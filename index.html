@@ -553,9 +553,10 @@
   /* soft tap sound for general buttons (chat chips, send, explore, language, back) */
   const tapSfx=new Audio("open.mp3"); tapSfx.volume=.18; tapSfx.preload="auto";
   function playTapSfx(){ if(SFX_MUTED) return; try{ tapSfx.currentTime=0; tapSfx.play().catch(()=>{}); }catch(e){} }
-  /* boom sound for opening each app */
-  const boomSfx=new Audio("boom.mp3"); boomSfx.volume=.5; boomSfx.preload="auto";
-  function playBoomSfx(){ if(SFX_MUTED) return; try{ boomSfx.currentTime=0; boomSfx.play().catch(()=>{}); }catch(e){} }
+  /* booms for opening apps — alternate so it never repeats */
+  const APP_BOOMS=["boom-energy.mp3","boom-military.mp3","boom-deep.mp3"].map(s=>{const a=new Audio(s);a.volume=.5;a.preload="auto";return a;});
+  let boomIdx=0;
+  function playBoomSfx(){ if(SFX_MUTED) return; const a=APP_BOOMS[boomIdx % APP_BOOMS.length]; boomIdx++; try{ a.currentTime=0; a.play().catch(()=>{}); }catch(e){} }
 
   const NEEDS_EN={
     tiempo:{need:"Time",essence:"The only resource that never returns.",
@@ -824,7 +825,7 @@ Elige la ÚNICA app más adecuada y escribe UNA frase cálida (máx 22 palabras)
   applyLang(LANG);
 
   /* ---------------- cinematic intro + boom ---------------- */
-  const A_BOOM="boom.mp3";
+  const A_BOOM="boom-deep.mp3";
   (function runIntro(){
     const intro=document.getElementById("intro");
     if(!intro) return;
