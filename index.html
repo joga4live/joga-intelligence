@@ -553,6 +553,9 @@
   /* soft tap sound for general buttons (chat chips, send, explore, language, back) */
   const tapSfx=new Audio("open.mp3"); tapSfx.volume=.18; tapSfx.preload="auto";
   function playTapSfx(){ if(SFX_MUTED) return; try{ tapSfx.currentTime=0; tapSfx.play().catch(()=>{}); }catch(e){} }
+  /* boom sound for opening each app */
+  const boomSfx=new Audio("boom.mp3"); boomSfx.volume=.5; boomSfx.preload="auto";
+  function playBoomSfx(){ if(SFX_MUTED) return; try{ boomSfx.currentTime=0; boomSfx.play().catch(()=>{}); }catch(e){} }
 
   const NEEDS_EN={
     tiempo:{need:"Time",essence:"The only resource that never returns.",
@@ -683,7 +686,7 @@
   function openApp(a){
     vtitle.childNodes[0].nodeValue=a.name; vsub.textContent=tagFor(a);
     vframe.src=a.file; vopen.href=a.file;
-    playOpenSfx();
+    playBoomSfx();
     viewer.classList.add("open"); document.body.style.overflow="hidden";
     document.getElementById("vback").focus();
   }
