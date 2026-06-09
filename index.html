@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0A0E1A">
+<meta name="theme-color" content="#0B0B0C">
 <title>Joga Intelligence — Una app para cada necesidad humana</title>
 <meta name="description" content="Las necesidades que mueven a cada ser humano. Una app inteligente para cada una. Tiempo, prosperidad, crecimiento, conocimiento, pertenencia y descanso — en un solo lugar.">
 
@@ -30,17 +30,17 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#0A0E1A;
-    --ink-2:#0C1120;
-    --panel:#121A2E;
-    --panel-2:#16203A;
+    --ink:#0B0B0C;
+    --ink-2:#131316;
+    --panel:#1B1B20;
+    --panel-2:#26262C;
     --ember:#E2703A;
     --ember-soft:#F0935F;
     --ember-deep:#B4471E;
     --gold:#E7C46A;
     --bone:#F2ECDD;
-    --muted:#8C97B0;
-    --line:rgba(231,196,106,.15);
+    --muted:#A8A8B0;
+    --line:rgba(231,196,106,.26);
     --hair:rgba(242,236,221,.10);
     --shadow:0 30px 70px -34px rgba(0,0,0,.9);
     --serif:"Fraunces",Georgia,serif;
@@ -84,8 +84,8 @@
   .aurora{position:absolute;inset:-30% -10% auto -10%;height:120%;z-index:0;pointer-events:none;filter:blur(8px)}
   .aurora i{position:absolute;border-radius:50%;mix-blend-mode:screen;opacity:.5;animation:drift 22s ease-in-out infinite}
   .aurora .a1{width:60vw;height:60vw;left:-8vw;top:-18vw;background:radial-gradient(circle,rgba(226,112,58,.55),transparent 62%)}
-  .aurora .a2{width:46vw;height:46vw;right:-6vw;top:-6vw;background:radial-gradient(circle,rgba(231,196,106,.34),transparent 62%);animation-delay:-7s}
-  .aurora .a3{width:40vw;height:40vw;left:30vw;top:6vw;background:radial-gradient(circle,rgba(95,184,196,.20),transparent 65%);animation-delay:-13s}
+  .aurora .a2{width:46vw;height:46vw;right:-6vw;top:-6vw;background:radial-gradient(circle,rgba(231,196,106,.46),transparent 62%);animation-delay:-7s}
+  .aurora .a3{width:40vw;height:40vw;left:30vw;top:6vw;background:radial-gradient(circle,rgba(231,196,106,.20),transparent 65%);animation-delay:-13s}
   @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(4vw,3vw) scale(1.08)}66%{transform:translate(-3vw,2vw) scale(.96)}}
   .grain{position:absolute;inset:0;z-index:1;opacity:.05;pointer-events:none;
     background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -161,10 +161,10 @@
     background:linear-gradient(165deg,var(--panel-2),var(--panel));
     border:1px solid var(--hair);padding:30px 28px;min-height:230px;
     display:flex;flex-direction:column;justify-content:flex-end;
-    color:inherit;font:inherit;transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s;
+    color:inherit;font:inherit;box-shadow:inset 0 1px 0 rgba(255,248,232,.06);transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s;
   }
   .need-app::after{content:"";position:absolute;width:220px;height:220px;right:-70px;top:-80px;border-radius:50%;
-    background:radial-gradient(circle,var(--accent),transparent 70%);opacity:.16;transition:opacity .3s}
+    background:radial-gradient(circle,var(--accent),transparent 70%);opacity:.24;transition:opacity .3s}
   .need-app:hover,.need-app:focus-visible{transform:translateY(-5px);border-color:color-mix(in srgb,var(--accent) 45%,transparent);
     box-shadow:var(--shadow);outline:none}
   .need-app:hover::after,.need-app:focus-visible::after{opacity:.3}
@@ -181,11 +181,17 @@
 
   /* ---------------- launcher (todo en un lugar) ---------------- */
   .launcher{padding:84px 0 70px;border-top:1px solid var(--hair);
-    background:radial-gradient(900px 420px at 50% -10%,rgba(226,112,58,.10),transparent 60%)}
+    background:radial-gradient(900px 420px at 50% -10%,rgba(226,112,58,.17),transparent 60%)}
   .launcher .head{text-align:center;max-width:40ch;margin:0 auto 40px}
   .launcher .head .eyebrow{justify-content:center}
-  .launcher .head .lau-logo{display:block;width:min(78vw,420px);height:auto;margin:0 auto 22px;
+  .launcher .head .lau-logo-wrap{position:relative;display:inline-block;line-height:0;margin:0 auto 22px}
+  .launcher .head .lau-logo{display:block;width:min(78vw,420px);height:auto;
     mix-blend-mode:screen;filter:drop-shadow(0 8px 28px rgba(231,196,106,.18))}
+  .launcher .head .lau-logo-shine{position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:screen;
+    background:linear-gradient(105deg,transparent 42%,rgba(255,244,212,.8) 50%,transparent 58%);
+    background-size:260% 100%;background-position:-150% 0;
+    -webkit-mask:url("joga-lockup.png") center/contain no-repeat;mask:url("joga-lockup.png") center/contain no-repeat}
+  body.motion .launcher .head.in .lau-logo-shine{animation:introLogoShine 1.25s ease .15s forwards}
   .launcher .head h2{font-family:var(--serif);font-weight:600;font-size:clamp(28px,5vw,44px);margin:0;line-height:1.05}
   .launcher .head p{color:var(--muted);margin:16px 0 0;line-height:1.6}
   .chips{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
@@ -193,7 +199,7 @@
   .chip{
     position:relative;display:flex;align-items:center;gap:14px;cursor:pointer;text-align:left;
     background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--hair);
-    border-radius:16px;padding:16px;color:inherit;font:inherit;overflow:hidden;
+    border-radius:16px;padding:16px;color:inherit;font:inherit;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,248,232,.05);
     transition:transform .22s,border-color .22s,box-shadow .22s;
   }
   .chip:hover,.chip:focus-visible{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 50%,transparent);
@@ -306,7 +312,7 @@
   /* ---------------- cinematic intro ---------------- */
   body.intro-lock{overflow:hidden}
   #intro{position:fixed;inset:0;z-index:200;display:grid;place-items:center;overflow:hidden;
-    background:radial-gradient(130% 120% at 50% 38%,#101830,#06080F 70%);
+    background:radial-gradient(130% 120% at 50% 38%,#16161B,#070708 70%);
     transition:opacity .7s ease,transform .7s cubic-bezier(.4,0,.2,1)}
   #intro.done{opacity:0;transform:translateY(-7%);pointer-events:none}
   #intro .glow{position:absolute;width:62vmin;height:62vmin;border-radius:50%;
@@ -473,7 +479,10 @@
   <section class="launcher" id="launcher">
     <div class="shell">
       <div class="head reveal">
-        <img class="lau-logo" src="joga-lockup.png" alt="JOGA Intelligence" width="1000" height="323" />
+        <div class="lau-logo-wrap">
+          <img class="lau-logo" src="joga-lockup.png" alt="JOGA Intelligence" width="1000" height="323" />
+          <span class="lau-logo-shine" aria-hidden="true"></span>
+        </div>
         <div class="eyebrow" data-i18n="lau.eyebrow">Todo en un solo lugar</div>
         <h2 data-i18n="lau.h2">Tu vida entera, a un toque</h2>
         <p data-i18n="lau.p">Abre cualquiera de las apps sin salir de Joga Intelligence. Una sola puerta de entrada.</p>
@@ -862,7 +871,9 @@ Elige la ÚNICA app más adecuada y escribe UNA frase cálida (máx 22 palabras)
     }
     document.body.classList.add("motion");
     const io=new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in");
+        if(e.target.querySelector && e.target.querySelector(".lau-logo")) playOpenSfx();
+        io.unobserve(e.target); } });
     },{threshold:0.16, rootMargin:"0px 0px -7% 0px"});
     targets.forEach(t=>io.observe(t));
   })();
