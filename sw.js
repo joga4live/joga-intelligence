@@ -1,5 +1,5 @@
 /* Joga Intelligence — service worker */
-const CACHE = 'joga-intelligence-v12';
+const CACHE = 'joga-intelligence-v13';
 
 /* App shell: cached on install so the home loads instantly and offline. */
 const SHELL = [
