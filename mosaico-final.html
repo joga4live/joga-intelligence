@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joga Intelligence — Vista previa del mosaico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;1,9..144,500&family=Space+Grotesk:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C;--panel:#1B1B20;--panel-2:#26262C;--bone:#F2ECDD;--muted:#A8A8B0;
+    --ember:#E2703A;--hair:rgba(242,236,221,.10);--shadow:0 30px 70px -34px rgba(0,0,0,.9);
+    --serif:"Fraunces",Georgia,serif;--grot:"Space Grotesk",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--bone);font-family:var(--grot);-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1060px;margin:0 auto;padding:40px 22px 80px}
+  .lead{display:flex;align-items:baseline;justify-content:space-between;gap:20px;border-bottom:1px solid var(--hair);padding-bottom:18px;margin-bottom:8px}
+  .lead h2{font-family:var(--serif);font-weight:600;font-size:clamp(20px,3vw,26px);margin:0}
+  .lead em{font-style:normal;color:var(--ember)}
+  .lead .count{color:var(--muted);font-size:12px;letter-spacing:.2em}
+
+  .bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:166px;gap:14px;margin-top:20px}
+  .tile{position:relative;overflow:hidden;cursor:pointer;text-align:left;color:inherit;font:inherit;
+    border-radius:22px;border:1px solid var(--hair);padding:20px;
+    background:linear-gradient(160deg,var(--panel-2),var(--panel));
+    display:flex;flex-direction:column;justify-content:flex-end;
+    box-shadow:inset 0 1px 0 rgba(255,248,232,.06);
+    transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s}
+  .tile::after{content:"";position:absolute;width:240px;height:240px;right:-80px;top:-90px;border-radius:50%;
+    background:radial-gradient(circle,var(--accent),transparent 70%);opacity:.22;transition:opacity .3s}
+  .tile:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 45%,transparent);box-shadow:var(--shadow)}
+  .tile:hover::after{opacity:.32}
+  .tile .glyph{position:absolute;top:18px;left:18px;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+    font-family:var(--serif);font-weight:800;font-size:19px;color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 15%,transparent);
+    border:1px solid color-mix(in srgb,var(--accent) 38%,transparent)}
+  .tile .t-num{position:absolute;top:22px;right:22px;font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:20px;color:transparent;-webkit-text-stroke:1px var(--accent);opacity:.6}
+  .tile .t-power{font-family:"Pinyon Script",cursive;font-weight:400;color:var(--accent);
+    font-size:23px;line-height:1.1;margin:0 0 3px}
+  .tile .t-app{font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:.02em;color:var(--bone);margin:0}
+  .tile .t-affirm{color:var(--muted);font-size:12.5px;line-height:1.45;margin:8px 0 0;font-style:italic;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .tile.big{grid-column:1/3;grid-row:1/3}
+  .tile.big .t-power{font-size:42px}
+  .tile.big .t-app{font-size:27px}
+  .tile.big .t-affirm{font-size:14px;max-width:32ch;-webkit-line-clamp:3}
+  .tile.big .glyph{width:52px;height:52px;font-size:24px}
+  .tile.p1{grid-column:3/4;grid-row:1/2}
+  .tile.p2{grid-column:4/5;grid-row:1/2}
+  .tile.p3{grid-column:3/5;grid-row:2/3}
+  .tile.p4{grid-column:1/3;grid-row:3/4}
+  .tile.p5{grid-column:3/5;grid-row:3/4}
+  @media(max-width:760px){
+    .bento{grid-template-columns:1fr 1fr;grid-auto-rows:158px;gap:12px}
+    .tile.big{grid-column:1/3;grid-row:auto;min-height:210px}
+    .tile.p1,.tile.p2,.tile.p3,.tile.p4,.tile.p5{grid-column:auto;grid-row:auto}
+    .tile.p3,.tile.p5{grid-column:1/3}
+    .tile .t-power{font-size:23px}.tile.big .t-power{font-size:34px}
+  }
+  @media(max-width:460px){.bento{grid-template-columns:1fr}.tile,.tile.big,.tile.p3,.tile.p5{grid-column:auto}}
+  .hint{color:var(--muted);font-size:13px;margin:26px 2px 0;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="lead"><h2>Seis necesidades. <em>Seis soluciones.</em></h2><span class="count">06</span></div>
+  <div class="bento" id="bento"></div>
+  <p class="hint">Vista previa del nuevo acomodo. Pasa el cursor por encima para ver el efecto.</p>
+</div>
+<script>
+  const N=[
+    {pos:"big",num:"01",power:"El poder del subconsciente",app:"SUBMENT",aff:"Despierto la fuerza que ya vive en mí.",g:"S",ac:"#AC97E6"},
+    {pos:"p1",num:"02",power:"El poder del tiempo",app:"JOGA TIME",aff:"Soy dueño de mis horas y mi enfoque.",g:"J",ac:"#E8A24C"},
+    {pos:"p2",num:"03",power:"El poder de los hábitos",app:"PROTONEUTRÓN",aff:"Lo que repito cada día me construye.",g:"⚛",ac:"#5FB8C4"},
+    {pos:"p3",num:"04",power:"El poder del crecimiento",app:"PASLEY",aff:"Crezco un peldaño cada día.",g:"P",ac:"#C9925A"},
+    {pos:"p4",num:"05",power:"El poder del dinero",app:"MONEXIUM",aff:"Dirijo mi prosperidad con cabeza y calma.",g:"◆",ac:"#E7C46A"},
+    {pos:"p5",num:"06",power:"El poder de las ventas",app:"VENTEMEX",aff:"Conecto, escucho y cierro con honestidad.",g:"V",ac:"#F0876A"}
+  ];
+  const b=document.getElementById("bento");
+  N.forEach(n=>{const d=document.createElement("button");d.className="tile "+n.pos;d.style.setProperty("--accent",n.ac);
+    d.innerHTML=`<span class="glyph">${n.g}</span><span class="t-num">${n.num}</span><span class="t-power">${n.power}</span><span class="t-app">${n.app}</span><span class="t-affirm">${n.aff}</span>`;
+    b.appendChild(d);});
+</script>
+</body>
+</html>

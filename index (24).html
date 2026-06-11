@@ -1,0 +1,930 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B0B0C">
+<title>Joga Intelligence — Una app para cada necesidad humana</title>
+<meta name="description" content="Las necesidades que mueven a cada ser humano. Una app inteligente para cada una. Poder interior, tiempo, prosperidad, ventas, crecimiento y conocimiento — en un solo lugar.">
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Joga">
+<meta name="application-name" content="Joga Intelligence">
+<!-- Compartir (Open Graph) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Joga Intelligence">
+<meta property="og:description" content="Una app inteligente para cada necesidad humana — en un solo lugar.">
+<meta property="og:image" content="icon-512.png">
+<meta name="twitter:card" content="summary">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C;
+    --ink-2:#131316;
+    --panel:#1B1B20;
+    --panel-2:#26262C;
+    --ember:#E2703A;
+    --ember-soft:#F0935F;
+    --ember-deep:#B4471E;
+    --gold:#E7C46A;
+    --bone:#F2ECDD;
+    --muted:#A8A8B0;
+    --line:rgba(231,196,106,.26);
+    --hair:rgba(242,236,221,.10);
+    --shadow:0 30px 70px -34px rgba(0,0,0,.9);
+    --serif:"Fraunces",Georgia,serif;
+    --grot:"Space Grotesk",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--ink);color:var(--bone);
+    font-family:var(--grot);-webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit}
+  .shell{max-width:1120px;margin:0 auto;padding:0 22px}
+
+  /* ---------------- top nav ---------------- */
+  nav.bar{
+    position:sticky;top:0;z-index:40;
+    backdrop-filter:blur(16px);background:rgba(10,14,26,.66);
+    border-bottom:1px solid var(--hair);
+  }
+  nav.bar .row{display:flex;align-items:center;justify-content:space-between;height:62px}
+  .wordmark{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .wordmark .ji{
+    width:30px;height:30px;border-radius:9px;display:grid;place-items:center;
+    background:linear-gradient(150deg,var(--ember),var(--ember-deep));
+    font-family:var(--serif);font-weight:800;font-size:16px;color:#fff;
+    box-shadow:0 6px 18px -6px var(--ember-deep);
+  }
+  .wordmark b{font-family:var(--serif);font-weight:600;font-size:16px;letter-spacing:.01em}
+  .wordmark b span{color:var(--muted);font-weight:400}
+  .navcta{
+    appearance:none;border:1px solid var(--line);background:transparent;color:var(--bone);
+    font:600 12.5px var(--grot);letter-spacing:.04em;padding:9px 16px;border-radius:999px;cursor:pointer;
+    transition:background .2s,border-color .2s,color .2s;
+  }
+  .navcta:hover{background:var(--ember);border-color:var(--ember);color:#1a0d05}
+
+  /* ---------------- hero ---------------- */
+  .hero{position:relative;overflow:hidden;padding:96px 0 86px}
+  .aurora{position:absolute;inset:-30% -10% auto -10%;height:120%;z-index:0;pointer-events:none;filter:blur(8px)}
+  .aurora i{position:absolute;border-radius:50%;mix-blend-mode:screen;opacity:.5;animation:drift 22s ease-in-out infinite}
+  .aurora .a1{width:60vw;height:60vw;left:-8vw;top:-18vw;background:radial-gradient(circle,rgba(226,112,58,.55),transparent 62%)}
+  .aurora .a2{width:46vw;height:46vw;right:-6vw;top:-6vw;background:radial-gradient(circle,rgba(231,196,106,.46),transparent 62%);animation-delay:-7s}
+  .aurora .a3{width:40vw;height:40vw;left:30vw;top:6vw;background:radial-gradient(circle,rgba(231,196,106,.20),transparent 65%);animation-delay:-13s}
+  @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(4vw,3vw) scale(1.08)}66%{transform:translate(-3vw,2vw) scale(.96)}}
+  .grain{position:absolute;inset:0;z-index:1;opacity:.05;pointer-events:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .hero .shell{position:relative;z-index:2}
+  .eyebrow{
+    font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--ember-soft);
+    display:flex;align-items:center;gap:12px;margin-bottom:26px;font-weight:600;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--ember)}
+  .hero h1{
+    font-family:var(--serif);font-weight:400;margin:0;
+    font-size:clamp(40px,8.4vw,86px);line-height:1.0;letter-spacing:-.015em;max-width:14ch;
+  }
+  .hero h1 em{font-style:italic;color:var(--ember)}
+  .hero .lede{
+    margin:30px 0 0;max-width:52ch;color:var(--muted);font-size:clamp(15px,2.1vw,18px);line-height:1.65;
+  }
+  .hero .lede b{color:var(--bone);font-weight:500}
+  .hero .actions{display:flex;flex-wrap:wrap;gap:14px;margin-top:38px}
+  .btn{
+    appearance:none;cursor:pointer;border:0;font:600 14px var(--grot);letter-spacing:.02em;
+    padding:14px 24px;border-radius:999px;text-decoration:none;display:inline-flex;align-items:center;gap:9px;
+    transition:transform .2s,box-shadow .2s,background .2s,border-color .2s;
+  }
+  .btn.primary{background:linear-gradient(150deg,var(--ember),var(--ember-deep));color:#1a0d05;
+    box-shadow:0 14px 34px -14px var(--ember-deep)}
+  .btn.primary:hover{transform:translateY(-2px);box-shadow:0 20px 40px -16px var(--ember-deep)}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--bone)}
+  .btn.ghost:hover{border-color:var(--bone)}
+
+  /* ---------------- manifesto ---------------- */
+  .manifesto{padding:18px 0 8px;border-top:1px solid var(--hair)}
+  .manifesto .shell{padding-top:62px;padding-bottom:62px}
+  .manifesto p{
+    font-family:var(--serif);font-weight:400;font-size:clamp(22px,3.6vw,34px);line-height:1.4;
+    max-width:24ch;margin:0;letter-spacing:-.01em;
+  }
+  .manifesto .needs-line{margin-top:26px;color:var(--muted);font-family:var(--grot);font-size:14px;
+    letter-spacing:.06em;line-height:2}
+  .manifesto .needs-line span{color:var(--gold)}
+
+  /* ---------------- needs / chapters ---------------- */
+  .chapters{padding:30px 0 10px}
+  .chapters .lead{display:flex;align-items:baseline;justify-content:space-between;gap:20px;
+    border-bottom:1px solid var(--hair);padding-bottom:18px;margin-bottom:8px}
+  .chapters .lead h2{font-family:var(--serif);font-weight:600;font-size:clamp(20px,3vw,26px);margin:0}
+  .chapters .lead em{font-style:normal;color:var(--ember)}
+  .chapters .lead .count{color:var(--muted);font-size:12px;letter-spacing:.2em}
+
+  /* ---------------- bento mosaic ---------------- */
+  .bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:166px;gap:14px;margin-top:20px}
+  .tile{
+    position:relative;overflow:hidden;cursor:pointer;text-align:left;color:inherit;font:inherit;
+    border-radius:22px;border:1px solid var(--hair);padding:20px;
+    background:linear-gradient(160deg,var(--panel-2),var(--panel));
+    display:flex;flex-direction:column;justify-content:flex-end;
+    box-shadow:inset 0 1px 0 rgba(255,248,232,.06);
+    transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s;
+  }
+  .tile::after{content:"";position:absolute;width:240px;height:240px;right:-80px;top:-90px;border-radius:50%;
+    background:radial-gradient(circle,var(--accent),transparent 70%);opacity:.22;transition:opacity .3s}
+  .tile:hover,.tile:focus-visible{transform:translateY(-4px);border-color:color-mix(in srgb,var(--accent) 45%,transparent);box-shadow:var(--shadow);outline:none}
+  .tile:hover::after,.tile:focus-visible::after{opacity:.32}
+  .tile:focus-visible{box-shadow:0 0 0 2px var(--accent),var(--shadow)}
+  .tile .glyph{position:absolute;top:18px;left:18px;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+    font-family:var(--serif);font-weight:800;font-size:19px;color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 15%,transparent);
+    border:1px solid color-mix(in srgb,var(--accent) 38%,transparent)}
+  .tile .t-num{position:absolute;top:22px;right:22px;font-family:var(--serif);font-style:italic;font-weight:500;
+    font-size:20px;color:transparent;-webkit-text-stroke:1px var(--accent);opacity:.6}
+  .tile .t-power{font-family:"Pinyon Script",cursive;font-weight:400;color:var(--accent);
+    font-size:23px;line-height:1.1;margin:0 0 3px;letter-spacing:.01em}
+  .tile .t-app{font-family:var(--serif);font-weight:600;font-size:18px;letter-spacing:.02em;color:var(--bone);margin:0}
+  .tile .t-affirm{color:var(--muted);font-size:12.5px;line-height:1.45;margin:8px 0 0;font-style:italic;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .tile .t-open{margin-top:12px;color:var(--accent);font-weight:600;font-size:12.5px;letter-spacing:.04em;opacity:0;transition:opacity .3s}
+  .tile:hover .t-open,.tile:focus-visible .t-open{opacity:1}
+
+  .tile.big{grid-column:1/3;grid-row:1/3}
+  .tile.big .t-power{font-size:42px}
+  .tile.big .t-app{font-size:27px}
+  .tile.big .t-affirm{font-size:14px;max-width:32ch;-webkit-line-clamp:3}
+  .tile.big .glyph{width:52px;height:52px;font-size:24px}
+  .tile.p1{grid-column:3/4;grid-row:1/2}
+  .tile.p2{grid-column:4/5;grid-row:1/2}
+  .tile.p3{grid-column:3/5;grid-row:2/3}
+  .tile.p4{grid-column:1/3;grid-row:3/4}
+  .tile.p5{grid-column:3/5;grid-row:3/4}
+
+  @media(max-width:760px){
+    .bento{grid-template-columns:1fr 1fr;grid-auto-rows:158px;gap:12px}
+    .tile.big{grid-column:1/3;grid-row:auto;min-height:210px}
+    .tile.p1,.tile.p2,.tile.p3,.tile.p4,.tile.p5{grid-column:auto;grid-row:auto}
+    .tile.p3,.tile.p5{grid-column:1/3}
+    .tile .t-power{font-size:23px}
+    .tile.big .t-power{font-size:34px}
+  }
+  @media(max-width:460px){
+    .bento{grid-template-columns:1fr}
+    .tile,.tile.big,.tile.p3,.tile.p5{grid-column:auto}
+  }
+
+  /* ---------------- launcher (todo en un lugar) ---------------- */
+  .launcher{padding:84px 0 70px;border-top:1px solid var(--hair);
+    background:radial-gradient(900px 420px at 50% -10%,rgba(226,112,58,.17),transparent 60%)}
+  .launcher .head{text-align:center;max-width:40ch;margin:0 auto 40px}
+  .launcher .head .eyebrow{justify-content:center}
+  .launcher .head .lau-logo-wrap{position:relative;display:inline-block;line-height:0;margin:0 auto 22px}
+  .launcher .head .lau-logo{display:block;width:min(78vw,420px);height:auto;
+    mix-blend-mode:screen;filter:drop-shadow(0 8px 28px rgba(231,196,106,.18))}
+  .launcher .head .lau-logo-shine{position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:screen;
+    background:linear-gradient(105deg,transparent 42%,rgba(255,244,212,.8) 50%,transparent 58%);
+    background-size:260% 100%;background-position:-150% 0;
+    -webkit-mask:url("joga-lockup.png") center/contain no-repeat;mask:url("joga-lockup.png") center/contain no-repeat}
+  body.motion .launcher .head.in .lau-logo-shine{animation:introLogoShine 1.25s ease .15s forwards}
+  .launcher .head h2{font-family:var(--serif);font-weight:600;font-size:clamp(28px,5vw,44px);margin:0;line-height:1.05}
+  .launcher .head p{color:var(--muted);margin:16px 0 0;line-height:1.6}
+  .chips{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
+  @media(min-width:760px){.chips{grid-template-columns:repeat(3,1fr);gap:14px}}
+  .chip{
+    position:relative;display:flex;align-items:center;gap:14px;cursor:pointer;text-align:left;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--hair);
+    border-radius:16px;padding:16px;color:inherit;font:inherit;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,248,232,.05);
+    transition:transform .22s,border-color .22s,box-shadow .22s;
+  }
+  .chip:hover,.chip:focus-visible{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 50%,transparent);
+    box-shadow:var(--shadow);outline:none}
+  .chip:focus-visible{box-shadow:0 0 0 2px var(--accent),var(--shadow)}
+  .chip .g{width:40px;height:40px;flex:0 0 auto;border-radius:11px;display:grid;place-items:center;
+    font-family:var(--serif);font-weight:800;font-size:18px;color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 14%,transparent);border:1px solid color-mix(in srgb,var(--accent) 34%,transparent)}
+  .chip .t b{font-family:var(--serif);font-weight:600;font-size:16px;display:block;letter-spacing:.01em}
+  .chip .t span{color:var(--muted);font-size:11.5px}
+
+  /* ---------------- footer ---------------- */
+  footer.foot{border-top:1px solid var(--hair);padding:46px 0 60px;color:var(--muted)}
+  footer.foot .row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+  footer.foot .mk{display:flex;align-items:center;gap:10px;color:var(--bone)}
+  footer.foot .mk .ji{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+    background:linear-gradient(150deg,var(--ember),var(--ember-deep));font-family:var(--serif);font-weight:800;font-size:13px;color:#fff}
+  footer.foot small{font-size:12px;letter-spacing:.04em}
+  footer.foot .tag{font-family:var(--serif);font-style:italic;color:var(--gold)}
+
+  /* ---------------- viewer overlay ---------------- */
+  .viewer{position:fixed;inset:0;z-index:80;background:var(--ink);display:flex;flex-direction:column;
+    transform:translateY(100%);opacity:0;visibility:hidden;
+    transition:transform .44s cubic-bezier(.2,.8,.2,1),opacity .3s,visibility .44s}
+  .viewer.open{transform:translateY(0);opacity:1;visibility:visible}
+  .vbar{display:flex;align-items:center;gap:12px;padding:max(8px,env(safe-area-inset-top)) 16px 8px;
+    background:rgba(10,14,26,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+  .vback{appearance:none;border:1px solid var(--line);background:var(--panel-2);color:var(--bone);
+    font:600 13px var(--grot);padding:9px 15px;border-radius:999px;cursor:pointer;transition:background .2s,border-color .2s}
+  .vback:hover{background:var(--ember);border-color:var(--ember);color:#1a0d05}
+  .vtitle{font-family:var(--serif);font-weight:600;font-size:15px}
+  .vtitle small{display:block;font-family:var(--grot);font-weight:400;font-size:10.5px;color:var(--muted);letter-spacing:.04em}
+  .vopen{margin-left:auto;color:var(--muted);text-decoration:none;font-size:12px;padding:8px;border-radius:8px}
+  .vopen:hover{color:var(--ember-soft)}
+  .vframe-wrap{flex:1;position:relative;background:#000}
+  .vframe-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+
+  .navactions{display:flex;align-items:center;gap:10px}
+  .langtoggle{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .langtoggle button{background:transparent;border:0;color:var(--muted);font:600 11.5px var(--grot);
+    letter-spacing:.08em;padding:7px 11px;cursor:pointer;transition:background .2s,color .2s}
+  .langtoggle button.active{background:var(--ember);color:#1a0d05}
+  .langtoggle button:not(.active):hover{color:var(--bone)}
+  .navcta.install{background:var(--ember);border-color:var(--ember);color:#1a0d05;font-weight:600}
+  .navcta.install:hover{background:var(--ember-soft);border-color:var(--ember-soft)}
+
+  /* iOS add-to-home hint */
+  .ios-hint{
+    position:fixed;left:14px;right:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:90;
+    background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);
+    border-radius:18px;padding:16px 16px 16px 18px;box-shadow:var(--shadow);
+    display:none;gap:14px;align-items:flex-start;max-width:520px;margin:0 auto;
+  }
+  .ios-hint.show{display:flex;animation:hintUp .4s cubic-bezier(.2,.8,.2,1)}
+  @keyframes hintUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .ios-hint .hi{width:40px;height:40px;flex:0 0 auto;border-radius:11px;display:grid;place-items:center;
+    background:linear-gradient(150deg,var(--ember),var(--ember-deep));font-family:var(--serif);font-weight:800;color:#fff;font-size:18px}
+  .ios-hint .htxt{font-size:13.5px;line-height:1.5;color:var(--bone)}
+  .ios-hint .htxt b{font-family:var(--serif);font-weight:600;display:block;margin-bottom:3px;font-size:15px}
+  .ios-hint .htxt span{color:var(--muted)}
+  .ios-hint .share{display:inline-flex;width:18px;height:18px;vertical-align:-4px;color:var(--ember-soft)}
+  .ios-hint .hclose{margin-left:auto;background:transparent;border:0;color:var(--muted);font-size:20px;cursor:pointer;line-height:1;padding:2px 4px}
+  .ios-hint .hclose:hover{color:var(--bone)}
+
+  /* ---------------- concierge ---------------- */
+  .concierge{margin-top:34px;max-width:580px;
+    background:linear-gradient(180deg,rgba(22,32,58,.88),rgba(16,24,44,.9));
+    border:1px solid var(--line);border-radius:22px;padding:20px;backdrop-filter:blur(10px);box-shadow:var(--shadow)}
+  .cz-head{display:flex;align-items:center;gap:12px;margin-bottom:15px}
+  .cz-avatar{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+    background:linear-gradient(150deg,var(--ember),var(--ember-deep));font-family:var(--serif);font-weight:800;color:#fff;font-size:18px;
+    animation:czpulse 3.4s ease-in-out infinite}
+  @keyframes czpulse{0%,100%{box-shadow:0 0 0 0 rgba(226,112,58,.5)}50%{box-shadow:0 0 0 9px rgba(226,112,58,0)}}
+  .cz-greet b{font-family:var(--serif);font-weight:600;font-size:17px;display:block;line-height:1.2}
+  .cz-greet span{color:var(--muted);font-size:13.5px}
+  .cz-inputrow{display:flex;gap:10px;align-items:center}
+  #cz-input{flex:1;min-width:0;background:rgba(10,14,26,.6);border:1px solid var(--hair);border-radius:12px;
+    color:var(--bone);font:400 15px var(--grot);padding:13px 14px;outline:none;transition:border-color .2s,box-shadow .2s}
+  #cz-input::placeholder{color:#6b7790}
+  #cz-input:focus{border-color:var(--ember);box-shadow:0 0 0 3px rgba(226,112,58,.18)}
+  #cz-send{flex:0 0 auto;width:46px;height:46px;border-radius:12px;border:0;cursor:pointer;
+    background:linear-gradient(150deg,var(--ember),var(--ember-deep));color:#1a0d05;font-size:20px;font-weight:700;
+    transition:transform .2s,box-shadow .2s}
+  #cz-send:hover{transform:translateY(-2px);box-shadow:0 10px 22px -10px var(--ember-deep)}
+  .cz-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .cz-chips button{background:rgba(242,236,221,.05);border:1px solid var(--hair);color:var(--bone);
+    font:500 12.5px var(--grot);padding:8px 13px;border-radius:999px;cursor:pointer;transition:background .2s,border-color .2s}
+  .cz-chips button:hover{background:rgba(226,112,58,.16);border-color:var(--ember)}
+  .cz-answer{margin-top:16px;border-top:1px solid var(--hair);padding-top:16px}
+  .cz-answer[hidden]{display:none}
+  .cz-thinking{display:flex;align-items:center;gap:7px;color:var(--muted);font-size:14px}
+  .cz-thinking i{width:6px;height:6px;border-radius:50%;background:var(--ember);display:inline-block;animation:czblink 1.2s infinite}
+  .cz-thinking i:nth-child(2){animation-delay:.2s}
+  .cz-thinking i:nth-child(3){animation-delay:.4s}
+  @keyframes czblink{0%,100%{opacity:.25;transform:translateY(0)}50%{opacity:1;transform:translateY(-2px)}}
+  .cz-reply{font-size:15.5px;line-height:1.6;color:var(--bone);animation:czfade .35s ease}
+  .cz-reply .nm{font-weight:600}
+  @keyframes czfade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+  .cz-result{margin-top:14px;display:flex;align-items:center;gap:13px;background:rgba(10,14,26,.5);
+    border:1px solid color-mix(in srgb,var(--accent) 32%,transparent);border-radius:16px;padding:13px 14px;cursor:pointer;
+    text-align:left;color:inherit;font:inherit;width:100%;transition:transform .2s,border-color .2s;animation:czfade .45s ease}
+  .cz-result:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .cz-result .g{width:44px;height:44px;flex:0 0 auto;border-radius:12px;display:grid;place-items:center;
+    font-family:var(--serif);font-weight:800;font-size:20px;color:var(--accent);
+    background:color-mix(in srgb,var(--accent) 14%,transparent);border:1px solid color-mix(in srgb,var(--accent) 36%,transparent)}
+  .cz-result .rt b{font-family:var(--serif);font-weight:600;font-size:17px;display:block}
+  .cz-result .rt span{color:var(--muted);font-size:12.5px}
+  .cz-result .go{margin-left:auto;color:var(--accent);font-weight:600;font-size:14px;white-space:nowrap}
+
+  /* ---------------- cinematic intro ---------------- */
+  body.intro-lock{overflow:hidden}
+  #intro{position:fixed;inset:0;z-index:200;display:grid;place-items:center;overflow:hidden;
+    background:radial-gradient(130% 120% at 50% 38%,#16161B,#070708 70%);
+    transition:opacity .7s ease,transform .7s cubic-bezier(.4,0,.2,1)}
+  #intro.done{opacity:0;transform:translateY(-7%);pointer-events:none}
+  #intro .glow{position:absolute;width:62vmin;height:62vmin;border-radius:50%;
+    background:radial-gradient(circle,rgba(226,112,58,.28),transparent 60%);filter:blur(12px);
+    animation:introGlow 3s ease forwards}
+  @keyframes introGlow{0%{opacity:0;transform:scale(.55)}45%{opacity:1}100%{opacity:.55;transform:scale(1.12)}}
+  .intro-stage{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center;padding:24px}
+  .intro-j{width:140px;height:154px}
+  .intro-j .jbase{fill:none;stroke:rgba(231,196,106,.20);stroke-width:2.5}
+  .intro-j .liquid{transform-box:view-box;transform-origin:0 0;transform:translateY(220px)}
+  #intro.playing .intro-j .liquid{animation:liquidFill 1.5s cubic-bezier(.45,.85,.3,1) .1s forwards}
+  @keyframes liquidFill{to{transform:translateY(0)}}
+  .intro-j .shine{transform-box:view-box;transform-origin:0 0;opacity:0}
+  #intro.playing .intro-j .shine{animation:introShine 1.2s ease .55s forwards}
+  @keyframes introShine{0%{opacity:0;transform:translateX(-70px)}45%{opacity:.75}100%{opacity:0;transform:translateX(80px)}}
+  .intro-word{font-family:var(--serif);font-weight:600;font-size:clamp(24px,6vw,30px);letter-spacing:.02em;
+    opacity:0;transform:translateY(12px);animation:introUp .7s ease .35s both}
+  .intro-word span{color:var(--muted);font-weight:400}
+  /* ---- JOGA logo image in intro (with gold shine sweep) ---- */
+  .intro-logo-wrap{position:relative;display:inline-block;line-height:0}
+  .intro-logo{display:block;width:min(74vw,460px);height:auto;mix-blend-mode:screen;
+    opacity:0;transform:scale(.93);filter:drop-shadow(0 10px 34px rgba(231,196,106,.20))}
+  #intro.playing .intro-logo{animation:introLogoIn 1.1s cubic-bezier(.2,.8,.2,1) .08s forwards}
+  @keyframes introLogoIn{to{opacity:1;transform:scale(1)}}
+  .intro-logo-shine{position:absolute;inset:0;pointer-events:none;opacity:0;mix-blend-mode:screen;
+    background:linear-gradient(105deg,transparent 42%,rgba(255,244,212,.75) 50%,transparent 58%);
+    background-size:260% 100%;background-position:-150% 0;
+    -webkit-mask:url("joga-logo.png") center/contain no-repeat;mask:url("joga-logo.png") center/contain no-repeat}
+  #intro.playing .intro-logo-shine{animation:introLogoShine 1.25s ease .5s forwards}
+  @keyframes introLogoShine{0%{opacity:0;background-position:-150% 0}40%{opacity:1}100%{opacity:0;background-position:160% 0}}
+  .intro-thesis{font-family:var(--grot);color:var(--muted);font-size:14px;max-width:30ch;line-height:1.6;opacity:0;transform:translateY(12px)}
+  #intro.playing .intro-thesis{animation:introUp .7s ease .7s forwards}
+  @keyframes introUp{to{opacity:1;transform:translateY(0)}}
+  .intro-enter{margin-top:8px;background:transparent;border:1px solid var(--line);color:var(--bone);
+    font:600 12px var(--grot);letter-spacing:.16em;text-transform:uppercase;padding:12px 22px;border-radius:999px;cursor:pointer;
+    opacity:0;animation:enterPulse 2.4s ease .6s infinite, introUp .6s ease .6s both}
+  .intro-enter:hover{border-color:var(--ember);color:var(--ember-soft)}
+  @keyframes enterPulse{0%,100%{box-shadow:0 0 0 0 rgba(226,112,58,0)}50%{box-shadow:0 0 0 8px rgba(226,112,58,.10)}}
+  #intro.playing .intro-enter{animation:none;opacity:0;pointer-events:none;transition:opacity .3s}
+  .intro-mute{position:absolute;top:max(16px,env(safe-area-inset-top));right:18px;z-index:3;
+    width:40px;height:40px;border-radius:50%;display:grid;place-items:center;cursor:pointer;
+    background:rgba(255,255,255,.05);border:1px solid var(--hair);color:var(--bone);
+    opacity:0;animation:introUp .6s ease .9s both}
+  .intro-mute:hover{border-color:var(--line)}
+  .intro-mute.off{color:var(--muted)}
+  .intro-mute.off .wave{display:none}
+  .intro-mute.off::after{content:"";position:absolute;left:9px;right:9px;top:50%;height:1.6px;background:var(--muted);transform:rotate(-45deg)}
+
+  /* ---------------- scroll reveal (only when body.motion) ---------------- */
+  body.motion .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .8s cubic-bezier(.2,.7,.2,1)}
+  body.motion .reveal.in{opacity:1;transform:translateY(0)}
+
+  body.motion .need .need-num{opacity:0;transform:translateY(16px);clip-path:inset(0 100% 0 0);
+    transition:opacity .6s ease,transform .7s ease,clip-path .95s cubic-bezier(.3,.7,.2,1)}
+  body.motion .need.in .need-num{opacity:.55;transform:translateY(0);clip-path:inset(0 0 0 0)}
+  body.motion .need .need-name,
+  body.motion .need .need-essence,
+  body.motion .need .need-body{opacity:0;transform:translateY(14px);transition:opacity .6s ease,transform .6s ease}
+  body.motion .need.in .need-name{opacity:1;transform:translateY(0);transition-delay:.1s}
+  body.motion .need.in .need-essence{opacity:1;transform:translateY(0);transition-delay:.18s}
+  body.motion .need.in .need-body{opacity:1;transform:translateY(0);transition-delay:.26s}
+  body.motion .need .need-app{opacity:0;transform:translateY(36px) scale(.98);
+    transition:opacity .6s ease .12s,transform .8s cubic-bezier(.2,.7,.2,1) .12s}
+  body.motion .need.in .need-app{opacity:1;transform:translateY(0) scale(1)}
+
+  :focus-visible{outline:none}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;scroll-behavior:auto!important;transition:none!important}
+    .viewer{transition:visibility .01s!important}
+    #intro{display:none!important}
+  }
+</style>
+</head>
+<body>
+
+  <noscript><style>#intro{display:none!important}</style></noscript>
+
+  <!-- cinematic intro -->
+  <div id="intro" aria-hidden="true">
+    <div class="glow"></div>
+    <div class="intro-stage">
+      <div class="intro-logo-wrap">
+        <img class="intro-logo" src="joga-logo.png" alt="JOGA" width="1000" height="314" />
+        <span class="intro-logo-shine" aria-hidden="true"></span>
+      </div>
+      <div class="intro-word"><span>Intelligence</span></div>
+      <div class="intro-thesis" data-i18n="intro.thesis">Las necesidades que mueven a cada ser humano. Una app para cada una.</div>
+      <button class="intro-enter" id="intro-enter" data-i18n="intro.enter">Toca para entrar</button>
+    </div>
+    <button class="intro-mute" id="intro-mute" aria-label="Silenciar / Mute" aria-pressed="false">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path class="wave" d="M16 9.5a3.5 3.5 0 0 1 0 5M18.7 7a7 7 0 0 1 0 10"/></svg>
+    </button>
+  </div>
+
+  <nav class="bar">
+    <div class="shell row">
+      <a class="wordmark" href="#top">
+        <span class="ji">J</span>
+        <b>Joga <span>Intelligence</span></b>
+      </a>
+      <div class="navactions">
+        <div class="langtoggle" id="lang-toggle" role="group" aria-label="Idioma / Language"><button data-lang="es">ES</button><button data-lang="en">EN</button></div>
+        <button class="navcta install" id="install-btn" hidden data-i18n="nav.install">Instalar app</button>
+        <button class="navcta" id="nav-apps" data-i18n="nav.apps">Abrir las apps</button>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="aurora"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
+    <div class="grain"></div>
+    <div class="shell">
+      <div class="eyebrow" data-i18n="hero.eyebrow">Inteligencia para la vida</div>
+      <h1 data-i18n-html="hero.h1">Las necesidades que mueven a cada ser humano. Una <em>app</em> para cada una.</h1>
+      <p class="lede" data-i18n-html="hero.lede">Toda vida, por distinta que sea, corre sobre las mismas necesidades. <b>Joga Intelligence</b> reúne una herramienta inteligente para cada una — pensadas, diseñadas y conectadas en un solo lugar.</p>
+
+      <div class="concierge" id="concierge">
+        <div class="cz-head">
+          <span class="cz-avatar">J</span>
+          <div class="cz-greet"><b data-i18n="cz.greet">Hola, soy Joga.</b><span id="cz-sub">¿Qué necesitas hoy?</span></div>
+        </div>
+        <div class="cz-inputrow">
+          <input id="cz-input" data-i18n-ph="cz.ph" type="text" autocomplete="off" enterkeyhint="go"
+                 placeholder="Dímelo en tus palabras… p. ej. «ando sin tiempo»">
+          <button id="cz-send" aria-label="Preguntar a Joga">→</button>
+        </div>
+        <div class="cz-chips" id="cz-chips">
+          <button data-q="Quiero despertar mi poder interior">Mi poder</button>
+          <button data-q="Ando sin tiempo, no me organizo">Sin tiempo</button>
+          <button data-q="Quiero ordenar mi dinero">Mi dinero</button>
+          <button data-q="Quiero aprender a vender mejor">Vender más</button>
+          <button data-q="Quiero crecer y mejorar como persona">Crecer</button>
+          <button data-q="Tengo ganas de aprender y crear cosas">Aprender</button>
+        </div>
+        <div class="cz-answer" id="cz-answer" hidden></div>
+      </div>
+
+      <div class="actions">
+        <a class="btn primary" href="#chapters" data-i18n="hero.cta1">Explorar el sistema →</a>
+        <button class="btn ghost" id="hero-apps" data-i18n="hero.cta2">Ver todas las apps</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="manifesto">
+    <div class="shell">
+      <p class="reveal" data-i18n="man.p">No vendemos apps sueltas. Resolvemos lo que de verdad importa, una necesidad a la vez.</p>
+      <div class="needs-line" data-i18n-html="man.needs">
+        <span>Subconsciente</span> · <span>Tiempo</span> · <span>Hábitos</span> · <span>Crecimiento</span> · <span>Dinero</span> · <span>Ventas</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapters" id="chapters">
+    <div class="shell">
+      <div class="lead reveal">
+        <h2 data-i18n-html="ch.h2">Seis necesidades. <em>Seis soluciones.</em></h2>
+        <div class="count">01 — 06</div>
+      </div>
+      <div id="needs"></div>
+    </div>
+  </section>
+
+  <section class="launcher" id="launcher">
+    <div class="shell">
+      <div class="head reveal">
+        <div class="lau-logo-wrap">
+          <img class="lau-logo" src="joga-lockup.png" alt="JOGA Intelligence" width="1000" height="323" />
+          <span class="lau-logo-shine" aria-hidden="true"></span>
+        </div>
+        <div class="eyebrow" data-i18n="lau.eyebrow">Todo en un solo lugar</div>
+        <h2 data-i18n="lau.h2">Tu vida entera, a un toque</h2>
+        <p data-i18n="lau.p">Abre cualquiera de las apps sin salir de Joga Intelligence. Una sola puerta de entrada.</p>
+      </div>
+      <div class="chips" id="chips"></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="shell row">
+      <div class="mk"><span class="ji">J</span><div><b style="font-family:var(--serif)">Joga Intelligence</b><br><small class="tag" data-i18n="foot.tag">Mente + Método</small></div></div>
+      <small id="foot-copy"></small>
+    </div>
+  </footer>
+
+  <!-- iOS install hint -->
+  <div class="ios-hint" id="ios-hint" role="dialog" aria-label="Instalar en iPhone">
+    <span class="hi">J</span>
+    <div class="htxt">
+      <b data-i18n="ios.title">Instálala en tu iPhone</b>
+      <span id="ios-body" data-i18n-html="ios.body">Toca <svg class="share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg> Compartir y luego «Agregar a inicio».</span>
+    </div>
+    <button class="hclose" id="ios-hint-close" aria-label="Cerrar">×</button>
+  </div>
+
+  <!-- viewer -->
+  <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-label="Visor de app">
+    <div class="vbar">
+      <button class="vback" id="vback" aria-label="Volver" data-i18n="v.back">‹ Volver</button>
+      <div class="vtitle" id="vtitle">App<small id="vsub"></small></div>
+      <a class="vopen" id="vopen" href="#" target="_blank" rel="noopener" title="Abrir en pestaña nueva" data-i18n="v.open">Abrir ↗</a>
+    </div>
+    <div class="vframe-wrap">
+      <iframe id="vframe" title="App" allow="autoplay; fullscreen; encrypted-media; clipboard-write"></iframe>
+    </div>
+  </div>
+
+<script>
+  const NEEDS = [
+    { num:"01", need:"El poder del subconsciente", essence:"Despierto la fuerza que ya vive en mí.",
+      body:"Tu mente repite, en silencio, los guiones que escribiste hace años. Subment es el entrenamiento para reescribirlos: hablarle a tu subconsciente con intención y volver a programar lo que crees posible.",
+      app:{key:"poder", name:"SUBMENT", tag:"Entrena tu subconsciente", glyph:"S", file:"subment.html", accent:"#AC97E6"} },
+    { num:"02", need:"El poder del tiempo", essence:"Soy dueño de mis horas y mi enfoque.",
+      body:"Antes que el dinero, antes que cualquier meta, está el tiempo. Aprender a verlo, medirlo y honrarlo es la primera forma de inteligencia. Joga Time convierte tus horas en algo visible y tuyo.",
+      app:{key:"tiempo", name:"JOGA TIME", tag:"Time is everything", glyph:"J", file:"jogatime.html", accent:"#E8A24C"} },
+    { num:"03", need:"El poder de los hábitos", essence:"Lo que repito cada día me construye.",
+      body:"Entender cómo funciona el mundo —y crear con ese saber— es lo que nos separa. Protoneutrón es el laboratorio: un espacio para experimentar, descomponer ideas y volver a armarlas.",
+      app:{key:"conocimiento", name:"PROTONEUTRÓN", tag:"Laboratorio", glyph:"⚛", file:"protoneutron.html", accent:"#5FB8C4"} },
+    { num:"04", need:"El poder del crecimiento", essence:"Crezco un peldaño cada día.",
+      body:"Nadie se queda quieto sin pagarlo. El impulso de mejorar, de dominar algo, de tener un propósito, es profundamente humano. Pasley es el método para subir un peldaño cada día.",
+      app:{key:"crecimiento", name:"PASLEY", tag:"El Método del Éxito", glyph:"P", file:"metodoexito.html", accent:"#C9925A"} },
+    { num:"05", need:"El poder del dinero", essence:"Dirijo mi prosperidad con cabeza y calma.",
+      body:"La libertad económica no nace de ganar más, sino de entender y dirigir lo que tienes. Monexium une la mentalidad de abundancia con un sistema práctico: cuentas, hábitos y decisiones con cabeza.",
+      app:{key:"prosperidad", name:"MONEXIUM", tag:"Finanzas · Mente + Método", glyph:"◆", file:"monexium.html", accent:"#E7C46A"} },
+    { num:"06", need:"El poder de las ventas", essence:"Conecto, escucho y cierro con honestidad.",
+      body:"Vender no es empujar; es entender a la persona que tienes enfrente y guiarla con claridad. Ventemex destila ese arte en pasos simples: abrir, escuchar, ofrecer y cerrar con honestidad.",
+      app:{key:"ventas", name:"VENTEMEX", tag:"El arte de vender", glyph:"V", file:"ventmex.html", accent:"#F0876A"} },
+  ];
+
+  /* ---------- i18n ---------- */
+  let LANG="es";
+  try{ const sv=localStorage.getItem("jiLang"); if(sv==="en"||sv==="es") LANG=sv; }catch(e){}
+
+  /* ---------- sound ---------- */
+  let SFX_MUTED=false; try{ SFX_MUTED = localStorage.getItem("jiMute")==="1"; }catch(e){}
+  const openSfx=new Audio("open.mp3"); openSfx.volume=.32; openSfx.preload="auto";
+  function playOpenSfx(){ if(SFX_MUTED) return; try{ openSfx.currentTime=0; openSfx.play().catch(()=>{}); }catch(e){} }
+  /* soft tap sound for general buttons (chat chips, send, explore, language, back) */
+  const tapSfx=new Audio("open.mp3"); tapSfx.volume=.18; tapSfx.preload="auto";
+  function playTapSfx(){ if(SFX_MUTED) return; try{ tapSfx.currentTime=0; tapSfx.play().catch(()=>{}); }catch(e){} }
+  /* booms for opening apps — alternate so it never repeats */
+  const APP_BOOMS=["boom-energy.mp3","boom-military.mp3","boom-deep.mp3"].map(s=>{const a=new Audio(s);a.volume=.5;a.preload="auto";return a;});
+  let boomIdx=0;
+  function playBoomSfx(){ if(SFX_MUTED) return; const a=APP_BOOMS[boomIdx % APP_BOOMS.length]; boomIdx++; try{ a.currentTime=0; a.play().catch(()=>{}); }catch(e){} }
+
+  const NEEDS_EN={
+    poder:{need:"The power of the subconscious",essence:"I awaken the strength already alive in me.",
+      body:"Your mind quietly replays the scripts you wrote years ago. Subment is the training to rewrite them: speaking to your subconscious with intention and reprogramming what you believe is possible.",
+      tag:"Train your subconscious"},
+    tiempo:{need:"The power of time",essence:"I own my hours and my focus.",
+      body:"Before money, before any goal, comes time. Learning to see it, measure it and honor it is the first form of intelligence. Joga Time turns your hours into something visible and yours.",
+      tag:"Time is everything"},
+    prosperidad:{need:"The power of money",essence:"I direct my prosperity with a clear, calm head.",
+      body:"Financial freedom isn't born from earning more, but from understanding and directing what you have. Monexium pairs an abundance mindset with a practical system: accounts, habits and clear-headed decisions.",
+      tag:"Finance · Mind + Method"},
+    ventas:{need:"The power of sales",essence:"I connect, listen and close with honesty.",
+      body:"Selling isn't pushing; it's understanding the person in front of you and guiding them with clarity. Ventemex distills that art into simple steps: open, listen, offer and close with honesty.",
+      tag:"The art of selling"},
+    crecimiento:{need:"The power of growth",essence:"I climb one step every day.",
+      body:"No one stands still without paying for it. The urge to improve, to master something, to have a purpose, is deeply human. Pasley is the method to climb one step every day.",
+      tag:"The Method of Success"},
+    conocimiento:{need:"The power of habits",essence:"What I repeat each day builds me.",
+      body:"Understanding how the world works — and creating with that knowledge — is what sets us apart. Protoneutrón is the laboratory: a space to experiment, take ideas apart and put them back together.",
+      tag:"Laboratory"},
+  };
+  function L(n){ if(LANG==="en"){const e=NEEDS_EN[n.app.key];return {need:e.need,essence:e.essence,body:e.body,tag:e.tag};}
+    return {need:n.need,essence:n.essence,body:n.body,tag:n.app.tag}; }
+  function tagFor(app){ return (LANG==="en"&&NEEDS_EN[app.key])?NEEDS_EN[app.key].tag:app.tag; }
+
+  const SHARE_SVG='<svg class="share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg>';
+  const T={
+    es:{ "nav.apps":"Abrir las apps","nav.install":"Instalar app","hero.eyebrow":"Inteligencia para la vida",
+      "hero.h1":"Las necesidades que mueven a cada ser humano. Una <em>app</em> para cada una.",
+      "hero.lede":"Toda vida, por distinta que sea, corre sobre las mismas necesidades. <b>Joga Intelligence</b> reúne una herramienta inteligente para cada una — pensadas, diseñadas y conectadas en un solo lugar.",
+      "hero.cta1":"Explorar el sistema →","hero.cta2":"Ver todas las apps",
+      "cz.greet":"Hola, soy Joga.","cz.sub":"¿Qué necesitas hoy?","cz.thinking":"Pensando en lo mejor para ti…","cz.more":"¿Algo más?",
+      "cz.ph":"Dímelo en tus palabras… p. ej. «ando sin tiempo»","cz.thinkingLabel":"Joga está pensando",
+      "cz.unsure":"No te entendí del todo. Dímelo con otras palabras, o elige una opción de abajo.","cz.open":"Abrir →",
+      "man.p":"No vendemos apps sueltas. Resolvemos lo que de verdad importa, una necesidad a la vez.",
+      "man.needs":"<span>Subconsciente</span> · <span>Tiempo</span> · <span>Hábitos</span> · <span>Crecimiento</span> · <span>Dinero</span> · <span>Ventas</span>",
+      "ch.h2":"Seis necesidades. <em>Seis soluciones.</em>",
+      "lau.eyebrow":"Todo en un solo lugar","lau.h2":"Tu vida entera, a un toque",
+      "lau.p":"Abre cualquiera de las apps sin salir de Joga Intelligence. Una sola puerta de entrada.",
+      "foot.tag":"Mente + Método","foot.copy":"Diseñado para una vida más plena",
+      "ios.title":"Instálala en tu iPhone","ios.body":"Toca "+SHARE_SVG+" Compartir y luego «Agregar a inicio».",
+      "v.back":"‹ Volver","v.open":"Abrir ↗",
+      "intro.thesis":"Las necesidades que mueven a cada ser humano. Una app para cada una.","intro.skip":"Saltar","intro.enter":"Toca para entrar",
+      "open":"Abrir" },
+    en:{ "nav.apps":"Open the apps","nav.install":"Install app","hero.eyebrow":"Intelligence for life",
+      "hero.h1":"The needs that move every human being. One <em>app</em> for each.",
+      "hero.lede":"Every life, however different, runs on the same needs. <b>Joga Intelligence</b> brings together one smart tool for each — designed and connected in a single place.",
+      "hero.cta1":"Explore the system →","hero.cta2":"See all the apps",
+      "cz.greet":"Hi, I'm Joga.","cz.sub":"What do you need today?","cz.thinking":"Thinking of what's best for you…","cz.more":"Anything else?",
+      "cz.ph":"Tell me in your words… e.g. \"I'm out of time\"","cz.thinkingLabel":"Joga is thinking",
+      "cz.unsure":"I didn't quite get that. Tell me another way, or pick an option below.","cz.open":"Open →",
+      "man.p":"We don't sell loose apps. We solve what truly matters, one need at a time.",
+      "man.needs":"<span>Subconscious</span> · <span>Time</span> · <span>Habits</span> · <span>Growth</span> · <span>Money</span> · <span>Sales</span>",
+      "ch.h2":"Six needs. <em>Six solutions.</em>",
+      "lau.eyebrow":"Everything in one place","lau.h2":"Your whole life, one tap away",
+      "lau.p":"Open any of the apps without leaving Joga Intelligence. One single doorway.",
+      "foot.tag":"Mind + Method","foot.copy":"Designed for a fuller life",
+      "ios.title":"Install it on your iPhone","ios.body":"Tap "+SHARE_SVG+" Share, then \u201cAdd to Home Screen\u201d.",
+      "v.back":"‹ Back","v.open":"Open ↗",
+      "intro.thesis":"The needs that move every human being. One app for each.","intro.skip":"Skip","intro.enter":"Tap to enter",
+      "open":"Open" },
+  };
+  const CHIPS=[
+    {key:"poder", es:{label:"Mi poder",q:"Quiero despertar mi poder interior"}, en:{label:"Inner power",q:"I want to awaken my inner power"}},
+    {key:"tiempo", es:{label:"Sin tiempo",q:"Ando sin tiempo, no me organizo"}, en:{label:"No time",q:"I'm out of time and disorganized"}},
+    {key:"prosperidad", es:{label:"Mi dinero",q:"Quiero ordenar mi dinero"}, en:{label:"My money",q:"I want to get my money in order"}},
+    {key:"ventas", es:{label:"Vender más",q:"Quiero aprender a vender mejor"}, en:{label:"Sell more",q:"I want to learn to sell better"}},
+    {key:"crecimiento", es:{label:"Crecer",q:"Quiero crecer y mejorar como persona"}, en:{label:"Grow",q:"I want to grow and improve as a person"}},
+    {key:"conocimiento", es:{label:"Aprender",q:"Tengo ganas de aprender y crear cosas"}, en:{label:"Learn",q:"I feel like learning and creating things"}},
+  ];
+
+  function markRevealed(){ document.querySelectorAll(".need, .reveal").forEach(el=>el.classList.add("in")); }
+
+  // build bento mosaic (language-aware)
+  function renderChapters(){
+    const needsEl=document.getElementById("needs"); needsEl.innerHTML="";
+    const openW=T[LANG]["open"];
+    const grid=document.createElement("div"); grid.className="bento";
+    const pos=["big","p1","p2","p3","p4","p5"];
+    NEEDS.forEach((n,i)=>{
+      const tx=L(n);
+      const b=document.createElement("button");
+      b.className="tile "+(pos[i]||"");
+      b.style.setProperty("--accent",n.app.accent);
+      b.setAttribute("aria-label",openW+" "+n.app.name);
+      b.innerHTML=`
+        <span class="glyph">${n.app.glyph}</span>
+        <span class="t-num">${n.num}</span>
+        <span class="t-power">${tx.need}</span>
+        <span class="t-app">${n.app.name}</span>
+        <span class="t-affirm">${tx.essence}</span>`;
+      b.addEventListener("click",()=>openApp(n.app));
+      grid.appendChild(b);
+    });
+    needsEl.appendChild(grid);
+    if(document.body.classList.contains("motion")) markRevealed();
+  }
+
+  // build launcher chips (language-aware)
+  function renderLauncherChips(){
+    const chipsEl=document.getElementById("chips"); chipsEl.innerHTML="";
+    const openW=T[LANG]["open"];
+    NEEDS.forEach(n=>{
+      const a=n.app, tx=L(n);
+      const c=document.createElement("button");
+      c.className="chip"; c.style.setProperty("--accent",a.accent);
+      c.setAttribute("aria-label",openW+" "+a.name);
+      c.innerHTML=`<span class="g">${a.glyph}</span><span class="t"><b>${a.name}</b><span>${tx.tag}</span></span>`;
+      c.addEventListener("click",()=>openApp(a));
+      chipsEl.appendChild(c);
+    });
+  }
+
+  // build concierge quick chips (language-aware)
+  function renderCzChips(){
+    const el=document.getElementById("cz-chips"); el.innerHTML="";
+    CHIPS.forEach(c=>{ const loc=c[LANG]; const b=document.createElement("button");
+      b.setAttribute("data-q",loc.q); b.textContent=loc.label; el.appendChild(b); });
+  }
+
+  // viewer
+  const viewer=document.getElementById("viewer"),vframe=document.getElementById("vframe"),
+        vtitle=document.getElementById("vtitle"),vsub=document.getElementById("vsub"),
+        vopen=document.getElementById("vopen");
+  function openApp(a){
+    vtitle.childNodes[0].nodeValue=a.name; vsub.textContent=tagFor(a);
+    vframe.src=a.file; vopen.href=a.file;
+    playBoomSfx();
+    viewer.classList.add("open"); document.body.style.overflow="hidden";
+    document.getElementById("vback").focus();
+  }
+  function closeApp(){
+    viewer.classList.remove("open"); document.body.style.overflow="";
+    setTimeout(()=>vframe.removeAttribute("src"),440);
+  }
+  document.getElementById("vback").addEventListener("click",()=>{ playTapSfx(); closeApp(); });
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&viewer.classList.contains("open"))closeApp();});
+
+  // "ver apps" buttons → scroll to launcher
+  const toLauncher=()=>{ playTapSfx(); document.getElementById("launcher").scrollIntoView({behavior:"smooth"}); };
+  document.getElementById("nav-apps").addEventListener("click",toLauncher);
+  document.getElementById("hero-apps").addEventListener("click",toLauncher);
+
+  /* ---------------- Joga concierge ---------------- */
+  const appByKey = {};
+  NEEDS.forEach(n => { appByKey[n.app.key] = n.app; });
+
+  // Local intent engine — works offline and on any host.
+  const INTENTS = {
+    poder:       { ack:"El cambio empieza por dentro.", ack_en:"Change starts from within.",
+      kw:["subconsciente","subconcient","subconscient","creenc","autoestima","confianza","poder interior","reprogram","afirmac","manifest","miedo","bloqueo","seguridad en mi","creer en mi","limit","insegur","autosabotaje","mente subconsciente","subconscious","mindset","belief","confidence","fear","inner power","self belief"] },
+    tiempo:      { ack:"Suena a que el reloj te gana.", ack_en:"Sounds like the clock is winning.",
+      kw:["tiempo","hora","horas","sin tiempo","organiz","agenda","rutina","productiv","enfoc","concentr","prisa","apur","ocupad","atras","procrastin","distra","reloj","time","busy","schedule","focus","minuto","dia a dia"] },
+    prosperidad: { ack:"Hablemos de tu dinero, con cabeza.", ack_en:"Let's talk money, with a clear head.",
+      kw:["dinero","finanz","ahorr","deuda","gast","presup","invert","invers","ganar","plata","lana","econom","financ","sueldo","pagar","banco","tarjeta","credito","money","save","budget","invest","cash","rich","riqueza"] },
+    ventas:      { ack:"Hablemos de cómo vender mejor.", ack_en:"Let's talk about selling better.",
+      kw:["vender","venta","ventas","client","cliente","negocio","negoci","cerrar","cierre","prospect","comision","comerci","ofrecer","persuad","convenc","trato","emprend","mercad","producto","servicio","sell","sales","customer","close","deal","pitch","business"] },
+    crecimiento: { ack:"Quieres avanzar — me gusta.", ack_en:"You want to move forward — I like it.",
+      kw:["crecer","crec","mejor","exito","meta","metas","propos","motiv","discipl","habit","superar","desarrollo","logr","constan","ser mejor","no se que hacer","sin rumbo","perdido","rumbo","growth","success","goal","improve","discipline","cambiar mi vida"] },
+    conocimiento:{ ack:"La curiosidad pide laboratorio.", ack_en:"Curiosity calls for a lab.",
+      kw:["aprend","conoc","cienc","crear","experiment","idea","curios","constru","proyecto","innov","estudi","saber","entender","tecnolog","laborator","program","invent","learn","build","science","create","study","knowledge","tech"] },
+  };
+  function normalize(t){
+    return (t||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9\s]/g," ");
+  }
+  function localPick(text){
+    const t=normalize(text); let best=null,bestScore=0;
+    for(const key in INTENTS){
+      let score=0;
+      for(const kw of INTENTS[key].kw){ const k=normalize(kw).trim(); if(k && t.includes(k)) score+=(k.length>4?2:1); }
+      if(score>bestScore){bestScore=score;best=key;}
+    }
+    return {key:best, ack: best?INTENTS[best].ack:null, ack_en: best?INTENTS[best].ack_en:null};
+  }
+
+  // Optional live Claude — answers inside Claude.ai; falls back to local elsewhere.
+  const USE_LIVE_AI = true;
+  async function livePick(text){
+    const sys=`Eres "Joga", el concierge cálido de Joga Intelligence. Hay 6 apps, una por necesidad humana:
+- poder: SUBMENT (entrenar el subconsciente, despertar el poder interior)
+- tiempo: JOGA TIME (manejar y honrar el tiempo)
+- prosperidad: MONEXIUM (finanzas personales, mente + método)
+- ventas: VENTEMEX (el arte de vender, método de ventas)
+- crecimiento: PASLEY (método del éxito, desarrollo personal)
+- conocimiento: PROTONEUTRÓN (aprender, crear, experimentar)
+Elige la ÚNICA app más adecuada y escribe UNA frase cálida (máx 22 palabras) que conecte lo que siente con esa app, en ${LANG==="en"?"INGLÉS":"ESPAÑOL"}. Responde SOLO JSON sin markdown: {"app":"<clave>","message":"<frase>"}`;
+    const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),7000);
+    try{
+      const r=await fetch("https://api.anthropic.com/v1/messages",{
+        method:"POST",headers:{"Content-Type":"application/json"},signal:ctrl.signal,
+        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,
+          messages:[{role:"user",content:sys+"\n\nUsuario: "+text}]})
+      });
+      clearTimeout(to);
+      const data=await r.json();
+      const txt=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").trim();
+      const obj=JSON.parse(txt.replace(/```json|```/g,"").trim());
+      if(obj && appByKey[obj.app]) return {key:obj.app, message:String(obj.message||"")};
+    }catch(e){ clearTimeout(to); }
+    return null;
+  }
+
+  const czInput=document.getElementById("cz-input");
+  const czAnswer=document.getElementById("cz-answer");
+  const czSub=document.getElementById("cz-sub");
+
+  function renderResult(key,message){
+    const a=appByKey[key]; czAnswer.innerHTML="";
+    const reply=document.createElement("div"); reply.className="cz-reply";
+    reply.textContent=message;
+    const res=document.createElement("button"); res.className="cz-result"; res.style.setProperty("--accent",a.accent);
+    res.setAttribute("aria-label",T[LANG]["open"]+" "+a.name);
+    res.innerHTML=`<span class="g">${a.glyph}</span><span class="rt"><b>${a.name}</b><span>${tagFor(a)}</span></span><span class="go">${T[LANG]["cz.open"]}</span>`;
+    res.addEventListener("click",()=>openApp(a));
+    czAnswer.appendChild(reply); czAnswer.appendChild(res); czAnswer.hidden=false;
+  }
+  function renderThinking(){ czAnswer.innerHTML='<div class="cz-thinking">'+T[LANG]["cz.thinkingLabel"]+' <i></i><i></i><i></i></div>'; czAnswer.hidden=false; }
+  function renderUnsure(){ czAnswer.innerHTML='<div class="cz-reply">'+T[LANG]["cz.unsure"]+'</div>'; czAnswer.hidden=false; }
+
+  let asking=false;
+  async function askJoga(text){
+    text=(text||"").trim(); if(!text||asking) return;
+    asking=true; renderThinking(); czSub.textContent=T[LANG]["cz.thinking"];
+    const minDelay=new Promise(r=>setTimeout(r,600));
+    let result=null;
+    if(USE_LIVE_AI) result=await livePick(text);
+    if(!result){
+      const lp=localPick(text);
+      if(lp.key){ const a=appByKey[lp.key]; const ack=(LANG==="en"?lp.ack_en:lp.ack); const suf=(LANG==="en"?(a.name+" is just right for that."):(a.name+" es justo para eso.")); result={key:lp.key, message:`${ack} ${suf}`}; }
+    }
+    await minDelay; czSub.textContent=T[LANG]["cz.more"];
+    if(result) renderResult(result.key,result.message); else renderUnsure();
+    asking=false;
+  }
+  document.getElementById("cz-send").addEventListener("click",()=>{ playTapSfx(); askJoga(czInput.value); });
+  czInput.addEventListener("keydown",e=>{ if(e.key==="Enter"){e.preventDefault();askJoga(czInput.value);} });
+  document.getElementById("cz-chips").addEventListener("click",e=>{
+    const b=e.target.closest("button[data-q]"); if(!b) return;
+    playTapSfx();
+    czInput.value=b.getAttribute("data-q"); askJoga(b.getAttribute("data-q"));
+  });
+
+  /* ---------- apply language ---------- */
+  function applyLang(lang){
+    LANG=(lang==="en")?"en":"es";
+    try{ localStorage.setItem("jiLang",LANG); }catch(e){}
+    const dict=T[LANG];
+    document.documentElement.lang=LANG;
+    document.querySelectorAll("[data-i18n]").forEach(el=>{ const k=el.getAttribute("data-i18n"); if(dict[k]!=null) el.textContent=dict[k]; });
+    document.querySelectorAll("[data-i18n-html]").forEach(el=>{ const k=el.getAttribute("data-i18n-html"); if(dict[k]!=null) el.innerHTML=dict[k]; });
+    document.querySelectorAll("[data-i18n-ph]").forEach(el=>{ const k=el.getAttribute("data-i18n-ph"); if(dict[k]!=null) el.setAttribute("placeholder",dict[k]); });
+    const sub=document.getElementById("cz-sub"); if(sub) sub.textContent=dict["cz.sub"];
+    const fc=document.getElementById("foot-copy"); if(fc) fc.textContent=dict["foot.copy"]+" · © "+new Date().getFullYear();
+    renderChapters(); renderLauncherChips(); renderCzChips();
+    const ans=document.getElementById("cz-answer"); if(ans){ ans.hidden=true; ans.innerHTML=""; }
+    document.querySelectorAll("#lang-toggle button").forEach(b=>b.classList.toggle("active", b.getAttribute("data-lang")===LANG));
+  }
+  document.getElementById("lang-toggle").addEventListener("click",e=>{
+    const b=e.target.closest("button[data-lang]"); if(!b) return;
+    playTapSfx();
+    applyLang(b.getAttribute("data-lang"));
+  });
+  applyLang(LANG);
+
+  /* ---------------- cinematic intro + boom ---------------- */
+  const A_BOOM="boom-deep.mp3";
+  (function runIntro(){
+    const intro=document.getElementById("intro");
+    if(!intro) return;
+    const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let seen=false; try{ seen=!!sessionStorage.getItem("jiIntro"); }catch(e){}
+    if(reduce || seen){ intro.remove(); return; }
+    try{ sessionStorage.setItem("jiIntro","1"); }catch(e){}
+    document.body.classList.add("intro-lock");
+
+    // boom sound (the one from Joga Time). Mobile blocks autoplay, so it fires on the entering tap.
+    const boom=new Audio(A_BOOM); boom.volume=.55; boom.preload="auto";
+    const muteBtn=document.getElementById("intro-mute");
+    muteBtn.classList.toggle("off",SFX_MUTED); muteBtn.setAttribute("aria-pressed",String(SFX_MUTED));
+    muteBtn.addEventListener("click",ev=>{
+      ev.stopPropagation();
+      SFX_MUTED=!SFX_MUTED;
+      try{ localStorage.setItem("jiMute",SFX_MUTED?"1":"0"); }catch(e){}
+      muteBtn.classList.toggle("off",SFX_MUTED); muteBtn.setAttribute("aria-pressed",String(SFX_MUTED));
+    });
+
+    let played=false, ended=false;
+    const end=()=>{
+      if(ended) return; ended=true;
+      intro.classList.add("done");
+      document.body.classList.remove("intro-lock");
+      setTimeout(()=>{ intro.remove(); },750);
+    };
+    const enter=()=>{
+      if(played) return; played=true;
+      intro.classList.add("playing");
+      if(!SFX_MUTED){ try{ boom.currentTime=0; boom.play().catch(()=>{}); }catch(e){} }
+      setTimeout(end,2300);
+    };
+    intro.addEventListener("click",enter);
+    window.addEventListener("keydown",function k(){ enter(); window.removeEventListener("keydown",k); });
+    // safety: if no interaction, enter anyway so the site is never stuck
+    setTimeout(()=>{ if(!played) enter(); },9000);
+  })();
+
+  /* ---------------- scroll reveal ---------------- */
+  (function reveals(){
+    const reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const targets=[...document.querySelectorAll(".need, .reveal")];
+    if(reduce || !("IntersectionObserver" in window)){
+      // no motion → show everything (no body.motion class added)
+      return;
+    }
+    document.body.classList.add("motion");
+    const io=new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in");
+        if(e.target.querySelector && e.target.querySelector(".lau-logo")) playOpenSfx();
+        io.unobserve(e.target); } });
+    },{threshold:0.16, rootMargin:"0px 0px -7% 0px"});
+    targets.forEach(t=>io.observe(t));
+  })();
+
+  /* ---------------- PWA ---------------- */
+  // register service worker
+  if("serviceWorker" in navigator){
+    window.addEventListener("load",()=>{
+      navigator.serviceWorker.register("sw.js").catch(()=>{});
+    });
+  }
+
+  const installBtn=document.getElementById("install-btn");
+  const iosHint=document.getElementById("ios-hint");
+  const isStandalone = window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true;
+
+  // Chrome / Edge / Android: native install prompt
+  let deferredPrompt=null;
+  window.addEventListener("beforeinstallprompt",(e)=>{
+    e.preventDefault(); deferredPrompt=e; installBtn.hidden=false;
+  });
+  installBtn.addEventListener("click",async()=>{
+    if(!deferredPrompt) return;
+    deferredPrompt.prompt();
+    await deferredPrompt.userChoice;
+    deferredPrompt=null; installBtn.hidden=true;
+  });
+  window.addEventListener("appinstalled",()=>{ installBtn.hidden=true; });
+
+  // iOS Safari: no prompt API → show a friendly hint once
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+                (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+  let hintSeen=false;
+  try{ hintSeen = !!sessionStorage.getItem("jiHintSeen"); }catch(e){}
+  if(isIOS && !isStandalone && !hintSeen){
+    setTimeout(()=>iosHint.classList.add("show"),2200);
+  }
+  document.getElementById("ios-hint-close").addEventListener("click",()=>{
+    iosHint.classList.remove("show");
+    try{ sessionStorage.setItem("jiHintSeen","1"); }catch(e){}
+  });
+</script>
+</body>
+</html>
