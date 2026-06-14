@@ -136,6 +136,237 @@
   .chapters .lead em{font-style:normal;color:var(--ember)}
   .chapters .lead .count{color:var(--muted);font-size:12px;letter-spacing:.2em}
 
+
+  /* ---------------- TÚNEL 3D (Versión C): profundidad cinematográfica ---------------- */
+  .tunnel3d{
+    position:relative;
+    width:100%;
+    min-height:560px;
+    margin:30px 0 50px;
+    perspective:1200px;
+    perspective-origin:50% 45%;
+    overflow:hidden;
+    touch-action:pan-y;
+    -webkit-user-select:none;user-select:none;
+  }
+  .tunnel3d::before, .tunnel3d::after{
+    content:"";position:absolute;left:0;right:0;height:120px;pointer-events:none;z-index:5;
+  }
+  .tunnel3d::before{top:0;background:linear-gradient(to bottom, var(--bg) 0%, transparent 100%)}
+  .tunnel3d::after{bottom:0;background:linear-gradient(to top, var(--bg) 0%, transparent 100%)}
+  .tunnel3d .t-stage{
+    position:relative;width:100%;height:560px;
+    transform-style:preserve-3d;
+  }
+  .tunnel3d .t-card{
+    position:absolute;top:50%;left:50%;
+    width:280px;height:380px;
+    margin:-190px 0 0 -140px;
+    background:linear-gradient(160deg, rgba(20,18,12,.94), rgba(11,11,12,.98));
+    border:1px solid rgba(231,196,106,.4);
+    border-radius:24px;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,.6),
+      0 0 60px rgba(231,196,106,.15),
+      inset 0 1px 0 rgba(255,255,255,.06);
+    padding:28px 22px;
+    display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+    cursor:pointer;backface-visibility:hidden;
+    transition:transform .8s cubic-bezier(.22,1,.36,1),
+               opacity .6s ease,
+               border-color .4s ease,
+               box-shadow .4s ease,
+               filter .6s ease;
+    will-change:transform,opacity;
+  }
+  /* posiciones del túnel: front, mid, back, hidden */
+  .tunnel3d .t-card[data-pos="front"]{
+    transform:translate3d(0,0,0) scale(1);
+    opacity:1;z-index:30;
+    border-color:rgba(231,196,106,.95);
+    box-shadow:
+      0 40px 120px rgba(0,0,0,.7),
+      0 0 100px rgba(231,196,106,.45),
+      inset 0 1px 0 rgba(255,255,255,.12);
+  }
+  .tunnel3d .t-card[data-pos="mid-l"]{
+    transform:translate3d(-220px,0,-220px) rotateY(28deg) scale(.85);
+    opacity:.55;z-index:20;filter:blur(.6px);
+  }
+  .tunnel3d .t-card[data-pos="mid-r"]{
+    transform:translate3d(220px,0,-220px) rotateY(-28deg) scale(.85);
+    opacity:.55;z-index:20;filter:blur(.6px);
+  }
+  .tunnel3d .t-card[data-pos="back-l"]{
+    transform:translate3d(-380px,0,-480px) rotateY(40deg) scale(.65);
+    opacity:.25;z-index:10;filter:blur(1.4px);
+  }
+  .tunnel3d .t-card[data-pos="back-r"]{
+    transform:translate3d(380px,0,-480px) rotateY(-40deg) scale(.65);
+    opacity:.25;z-index:10;filter:blur(1.4px);
+  }
+  .tunnel3d .t-card[data-pos="hidden"]{
+    transform:translate3d(0,0,-900px) scale(.3);
+    opacity:0;z-index:0;pointer-events:none;
+  }
+  .tunnel3d .t-num{
+    font-family:var(--serif);font-style:italic;
+    font-size:14px;color:var(--gold);opacity:.75;letter-spacing:3px;
+  }
+  .tunnel3d .t-glyph{
+    font-family:var(--serif);font-weight:600;
+    font-size:84px;color:var(--gold);line-height:1;margin:6px 0;
+    text-shadow:0 0 30px rgba(231,196,106,.6),0 0 70px rgba(231,196,106,.3);
+  }
+  .tunnel3d .t-app{
+    font-family:var(--serif);font-weight:700;
+    font-size:22px;color:#fff;letter-spacing:1.5px;text-align:center;
+  }
+  .tunnel3d .t-power{
+    font-family:'Dancing Script',cursive;
+    font-size:24px;color:var(--gold);
+    text-align:center;line-height:1.2;margin-top:8px;
+    text-shadow:0 0 22px rgba(231,196,106,.5);
+  }
+  .tunnel3d .t-cta{
+    font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.55);
+    text-transform:uppercase;margin-top:auto;
+    opacity:0;transition:opacity .4s ease;
+  }
+  .tunnel3d .t-card[data-pos="front"] .t-cta{opacity:1}
+  /* línea de luz central (riel del túnel) */
+  .tunnel3d .t-rail{
+    position:absolute;left:50%;top:50%;
+    width:2px;height:600px;margin:-300px 0 0 -1px;
+    background:linear-gradient(to bottom, transparent, rgba(231,196,106,.25), transparent);
+    transform:translateZ(-700px) rotateX(80deg);
+    pointer-events:none;z-index:1;
+  }
+  /* halo de fondo */
+  .tunnel3d::after,.tunnel3d-halo{}
+  .tunnel3d .t-halo{
+    position:absolute;left:50%;top:50%;
+    width:500px;height:500px;margin:-250px 0 0 -250px;
+    background:radial-gradient(circle, rgba(231,196,106,.12) 0%, transparent 65%);
+    pointer-events:none;z-index:0;
+    animation:halo 8s ease-in-out infinite;
+  }
+  /* controles abajo */
+  .tunnel3d .t-ctrl{
+    position:absolute;left:0;right:0;bottom:14px;
+    display:flex;justify-content:center;align-items:center;gap:14px;
+    z-index:40;
+  }
+  .tunnel3d .t-btn{
+    width:48px;height:48px;border-radius:50%;
+    background:rgba(231,196,106,.08);
+    border:1px solid rgba(231,196,106,.45);
+    color:var(--gold);font-size:24px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:all .25s ease;
+  }
+  .tunnel3d .t-btn:hover{background:rgba(231,196,106,.22);transform:scale(1.08)}
+  .tunnel3d .t-dots{display:flex;gap:8px;padding:0 14px}
+  .tunnel3d .t-dot{
+    width:8px;height:8px;border-radius:50%;
+    background:rgba(231,196,106,.25);transition:all .3s ease;cursor:pointer;
+  }
+  .tunnel3d .t-dot.is-on{background:var(--gold);box-shadow:0 0 14px rgba(231,196,106,.75);transform:scale(1.35)}
+  .tunnel3d .t-hint{
+    text-align:center;font-size:12px;color:rgba(255,255,255,.4);
+    letter-spacing:2px;text-transform:uppercase;
+    margin-top:18px;
+  }
+  @media (max-width:620px){
+    .tunnel3d{min-height:480px}
+    .tunnel3d .t-stage{height:480px}
+    .tunnel3d .t-card{width:220px;height:320px;margin:-160px 0 0 -110px}
+    .tunnel3d .t-card[data-pos="mid-l"]{transform:translate3d(-150px,0,-180px) rotateY(24deg) scale(.78)}
+    .tunnel3d .t-card[data-pos="mid-r"]{transform:translate3d(150px,0,-180px) rotateY(-24deg) scale(.78)}
+    .tunnel3d .t-card[data-pos="back-l"]{transform:translate3d(-240px,0,-360px) rotateY(36deg) scale(.55)}
+    .tunnel3d .t-card[data-pos="back-r"]{transform:translate3d(240px,0,-360px) rotateY(-36deg) scale(.55)}
+    .tunnel3d .t-glyph{font-size:68px}
+    .tunnel3d .t-app{font-size:19px}
+    .tunnel3d .t-power{font-size:20px}
+  }
+
+
+  /* ---------------- SISTEMA DE PROGRESO Y GUÍA ---------------- */
+  /* Etiqueta "Empieza aquí" / "Tu siguiente poder" */
+  .tile{position:relative}
+  .tile .start-badge{
+    position:absolute;top:14px;right:14px;z-index:5;
+    font-family:var(--serif);font-style:italic;font-size:12px;
+    color:#0B0B0C;background:linear-gradient(135deg,#F4D78A,#E7C46A,#C9A050);
+    padding:6px 12px;border-radius:999px;
+    letter-spacing:.5px;font-weight:600;
+    box-shadow:0 4px 14px rgba(231,196,106,.5),0 0 24px rgba(231,196,106,.4);
+    animation:badgeBreathe 2.4s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes badgeBreathe{
+    0%,100%{transform:scale(1);box-shadow:0 4px 14px rgba(231,196,106,.5),0 0 24px rgba(231,196,106,.4)}
+    50%{transform:scale(1.06);box-shadow:0 6px 22px rgba(231,196,106,.7),0 0 40px rgba(231,196,106,.6)}
+  }
+  /* Resaltado dorado cuando es el poder sugerido */
+  .tile.is-suggested{
+    border-color:rgba(231,196,106,.7)!important;
+    box-shadow:0 0 0 1px rgba(231,196,106,.3) inset,0 16px 40px rgba(231,196,106,.18),0 0 60px rgba(231,196,106,.15)!important;
+  }
+  /* Caja "despertada" (completada 3/3) */
+  .tile.is-awakened{
+    border-color:rgba(231,196,106,.9)!important;
+    box-shadow:0 0 0 1px rgba(231,196,106,.5) inset,0 12px 30px rgba(231,196,106,.25)!important;
+    background:linear-gradient(160deg,rgba(231,196,106,.06),rgba(11,11,12,.95))!important;
+  }
+  .tile.is-awakened .t-num::after{
+    content:" · ✓";color:var(--gold);font-style:normal;font-weight:600;
+  }
+  /* Barra de progreso */
+  .tile .progress-row{
+    display:flex;align-items:center;gap:10px;margin-top:14px;
+    padding-top:12px;border-top:1px solid rgba(231,196,106,.12);
+  }
+  .tile .progress-bar{
+    flex:1;height:5px;background:rgba(255,255,255,.06);
+    border-radius:999px;overflow:hidden;
+  }
+  .tile .progress-fill{
+    height:100%;background:linear-gradient(90deg,#C9A050,#E7C46A,#F4D78A);
+    border-radius:999px;transition:width .6s cubic-bezier(.22,1,.36,1);
+    box-shadow:0 0 8px rgba(231,196,106,.5);
+  }
+  .tile .progress-text{
+    font-family:var(--serif);font-size:11px;color:var(--muted);
+    letter-spacing:1.5px;text-transform:uppercase;font-style:italic;
+    white-space:nowrap;
+  }
+  .tile.is-awakened .progress-text{color:var(--gold)}
+  /* Toast / mensaje al completar */
+  #power-toast{
+    position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-30px);
+    background:linear-gradient(135deg,rgba(20,18,12,.98),rgba(11,11,12,.98));
+    color:#fff;padding:16px 28px;border-radius:14px;
+    border:1px solid rgba(231,196,106,.6);
+    box-shadow:0 20px 60px rgba(0,0,0,.7),0 0 40px rgba(231,196,106,.3);
+    font-family:var(--serif);font-size:15px;
+    z-index:9999;opacity:0;pointer-events:none;
+    transition:opacity .5s ease,transform .5s ease;
+    max-width:90vw;text-align:center;
+  }
+  #power-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #power-toast .gold{color:var(--gold);font-weight:600}
+  /* Botón de prueba de práctica (solo para Parte 1) */
+  .tile .test-btn{
+    display:block;width:100%;margin-top:10px;
+    background:rgba(231,196,106,.05);border:1px dashed rgba(231,196,106,.4);
+    color:var(--gold);font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    padding:8px;border-radius:8px;cursor:pointer;
+    transition:all .25s ease;font-family:var(--serif);
+  }
+  .tile .test-btn:hover{background:rgba(231,196,106,.15);transform:scale(1.02)}
+  .tile.is-awakened .test-btn{display:none}
+
   /* ---------------- lista alterna (un box por fila) ---------------- */
   .bento{display:flex;flex-direction:column;gap:16px;margin-top:24px}
   .tile{
@@ -383,6 +614,14 @@
     .viewer{transition:visibility .01s!important}
     #intro{display:none!important}
   }
+
+  /* Centrar el túnel cuando vive en la sección launcher */
+  #launcher #chips{display:flex;justify-content:center;align-items:center;width:100%}
+  #launcher #chips .tunnel3d{max-width:1120px;margin-left:auto;margin-right:auto}
+  /* Centrar el contenido interno del túnel */
+  .tunnel3d .t-stage{margin:0 auto;max-width:1120px}
+  .tunnel3d .t-hint{max-width:1120px;margin-left:auto;margin-right:auto}
+
 </style>
 <style>
   .power-card{position:fixed;inset:0;z-index:120;display:none}
@@ -649,46 +888,181 @@
 
   function markRevealed(){ document.querySelectorAll(".need, .reveal").forEach(el=>el.classList.add("in")); }
 
-  // build bento mosaic (language-aware)
+  // build 3D tunnel (Versión C)
+  let _tunIdx=0,_tunStage=null,_tunDots=null;
   function renderChapters(){
-    const needsEl=document.getElementById("needs"); needsEl.innerHTML="";
+    const needsEl=document.getElementById("chips"); needsEl.innerHTML="";
     const openW=T[LANG]["open"];
-    const grid=document.createElement("div"); grid.className="bento";
-    const pos=["big","p1","p2","p3","p4","p5"];
+    const wrap=document.createElement("div"); wrap.className="tunnel3d";
+    const halo=document.createElement("div"); halo.className="t-halo"; wrap.appendChild(halo);
+    const rail=document.createElement("div"); rail.className="t-rail"; wrap.appendChild(rail);
+    const stage=document.createElement("div"); stage.className="t-stage";
     NEEDS.forEach((n,i)=>{
       const tx=L(n);
-      const b=document.createElement("button");
+      const card=document.createElement("button");
+      card.className="t-card";
+      card.setAttribute("data-i",i);
+      card.style.setProperty("--accent",n.app.accent);
+      card.setAttribute("aria-label",openW+" "+n.app.name);
+      card.innerHTML=`
+        <span class="t-num">${n.num}</span>
+        <span class="t-glyph">${n.app.glyph}</span>
+        <span class="t-app">${n.app.name}</span>
+        <span class="t-power">${tx.need}</span>
+        <span class="t-cta">${T[LANG]["open"]} →</span>`;
+      card.addEventListener("click",()=>{
+        if(i===_tunIdx){ previewPower(n); }
+        else { _tunIdx=i; _tunUpdate(); playTapSfx(); }
+      });
+      stage.appendChild(card);
+    });
+    wrap.appendChild(stage);
+    // controles
+    const ctrl=document.createElement("div"); ctrl.className="t-ctrl";
+    const prev=document.createElement("button"); prev.className="t-btn"; prev.innerHTML="‹"; prev.setAttribute("aria-label","Anterior");
+    const next=document.createElement("button"); next.className="t-btn"; next.innerHTML="›"; next.setAttribute("aria-label","Siguiente");
+    const dots=document.createElement("div"); dots.className="t-dots";
+    NEEDS.forEach((_,i)=>{ const d=document.createElement("span"); d.className="t-dot"+(i===0?" is-on":""); d.addEventListener("click",()=>{_tunIdx=i;_tunUpdate();playTapSfx();}); dots.appendChild(d); });
+    const total=NEEDS.length;
+    prev.addEventListener("click",()=>{ _tunIdx=(_tunIdx-1+total)%total; _tunUpdate(); playTapSfx(); });
+    next.addEventListener("click",()=>{ _tunIdx=(_tunIdx+1)%total; _tunUpdate(); playTapSfx(); });
+    ctrl.appendChild(prev); ctrl.appendChild(dots); ctrl.appendChild(next);
+    wrap.appendChild(ctrl);
+    const hint=document.createElement("div"); hint.className="t-hint";
+    hint.textContent=(LANG==="es")?"Desliza · Toca para despertar":"Swipe · Tap to awaken";
+    needsEl.appendChild(wrap); needsEl.appendChild(hint);
+    // swipe
+    let sx=null;
+    wrap.addEventListener("touchstart",e=>{ sx=e.touches[0].clientX; },{passive:true});
+    wrap.addEventListener("touchend",e=>{
+      if(sx===null) return;
+      const dx=e.changedTouches[0].clientX-sx; sx=null;
+      if(Math.abs(dx)<30) return;
+      if(dx<0){ _tunIdx=(_tunIdx+1)%total; } else { _tunIdx=(_tunIdx-1+total)%total; }
+      _tunUpdate(); playTapSfx();
+    });
+    _tunStage=stage; _tunDots=dots; _tunUpdate();
+    if(document.body.classList.contains("motion")) markRevealed();
+  }
+  function _tunUpdate(){
+    if(!_tunStage) return;
+    const cards=_tunStage.querySelectorAll(".t-card");
+    const total=cards.length;
+    cards.forEach((c,i)=>{
+      const d=(i-_tunIdx+total)%total;
+      let pos="hidden";
+      if(d===0) pos="front";
+      else if(d===1) pos="mid-r";
+      else if(d===total-1) pos="mid-l";
+      else if(d===2) pos="back-r";
+      else if(d===total-2) pos="back-l";
+      c.setAttribute("data-pos",pos);
+    });
+    if(_tunDots) _tunDots.querySelectorAll(".t-dot").forEach((d,i)=>d.classList.toggle("is-on",i===_tunIdx));
+  }
+
+  // build launcher (cajas alternadas grandes abajo) + sistema de progreso
+  function renderLauncherChips(){
+    const chipsEl=document.getElementById("needs"); chipsEl.innerHTML="";
+    chipsEl.className="bento";
+    const openW=T[LANG]["open"];
+    const suggestedIdx=getNextSuggestedPowerIndex();
+    NEEDS.forEach((n,i)=>{
+      const tx=L(n);
+      const progress=getPowerProgress(n.app.name);  // {done:0-3}
+      const isAwakened=progress.done>=3;
+      const isSuggested=(i===suggestedIdx && !isAwakened);
+      const b=document.createElement("div");  // div en vez de button para que los hijos sean clicables
       b.className="tile";
+      if(isSuggested) b.classList.add("is-suggested");
+      if(isAwakened) b.classList.add("is-awakened");
       b.style.setProperty("--accent",n.app.accent);
       b.setAttribute("aria-label",openW+" "+n.app.name);
+      b.style.cursor="pointer";
+      const badgeText=isAwakened?"":(isSuggested?(suggestedIdx===0&&progress.done===0?(LANG==="es"?"✨ Empieza aquí":"✨ Start here"):(LANG==="es"?"✨ Tu siguiente poder":"✨ Your next power")):"");
+      const progressText=isAwakened?(LANG==="es"?"Despertado ✓":"Awakened ✓"):`${progress.done}/3 ${LANG==="es"?"prácticas":"practices"}`;
+      const pct=Math.min(100,(progress.done/3)*100);
       b.innerHTML=`
+        ${badgeText?`<span class="start-badge">${badgeText}</span>`:""}
         <span class="t-media"><span class="t-num">${n.num}</span><span class="glyph">${n.app.glyph}</span></span>
         <span class="t-body">
           <span class="t-power">${tx.need}</span>
           <span class="t-app">${n.app.name}</span>
           <span class="t-affirm">${tx.essence}</span>
+          <span class="progress-row">
+            <span class="progress-bar"><span class="progress-fill" style="width:${pct}%"></span></span>
+            <span class="progress-text">${progressText}</span>
+          </span>
+          ${isAwakened?"":`<button class="test-btn" data-power="${n.app.name}">${LANG==="es"?"✓ Marcar práctica como completada (prueba)":"✓ Mark practice as done (test)"}</button>`}
         </span>`;
-      b.addEventListener("click",()=>previewPower(n));
-      grid.appendChild(b);
+      // click en la caja abre el poder, pero NO si es el botón de prueba
+      b.addEventListener("click",(e)=>{
+        if(e.target.classList.contains("test-btn")){
+          e.stopPropagation();
+          completePractice(n.app.name);
+          return;
+        }
+        previewPower(n);
+      });
+      chipsEl.appendChild(b);
     });
-    needsEl.appendChild(grid);
-    if(document.body.classList.contains("motion")) markRevealed();
   }
 
-  // build launcher chips (language-aware)
-  function renderLauncherChips(){
-    const chipsEl=document.getElementById("chips"); chipsEl.innerHTML="";
-    const openW=T[LANG]["open"];
-    NEEDS.forEach(n=>{
-      const a=n.app, tx=L(n);
-      const c=document.createElement("button");
-      c.className="chip"; c.style.setProperty("--accent",a.accent);
-      c.setAttribute("aria-label",openW+" "+a.name);
-      c.innerHTML=`<span class="g">${a.glyph}</span><span class="t"><b>${a.name}</b><span>${tx.tag}</span></span>`;
-      c.addEventListener("click",()=>openApp(a));
-      chipsEl.appendChild(c);
-    });
+  // === Sistema de progreso (Parte 1) ===
+  const PROGRESS_KEY="joga_progress_v1";
+  function getAllProgress(){
+    try{ return JSON.parse(localStorage.getItem(PROGRESS_KEY)||"{}"); }
+    catch(e){ return {}; }
   }
+  function getPowerProgress(powerName){
+    const all=getAllProgress();
+    return all[powerName]||{done:0};
+  }
+  function saveProgress(p){
+    try{ localStorage.setItem(PROGRESS_KEY,JSON.stringify(p)); }catch(e){}
+  }
+  function completePractice(powerName){
+    const all=getAllProgress();
+    const cur=all[powerName]||{done:0};
+    if(cur.done>=3) return;
+    cur.done+=1;
+    all[powerName]=cur;
+    saveProgress(all);
+    playTapSfx();
+    if(cur.done>=3){
+      const nextIdx=getNextSuggestedPowerIndex();
+      const nextPower=(nextIdx>=0)?NEEDS[nextIdx].app.name:null;
+      const msg=(LANG==="es")
+        ? `<span class="gold">${powerName}</span> ha sido despertado.${nextPower?` <span class="gold">${nextPower}</span> te espera.`:" Has despertado todos tus poderes ✨"}`
+        : `<span class="gold">${powerName}</span> has been awakened.${nextPower?` <span class="gold">${nextPower}</span> is waiting for you.`:" You have awakened all your powers ✨"}`;
+      showPowerToast(msg);
+    }
+    renderLauncherChips();
+  }
+  function getNextSuggestedPowerIndex(){
+    // Devuelve el índice del primer poder en orden que NO esté completado
+    for(let i=0;i<NEEDS.length;i++){
+      const p=getPowerProgress(NEEDS[i].app.name);
+      if(p.done<3) return i;
+    }
+    return -1;  // todos completados
+  }
+  function showPowerToast(html){
+    let t=document.getElementById("power-toast");
+    if(!t){
+      t=document.createElement("div"); t.id="power-toast";
+      document.body.appendChild(t);
+    }
+    t.innerHTML=html;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),5000);
+  }
+  // Función para borrar progreso (útil para pruebas, expongo en window)
+  window.jogaResetProgress=function(){
+    try{ localStorage.removeItem(PROGRESS_KEY); }catch(e){}
+    renderLauncherChips();
+    console.log("Progreso reseteado");
+  };
 
   // build concierge quick chips (language-aware)
   function renderCzChips(){
