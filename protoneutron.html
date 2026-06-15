@@ -79,6 +79,183 @@
     <div class="hero-stats" id="hero-stats"></div>
   </header>
 
+  <!-- ===== JOGA · MÓDULO DE PRÁCTICAS (unificado · oscuro+dorado) ===== -->
+  <section class="jp-wrap" id="jp-wrap" aria-label="Practicas">
+    <style>
+      .jp-wrap{--jp-gold:#ffd23f;--jp-gold-2:#e0a82e;--jp-ink:#eef1fa;--jp-soft:#9aa3bd;
+        --jp-panel:linear-gradient(180deg,rgba(14,17,28,.92),rgba(8,10,18,.94));
+        --jp-cardbg:rgba(255,255,255,.035);--jp-cardbd:rgba(255,210,63,.18);
+        max-width:880px;margin:18px auto 0;padding:26px 22px 30px;border-radius:24px;
+        background:var(--jp-panel);border:1px solid rgba(255,210,63,.14);
+        box-shadow:0 18px 50px rgba(0,0,0,.45);backdrop-filter:blur(10px);
+        font-family:inherit;-webkit-font-smoothing:antialiased;box-sizing:border-box}
+      .jp-wrap *{box-sizing:border-box}
+      .jp-kicker{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--jp-gold);
+        font-weight:700;text-align:center;opacity:.9}
+      .jp-title{font-size:clamp(22px,3.4vw,30px);font-weight:800;text-align:center;margin:8px 0 4px;
+        background:linear-gradient(120deg,var(--jp-gold),#fff4cf,var(--jp-gold-2));
+        -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+      .jp-sub{text-align:center;color:var(--jp-soft);font-size:14px;margin:0 auto 18px;max-width:520px}
+      .jp-barwrap{max-width:520px;margin:0 auto 22px}
+      .jp-bartop{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+      .jp-barlabel{font-size:12px;color:var(--jp-soft);letter-spacing:.04em}
+      .jp-barcount{font-size:12px;font-weight:700;color:var(--jp-gold)}
+      .jp-bar{height:9px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+      .jp-fill{height:100%;width:0%;border-radius:99px;
+        background:linear-gradient(90deg,var(--jp-gold-2),var(--jp-gold));
+        transition:width .6s cubic-bezier(.2,.8,.2,1)}
+      .jp-grid{display:flex;flex-direction:column;gap:14px}
+      .jp-card{position:relative;background:var(--jp-cardbg);border:1px solid var(--jp-cardbd);
+        border-radius:18px;padding:20px 20px 18px;transition:opacity .4s ease,filter .4s ease}
+      .jp-card .jp-ico{font-size:24px;line-height:1}
+      .jp-card h3{margin:8px 0 6px;font-size:18px;font-weight:800;color:var(--jp-ink)}
+      .jp-card .jp-desc{margin:0 0 8px;font-size:14.5px;line-height:1.6;color:#cfd5e6}
+      .jp-card .jp-extra{margin:0 0 14px;font-size:13px;line-height:1.55;color:var(--jp-soft);
+        border-left:2px solid rgba(255,210,63,.4);padding-left:11px}
+      .jp-btn{appearance:none;border:0;cursor:pointer;font-family:inherit;font-weight:800;
+        font-size:14px;padding:11px 18px;border-radius:12px;color:#1a1606;
+        background:linear-gradient(135deg,var(--jp-gold),var(--jp-gold-2));
+        box-shadow:0 6px 18px rgba(255,210,63,.22);transition:transform .15s ease,filter .15s ease}
+      .jp-btn:hover{transform:translateY(-1px);filter:brightness(1.05)}
+      .jp-btn:active{transform:translateY(0)}
+      .jp-card.done{opacity:.6}
+      .jp-card.done .jp-btn{background:transparent;color:#7be0b0;border:1px solid rgba(123,224,176,.5);
+        box-shadow:none;cursor:default}
+      .jp-card.done .jp-btn:hover{transform:none;filter:none}
+      .jp-card.done::after{content:"\2713";position:absolute;top:16px;right:18px;
+        width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+        font-weight:900;color:#1a1606;background:linear-gradient(135deg,var(--jp-gold),var(--jp-gold-2));
+        box-shadow:0 4px 12px rgba(255,210,63,.4)}
+      .jp-toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);
+        background:linear-gradient(180deg,rgba(20,18,8,.97),rgba(12,11,6,.97));
+        border:1px solid rgba(255,210,63,.45);color:var(--jp-gold,#ffd23f);font-weight:700;
+        padding:14px 22px;border-radius:14px;font-size:14.5px;z-index:9999;opacity:0;pointer-events:none;
+        box-shadow:0 18px 50px rgba(0,0,0,.6);transition:opacity .4s ease,transform .4s ease;
+        font-family:inherit;max-width:90vw;text-align:center}
+      .jp-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    </style>
+
+    <div class="jp-kicker" data-es="Tu camino" data-en="Your path">Tu camino</div>
+    <h2 class="jp-title" data-es="Tus 3 pr&aacute;cticas" data-en="Your 3 practices">Tus 3 prácticas</h2>
+    <p class="jp-sub" data-es="Compl&eacute;talas para despertar tu poder." data-en="Complete them to awaken your power.">Complétalas para despertar tu poder.</p>
+
+    <div class="jp-barwrap">
+      <div class="jp-bartop">
+        <span class="jp-barlabel" data-es="Progreso" data-en="Progress">Progreso</span>
+        <span class="jp-barcount" id="jp-count">0 / 3</span>
+      </div>
+      <div class="jp-bar"><div class="jp-fill" id="jp-fill"></div></div>
+    </div>
+
+    <div class="jp-grid">
+      <div class="jp-card" data-pid="p1">
+        <div class="jp-ico">&#128257;</div>
+        <h3 data-es="El h&aacute;bito ancla" data-en="The anchor habit">El hábito ancla</h3>
+        <p class="jp-desc" data-es="Elige un solo h&aacute;bito nuevo y con&eacute;ctalo con algo que ya haces todos los d&iacute;as sin pensar (lavarte los dientes, tomar caf&eacute;, llegar al carro)." data-en="Pick one new habit and tie it to something you already do every day without thinking (brushing your teeth, making coffee, getting in the car).">Elige un solo hábito nuevo y conéctalo con algo que ya haces todos los días sin pensar.</p>
+        <p class="jp-extra" data-es="Ejemplo: &laquo;Despu&eacute;s de tomar caf&eacute;, hago 10 sentadillas.&raquo;" data-en="Example: &ldquo;After my coffee, I do 10 squats.&rdquo;">Ejemplo: «Después de tomar café, hago 10 sentadillas.»</p>
+        <button class="jp-btn" data-es="Marcar como completada &#10003;" data-en="Mark as completed &#10003;">Marcar como completada ✓</button>
+      </div>
+
+      <div class="jp-card" data-pid="p2">
+        <div class="jp-ico">&#128202;</div>
+        <h3 data-es="La cadena de d&iacute;as" data-en="The chain of days">La cadena de días</h3>
+        <p class="jp-desc" data-es="Marca cada d&iacute;a que cumples tu h&aacute;bito ancla. La meta no es la perfecci&oacute;n: es no romper la cadena dos d&iacute;as seguidos." data-en="Mark every day you keep your anchor habit. The goal isn&rsquo;t perfection &mdash; it&rsquo;s never breaking the chain two days in a row.">Marca cada día que cumples tu hábito ancla. La meta es no romper la cadena dos días seguidos.</p>
+        <p class="jp-extra" data-es="Un d&iacute;a perdido no rompe el h&aacute;bito. Dos seguidos, s&iacute;." data-en="One missed day won&rsquo;t break it. Two in a row will.">Un día perdido no rompe el hábito. Dos seguidos, sí.</p>
+        <button class="jp-btn" data-es="Marcar como completada &#10003;" data-en="Mark as completed &#10003;">Marcar como completada ✓</button>
+      </div>
+
+      <div class="jp-card" data-pid="p3">
+        <div class="jp-ico">&#9986;</div>
+        <h3 data-es="El h&aacute;bito que cortas" data-en="The habit you cut">El hábito que cortas</h3>
+        <p class="jp-desc" data-es="Identifica un h&aacute;bito viejo que te frena (revisar el celular al despertar, dulces en la tarde) y reempl&aacute;zalo por algo m&aacute;s sano en el mismo momento del d&iacute;a." data-en="Spot an old habit that holds you back (checking your phone on waking, sweets in the afternoon) and replace it with something healthier at the same moment of the day.">Identifica un hábito viejo que te frena y reemplázalo por algo más sano en el mismo momento del día.</p>
+        <p class="jp-extra" data-es="No lo elimines: sustit&uacute;yelo. Eso s&iacute; funciona." data-en="Don&rsquo;t erase it &mdash; replace it. That&rsquo;s what works.">No lo elimines: sustitúyelo. Eso sí funciona.</p>
+        <button class="jp-btn" data-es="Marcar como completada &#10003;" data-en="Mark as completed &#10003;">Marcar como completada ✓</button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+  (function(){
+    var KEY="joga_progress_v1", POWER="PROTONEUTRÓN", NEXT="PASLEY", TOTAL=3;
+    function lang(){ try{ return localStorage.getItem('protoneutron:lang')||'es'; }catch(e){ return 'es'; } }
+    function store(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
+    function save(s){ try{ localStorage.setItem(KEY,JSON.stringify(s)); }catch(e){} }
+    function power(){ var s=store(); var p=s[POWER]||{}; if(typeof p.done!=="number")p.done=0; if(!p.items)p.items={}; return p; }
+    function setItem(pid){
+      var s=store(); var p=s[POWER]||{done:0,items:{}}; if(!p.items)p.items={};
+      p.items[pid]=true;
+      var c=0; ["p1","p2","p3"].forEach(function(k){ if(p.items[k]) c++; });
+      p.done=c; s[POWER]=p; save(s); return c;
+    }
+    function applyLang(){
+      var L=lang();
+      document.querySelectorAll('#jp-wrap [data-es]').forEach(function(el){
+        var v=el.getAttribute(L==='en'?'data-en':'data-es'); if(v!=null) el.innerHTML=v;
+      });
+      // keep "done" buttons showing the completed label in the right language
+      document.querySelectorAll('#jp-wrap .jp-card.done .jp-btn').forEach(function(b){
+        b.innerHTML=(L==='en'?'&#10003; Completed':'&#10003; Completada');
+      });
+      var cnt=document.getElementById('jp-count'); if(cnt){ var p=power(); cnt.textContent=p.done+' / '+TOTAL; }
+    }
+    function toast(){
+      var L=lang(), t=document.createElement('div'); t.className='jp-toast';
+      t.innerHTML=(L==='en')
+        ? '\u2728 You have awakened PROTONEUTR\u00d3N. '+NEXT+' is waiting for you.'
+        : '\u2728 Has despertado PROTONEUTR\u00d3N. '+NEXT+' te espera.';
+      document.body.appendChild(t);
+      requestAnimationFrame(function(){ t.classList.add('show'); });
+      setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); },500); },5000);
+    }
+    function paint(){
+      var p=power(), L=lang();
+      document.querySelectorAll('#jp-wrap .jp-card').forEach(function(card){
+        var pid=card.getAttribute('data-pid'), btn=card.querySelector('.jp-btn');
+        if(p.items[pid]){
+          card.classList.add('done');
+          btn.innerHTML=(L==='en'?'&#10003; Completed':'&#10003; Completada');
+          btn.disabled=true;
+        }
+      });
+      var pct=Math.round((p.done/TOTAL)*100);
+      var fill=document.getElementById('jp-fill'); if(fill) fill.style.width=pct+'%';
+      var cnt=document.getElementById('jp-count'); if(cnt) cnt.textContent=p.done+' / '+TOTAL;
+    }
+    function bind(){
+      document.querySelectorAll('#jp-wrap .jp-card').forEach(function(card){
+        var pid=card.getAttribute('data-pid'), btn=card.querySelector('.jp-btn');
+        btn.addEventListener('click',function(){
+          if(card.classList.contains('done')) return;
+          var done=setItem(pid);
+          card.classList.add('done'); btn.disabled=true;
+          btn.innerHTML=(lang()==='en'?'&#10003; Completed':'&#10003; Completada');
+          var pct=Math.round((done/TOTAL)*100);
+          var fill=document.getElementById('jp-fill'); if(fill) fill.style.width=pct+'%';
+          var cnt=document.getElementById('jp-count'); if(cnt) cnt.textContent=done+' / '+TOTAL;
+          try{ if(window.AudioContext||window.webkitAudioContext){} }catch(e){}
+          if(done>=TOTAL) toast();
+        });
+      });
+      // follow the page language toggle without touching its code
+      document.addEventListener('click',function(){ setTimeout(applyLang,60); },true);
+    }
+    function init(){ applyLang(); paint(); bind(); }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
+    else init();
+    window.pnResetPractices=function(){
+      var s=store(); s[POWER]={done:0,items:{}}; save(s);
+      document.querySelectorAll('#jp-wrap .jp-card').forEach(function(c){
+        c.classList.remove('done'); var b=c.querySelector('.jp-btn'); if(b){ b.disabled=false; }
+      });
+      applyLang();
+      var fill=document.getElementById('jp-fill'); if(fill) fill.style.width='0%';
+      var cnt=document.getElementById('jp-count'); if(cnt) cnt.textContent='0 / '+TOTAL;
+      console.log('PROTONEUTRÓN: prácticas reseteadas');
+    };
+  })();
+  </script>
+  <!-- ===== /JOGA · MÓDULO DE PRÁCTICAS ===== -->
+
   <!-- QUOTE BANNER -->
   <section class="quote-banner">
     <span class="q-mark">"</span>

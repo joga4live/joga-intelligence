@@ -339,6 +339,45 @@ h2{font-family:'Syne';font-weight:700;font-size:clamp(21px,4vw,28px);letter-spac
   .h-actions{grid-column:1/-1;flex-direction:row;justify-content:space-between;align-items:center}
   .e-grid{grid-template-columns:repeat(2,1fr)}
 }
+
+/* ---- Sección "Tus 3 prácticas" (estilo oscuro/dorado coherente con jogatime) ---- */
+.gm-practices{padding:20px 18px 10px;max-width:560px;margin:0 auto}
+.gm-practices .prac-header{text-align:center;margin-bottom:18px}
+.gm-practices .prac-eyebrow{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:6px;display:block}
+.gm-practices .prac-title{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--ink);margin:0;letter-spacing:-.5px}
+.gm-practices .prac-title span{background:linear-gradient(120deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.gm-practices .prac-sub{font-family:'Sora';font-style:italic;font-size:13px;color:var(--ink-soft);margin-top:6px}
+
+/* barra de progreso del poder */
+.gm-practices .prac-summary{background:var(--card);border:1px solid var(--card-bd);border-radius:14px;padding:14px;backdrop-filter:blur(6px);margin-bottom:14px}
+.gm-practices .pp-bar-wrap{height:5px;background:rgba(233,196,105,.08);border-radius:999px;overflow:hidden;margin:8px 0}
+.gm-practices .pp-fill-jt{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:999px;transition:width .6s cubic-bezier(.22,1,.36,1);box-shadow:0 0 10px color-mix(in srgb,var(--accent) 50%,transparent)}
+.gm-practices .pp-text-jt{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--ink-soft);text-transform:uppercase;text-align:center}
+.gm-practices .prac-summary.is-complete{border-color:var(--accent)}
+.gm-practices .prac-summary.is-complete .pp-text-jt{color:var(--accent)}
+
+/* cajas de prácticas */
+.gm-practices .prac-card{background:var(--card);border:1px solid var(--card-bd);border-radius:18px;padding:18px 16px;margin-bottom:12px;backdrop-filter:blur(6px);transition:all .35s ease;position:relative;overflow:hidden}
+.gm-practices .prac-card.is-done{border-color:rgba(233,196,105,.45);background:linear-gradient(160deg,rgba(233,196,105,.05),var(--card))}
+.gm-practices .prac-card.is-done::after{content:"✓";position:absolute;top:14px;right:18px;font-size:20px;color:var(--accent);font-weight:700;font-family:'Space Mono',monospace}
+
+.gm-practices .prac-head-row{display:flex;align-items:flex-start;gap:12px;margin-bottom:8px}
+.gm-practices .prac-icon{font-size:28px;line-height:1;flex-shrink:0;filter:drop-shadow(0 0 8px color-mix(in srgb,var(--accent) 40%,transparent))}
+.gm-practices .prac-name{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--ink-soft);text-transform:uppercase}
+.gm-practices .prac-h{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--ink);margin:2px 0 0;line-height:1.2}
+
+.gm-practices .prac-desc{font-family:'Sora';font-size:13px;color:var(--ink-soft);line-height:1.5;margin:6px 0 12px}
+.gm-practices .prac-content-jt{background:rgba(233,196,105,.04);border-left:2px solid var(--accent);padding:12px 14px;border-radius:0 8px 8px 0;margin:10px 0 14px;font-size:13px;line-height:1.55;color:var(--ink)}
+.gm-practices .prac-content-jt .qline-jt{display:block;margin:5px 0;padding-left:16px;position:relative}
+.gm-practices .prac-content-jt .qline-jt::before{content:"›";position:absolute;left:4px;color:var(--accent);font-weight:700}
+.gm-practices .prac-content-jt strong{display:block;margin-bottom:6px;color:var(--accent);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase}
+.gm-practices .prac-content-jt em{color:var(--accent);font-style:italic;font-family:'Sora'}
+
+.gm-practices .prac-btn-jt{display:block;width:100%;background:linear-gradient(120deg,var(--accent),var(--accent2));color:#1a1304;font-family:'Space Mono',monospace;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;padding:11px 14px;border:none;border-radius:30px;cursor:pointer;transition:all .25s ease;box-shadow:0 4px 14px color-mix(in srgb,var(--accent) 30%,transparent)}
+.gm-practices .prac-btn-jt:hover{transform:translateY(-1px);box-shadow:0 6px 18px color-mix(in srgb,var(--accent) 45%,transparent)}
+.gm-practices .prac-card.is-done .prac-btn-jt{background:rgba(233,196,105,.1);color:var(--accent);box-shadow:none;cursor:default;border:1px solid var(--card-bd)}
+.gm-practices .prac-card.is-done .prac-btn-jt:hover{transform:none}
+
 </style>
 </head>
 <body>
@@ -442,6 +481,79 @@ h2{font-family:'Syne';font-weight:700;font-size:clamp(21px,4vw,28px);letter-spac
         </div>
       </div>
     </section>
+
+    <!-- TUS 3 PRÁCTICAS -->
+    <section class="gm-practices" data-tab="inicio">
+      <div class="prac-header">
+        <span class="prac-eyebrow" id="prac-eye-jt">Tu camino</span>
+        <h2 class="prac-title">Tus 3 <span>prácticas</span></h2>
+        <p class="prac-sub" id="prac-sub-jt">Completa las tres para despertar tu poder.</p>
+      </div>
+
+      <div class="prac-summary" id="pracSummaryJT">
+        <div class="pp-bar-wrap"><div class="pp-fill-jt" id="ppFillJT" style="width:0%"></div></div>
+        <div class="pp-text-jt" id="ppTextJT">0 / 3 prácticas</div>
+      </div>
+
+      <!-- Práctica 1: Los 3 grandes del día -->
+      <div class="prac-card" data-practice-jt="1">
+        <div class="prac-head-row">
+          <span class="prac-icon">🎯</span>
+          <div>
+            <span class="prac-name" id="p1-name-jt">Práctica 01</span>
+            <h3 class="prac-h" id="p1-title-jt">Los 3 grandes del día</h3>
+          </div>
+        </div>
+        <p class="prac-desc" id="p1-desc-jt">Al despertar, escribe solo 3 tareas importantes. Si las completas hoy, el día valió la pena.</p>
+        <div class="prac-content-jt" id="p1-content-jt">
+          <strong>Tus 3 grandes de hoy</strong>
+          <span class="qline-jt">Tarea importante #1</span>
+          <span class="qline-jt">Tarea importante #2</span>
+          <span class="qline-jt">Tarea importante #3</span>
+        </div>
+        <button class="prac-btn-jt" data-prac-btn-jt="1" id="p1-btn-jt">Marcar como completada ✓</button>
+      </div>
+
+      <!-- Práctica 2: Bloqueo sagrado -->
+      <div class="prac-card" data-practice-jt="2">
+        <div class="prac-head-row">
+          <span class="prac-icon">⏸️</span>
+          <div>
+            <span class="prac-name" id="p2-name-jt">Práctica 02</span>
+            <h3 class="prac-h" id="p2-title-jt">El bloqueo sagrado</h3>
+          </div>
+        </div>
+        <p class="prac-desc" id="p2-desc-jt">Aparta un bloque de 30 a 60 min sin interrupciones. Sin celular, sin redes, sin notificaciones.</p>
+        <div class="prac-content-jt" id="p2-content-jt">
+          <strong>Tu bloque sagrado</strong>
+          <span class="qline-jt">Elige UNA tarea importante.</span>
+          <span class="qline-jt">Silencia el teléfono.</span>
+          <span class="qline-jt">Trabaja entre 30 y 60 minutos sin parar.</span>
+          <span class="qline-jt">No revises mensajes hasta terminar.</span>
+        </div>
+        <button class="prac-btn-jt" data-prac-btn-jt="2" id="p2-btn-jt">Marcar como completada ✓</button>
+      </div>
+
+      <!-- Práctica 3: Revisión nocturna -->
+      <div class="prac-card" data-practice-jt="3">
+        <div class="prac-head-row">
+          <span class="prac-icon">🌙</span>
+          <div>
+            <span class="prac-name" id="p3-name-jt">Práctica 03</span>
+            <h3 class="prac-h" id="p3-title-jt">La revisión nocturna</h3>
+          </div>
+        </div>
+        <p class="prac-desc" id="p3-desc-jt">Antes de dormir, responde 3 preguntas. Convierte cada día en una lección aprendida.</p>
+        <div class="prac-content-jt" id="p3-content-jt">
+          <strong>Tu reflexión de hoy</strong>
+          <span class="qline-jt">¿Qué me robó tiempo hoy?</span>
+          <span class="qline-jt">¿Qué me dio energía?</span>
+          <span class="qline-jt">¿Qué voy a cambiar mañana?</span>
+        </div>
+        <button class="prac-btn-jt" data-prac-btn-jt="3" id="p3-btn-jt">Marcar como completada ✓</button>
+      </div>
+    </section>
+
 
     <!-- QUOTE -->
     <section class="gm-quote">
@@ -1353,6 +1465,126 @@ if(!load("t_seen",false)){document.getElementById("guide-modal").classList.add("
     if(t.closest('#music-btn,#voz-btn,#chill-btn,#sea-btn')) { sToggle(); return; }
     if(t.closest('#export-btn,#import-btn')) { sTap(); return; }
   }, true);
+})();
+</script>
+<script>
+
+// ============ SISTEMA DE PRÁCTICAS JOGA TIME ============
+(function(){
+  const JT_POWER="JOGA TIME";
+  const JT_PROGRESS_KEY="joga_progress_v1";
+  const JT_PRACTICES_KEY="joga_jogatime_practices_v1";
+
+  function jtGetAllProgress(){
+    try{ return JSON.parse(localStorage.getItem(JT_PROGRESS_KEY)||"{}"); }
+    catch(e){ return {}; }
+  }
+  function jtSaveAllProgress(p){
+    try{ localStorage.setItem(JT_PROGRESS_KEY,JSON.stringify(p)); }catch(e){}
+  }
+  function jtGetCompletedPractices(){
+    try{ return JSON.parse(localStorage.getItem(JT_PRACTICES_KEY)||"{}"); }
+    catch(e){ return {}; }
+  }
+  function jtSaveCompletedPractices(c){
+    try{ localStorage.setItem(JT_PRACTICES_KEY,JSON.stringify(c)); }catch(e){}
+  }
+  function jtIsEnglish(){
+    // Detecta si el idioma actual de la app es inglés
+    const enBtn=document.querySelector('.lang-opt[data-lang="en"]');
+    return enBtn && enBtn.classList.contains('on');
+  }
+  function jtRenderState(){
+    const completed=jtGetCompletedPractices();
+    const en=jtIsEnglish();
+    let doneCount=0;
+    document.querySelectorAll(".prac-card").forEach(card=>{
+      const id=card.getAttribute("data-practice-jt");
+      if(!id) return;
+      const btn=card.querySelector(".prac-btn-jt");
+      if(completed[id]){
+        card.classList.add("is-done");
+        if(btn) btn.textContent=en?"✓ Completed":"✓ Completada";
+        doneCount++;
+      }else{
+        card.classList.remove("is-done");
+        if(btn) btn.textContent=en?"Mark as completed ✓":"Marcar como completada ✓";
+      }
+    });
+    const pct=Math.min(100,(doneCount/3)*100);
+    const fill=document.getElementById("ppFillJT");
+    const txt=document.getElementById("ppTextJT");
+    const summary=document.getElementById("pracSummaryJT");
+    if(fill) fill.style.width=pct+"%";
+    if(txt){
+      if(doneCount>=3){
+        txt.textContent=en?"JOGA TIME awakened ✨":"JOGA TIME despertado ✨";
+        if(summary) summary.classList.add("is-complete");
+      }else{
+        txt.textContent=en?(doneCount+" / 3 practices"):(doneCount+" / 3 prácticas");
+        if(summary) summary.classList.remove("is-complete");
+      }
+    }
+  }
+  function jtMarkPractice(id){
+    const completed=jtGetCompletedPractices();
+    if(completed[id]) return;
+    completed[id]=true;
+    jtSaveCompletedPractices(completed);
+    const totalDone=Object.keys(completed).filter(k=>completed[k]).length;
+    const allProgress=jtGetAllProgress();
+    allProgress[JT_POWER]={done:Math.min(3,totalDone)};
+    jtSaveAllProgress(allProgress);
+    jtRenderState();
+    if(totalDone>=3){
+      setTimeout(()=>{
+        const en=jtIsEnglish();
+        const msg=en
+          ? "✨ You have awakened JOGA TIME. PROTONEUTRÓN is waiting."
+          : "✨ Has despertado JOGA TIME. PROTONEUTRÓN te espera.";
+        jtShowToast(msg);
+      },300);
+    }
+  }
+  function jtShowToast(text){
+    let t=document.getElementById("jt-toast");
+    if(!t){
+      t=document.createElement("div"); t.id="jt-toast";
+      t.style.cssText="position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:linear-gradient(135deg,rgba(20,17,12,.98),rgba(11,10,8,.98));color:#f4efe3;padding:14px 26px;border-radius:30px;border:1px solid rgba(233,196,105,.6);box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(233,196,105,.3);font-family:'Sora',sans-serif;font-size:14px;z-index:99999;opacity:0;transition:opacity .5s ease,transform .5s ease;max-width:90vw;text-align:center;backdrop-filter:blur(10px)";
+      document.body.appendChild(t);
+    }
+    t.textContent=text;
+    setTimeout(()=>{t.style.opacity="1";t.style.transform="translateX(-50%) translateY(0)";},20);
+    setTimeout(()=>{t.style.opacity="0";t.style.transform="translateX(-50%) translateY(-20px)";},5500);
+  }
+  // Conectar botones
+  document.addEventListener("click",function(e){
+    const btn=e.target.closest(".prac-btn-jt");
+    if(!btn) return;
+    const id=btn.getAttribute("data-prac-btn-jt");
+    if(id) jtMarkPractice(id);
+  });
+  // Inicializar
+  if(document.readyState==="loading"){
+    document.addEventListener("DOMContentLoaded",function(){ setTimeout(jtRenderState,150); });
+  } else {
+    setTimeout(jtRenderState,150);
+  }
+  // Re-renderizar al cambiar idioma (escucha clicks en botones de idioma)
+  document.addEventListener("click",function(e){
+    if(e.target.closest(".lang-opt")) setTimeout(jtRenderState,80);
+  });
+  // Para resetear desde consola
+  window.jtResetPractices=function(){
+    try{
+      localStorage.removeItem(JT_PRACTICES_KEY);
+      const all=jtGetAllProgress();
+      delete all[JT_POWER];
+      jtSaveAllProgress(all);
+    }catch(e){}
+    jtRenderState();
+    console.log("Prácticas JOGA TIME reseteadas");
+  };
 })();
 </script>
 </body>

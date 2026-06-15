@@ -218,6 +218,105 @@
   .intro .start:active{transform:scale(.97)}.intro .start:hover{background:var(--oliva-vivo)}
   .intro .ifoot{margin-top:16px;font-family:'Fraunces';font-style:italic;font-size:12px;color:var(--salvia)}
   @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.001ms!important}}
+
+/* ---------------- Sección "Tus 3 prácticas" ---------------- */
+.practices-section{margin-top:40px;padding:0 4px}
+.practices-header{text-align:center;margin-bottom:24px}
+.practices-header .eyebrow-p{
+  font-family:var(--serif);font-style:italic;font-size:13px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:6px;display:block;
+}
+.practices-header h2{
+  font-family:var(--serif);font-weight:700;font-size:24px;color:var(--ink);
+  margin:0;letter-spacing:.3px;
+}
+.practices-header p{
+  font-size:13px;color:var(--muted);margin-top:6px;max-width:32ch;margin-left:auto;margin-right:auto;
+}
+.practice-card{
+  background:linear-gradient(160deg,#fff,#fafaf3);
+  border:1px solid rgba(150,140,90,.18);border-radius:18px;
+  padding:20px 18px;margin-bottom:14px;
+  box-shadow:0 4px 16px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.03);
+  transition:all .35s ease;
+  position:relative;overflow:hidden;
+}
+.practice-card.is-done{
+  background:linear-gradient(160deg,rgba(150,140,90,.04),rgba(255,255,255,.7));
+  border-color:rgba(150,140,90,.35);
+  opacity:.85;
+}
+.practice-card.is-done::after{
+  content:"✓";position:absolute;top:18px;right:20px;
+  font-size:22px;color:var(--gold);font-weight:700;
+}
+.practice-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.practice-icon{
+  font-size:32px;line-height:1;flex-shrink:0;
+  filter:drop-shadow(0 2px 4px rgba(0,0,0,.1));
+}
+.practice-title-wrap{flex:1;min-width:0}
+.practice-num{
+  font-family:var(--serif);font-style:italic;font-size:11px;
+  color:var(--muted);letter-spacing:2px;text-transform:uppercase;
+}
+.practice-title{
+  font-family:var(--serif);font-weight:700;font-size:17px;color:var(--ink);
+  margin:2px 0 0;line-height:1.25;
+}
+.practice-desc{
+  font-size:14px;color:var(--ink-soft);line-height:1.5;margin:8px 0 14px;
+}
+.practice-content{
+  background:rgba(150,140,90,.06);border-left:3px solid var(--gold);
+  padding:14px 16px;border-radius:0 10px 10px 0;margin:12px 0 16px;
+  font-size:13.5px;line-height:1.55;color:var(--ink);
+}
+.practice-content .qline{display:block;margin:6px 0;padding-left:18px;position:relative}
+.practice-content .qline::before{content:"•";position:absolute;left:6px;color:var(--gold);font-weight:700}
+.practice-content em{color:var(--gold-deep);font-style:italic;font-family:var(--serif)}
+.practice-content strong{color:var(--ink);display:block;margin-bottom:6px;font-size:13px}
+.practice-btn{
+  display:block;width:100%;
+  background:linear-gradient(135deg,#C9A050,#E7C46A,#C9A050);
+  color:#0B0B0C;font-family:var(--serif);font-weight:700;
+  font-size:14px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:12px 16px;border:none;border-radius:10px;cursor:pointer;
+  box-shadow:0 4px 14px rgba(150,140,90,.3);
+  transition:all .25s ease;
+}
+.practice-btn:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(150,140,90,.45)}
+.practice-card.is-done .practice-btn{
+  background:rgba(150,140,90,.15);color:var(--gold-deep);
+  box-shadow:none;cursor:default;
+}
+.practice-card.is-done .practice-btn:hover{transform:none}
+/* Resumen de progreso del poder */
+.power-progress-summary{
+  text-align:center;margin:20px 0 8px;padding:16px;
+  background:linear-gradient(135deg,rgba(150,140,90,.08),rgba(150,140,90,.04));
+  border-radius:14px;border:1px solid rgba(150,140,90,.2);
+}
+.power-progress-summary .pp-bar{
+  height:6px;background:rgba(150,140,90,.15);border-radius:999px;
+  overflow:hidden;margin:10px 0 8px;
+}
+.power-progress-summary .pp-fill{
+  height:100%;background:linear-gradient(90deg,#C9A050,#E7C46A);
+  border-radius:999px;transition:width .6s cubic-bezier(.22,1,.36,1);
+}
+.power-progress-summary .pp-text{
+  font-family:var(--serif);font-size:13px;color:var(--ink-soft);
+  letter-spacing:1px;font-style:italic;
+}
+.power-progress-summary.is-complete{
+  background:linear-gradient(135deg,rgba(150,140,90,.15),rgba(150,140,90,.08));
+  border-color:rgba(150,140,90,.5);
+}
+.power-progress-summary.is-complete .pp-text{
+  color:var(--gold-deep);font-weight:700;font-style:normal;
+}
+
 </style>
 </head>
 <body>
@@ -305,7 +404,77 @@
         <div class="zone-hint" id="zoneHint" data-key="mente.hint">Toca una zona para empezar →</div>
       </div>
       <div class="info-card" id="zoneInfo" style="display:none"><span class="pct" id="zonePct"></span><span class="tag" id="zoneTag"></span><h3 id="zoneTitle"></h3><p id="zoneText"></p></div>
-      <div class="info-card"><span class="tag" data-key="mente.card2tag">En pocas palabras</span><h3 data-key="mente.card2h">Cómo le hablas</h3><p data-key="mente.card2p">Tu subconsciente no discute ni juzga: acepta como verdad lo que repites con emoción e imágenes. Por eso funcionan las afirmaciones, la visualización y los pensamientos que cultivas cada día.</p></div>
+      <div class="info-card" id="zoneCard2"><span class="tag" id="zoneCard2Tag" data-key="mente.card2tag">En pocas palabras</span><h3 id="zoneCard2Title" data-key="mente.card2h">Cómo le hablas</h3><p id="zoneCard2Text" data-key="mente.card2p">Tu subconsciente no discute ni juzga: acepta como verdad lo que repites con emoción e imágenes. Por eso funcionan las afirmaciones, la visualización y los pensamientos que cultivas cada día.</p></div>
+      <!-- TUS 3 PRÁCTICAS -->
+      <div class="practices-section" id="practicesSection">
+        <div class="practices-header">
+          <span class="eyebrow-p" data-key="prac.eyebrow">Tu camino</span>
+          <h2 data-key="prac.title">Tus 3 prácticas</h2>
+          <p data-key="prac.sub">Completa las tres para despertar tu poder.</p>
+        </div>
+
+        <div class="power-progress-summary" id="powerSummary">
+          <div class="pp-bar"><div class="pp-fill" id="ppFill" style="width:0%"></div></div>
+          <div class="pp-text" id="ppText">0 de 3 prácticas completadas</div>
+        </div>
+
+        <!-- Práctica 1: Afirmación -->
+        <div class="practice-card" data-practice="1">
+          <div class="practice-head">
+            <span class="practice-icon">🌅</span>
+            <div class="practice-title-wrap">
+              <span class="practice-num" data-key="prac.p1.num">Práctica 01</span>
+              <h3 class="practice-title" data-key="prac.p1.title">La afirmación del día</h3>
+            </div>
+          </div>
+          <p class="practice-desc" data-key="prac.p1.desc">Repite hoy una afirmación 5 veces, en voz alta, sintiendo cada palabra.</p>
+          <div class="practice-content" data-key-html="prac.p1.content">
+            <strong>Tu afirmación de hoy:</strong>
+            <em>"Mi mente trabaja a mi favor. Lo que pienso hoy, lo vivo mañana."</em>
+          </div>
+          <button class="practice-btn" data-practice-btn="1" data-key="prac.btn.do">Marcar como completada ✓</button>
+        </div>
+
+        <!-- Práctica 2: Visualización -->
+        <div class="practice-card" data-practice="2">
+          <div class="practice-head">
+            <span class="practice-icon">👁️</span>
+            <div class="practice-title-wrap">
+              <span class="practice-num" data-key="prac.p2.num">Práctica 02</span>
+              <h3 class="practice-title" data-key="prac.p2.title">La visualización guiada</h3>
+            </div>
+          </div>
+          <p class="practice-desc" data-key="prac.p2.desc">Cierra los ojos 5 minutos y vive con detalle la versión de ti que ya logró su sueño.</p>
+          <div class="practice-content" data-key-html="prac.p2.content">
+            <strong>Guía:</strong>
+            <span class="qline">Respira profundo 3 veces.</span>
+            <span class="qline">Imagina una escena específica: ¿dónde estás, qué vistes, quién está contigo?</span>
+            <span class="qline">Siente la emoción de ya haberlo logrado.</span>
+            <span class="qline">Quédate ahí 5 minutos.</span>
+          </div>
+          <button class="practice-btn" data-practice-btn="2" data-key="prac.btn.do">Marcar como completada ✓</button>
+        </div>
+
+        <!-- Práctica 3: Diario -->
+        <div class="practice-card" data-practice="3">
+          <div class="practice-head">
+            <span class="practice-icon">📓</span>
+            <div class="practice-title-wrap">
+              <span class="practice-num" data-key="prac.p3.num">Práctica 03</span>
+              <h3 class="practice-title" data-key="prac.p3.title">El diario de pensamientos</h3>
+            </div>
+          </div>
+          <p class="practice-desc" data-key="prac.p3.desc">Al final del día, escribe 3 pensamientos que tuviste y clasifícalos.</p>
+          <div class="practice-content" data-key-html="prac.p3.content">
+            <strong>Tu mini-diario:</strong>
+            <span class="qline">Pensamiento 1 → ¿Me empujó o me frenó?</span>
+            <span class="qline">Pensamiento 2 → ¿Me empujó o me frenó?</span>
+            <span class="qline">Pensamiento 3 → ¿Me empujó o me frenó?</span>
+          </div>
+          <button class="practice-btn" data-practice-btn="3" data-key="prac.btn.do">Marcar como completada ✓</button>
+        </div>
+      </div>
+
     </section>
 
     <!-- IDEAS -->
@@ -517,9 +686,9 @@ const books=[
   q:{es:'Una decisión verdadera se mide por la acción que tomas.',en:'A true decision is measured by the action you take.'}}
 ];
 const zones={
- consciente:{tag:{es:'Mente consciente',en:'Conscious mind'},pct:'5%',title:{es:'La voz que razona',en:'The voice that reasons'},text:{es:'Es la parte que piensa, analiza y decide en el momento. Es poderosa, pero ocupa una porción pequeña de tu actividad mental. Aquí eliges qué ideas dejas pasar hacia lo profundo.',en:'It is the part that thinks, analyzes and decides in the moment. It is powerful, yet it takes up a small portion of your mental activity. Here you choose which ideas you let pass into the depths.'}},
- subconsciente:{tag:{es:'Mente subconsciente',en:'Subconscious mind'},pct:'95%',title:{es:'Tu arma poderosa',en:'Your powerful weapon'},text:{es:'Trabaja día y noche sin descanso. Guarda tus creencias, emociones e imágenes, y no juzga: acepta como verdad lo que le repites con sentimiento. Aquí se decide gran parte de lo que vives.',en:'It works day and night without rest. It stores your beliefs, emotions and images, and does not judge: it accepts as true what you repeat with feeling. Much of what you live is decided here.'}},
- habitos:{tag:{es:'Hábitos y automatismos',en:'Habits and automatisms'},pct:'·',title:{es:'El piloto automático',en:'The autopilot'},text:{es:'Son las rutinas que tu mente ejecuta sola para ahorrar energía. Bien dirigidos, te impulsan; sin darte cuenta, te frenan. Cambiarlos es reprogramar tu día a día.',en:'These are the routines your mind runs on its own to save energy. Well directed, they drive you; unnoticed, they hold you back. Changing them is reprogramming your day to day.'}}
+ consciente:{tag:{es:'Mente consciente',en:'Conscious mind'},pct:'5%',title:{es:'La voz que razona',en:'The voice that reasons'},text:{es:'Es la parte que piensa, analiza y decide en el momento. Es poderosa, pero ocupa una porción pequeña de tu actividad mental. Aquí eliges qué ideas dejas pasar hacia lo profundo.',en:'It is the part that thinks, analyzes and decides in the moment. It is powerful, yet it takes up a small portion of your mental activity. Here you choose which ideas you let pass into the depths.'},card2tag:{es:'En pocas palabras',en:'In short'},card2title:{es:'Cómo lo entrenas',en:'How you train it'},card2text:{es:'Tu mente consciente decide qué dejas entrar. Lee, observa y elige con cuidado: lo que aceptas hoy se vuelve creencia mañana. Aquí empieza todo cambio real.',en:'Your conscious mind decides what you let in. Read, observe and choose with care: what you accept today becomes belief tomorrow. Every real change starts here.'}},
+ subconsciente:{tag:{es:'Mente subconsciente',en:'Subconscious mind'},pct:'95%',title:{es:'Tu arma poderosa',en:'Your powerful weapon'},text:{es:'Trabaja día y noche sin descanso. Guarda tus creencias, emociones e imágenes, y no juzga: acepta como verdad lo que le repites con sentimiento. Aquí se decide gran parte de lo que vives.',en:'It works day and night without rest. It stores your beliefs, emotions and images, and does not judge: it accepts as true what you repeat with feeling. Much of what you live is decided here.'},card2tag:{es:'En pocas palabras',en:'In short'},card2title:{es:'Cómo le hablas',en:'How you speak to it'},card2text:{es:'Tu subconsciente no discute ni juzga: acepta como verdad lo que repites con emoción e imágenes. Por eso funcionan las afirmaciones, la visualización y los pensamientos que cultivas cada día.',en:'Your subconscious does not argue or judge: it accepts as true what you repeat with emotion and images. That is why affirmations, visualization and the thoughts you cultivate each day work.'}},
+ habitos:{tag:{es:'Hábitos y automatismos',en:'Habits and automatisms'},pct:'·',title:{es:'El piloto automático',en:'The autopilot'},text:{es:'Son las rutinas que tu mente ejecuta sola para ahorrar energía. Bien dirigidos, te impulsan; sin darte cuenta, te frenan. Cambiarlos es reprogramar tu día a día.',en:'These are the routines your mind runs on its own to save energy. Well directed, they drive you; unnoticed, they hold you back. Changing them is reprogramming your day to day.'},card2tag:{es:'En pocas palabras',en:'In short'},card2title:{es:'Cómo los cambias',en:'How you change them'},card2text:{es:'Un hábito no se borra: se reemplaza. Sustituye la acción vieja por una nueva ligada al mismo momento del día, y repítela hasta que la mente la haga sola.',en:'A habit is not erased: it is replaced. Swap the old action for a new one tied to the same moment of the day, and repeat it until your mind does it on its own.'}}
 };
 const exercises=[
  {icon:'<path d="M12 2v6M12 22a6 6 0 0 0 6-6c0-4-6-10-6-10S6 12 6 16a6 6 0 0 0 6 6Z"/>',color:'#556236',
@@ -720,6 +889,10 @@ function showZone(){
   document.getElementById('zonePct').textContent=d.pct;
   document.getElementById('zoneTitle').textContent=d.title[L];
   document.getElementById('zoneText').textContent=d.text[L];
+  // Actualizar también card2 según zona
+  if(d.card2tag){ document.getElementById('zoneCard2Tag').textContent=d.card2tag[L]; }
+  if(d.card2title){ document.getElementById('zoneCard2Title').textContent=d.card2title[L]; }
+  if(d.card2text){ document.getElementById('zoneCard2Text').textContent=d.card2text[L]; }
   document.getElementById('zoneHint').textContent = L==='es'?'Toca otra zona para comparar':'Tap another area to compare';
 }
 
@@ -767,6 +940,125 @@ makeStars();
 document.getElementById('moment').addEventListener('click',function(){ if(getMoment()==='noche') openAmazonMusic(); });
 if(synth){synth.onvoiceschanged=function(){};synth.getVoices();}
 applyLang();
+
+
+// ============ SISTEMA DE PRÁCTICAS SUBMENT ============
+const SUBMENT_POWER="SUBMENT";
+const SUBMENT_PROGRESS_KEY="joga_progress_v1";
+const SUBMENT_PRACTICES_KEY="joga_submentpractices_v1";
+
+function smGetAllProgress(){
+  try{ return JSON.parse(localStorage.getItem(SUBMENT_PROGRESS_KEY)||"{}"); }
+  catch(e){ return {}; }
+}
+function smSaveAllProgress(p){
+  try{ localStorage.setItem(SUBMENT_PROGRESS_KEY,JSON.stringify(p)); }catch(e){}
+}
+function smGetCompletedPractices(){
+  // {1:true, 2:false, 3:false}
+  try{ return JSON.parse(localStorage.getItem(SUBMENT_PRACTICES_KEY)||"{}"); }
+  catch(e){ return {}; }
+}
+function smSaveCompletedPractices(c){
+  try{ localStorage.setItem(SUBMENT_PRACTICES_KEY,JSON.stringify(c)); }catch(e){}
+}
+
+function smRenderPracticesState(){
+  const completed=smGetCompletedPractices();
+  const cards=document.querySelectorAll(".practice-card");
+  let doneCount=0;
+  cards.forEach(card=>{
+    const id=card.getAttribute("data-practice");
+    const btn=card.querySelector(".practice-btn");
+    if(completed[id]){
+      card.classList.add("is-done");
+      btn.textContent=(L==='es')?"✓ Completada":"✓ Completed";
+      doneCount++;
+    }else{
+      card.classList.remove("is-done");
+      btn.textContent=(L==='es')?"Marcar como completada ✓":"Mark as completed ✓";
+    }
+  });
+  // Update summary bar
+  const pct=Math.min(100,(doneCount/3)*100);
+  const fill=document.getElementById("ppFill");
+  const txt=document.getElementById("ppText");
+  const summary=document.getElementById("powerSummary");
+  if(fill) fill.style.width=pct+"%";
+  if(txt){
+    if(doneCount>=3){
+      txt.textContent=(L==='es')?"SUBMENT despertado ✨":"SUBMENT awakened ✨";
+      if(summary) summary.classList.add("is-complete");
+    }else{
+      txt.textContent=(L==='es')
+        ? doneCount+" de 3 prácticas completadas"
+        : doneCount+" of 3 practices completed";
+      if(summary) summary.classList.remove("is-complete");
+    }
+  }
+}
+
+function smMarkPractice(id){
+  const completed=smGetCompletedPractices();
+  if(completed[id]) return; // ya completada, no hacer nada
+  completed[id]=true;
+  smSaveCompletedPractices(completed);
+  // Actualizar progreso global del poder (sincroniza con el index)
+  const totalDone=Object.keys(completed).filter(k=>completed[k]).length;
+  const allProgress=smGetAllProgress();
+  allProgress[SUBMENT_POWER]={done:Math.min(3,totalDone)};
+  smSaveAllProgress(allProgress);
+  // Refrescar visual
+  smRenderPracticesState();
+  // Si recién completó las 3, mensaje
+  if(totalDone>=3){
+    setTimeout(()=>{
+      const msg=(L==='es')
+        ? "✨ Has despertado SUBMENT. JOGA TIME te espera."
+        : "✨ You have awakened SUBMENT. JOGA TIME is waiting.";
+      smShowToast(msg);
+    },300);
+  }
+}
+
+function smShowToast(text){
+  let t=document.getElementById("sm-toast");
+  if(!t){
+    t=document.createElement("div"); t.id="sm-toast";
+    t.style.cssText="position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:linear-gradient(135deg,#1a1611,#0f0d0a);color:#fff;padding:14px 26px;border-radius:14px;border:1px solid rgba(231,196,106,.6);box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 40px rgba(231,196,106,.3);font-family:'Cormorant Garamond',serif;font-size:15px;z-index:9999;opacity:0;transition:opacity .5s ease,transform .5s ease;max-width:90vw;text-align:center";
+    document.body.appendChild(t);
+  }
+  t.textContent=text;
+  setTimeout(()=>{t.style.opacity="1";t.style.transform="translateX(-50%) translateY(0)";},20);
+  setTimeout(()=>{t.style.opacity="0";t.style.transform="translateX(-50%) translateY(-20px)";},5000);
+}
+
+// Conectar botones
+document.addEventListener("click",function(e){
+  const btn=e.target.closest(".practice-btn");
+  if(!btn) return;
+  const id=btn.getAttribute("data-practice-btn");
+  if(!id) return;
+  smMarkPractice(id);
+});
+
+// Inicializar al cargar
+document.addEventListener("DOMContentLoaded",function(){
+  setTimeout(smRenderPracticesState,100);
+});
+
+// Para resetear desde consola (debugging)
+window.smResetPractices=function(){
+  try{
+    localStorage.removeItem(SUBMENT_PRACTICES_KEY);
+    const all=smGetAllProgress();
+    delete all[SUBMENT_POWER];
+    smSaveAllProgress(all);
+  }catch(e){}
+  smRenderPracticesState();
+  console.log("Prácticas SUBMENT reseteadas");
+};
+
 </script>
 </body>
 </html>
