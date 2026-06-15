@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0B0B0C">
-<title>Retos JOGA · El método</title>
+<title data-es="Retos JOGA · El método" data-en="JOGA Challenges · The Method">Retos JOGA · El método</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,800;1,9..144,400;1,9..144,500&family=Space+Grotesk:wght@400;500;600;700&family=Dancing+Script:wght@500;600;700&display=swap" rel="stylesheet">
@@ -46,6 +46,8 @@
     margin-top:14px;line-height:1.2;
   }
   .hairline{width:46px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:26px auto 0}
+  .hero-logo{width:min(86%,360px);height:auto;display:block;margin:6px auto 2px;
+    filter:drop-shadow(0 12px 42px rgba(226,112,58,.30))}
 
   /* ---------- TRUTH ---------- */
   .truth{
@@ -188,181 +190,254 @@
   .app-card .ac-power{color:var(--muted);font-size:.9rem;flex:1;line-height:1.45}
   .app-card .ac-cta{font-size:.82rem;font-weight:700;letter-spacing:.04em;margin-top:2px}
 
-  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+  /* ---------- CARRUSEL 3D (túnel) ---------- */
+  @keyframes halo{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+  .tunnel3d{
+    position:relative;width:100%;min-height:560px;margin:26px 0 30px;
+    perspective:1200px;perspective-origin:50% 45%;overflow:hidden;
+    touch-action:pan-y;-webkit-user-select:none;user-select:none;
+  }
+  .tunnel3d::before,.tunnel3d::after{content:"";position:absolute;left:0;right:0;height:110px;pointer-events:none;z-index:5}
+  .tunnel3d::before{top:0;background:linear-gradient(to bottom,var(--ink) 0%,transparent 100%)}
+  .tunnel3d::after{bottom:0;background:linear-gradient(to top,var(--ink) 0%,transparent 100%)}
+  .tunnel3d .t-stage{position:relative;width:100%;height:560px;transform-style:preserve-3d}
+  .tunnel3d .t-card{
+    position:absolute;top:50%;left:50%;width:280px;height:380px;margin:-190px 0 0 -140px;
+    background:linear-gradient(160deg,rgba(20,18,12,.94),rgba(11,11,12,.98));
+    border:1px solid rgba(231,196,106,.4);border-radius:24px;
+    box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 60px rgba(231,196,106,.15),inset 0 1px 0 rgba(255,255,255,.06);
+    padding:28px 22px;display:flex;flex-direction:column;align-items:center;justify-content:space-between;
+    cursor:pointer;backface-visibility:hidden;
+    transition:transform .8s cubic-bezier(.22,1,.36,1),opacity .6s ease,border-color .4s ease,box-shadow .4s ease,filter .6s ease;
+    will-change:transform,opacity;
+  }
+  .tunnel3d .t-card[data-pos="front"]{transform:translate3d(0,0,0) scale(1);opacity:1;z-index:30;
+    border-color:rgba(231,196,106,.95);
+    box-shadow:0 40px 120px rgba(0,0,0,.7),0 0 100px rgba(231,196,106,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+  .tunnel3d .t-card[data-pos="mid-l"]{transform:translate3d(-220px,0,-220px) rotateY(28deg) scale(.85);opacity:.55;z-index:20;filter:blur(.6px)}
+  .tunnel3d .t-card[data-pos="mid-r"]{transform:translate3d(220px,0,-220px) rotateY(-28deg) scale(.85);opacity:.55;z-index:20;filter:blur(.6px)}
+  .tunnel3d .t-card[data-pos="back-l"]{transform:translate3d(-380px,0,-480px) rotateY(40deg) scale(.65);opacity:.25;z-index:10;filter:blur(1.4px)}
+  .tunnel3d .t-card[data-pos="back-r"]{transform:translate3d(380px,0,-480px) rotateY(-40deg) scale(.65);opacity:.25;z-index:10;filter:blur(1.4px)}
+  .tunnel3d .t-card[data-pos="hidden"]{transform:translate3d(0,0,-900px) scale(.3);opacity:0;z-index:0;pointer-events:none}
+  .tunnel3d .t-num{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--gold);opacity:.75;letter-spacing:3px}
+  .tunnel3d .t-glyph{width:96px;height:96px;border-radius:24px;display:grid;place-items:center;margin:6px 0;
+    font-family:var(--serif);font-weight:600;font-size:48px;line-height:1;color:#0d0d10;
+    box-shadow:0 0 36px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25)}
+  .tunnel3d .t-app{font-family:var(--serif);font-weight:700;font-size:22px;color:#fff;letter-spacing:1.5px;text-align:center}
+  .tunnel3d .t-power{font-family:var(--script);font-size:24px;color:var(--gold);text-align:center;line-height:1.2;margin-top:8px;text-shadow:0 0 22px rgba(231,196,106,.5)}
+  .tunnel3d .t-cta{font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.55);text-transform:uppercase;margin-top:auto;opacity:0;transition:opacity .4s ease}
+  .tunnel3d .t-card[data-pos="front"] .t-cta{opacity:1}
+  .tunnel3d .t-rail{position:absolute;left:50%;top:50%;width:2px;height:600px;margin:-300px 0 0 -1px;
+    background:linear-gradient(to bottom,transparent,rgba(231,196,106,.25),transparent);
+    transform:translateZ(-700px) rotateX(80deg);pointer-events:none;z-index:1}
+  .tunnel3d .t-halo{position:absolute;left:50%;top:50%;width:500px;height:500px;margin:-250px 0 0 -250px;
+    background:radial-gradient(circle,rgba(231,196,106,.12) 0%,transparent 65%);pointer-events:none;z-index:0;animation:halo 8s ease-in-out infinite}
+  .tunnel3d .t-ctrl{position:absolute;left:0;right:0;bottom:14px;display:flex;justify-content:center;align-items:center;gap:14px;z-index:40}
+  .tunnel3d .t-btn{width:48px;height:48px;border-radius:50%;background:rgba(231,196,106,.08);border:1px solid rgba(231,196,106,.45);
+    color:var(--gold);font-size:24px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s ease}
+  .tunnel3d .t-btn:hover{background:rgba(231,196,106,.22);transform:scale(1.08)}
+  .tunnel3d .t-dots{display:flex;gap:8px;padding:0 14px}
+  .tunnel3d .t-dot{width:8px;height:8px;border-radius:50%;background:rgba(231,196,106,.25);transition:all .3s ease;cursor:pointer}
+  .tunnel3d .t-dot.is-on{background:var(--gold);box-shadow:0 0 14px rgba(231,196,106,.75);transform:scale(1.35)}
+  .tunnel3d .t-hint{text-align:center;font-size:12px;color:rgba(255,255,255,.4);letter-spacing:2px;text-transform:uppercase;margin-top:14px}
+  @media (max-width:620px){
+    .tunnel3d{min-height:480px}
+    .tunnel3d .t-stage{height:480px}
+    .tunnel3d .t-card{width:220px;height:320px;margin:-160px 0 0 -110px}
+    .tunnel3d .t-card[data-pos="mid-l"]{transform:translate3d(-150px,0,-180px) rotateY(24deg) scale(.78)}
+    .tunnel3d .t-card[data-pos="mid-r"]{transform:translate3d(150px,0,-180px) rotateY(-24deg) scale(.78)}
+    .tunnel3d .t-card[data-pos="back-l"]{transform:translate3d(-240px,0,-360px) rotateY(36deg) scale(.55)}
+    .tunnel3d .t-card[data-pos="back-r"]{transform:translate3d(240px,0,-360px) rotateY(-36deg) scale(.55)}
+    .tunnel3d .t-glyph{width:80px;height:80px;font-size:40px}
+    .tunnel3d .t-app{font-size:19px}
+    .tunnel3d .t-power{font-size:20px}
+  }
+
+  /* ---------- EFECTO BOOM AL ENTRAR ---------- */
+  #boomFx{position:fixed;inset:0;z-index:9999;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0}
+  #boomFx.go{animation:boomFlash .9s ease-out forwards}
+  #boomFx .ring{position:absolute;width:40px;height:40px;border-radius:50%;
+    border:3px solid var(--gold);box-shadow:0 0 60px rgba(231,196,106,.8),0 0 120px rgba(226,112,58,.5)}
+  #boomFx.go .ring{animation:boomRing .85s cubic-bezier(.16,1,.3,1) forwards}
+  #boomFx .flash{position:absolute;inset:0;background:radial-gradient(circle at 50% 50%,rgba(231,196,106,.45),rgba(226,112,58,.18) 35%,transparent 70%)}
+  @keyframes boomFlash{0%{opacity:1}100%{opacity:0}}
+  @keyframes boomRing{0%{width:20px;height:20px;opacity:1;border-width:5px}100%{width:160vmax;height:160vmax;opacity:0;border-width:1px}}
+
+  /* ---------- TOGGLE IDIOMA ES/EN ---------- */
+  .lang-switch{position:fixed;top:calc(env(safe-area-inset-top) + 12px);right:14px;z-index:9998;
+    display:flex;gap:2px;padding:3px;border-radius:99px;
+    background:rgba(27,27,32,.82);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border:1px solid var(--line);box-shadow:0 8px 24px -10px rgba(0,0,0,.6)}
+  .lang-switch button{border:none;background:transparent;color:var(--muted);cursor:pointer;
+    font-family:var(--grot);font-weight:600;font-size:.72rem;letter-spacing:.06em;
+    padding:6px 12px;border-radius:99px;transition:background .2s ease,color .2s ease}
+  .lang-switch button.on{background:linear-gradient(110deg,var(--ember),var(--gold-deep));color:#fff}
+  .lang-switch button:active{opacity:.8}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}#boomFx{display:none}}
 </style>
 </head>
 <body>
+<div id="boomFx"><div class="flash"></div><div class="ring"></div></div>
+<div class="lang-switch" role="group" aria-label="Language"><button type="button" id="langEs">ES</button><button type="button" id="langEn">EN</button></div>
 <div class="wrap">
 
   <!-- HERO -->
   <header class="hero">
-    <div class="eyebrow">El método</div>
-    <h1>Retos <span class="gold">JOGA</span></h1>
-    <div class="script">El porcentaje eres tú</div>
+    <div class="eyebrow" data-es="El método" data-en="The Method">El método</div>
+    <img class="hero-logo" src="joga-logo.png" alt="JOGA Challenge">
+    <div class="script" data-es="El porcentaje eres tú" data-en="You are the percentage">El porcentaje eres tú</div>
     <div class="hairline"></div>
   </header>
 
   <!-- LA VERDAD -->
   <section class="truth">
-    <p>JOGA no te transforma. <span class="pct">Tú te transformas.</span></p>
-    <p>Las seis apps son el mapa. El viaje lo caminas tú. Una app abierta una vez no cambia a nadie: lo que cambia a la gente es repetir la práctica el día que no tiene ganas. Por eso aquí no medimos cuántas apps tienes — medimos cuántos días apareces.</p>
+    <p data-es="JOGA no te transforma. <span class=&quot;pct&quot;>Tú te transformas.</span>" data-en="JOGA doesn&#39;t transform you. <span class=&quot;pct&quot;>You transform yourself.</span>">JOGA no te transforma. <span class="pct">Tú te transformas.</span></p>
+    <p data-es="Las seis apps son el mapa. El viaje lo caminas tú. Una app abierta una vez no cambia a nadie: lo que cambia a la gente es repetir la práctica el día que no tiene ganas. Por eso aquí no medimos cuántas apps tienes — medimos cuántos días apareces." data-en="The six apps are the map. You walk the journey yourself. An app opened once changes no one: what changes people is repeating the practice on the day they don&#39;t feel like it. That&#39;s why here we don&#39;t measure how many apps you have — we measure how many days you show up.">Las seis apps son el mapa. El viaje lo caminas tú. Una app abierta una vez no cambia a nadie: lo que cambia a la gente es repetir la práctica el día que no tiene ganas. Por eso aquí no medimos cuántas apps tienes — medimos cuántos días apareces.</p>
   </section>
 
   <!-- REGLA DE ORO -->
-  <div class="sec-label">La única regla que importa</div>
-  <h2 class="sec-title">No rompas la cadena</h2>
-  <p class="sec-sub">Todo el reto se sostiene en esto</p>
+  <div class="sec-label" data-es="La única regla que importa" data-en="The only rule that matters">La única regla que importa</div>
+  <h2 class="sec-title" data-es="No rompas la cadena" data-en="Don&#39;t break the chain">No rompas la cadena</h2>
+  <p class="sec-sub" data-es="Todo el reto se sostiene en esto" data-en="The whole challenge rests on this">Todo el reto se sostiene en esto</p>
   <div class="rule">
     <div class="star">⛓️</div>
-    <b>Nunca dos días seguidos sin hacerlo.</b>
-    <span>Fallar un día es humano. Fallar dos es como empieza el abandono. Si caes, al día siguiente vuelves sí o sí. Esa terquedad es el método entero.</span>
+    <b data-es="Nunca dos días seguidos sin hacerlo." data-en="Never two days in a row without doing it.">Nunca dos días seguidos sin hacerlo.</b>
+    <span data-es="Fallar un día es humano. Fallar dos es como empieza el abandono. Si caes, al día siguiente vuelves sí o sí. Esa terquedad es el método entero." data-en="Missing one day is human. Missing two is how quitting begins. If you fall, the next day you come back no matter what. That stubbornness is the whole method.">Fallar un día es humano. Fallar dos es como empieza el abandono. Si caes, al día siguiente vuelves sí o sí. Esa terquedad es el método entero.</span>
   </div>
 
   <!-- LAS 6 ETAPAS -->
-  <div class="sec-label">El recorrido</div>
-  <h2 class="sec-title">Un poder a la vez</h2>
-  <p class="sec-sub">No abras las seis el primer día. Súmalas de cinco en cinco.</p>
+  <div class="sec-label" data-es="El recorrido" data-en="The Journey">El recorrido</div>
+  <h2 class="sec-title" data-es="Un poder a la vez" data-en="One power at a time">Un poder a la vez</h2>
+  <p class="sec-sub" data-es="No abras las seis el primer día. Súmalas de cinco en cinco." data-en="Don&#39;t open all six on day one. Add them five days at a time.">No abras las seis el primer día. Súmalas de cinco en cinco.</p>
 
   <div class="stage">
     <div class="glyph" style="background:linear-gradient(140deg,#C8B6F0,#AC97E6)">S</div>
     <div class="body">
-      <div class="days">Días 1–5 · Empieza aquí</div>
+      <div class="days" data-es="Días 1–5 · Empieza aquí" data-en="Days 1–5 · Start here">Días 1–5 · Empieza aquí</div>
       <div class="name">SUBMENT</div>
-      <div class="desc">Tu subconsciente. <em>La meta no es sentirte transformado: es sentarte.</em> Cada mañana, las 3 prácticas. Punto. Aquí construyes el músculo de aparecer.</div>
+      <div class="desc" data-es="Tu subconsciente. <em>La meta no es sentirte transformado: es sentarte.</em> Cada mañana, las 3 prácticas. Punto. Aquí construyes el músculo de aparecer." data-en="Your subconscious. <em>The goal isn&#39;t to feel transformed: it&#39;s to sit down.</em> Every morning, the 3 practices. Period. Here you build the muscle of showing up.">Tu subconsciente. <em>La meta no es sentirte transformado: es sentarte.</em> Cada mañana, las 3 prácticas. Punto. Aquí construyes el músculo de aparecer.</div>
     </div>
   </div>
 
   <div class="stage">
     <div class="glyph" style="background:linear-gradient(140deg,#F4C07A,#E8A24C)">J</div>
     <div class="body">
-      <div class="days">Días 6–10</div>
+      <div class="days" data-es="Días 6–10" data-en="Days 6–10">Días 6–10</div>
       <div class="name">JOGA TIME</div>
-      <div class="desc">El poder de tu tiempo. Sigues con SUBMENT y sumas el dominio de tus horas. Dos poderes, un mismo hábito.</div>
+      <div class="desc" data-es="El poder de tu tiempo. Sigues con SUBMENT y sumas el dominio de tus horas. Dos poderes, un mismo hábito." data-en="The power of your time. You stay with SUBMENT and add command of your hours. Two powers, one habit.">El poder de tu tiempo. Sigues con SUBMENT y sumas el dominio de tus horas. Dos poderes, un mismo hábito.</div>
     </div>
   </div>
 
   <div class="stage">
     <div class="glyph" style="background:linear-gradient(140deg,#86D0DA,#5FB8C4)">P</div>
     <div class="body">
-      <div class="days">Días 11–15</div>
+      <div class="days" data-es="Días 11–15" data-en="Days 11–15">Días 11–15</div>
       <div class="name">PROTONEUTRÓN</div>
-      <div class="desc">Tus hábitos. El laboratorio donde decides cuáles te construyen y cuáles te frenan.</div>
+      <div class="desc" data-es="Tus hábitos. El laboratorio donde decides cuáles te construyen y cuáles te frenan." data-en="Your habits. The lab where you decide which ones build you and which ones hold you back.">Tus hábitos. El laboratorio donde decides cuáles te construyen y cuáles te frenan.</div>
     </div>
   </div>
 
   <div class="stage">
     <div class="glyph" style="background:linear-gradient(140deg,#DBB07A,#C9925A)">P</div>
     <div class="body">
-      <div class="days">Días 16–20</div>
+      <div class="days" data-es="Días 16–20" data-en="Days 16–20">Días 16–20</div>
       <div class="name">PASLEY</div>
-      <div class="desc">El método del éxito. Tus pasos alineados con las leyes que de verdad funcionan.</div>
+      <div class="desc" data-es="El método del éxito. Tus pasos alineados con las leyes que de verdad funcionan." data-en="The method of success. Your steps aligned with the laws that truly work.">El método del éxito. Tus pasos alineados con las leyes que de verdad funcionan.</div>
     </div>
   </div>
 
   <div class="stage">
     <div class="glyph" style="background:linear-gradient(140deg,#F4D78A,#E7C46A)">M</div>
     <div class="body">
-      <div class="days">Días 21–25</div>
+      <div class="days" data-es="Días 21–25" data-en="Days 21–25">Días 21–25</div>
       <div class="name">MONEXIUM</div>
-      <div class="desc">Tu dinero. Dirigir tu prosperidad con cabeza y calma, no con ansiedad.</div>
+      <div class="desc" data-es="Tu dinero. Dirigir tu prosperidad con cabeza y calma, no con ansiedad." data-en="Your money. Steering your prosperity with a clear head and calm, not anxiety.">Tu dinero. Dirigir tu prosperidad con cabeza y calma, no con ansiedad.</div>
     </div>
   </div>
 
   <div class="stage">
     <div class="glyph" style="background:linear-gradient(140deg,#F6A488,#F0876A)">V</div>
     <div class="body">
-      <div class="days">Días 26–30</div>
+      <div class="days" data-es="Días 26–30" data-en="Days 26–30">Días 26–30</div>
       <div class="name">VENTEMEX</div>
-      <div class="desc">Tus ventas. El cierre donde se unen los seis poderes: conectar, escuchar y cerrar con honestidad.</div>
+      <div class="desc" data-es="Tus ventas. El cierre donde se unen los seis poderes: conectar, escuchar y cerrar con honestidad." data-en="Your sales. The close where the six powers come together: connect, listen, and close with honesty.">Tus ventas. El cierre donde se unen los seis poderes: conectar, escuchar y cerrar con honestidad.</div>
     </div>
   </div>
 
-  <div class="month2">
+  <div class="month2" data-es="Honestidad de socio: <b>30 días no te hacen maestro de los seis</b> — te hacen probarlos y construir el hábito de aparecer. La maestría es repetir. Termina la cadena y empieza otra." data-en="Partner&#39;s honesty: <b>30 days won&#39;t make you a master of all six</b> — they make you try them and build the habit of showing up. Mastery is repetition. Finish the chain and start another.">
     Honestidad de socio: <b>30 días no te hacen maestro de los seis</b> — te hacen probarlos y construir el hábito de aparecer. La maestría es repetir. Termina la cadena y empieza otra.
   </div>
 
   <!-- LA CADENA (tracker) -->
-  <div class="sec-label" style="margin-top:48px">Tu reto</div>
-  <h2 class="sec-title">La cadena de 30 días</h2>
-  <p class="sec-sub">Palomea un día solo cuando lo hayas hecho</p>
+  <div class="sec-label" style="margin-top:48px" data-es="Tu reto" data-en="Your challenge">Tu reto</div>
+  <h2 class="sec-title" data-es="La cadena de 30 días" data-en="The 30-day chain">La cadena de 30 días</h2>
+  <p class="sec-sub" data-es="Palomea un día solo cuando lo hayas hecho" data-en="Check off a day only once you&#39;ve done it">Palomea un día solo cuando lo hayas hecho</p>
 
   <div class="chain-card">
     <div class="chain-head">
-      <h3>Mi cadena</h3>
+      <h3 data-es="Mi cadena" data-en="My chain">Mi cadena</h3>
       <div class="count"><b id="count">0</b> / 30</div>
     </div>
-    <div class="chain-note">Tu único KPI del mes: ¿cuántos días llevo? No la rompas.</div>
+    <div class="chain-note" data-es="Tu único KPI del mes: ¿cuántos días llevo? No la rompas." data-en="Your only KPI this month: how many days am I at? Don&#39;t break it.">Tu único KPI del mes: ¿cuántos días llevo? No la rompas.</div>
     <div class="bar"><i id="barFill"></i></div>
     <div id="phases"></div>
 
     <div class="chain-actions">
-      <button class="btn btn-mark" id="markToday">Marcar el día de hoy</button>
-      <button class="btn btn-reset" id="resetBtn">Reiniciar</button>
+      <button class="btn btn-mark" id="markToday" data-es="Marcar el día de hoy" data-en="Mark today">Marcar el día de hoy</button>
+      <button class="btn btn-reset" id="resetBtn" data-es="Reiniciar" data-en="Reset">Reiniciar</button>
     </div>
 
     <div class="done-msg" id="doneMsg">
-      <b>✨ Completaste la cadena.</b>
-      <span>30 días apareciendo. El tipo que hace esto ya es otra persona — solo que sin darse cuenta. Empieza la siguiente.</span>
+      <b data-es="✨ Completaste la cadena." data-en="✨ You completed the chain.">✨ Completaste la cadena.</b>
+      <span data-es="30 días apareciendo. El tipo que hace esto ya es otra persona — solo que sin darse cuenta. Empieza la siguiente." data-en="30 days of showing up. The person who does this is already someone else — they just don&#39;t realize it yet. Start the next one.">30 días apareciendo. El tipo que hace esto ya es otra persona — solo que sin darse cuenta. Empieza la siguiente.</span>
     </div>
   </div>
 
   <!-- LAUNCHER / CARRUSEL DE APPS -->
   <section class="launcher">
     <img class="lau-logo" src="joga-challenge.png" alt="JOGA Challenge">
-    <div class="lau-eyebrow">Todo en un solo lugar</div>
-    <h2 class="lau-title">Abre cualquiera de tus poderes</h2>
-    <p class="lau-sub">Tus seis apps, sin salir de aquí · desliza →</p>
-    <div class="rail">
-      <a class="app-card" href="subment.html" style="--accent:#AC97E6">
-        <span class="ac-glyph" style="background:color-mix(in srgb,#AC97E6 16%,transparent);color:#AC97E6;border:1px solid color-mix(in srgb,#AC97E6 38%,transparent)">S</span>
-        <span class="ac-name">SUBMENT</span>
-        <span class="ac-power">El poder de tu transformación</span>
-        <span class="ac-cta" style="color:#AC97E6">Abrir →</span>
-      </a>
-      <a class="app-card" href="jogatime.html" style="--accent:#E8A24C">
-        <span class="ac-glyph" style="background:color-mix(in srgb,#E8A24C 16%,transparent);color:#E8A24C;border:1px solid color-mix(in srgb,#E8A24C 38%,transparent)">J</span>
-        <span class="ac-name">JOGA TIME</span>
-        <span class="ac-power">El poder de tu tiempo</span>
-        <span class="ac-cta" style="color:#E8A24C">Abrir →</span>
-      </a>
-      <a class="app-card" href="protoneutron.html" style="--accent:#5FB8C4">
-        <span class="ac-glyph" style="background:color-mix(in srgb,#5FB8C4 16%,transparent);color:#5FB8C4;border:1px solid color-mix(in srgb,#5FB8C4 38%,transparent)">P</span>
-        <span class="ac-name">PROTONEUTRÓN</span>
-        <span class="ac-power">El poder de tus hábitos</span>
-        <span class="ac-cta" style="color:#5FB8C4">Abrir →</span>
-      </a>
-      <a class="app-card" href="metodoexito.html" style="--accent:#C9925A">
-        <span class="ac-glyph" style="background:color-mix(in srgb,#C9925A 16%,transparent);color:#C9925A;border:1px solid color-mix(in srgb,#C9925A 38%,transparent)">P</span>
-        <span class="ac-name">PASLEY</span>
-        <span class="ac-power">El poder de tus pasos</span>
-        <span class="ac-cta" style="color:#C9925A">Abrir →</span>
-      </a>
-      <a class="app-card" href="monexium.html" style="--accent:#E7C46A">
-        <span class="ac-glyph" style="background:color-mix(in srgb,#E7C46A 16%,transparent);color:#E7C46A;border:1px solid color-mix(in srgb,#E7C46A 38%,transparent)">M</span>
-        <span class="ac-name">MONEXIUM</span>
-        <span class="ac-power">El poder de tu dinero</span>
-        <span class="ac-cta" style="color:#E7C46A">Abrir →</span>
-      </a>
-      <a class="app-card" href="ventmex.html" style="--accent:#F0876A">
-        <span class="ac-glyph" style="background:color-mix(in srgb,#F0876A 16%,transparent);color:#F0876A;border:1px solid color-mix(in srgb,#F0876A 38%,transparent)">V</span>
-        <span class="ac-name">VENTEMEX</span>
-        <span class="ac-power">El poder de tus ventas</span>
-        <span class="ac-cta" style="color:#F0876A">Abrir →</span>
-      </a>
-    </div>
+    <div class="lau-eyebrow" data-es="Todo en un solo lugar" data-en="Everything in one place">Todo en un solo lugar</div>
+    <h2 class="lau-title" data-es="Abre cualquiera de tus poderes" data-en="Open any of your powers">Abre cualquiera de tus poderes</h2>
+    <p class="lau-sub" data-es="Tus seis apps, sin salir de aquí · desliza · toca para abrir" data-en="Your six apps, without leaving here · swipe · tap to open">Tus seis apps, sin salir de aquí · desliza · toca para abrir</p>
+    <div class="tunnel3d" id="tunnel"></div>
   </section>
 
   <!-- CIERRE -->
   <div class="closer">
-    <p>“Nadie se pone fuerte<br>por tener membresía.”</p>
-    <div class="by">JOGA es tu gimnasio · tú eres la fuerza</div>
+    <p data-es="“Nadie se pone fuerte<br>por tener membresía.”" data-en="“No one gets strong<br>just by having a membership.”">“Nadie se pone fuerte<br>por tener membresía.”</p>
+    <div class="by" data-es="JOGA es tu gimnasio · tú eres la fuerza" data-en="JOGA is your gym · you are the strength">JOGA es tu gimnasio · tú eres la fuerza</div>
   </div>
 
-  <a href="index.html" class="back">‹ Volver a mis poderes</a>
+  <a href="index.html" class="back" data-es="‹ Volver a mis poderes" data-en="‹ Back to my powers">‹ Volver a mis poderes</a>
 
 </div>
 
 <script>
+/* ===== i18n ES/EN — sincroniza con index.html vía localStorage 'joga_lang' ===== */
+window.jogaI18n=(function(){
+  var KEY='joga_lang', subs=[];
+  function read(){ try{ var v=localStorage.getItem(KEY); return (v==='en'||v==='es')?v:'es'; }catch(e){ return 'es'; } }
+  var lang=read();
+  function apply(){
+    document.documentElement.lang=lang;
+    var nodes=document.querySelectorAll('[data-es]');
+    for(var i=0;i<nodes.length;i++){ var v=nodes[i].getAttribute('data-'+lang); if(v!==null) nodes[i].innerHTML=v; }
+    var es=document.getElementById('langEs'), en=document.getElementById('langEn');
+    if(es) es.classList.toggle('on',lang==='es');
+    if(en) en.classList.toggle('on',lang==='en');
+    for(var k=0;k<subs.length;k++){ try{ subs[k](lang); }catch(e){} }
+  }
+  function set(l){ if(l!=='es'&&l!=='en') return; lang=l; try{ localStorage.setItem(KEY,l); }catch(e){} apply(); }
+  document.addEventListener('DOMContentLoaded',function(){
+    var es=document.getElementById('langEs'), en=document.getElementById('langEn');
+    if(es) es.addEventListener('click',function(){ set('es'); });
+    if(en) en.addEventListener('click',function(){ set('en'); });
+    apply();
+  });
+  return { get lang(){ return lang; }, set:set, apply:apply, onChange:function(cb){ subs.push(cb); try{ cb(lang); }catch(e){} } };
+})();
+
 (function(){
   var KEY='joga_retos_v1';
   var TOTAL=30;
@@ -446,12 +521,134 @@
   });
 
   document.getElementById('resetBtn').addEventListener('click',function(){
-    if(confirm('¿Reiniciar tu cadena? Vuelves a cero.')){
+    var _rmsg=(window.jogaI18n&&window.jogaI18n.lang==='en')?'Reset your chain? You go back to zero.':'¿Reiniciar tu cadena? Vuelves a cero.';
+    if(confirm(_rmsg)){
       state=new Array(TOTAL).fill(false);save(state);paint();
     }
   });
 
   build();
+})();
+
+/* ===== Carrusel 3D + efecto BOOM ===== */
+(function(){
+  var APPS=[
+    {n:'I',  name:'SUBMENT',      power:{es:'El poder de tu transformación',en:'The power of your transformation'}, href:'subment.html',    c:'#AC97E6'},
+    {n:'II', name:'JOGA TIME',    power:{es:'El poder de tu tiempo',en:'The power of your time'},         href:'jogatime.html',   c:'#E8A24C'},
+    {n:'III',name:'PROTONEUTRÓN', power:{es:'El poder de tus hábitos',en:'The power of your habits'},       href:'protoneutron.html',c:'#5FB8C4'},
+    {n:'IV', name:'PASLEY',       power:{es:'El poder de tus pasos',en:'The power of your steps'},         href:'metodoexito.html',c:'#C9925A'},
+    {n:'V',  name:'MONEXIUM',     power:{es:'El poder de tu dinero',en:'The power of your money'},         href:'monexium.html',   c:'#E7C46A'},
+    {n:'VI', name:'VENTEMEX',     power:{es:'El poder de tus ventas',en:'The power of your sales'},        href:'ventmex.html',    c:'#F0876A'}
+  ];
+
+  /* --- sonido boom sintetizado (sin archivos) --- */
+  var AC=null;
+  function ctx(){ try{ if(!AC) AC=new (window.AudioContext||window.webkitAudioContext)(); if(AC.state==='suspended') AC.resume(); }catch(e){} return AC; }
+  function playBoom(){
+    var c=ctx(); if(!c) return;
+    var t=c.currentTime;
+    // golpe grave
+    var o=c.createOscillator(), g=c.createGain();
+    o.type='sine'; o.frequency.setValueAtTime(140,t); o.frequency.exponentialRampToValueAtTime(42,t+.5);
+    g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.6,t+.02); g.gain.exponentialRampToValueAtTime(.0001,t+.6);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t+.65);
+    // chispa dorada (ruido filtrado)
+    var b=c.createBuffer(1,c.sampleRate*.3,c.sampleRate), d=b.getChannelData(0);
+    for(var i=0;i<d.length;i++){ d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2); }
+    var ns=c.createBufferSource(); ns.buffer=b;
+    var bp=c.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=2200; bp.Q.value=.8;
+    var ng=c.createGain(); ng.gain.setValueAtTime(.25,t); ng.gain.exponentialRampToValueAtTime(.0001,t+.3);
+    ns.connect(bp).connect(ng).connect(c.destination); ns.start(t); ns.stop(t+.32);
+  }
+  function tap(){
+    var c=ctx(); if(!c) return; var t=c.currentTime;
+    var o=c.createOscillator(), g=c.createGain();
+    o.type='triangle'; o.frequency.setValueAtTime(520,t); o.frequency.exponentialRampToValueAtTime(180,t+.12);
+    g.gain.setValueAtTime(.18,t); g.gain.exponentialRampToValueAtTime(.0001,t+.14);
+    o.connect(g).connect(c.destination); o.start(t); o.stop(t+.15);
+  }
+
+  /* --- efecto boom visual --- */
+  var fx=document.getElementById('boomFx');
+  function flashBoom(sound){
+    if(fx){ fx.classList.remove('go'); void fx.offsetWidth; fx.classList.add('go'); }
+    if(sound) playBoom();
+  }
+
+  /* --- construir el túnel --- */
+  var idx=0, stage=null, dots=null;
+  function update(){
+    if(!stage) return;
+    var cards=stage.querySelectorAll('.t-card'), total=cards.length;
+    cards.forEach(function(card,i){
+      var d=(i-idx+total)%total, pos='hidden';
+      if(d===0)pos='front'; else if(d===1)pos='mid-r'; else if(d===total-1)pos='mid-l';
+      else if(d===2)pos='back-r'; else if(d===total-2)pos='back-l';
+      card.setAttribute('data-pos',pos);
+    });
+    if(dots) dots.querySelectorAll('.t-dot').forEach(function(dt,i){ dt.classList.toggle('is-on',i===idx); });
+  }
+  function go(i){ var t=APPS.length; idx=((i%t)+t)%t; update(); tap(); }
+  function open(app){ flashBoom(true); setTimeout(function(){ window.location.href=app.href; },380); }
+
+  function build(){
+    var wrap=document.getElementById('tunnel'); if(!wrap) return;
+    var L=(window.jogaI18n?window.jogaI18n.lang:'es');
+    var halo=document.createElement('div'); halo.className='t-halo'; wrap.appendChild(halo);
+    var rail=document.createElement('div'); rail.className='t-rail'; wrap.appendChild(rail);
+    stage=document.createElement('div'); stage.className='t-stage';
+    APPS.forEach(function(a,i){
+      var card=document.createElement('button');
+      card.className='t-card'; card.setAttribute('data-i',i);
+      var letter=a.name.charAt(0);
+      card.innerHTML='<span class="t-num">'+a.n+'</span>'+
+        '<span class="t-glyph" style="background:linear-gradient(140deg,'+a.c+','+a.c+'cc)">'+letter+'</span>'+
+        '<span class="t-app">'+a.name+'</span>'+
+        '<span class="t-power" style="color:'+a.c+'">'+a.power[L]+'</span>'+
+        '<span class="t-cta">'+(L==='en'?'Open →':'Abrir →')+'</span>';
+      card.addEventListener('click',function(){ if(i===idx){ open(a); } else { go(i); } });
+      stage.appendChild(card);
+    });
+    wrap.appendChild(stage);
+
+    var ctrl=document.createElement('div'); ctrl.className='t-ctrl';
+    var prev=document.createElement('button'); prev.className='t-btn'; prev.innerHTML='‹'; prev.setAttribute('aria-label',L==='en'?'Previous':'Anterior');
+    var next=document.createElement('button'); next.className='t-btn'; next.innerHTML='›'; next.setAttribute('aria-label',L==='en'?'Next':'Siguiente');
+    dots=document.createElement('div'); dots.className='t-dots';
+    APPS.forEach(function(_,i){ var d=document.createElement('span'); d.className='t-dot'+(i===0?' is-on':''); d.addEventListener('click',function(){go(i);}); dots.appendChild(d); });
+    prev.addEventListener('click',function(){ go(idx-1); });
+    next.addEventListener('click',function(){ go(idx+1); });
+    ctrl.appendChild(prev); ctrl.appendChild(dots); ctrl.appendChild(next);
+    wrap.appendChild(ctrl);
+
+    var hint=document.createElement('div'); hint.className='t-hint'; hint.textContent=(L==='en'?'Swipe · Tap to open':'Desliza · Toca para abrir');
+    wrap.parentNode.appendChild(hint);
+
+    // swipe
+    var sx=null;
+    wrap.addEventListener('touchstart',function(e){ sx=e.touches[0].clientX; },{passive:true});
+    wrap.addEventListener('touchend',function(e){
+      if(sx===null) return; var dx=e.changedTouches[0].clientX-sx; sx=null;
+      if(Math.abs(dx)<30) return; go(dx<0?idx+1:idx-1);
+    });
+    update();
+  }
+
+  build();
+
+  if(window.jogaI18n) window.jogaI18n.onChange(function(L){
+    if(stage){ stage.querySelectorAll('.t-card').forEach(function(card,i){
+      var pw=card.querySelector('.t-power'); if(pw&&APPS[i]) pw.textContent=APPS[i].power[L];
+      var cta=card.querySelector('.t-cta'); if(cta) cta.textContent=(L==='en'?'Open →':'Abrir →');
+    }); }
+    var h=document.querySelector('.tunnel3d .t-hint'); if(h) h.textContent=(L==='en'?'Swipe · Tap to open':'Desliza · Toca para abrir');
+  });
+
+  // BOOM al entrar al reto: visual al cargar; sonido en el primer toque (política del navegador)
+  window.addEventListener('load',function(){ setTimeout(function(){ flashBoom(false); },120); });
+  var armed=false;
+  function armSound(){ if(armed) return; armed=true; ctx(); playBoom(); }
+  ['pointerdown','touchstart','keydown'].forEach(function(ev){ window.addEventListener(ev,armSound,{once:true,passive:true}); });
 })();
 </script>
 </body>
