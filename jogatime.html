@@ -1281,6 +1281,21 @@ function toast(msg){const el=document.getElementById("toast");el.textContent=msg
 
 /* ============ EVENTS ============ */
 document.getElementById("transform-btn").onclick=transform;
+  /* ===== Puente: prácticas -> motor (XP + racha) ===== */
+  window.addEventListener("jt:practice",function(ev){
+    try{
+      addXp(8);
+      var total=(ev&&ev.detail&&ev.detail.total)||0;
+      if(total>=3 && !homeLoggedToday()){
+        dayLog.push(homeKey(new Date())); save("t_daylog",dayLog);
+        addXp(10);
+        try{ focusBoom(); }catch(e){}
+      }
+      try{ renderHome(); }catch(e){}
+      try{ renderStats(); }catch(e){}
+      try{ renderLevels(); }catch(e){}
+    }catch(e){}
+  });
 document.getElementById("q-next").onclick=()=>{qi=(qi+1)%QUOTES.length;tick();renderQuote();};
 document.getElementById("theme-btn").onclick=()=>{theme=(theme+1)%THEMES.length;save("t_theme",theme);applyTheme();tick();};
 document.getElementById("sfx-btn").onclick=()=>{sfxOn=!sfxOn;save("t_sfx",sfxOn);setBtnState();if(sfxOn){try{if(actx&&actx.state==="suspended")actx.resume();}catch(e){}tick();boomForce();}};
@@ -1429,10 +1444,15 @@ if(!load("t_seen",false)){document.getElementById("guide-modal").classList.add("
     var v=gm.querySelector('video.guide-logo');
     if(v){ try{ v.muted=true; v.play().catch(function(){}); }catch(e){} }
   }
+  function jtMaybeOpenGuide(){
+    try{ if(localStorage.getItem('jt_guide_seen')==='1') return; }catch(e){}
+    try{ localStorage.setItem('jt_guide_seen','1'); }catch(e){}
+    openGuide();
+  }
   if(document.readyState==='loading'){
-    window.addEventListener('DOMContentLoaded', function(){ setTimeout(openGuide,80); });
+    window.addEventListener('DOMContentLoaded', function(){ setTimeout(jtMaybeOpenGuide,80); });
   } else {
-    setTimeout(openGuide,80);
+    setTimeout(jtMaybeOpenGuide,80);
   }
 })();
 </script>
@@ -1536,6 +1556,7 @@ if(!load("t_seen",false)){document.getElementById("guide-modal").classList.add("
     allProgress[JT_POWER]={done:Math.min(3,totalDone)};
     jtSaveAllProgress(allProgress);
     jtRenderState();
+    try{ window.dispatchEvent(new CustomEvent("jt:practice",{detail:{id:id,total:totalDone}})); }catch(e){}
     if(totalDone>=3){
       setTimeout(()=>{
         const en=jtIsEnglish();
