@@ -1167,33 +1167,6 @@
     return {key:best, ack: best?INTENTS[best].ack:null, ack_en: best?INTENTS[best].ack_en:null};
   }
 
-  // Optional live Claude — answers inside Claude.ai; falls back to local elsewhere.
-  const USE_LIVE_AI = false; // hosting estático: usar motor local (instantáneo, sin CORS)
-  async function livePick(text){
-    const sys=`Eres "Joga", el concierge cálido de Joga Intelligence. Hay 6 apps, una por cada poder que vive en ti:
-- poder: SUBMENT (entrenar el subconsciente, despertar el poder interior)
-- tiempo: JOGA TIME (manejar y honrar el tiempo)
-- prosperidad: MONEXIUM (finanzas personales, mente + método)
-- ventas: VENTEMEX (el arte de vender, método de ventas)
-- crecimiento: PASLEY (método del éxito, desarrollo personal)
-- conocimiento: PROTONEUTRÓN (aprender, crear, experimentar)
-Elige la ÚNICA app más adecuada y escribe UNA frase cálida (máx 22 palabras) que conecte lo que siente con esa app, en ${LANG==="en"?"INGLÉS":"ESPAÑOL"}. Responde SOLO JSON sin markdown: {"app":"<clave>","message":"<frase>"}`;
-    const ctrl=new AbortController(); const to=setTimeout(()=>ctrl.abort(),7000);
-    try{
-      const r=await fetch("https://api.anthropic.com/v1/messages",{
-        method:"POST",headers:{"Content-Type":"application/json"},signal:ctrl.signal,
-        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,
-          messages:[{role:"user",content:sys+"\n\nUsuario: "+text}]})
-      });
-      clearTimeout(to);
-      const data=await r.json();
-      const txt=(data.content||[]).filter(b=>b.type==="text").map(b=>b.text).join("").trim();
-      const obj=JSON.parse(txt.replace(/```json|```/g,"").trim());
-      if(obj && appByKey[obj.app]) return {key:obj.app, message:String(obj.message||"")};
-    }catch(e){ clearTimeout(to); }
-    return null;
-  }
-
   const czInput=document.getElementById("cz-input");
   const czAnswer=document.getElementById("cz-answer");
   const czSub=document.getElementById("cz-sub");
@@ -1217,7 +1190,6 @@ Elige la ÚNICA app más adecuada y escribe UNA frase cálida (máx 22 palabras)
     asking=true; renderThinking(); czSub.textContent=T[LANG]["cz.thinking"];
     const minDelay=new Promise(r=>setTimeout(r,600));
     let result=null;
-    if(USE_LIVE_AI) result=await livePick(text);
     if(!result){
       const lp=localPick(text);
       if(lp.key){ const a=appByKey[lp.key]; const ack=(LANG==="en"?lp.ack_en:lp.ack); const suf=(LANG==="en"?(a.name+" is just right for that."):(a.name+" es justo para eso.")); result={key:lp.key, message:`${ack} ${suf}`}; }

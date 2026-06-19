@@ -1,60 +1,81 @@
-/* Joga Intelligence — service worker */
-const CACHE = 'joga-intelligence-v13';
+/* Joga Intelligence — Service Worker
+   Estrategia:
+   - Navegaciones (páginas): network-first → si no hay red, sirve desde caché (offline).
+   - Estáticos mismo origen y fuentes: stale-while-revalidate (rápido + se actualiza solo).
+   Sube CACHE_VERSION cada vez que quieras forzar refresco tras un deploy. */
 
-/* App shell: cached on install so the home loads instantly and offline. */
-const SHELL = [
+const CACHE_VERSION = 'joga-v1';
+const CACHE = `joga-cache-${CACHE_VERSION}`;
+
+/* Shell mínimo que se precachea al instalar.
+   Se mantiene corto a propósito: si un archivo faltara, addAll NO falla en bloque
+   porque lo envolvemos en intentos individuales. El resto (las 6 apps) se cachea
+   solo al visitarlas la primera vez con red. */
+const CORE = [
   './',
   './index.html',
+  './retos.html',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',
-  './apple-touch-icon.png',
-  './favicon.ico',
-  './joga-logo.png',
-  './joga-lockup.png',
-  './subment.html',
-  './ventmex.html',
-  './boom.mp3',
-  './boom-energy.mp3',
-  './boom-military.mp3',
-  './boom-deep.mp3',
-  './open.mp3'
+  './icon-512-maskable.png',
+  './apple-touch-icon.png'
 ];
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())
-  );
+self.addEventListener('install', (event) => {
+  event.waitUntil((async () => {
+    const cache = await caches.open(CACHE);
+    // cachea uno por uno para que un 404 no rompa toda la instalación
+    await Promise.all(CORE.map(async (url) => {
+      try { await cache.add(new Request(url, { cache: 'reload' })); }
+      catch (e) { /* ignora el que falle */ }
+    }));
+    self.skipWaiting();
+  })());
 });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+self.addEventListener('activate', (event) => {
+  event.waitUntil((async () => {
+    const keys = await caches.keys();
+    await Promise.all(keys.map((k) => k.startsWith('joga-cache-') && k !== CACHE ? caches.delete(k) : null));
+    await self.clients.claim();
+  })());
 });
 
-/* Stale-while-revalidate:
-   - serve from cache instantly when available,
-   - refresh the cache in the background,
-   - cache new GETs (the app html files, Google Fonts) on first use → offline afterwards.
-   Each individual app is cached the first time you open it. */
-self.addEventListener('fetch', (e) => {
-  const req = e.request;
+self.addEventListener('fetch', (event) => {
+  const req = event.request;
   if (req.method !== 'GET') return;
 
-  e.respondWith(
-    caches.match(req).then((cached) => {
-      const network = fetch(req).then((res) => {
-        if (res && (res.status === 200 || res.type === 'opaque')) {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(req, copy));
-        }
-        return res;
-      }).catch(() => cached || (req.mode === 'navigate' ? caches.match('./index.html') : undefined));
+  const url = new URL(req.url);
+  const sameOrigin = url.origin === self.location.origin;
 
-      return cached || network;
-    })
-  );
+  // Páginas (navegación): network-first con fallback a caché
+  if (req.mode === 'navigate') {
+    event.respondWith((async () => {
+      try {
+        const fresh = await fetch(req);
+        const cache = await caches.open(CACHE);
+        cache.put(req, fresh.clone());
+        return fresh;
+      } catch (e) {
+        const cached = await caches.match(req);
+        return cached || await caches.match('./index.html');
+      }
+    })());
+    return;
+  }
+
+  // Estáticos mismo origen + Google Fonts: stale-while-revalidate
+  const isFont = url.hostname.includes('fonts.googleapis.com') || url.hostname.includes('fonts.gstatic.com');
+  if (sameOrigin || isFont) {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE);
+      const cached = await cache.match(req);
+      const network = fetch(req).then((res) => {
+        if (res && res.status === 200) cache.put(req, res.clone());
+        return res;
+      }).catch(() => null);
+      return cached || (await network) || new Response('', { status: 504 });
+    })());
+  }
 });
