@@ -737,6 +737,55 @@
   <!-- Sección "Seis poderes / Seis apps" retirada. Se conserva #needs oculto porque el script lo usa. -->
   <div id="needs" style="display:none" aria-hidden="true"></div>
 
+  <!-- QUIÉN ESTÁ DETRÁS (señal de confianza) -->
+  <section class="founder" id="founder">
+    <style>
+      .founder{padding:30px 0 10px}
+      .founder .shell{max-width:1000px;margin:0 auto;padding:0 22px}
+      .founder-card{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:34px;align-items:center;
+        padding:30px;border-radius:24px;
+        background:radial-gradient(120% 120% at 0% 0%,rgba(231,196,106,.09),transparent 60%),linear-gradient(165deg,#15100a,#0d0d10);
+        border:1px solid rgba(231,196,106,.22);
+        box-shadow:0 26px 60px -34px rgba(0,0,0,.85)}
+      .founder-photo{position:relative;border-radius:18px;overflow:hidden;
+        border:1px solid rgba(231,196,106,.30);
+        box-shadow:0 18px 44px -22px rgba(226,112,58,.5)}
+      .founder-photo img{display:block;width:100%;height:auto}
+      .founder-eyebrow{font-family:var(--grot);font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:#C9A050;font-weight:600;margin-bottom:10px}
+      .founder-name{font-family:var(--serif);font-weight:600;font-size:clamp(22px,4.4vw,30px);color:var(--bone);margin:0 0 3px;line-height:1.1}
+      .founder-role{font-family:var(--grot);font-size:.85rem;color:var(--muted);margin-bottom:16px}
+      .founder-bio{color:#cfc9bb;font-size:1rem;line-height:1.62;margin:0 0 18px}
+      .founder-bio em{color:var(--gold);font-style:normal}
+      .founder-promise{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:14px;
+        background:rgba(231,196,106,.06);border-left:3px solid var(--ember)}
+      .founder-promise svg{flex-shrink:0;margin-top:3px}
+      .founder-promise span{font-family:var(--serif);font-style:italic;color:var(--bone);font-size:1.02rem;line-height:1.45}
+      @media(max-width:680px){
+        .founder-card{grid-template-columns:1fr;gap:22px;text-align:center;padding:24px}
+        .founder-photo{max-width:250px;margin:0 auto}
+        .founder-promise{text-align:left}
+      }
+    </style>
+    <div class="shell">
+      <div class="founder-card">
+        <div class="founder-photo">
+          <img src="founder.jpg" width="900" height="1125" loading="lazy"
+               alt="José Omar Gallardo Alderete, fundador de Joga Intelligence">
+        </div>
+        <div class="founder-text">
+          <div class="founder-eyebrow" data-i18n="founder.eyebrow">Quién está detrás</div>
+          <h2 class="founder-name" data-i18n="founder.name">José Omar Gallardo Alderete</h2>
+          <div class="founder-role" data-i18n="founder.role">Fundador · Joga Intelligence</div>
+          <p class="founder-bio" data-i18n-html="founder.bio">Creé Joga Intelligence por una certeza simple: todos llevamos dentro poderes que nunca aprendimos a desarrollar. <em>No son talento de unos cuantos — están en ti, esperando.</em> Construí estas seis apps para darte un método claro y diario que los despierte, uno a la vez.</p>
+          <div class="founder-promise">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E2703A" stroke-width="1.8"><path d="M12 2l2.4 7.4H22l-6 4.4 2.3 7.2L12 16.6 5.7 21l2.3-7.2-6-4.4h7.6z"/></svg>
+            <span data-i18n="founder.promise">En 30 días empiezas a despertar el poder que ya vive en ti.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ACCESO A JOGA CHALLENGE (reemplaza al carrusel) -->
   <section class="challenge" id="challenge">
     <style>
@@ -881,6 +930,9 @@
       "ios.title":"Instálala en tu iPhone","ios.body":"Toca "+SHARE_SVG+" Compartir y luego «Agregar a inicio».",
       "v.back":"‹ Volver","v.open":"Abrir ↗",
       "intro.thesis":"No son necesidades. Son los poderes que ya viven en ti. Una app para despertar cada uno.","intro.skip":"Saltar","intro.enter":"Toca para entrar",
+      "founder.eyebrow":"Quién está detrás","founder.name":"José Omar Gallardo Alderete","founder.role":"Fundador · Joga Intelligence",
+      "founder.bio":"Creé Joga Intelligence por una certeza simple: todos llevamos dentro poderes que nunca aprendimos a desarrollar. <em>No son talento de unos cuantos — están en ti, esperando.</em> Construí estas seis apps para darte un método claro y diario que los despierte, uno a la vez.",
+      "founder.promise":"En 30 días empiezas a despertar el poder que ya vive en ti.",
       "open":"Abrir" },
     en:{ "nav.apps":"Open the apps","nav.install":"Install app","hero.eyebrow":"Intelligence for life",
       "hero.h1":"These aren't needs. They're the powers already alive in you. One <em>app</em> to awaken each.",
@@ -898,6 +950,9 @@
       "ios.title":"Install it on your iPhone","ios.body":"Tap "+SHARE_SVG+" Share, then \u201cAdd to Home Screen\u201d.",
       "v.back":"‹ Back","v.open":"Open ↗",
       "intro.thesis":"These aren't needs. They're the powers already alive in you. One app to awaken each.","intro.skip":"Skip","intro.enter":"Tap to enter",
+      "founder.eyebrow":"Who's behind this","founder.name":"José Omar Gallardo Alderete","founder.role":"Founder · Joga Intelligence",
+      "founder.bio":"I created Joga Intelligence from a simple conviction: we all carry powers within that we never learned to develop. <em>They're not a gift for the few — they're in you, waiting.</em> I built these six apps to give you a clear, daily method to awaken them, one at a time.",
+      "founder.promise":"In 30 days you begin to awaken the power already alive in you.",
       "open":"Open" },
   };
   const CHIPS=[
