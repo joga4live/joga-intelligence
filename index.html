@@ -538,6 +538,8 @@
   .cz-result .rt b{font-family:var(--serif);font-weight:600;font-size:17px;display:block}
   .cz-result .rt span{color:var(--muted);font-size:12.5px}
   .cz-result .go{margin-left:auto;color:var(--accent);font-weight:600;font-size:14px;white-space:nowrap}
+  .cz-step{margin-top:10px;background:rgba(231,196,106,.06);border-left:3px solid var(--accent,#E7C46A);border-radius:12px;padding:11px 13px;font-size:13.5px;line-height:1.5;color:var(--bone);animation:czfade .45s ease}
+  .cz-step .cz-step-l{display:block;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9A050;font-weight:600;margin-bottom:5px}
 
   /* ---------------- cinematic intro ---------------- */
   body.intro-lock{overflow:hidden}
@@ -1309,7 +1311,7 @@
   const czAnswer=document.getElementById("cz-answer");
   const czSub=document.getElementById("cz-sub");
 
-  function renderResult(key,message){
+  function renderResult(key,message,step){
     const a=appByKey[key]; czAnswer.innerHTML="";
     const reply=document.createElement("div"); reply.className="cz-reply";
     reply.textContent=message;
@@ -1317,23 +1319,60 @@
     res.setAttribute("aria-label",T[LANG]["open"]+" "+a.name);
     res.innerHTML=`<span class="g">${a.glyph}</span><span class="rt"><b>${a.name}</b><span>${tagFor(a)}</span></span><span class="go">${T[LANG]["cz.open"]}</span>`;
     res.addEventListener("click",()=>openApp(a));
-    czAnswer.appendChild(reply); czAnswer.appendChild(res); czAnswer.hidden=false;
+    czAnswer.appendChild(reply); czAnswer.appendChild(res);
+    if(step){
+      const st=document.createElement("div"); st.className="cz-step"; st.style.setProperty("--accent",a.accent);
+      const lbl=(LANG==="en"?"First step \u00b7 today \u00b7 5 min":"Tu primer paso \u00b7 hoy \u00b7 5 min");
+      const sl=document.createElement("span"); sl.className="cz-step-l"; sl.textContent=lbl;
+      st.appendChild(sl); st.appendChild(document.createTextNode(step));
+      czAnswer.appendChild(st);
+    }
+    czAnswer.hidden=false;
   }
   function renderThinking(){ czAnswer.innerHTML='<div class="cz-thinking">'+T[LANG]["cz.thinkingLabel"]+' <i></i><i></i><i></i></div>'; czAnswer.hidden=false; }
   function renderUnsure(){ czAnswer.innerHTML='<div class="cz-reply">'+T[LANG]["cz.unsure"]+'</div>'; czAnswer.hidden=false; }
+
+  // Motor inteligente real: lee lo que escribe la persona y elige el poder + un primer paso.
+  async function aiPick(text){
+    if(!(window.claude && typeof window.claude.complete==="function")) return null;
+    const langName=(LANG==="en"?"English":"Spanish");
+    const prompt=
+`Eres el motor de diagnostico de Joga Intelligence, una app que despierta "poderes que ya viven en la persona". El usuario describe en sus palabras que se le atraviesa. Elige EL UNICO poder que debe despertar primero.
+
+Poderes (usa exactamente una de estas keys):
+- "poder": transformacion interior, mente, subconsciente, miedo, ansiedad, confianza, autoestima, cambiar de raiz.
+- "tiempo": falta de tiempo, agenda, enfoque, distraccion, productividad, organizacion.
+- "conocimiento": habitos, constancia, disciplina, aprender, crear, curiosidad, rutinas.
+- "crecimiento": direccion, proposito, metas, crecer, sentirse estancado, avanzar con metodo.
+- "prosperidad": dinero, deudas, ahorro, finanzas, prosperidad, gastar.
+- "ventas": vender, clientes, cerrar tratos, negocio, ingresos por venta.
+
+Responde SOLO con JSON valido, sin markdown ni explicaciones, en ${langName}, con esta forma exacta:
+{"key":"<key>","message":"<1 o 2 frases en segunda persona (tu), calidas y especificas a lo que dijo, max 200 caracteres>","step":"<accion concreta de 5 min para HOY, empieza con verbo, max 100 caracteres>"}
+
+Lo que dijo la persona: «${text}»`;
+    try{
+      const raw=await window.claude.complete(prompt);
+      let s=String(raw||"").trim().replace(/^```(json)?/i,"").replace(/```$/,"").trim();
+      const a=s.indexOf("{"), b=s.lastIndexOf("}"); if(a<0||b<0) return null;
+      const d=JSON.parse(s.slice(a,b+1));
+      if(!d||!appByKey[d.key]) return null;
+      return {key:d.key, message:(d.message||"").trim(), step:(d.step||"").trim()};
+    }catch(e){ return null; }
+  }
 
   let asking=false;
   async function askJoga(text){
     text=(text||"").trim(); if(!text||asking) return;
     asking=true; renderThinking(); czSub.textContent=T[LANG]["cz.thinking"];
     const minDelay=new Promise(r=>setTimeout(r,600));
-    let result=null;
-    if(!result){
-      const lp=localPick(text);
-      if(lp.key){ const a=appByKey[lp.key]; const ack=(LANG==="en"?lp.ack_en:lp.ack); const suf=(LANG==="en"?(a.name+" is just right for that."):(a.name+" es justo para eso.")); result={key:lp.key, message:`${ack} ${suf}`}; }
+    let result=await aiPick(text);            // IA real (si esta disponible)
+    if(!result || !result.message){
+      const lp=localPick(text);               // respaldo local offline
+      if(lp.key){ const a=appByKey[lp.key]; const ack=(LANG==="en"?lp.ack_en:lp.ack); const suf=(LANG==="en"?(a.name+" is just right for that."):(a.name+" es justo para eso.")); result={key:lp.key, message:`${ack} ${suf}`, step:null}; }
     }
     await minDelay; czSub.textContent=T[LANG]["cz.more"];
-    if(result) renderResult(result.key,result.message); else renderUnsure();
+    if(result) renderResult(result.key,result.message,result.step); else renderUnsure();
     asking=false;
   }
   document.getElementById("cz-send").addEventListener("click",()=>{ playTapSfx(); askJoga(czInput.value); });
