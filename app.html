@@ -836,6 +836,15 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 #jmap .jm-hint{margin-top:12px;text-align:center;font:500 11.5px system-ui;color:#8d8677}
 </style>
       <div id="jmap" aria-label="Mapa de poderes"></div>
+      <style>
+#jremind{margin:0 0 26px;border:1px solid rgba(201,160,80,.25);border-radius:18px;padding:16px;background:rgba(220,183,102,.05);display:none}
+#jremind .jr-row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+#jremind .jr-t{font:600 12.5px system-ui;color:#F2ECDD}
+#jremind button{cursor:pointer;border-radius:999px;border:1px solid rgba(201,160,80,.4);background:rgba(220,183,102,.08);color:#E7C46A;font:600 12px system-ui;padding:8px 14px}
+#jremind button.on{background:linear-gradient(180deg,#dcb766,#b8924a);color:#1a130a;border-color:transparent}
+#jremind .jr-note{margin-top:10px;text-align:center;font:500 11px system-ui;color:#8d8677}
+      </style>
+      <div id="jremind"></div>
       <div class="apps-grid" id="apps-grid" aria-label="Siete poderes, siete apps"></div>
     </div>
   </section>
@@ -1883,6 +1892,50 @@ Lo que dijo la persona: «${text}»`;
   window.addEventListener('focus', later);
   window.addEventListener('pageshow', later);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', render); else render();
+})();
+</script>
+<script>
+/* Recordatorio diario: UI y programador / Daily reminder: UI and scheduler */
+(function(){
+  if(!('Notification' in window) || !('serviceWorker' in navigator)) return;
+  function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function st(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function rdb(fn){ try{ var rq=indexedDB.open('joga-reminder',1); rq.onupgradeneeded=function(){ rq.result.createObjectStore('kv'); }; rq.onsuccess=function(){ fn(rq.result); }; }catch(e){} }
+  function saveCfg(){ var cfg={ on:g('jiRemindOn')==='1', hour:parseInt(g('jiRemindHour')||'8',10), lang:(g('jiLang')==='en'?'en':'es') };
+    rdb(function(db){ try{ db.transaction('kv','readwrite').objectStore('kv').put(cfg,'cfg'); }catch(e){} }); return cfg; }
+  function ping(){ saveCfg(); try{ navigator.serviceWorker.ready.then(function(r){ if(r.active) r.active.postMessage({type:'joga-remind-check'}); }); }catch(e){} }
+  function tryPeriodic(){ try{ navigator.serviceWorker.ready.then(function(r){ if('periodicSync' in r){ r.periodicSync.register('joga-daily',{minInterval:12*60*60*1000}).catch(function(){}); } }); }catch(e){} }
+  var HOURS=[[8,'Ma\u00f1ana 8:00','Morning 8:00'],[15,'Tarde 3:00','Afternoon 3:00'],[20,'Noche 8:00','Evening 8:00']];
+  function render(){
+    var el=document.getElementById('jremind'); if(!el) return;
+    var EN=(g('jiLang')==='en'), on=g('jiRemindOn')==='1', hr=parseInt(g('jiRemindHour')||'8',10);
+    var h='<div class="jr-row"><span class="jr-t">\uD83D\uDD14 '+(EN?'Daily reminder':'Recordatorio diario')+'</span>';
+    h+='<button id="jr-tog" class="'+(on?'on':'')+'">'+(on?(EN?'On':'Activado'):(EN?'Turn on':'Activar'))+'</button>';
+    if(on){ HOURS.forEach(function(o){ h+='<button data-h="'+o[0]+'" class="jr-h'+(hr===o[0]?' on':'')+'">'+(EN?o[2]:o[1])+'</button>'; }); }
+    h+='</div>';
+    h+='<div class="jr-note">'+(on
+      ?(EN?'One notification a day, at your chosen time, whenever you open Joga \u2014 and in the background on the installed app (Android/Chrome).'
+           :'Una notificaci\u00f3n al d\u00eda, a tu hora, cada vez que abras Joga \u2014 y en segundo plano con la app instalada (Android/Chrome).')
+      :(EN?'Don\u2019t break the chain \u2014 get a daily nudge for your practice.'
+           :'No rompas la cadena \u2014 recibe un empuj\u00f3n diario para tu pr\u00e1ctica.'))+'</div>';
+    el.innerHTML=h; el.style.display='block';
+    var tog=document.getElementById('jr-tog');
+    if(tog) tog.onclick=function(){
+      if(g('jiRemindOn')==='1'){ st('jiRemindOn','0'); saveCfg(); render(); return; }
+      Notification.requestPermission().then(function(p){
+        if(p!=='granted'){ alert(EN?'Enable notifications in your browser to use the reminder.':'Activa las notificaciones en tu navegador para usar el recordatorio.'); return; }
+        st('jiRemindOn','1'); saveCfg(); tryPeriodic(); render();
+        try{ navigator.serviceWorker.ready.then(function(r){ r.showNotification('Joga Intelligence',{ body:(EN?'\u2705 Reminder on. See you every day \u2014 don\u2019t break the chain.':'\u2705 Recordatorio activado. Nos vemos cada d\u00eda \u2014 no rompas la cadena.'), icon:'./icon-192.png', tag:'joga-daily-hi' }); }); }catch(e){}
+      });
+    };
+    Array.prototype.forEach.call(el.querySelectorAll('.jr-h'),function(b){
+      b.onclick=function(){ st('jiRemindHour',b.getAttribute('data-h')); saveCfg(); render(); };
+    });
+  }
+  document.addEventListener('click', function(){ setTimeout(render,300); }, true);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ render(); ping(); });
+  else { render(); ping(); }
+  setInterval(ping, 5*60*1000);
 })();
 </script>
 </body>

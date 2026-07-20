@@ -4,7 +4,7 @@
    - Estáticos mismo origen y fuentes: stale-while-revalidate (rápido + se actualiza solo).
    Sube CACHE_VERSION cada vez que quieras forzar refresco tras un deploy. */
 
-const CACHE_VERSION = 'joga-v18';
+const CACHE_VERSION = 'joga-v19';
 const CACHE = `joga-cache-${CACHE_VERSION}`;
 
 /* Shell mínimo que se precachea al instalar.
@@ -78,4 +78,74 @@ self.addEventListener('fetch', (event) => {
       return cached || (await network) || new Response('', { status: 504 });
     })());
   }
+});
+
+
+/* ===== Recordatorio diario / Daily reminder =====
+   La pagina guarda la config en IndexedDB (on, hour, lang, lastShown).
+   El SW la lee al recibir un ping de la pagina o un periodicsync (PWA instalada). */
+function rdbOpen() {
+  return new Promise((res) => {
+    try {
+      const rq = indexedDB.open('joga-reminder', 1);
+      rq.onupgradeneeded = () => { rq.result.createObjectStore('kv'); };
+      rq.onsuccess = () => res(rq.result);
+      rq.onerror = () => res(null);
+    } catch (e) { res(null); }
+  });
+}
+function rdbGet(key) {
+  return rdbOpen().then((db) => new Promise((res) => {
+    if (!db) return res(null);
+    try {
+      const g = db.transaction('kv', 'readonly').objectStore('kv').get(key);
+      g.onsuccess = () => res(g.result || null);
+      g.onerror = () => res(null);
+    } catch (e) { res(null); }
+  }));
+}
+function rdbSet(key, val) {
+  return rdbOpen().then((db) => new Promise((res) => {
+    if (!db) return res(false);
+    try {
+      const tx = db.transaction('kv', 'readwrite');
+      tx.objectStore('kv').put(val, key);
+      tx.oncomplete = () => res(true);
+      tx.onerror = () => res(false);
+    } catch (e) { res(false); }
+  }));
+}
+function localDay(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+async function maybeRemind() {
+  const cfg = await rdbGet('cfg');
+  if (!cfg || !cfg.on) return;
+  const now = new Date(), today = localDay(now);
+  const last = await rdbGet('lastShown');
+  if (last === today) return;
+  if (now.getHours() < (typeof cfg.hour === 'number' ? cfg.hour : 8)) return;
+  const es = cfg.lang !== 'en';
+  await self.registration.showNotification('Joga Intelligence', {
+    body: es ? '\u{1F525} No rompas la cadena: tu pr\u00e1ctica de hoy te espera.'
+             : '\u{1F525} Don\u2019t break the chain: today\u2019s practice is waiting for you.',
+    icon: './icon-192.png',
+    badge: './icon-192.png',
+    tag: 'joga-daily',
+    renotify: false
+  });
+  await rdbSet('lastShown', today);
+}
+self.addEventListener('periodicsync', (event) => {
+  if (event.tag === 'joga-daily') event.waitUntil(maybeRemind());
+});
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'joga-remind-check') {
+    const p = maybeRemind();
+    if (event.waitUntil) event.waitUntil(p);
+  }
+});
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  event.waitUntil(self.clients.openWindow('./app.html'));
 });
