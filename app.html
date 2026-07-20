@@ -713,6 +713,10 @@
 .jbw-go{display:inline-flex;align-items:center;gap:7px;margin-top:18px;font:600 12.5px/1 system-ui}
 .jbw-enter{display:inline-flex;align-items:center;gap:9px;margin:8px auto 0;padding:15px 32px;border-radius:999px;background:linear-gradient(180deg,#dcb766,#b8924a);color:#1a130a;font:600 14px/1 system-ui;letter-spacing:.01em;text-decoration:none;border:none;cursor:pointer;box-shadow:0 16px 36px -10px rgba(184,146,74,.65);transition:transform .18s ease,box-shadow .18s ease}
 .jbw-enter:hover{transform:translateY(-2px);box-shadow:0 22px 46px -10px rgba(184,146,74,.75)}
+.jbw-choice{display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;margin-top:8px}
+.jbw-choice .jbw-enter{margin:0}
+.jbw-enter-alt{background:transparent;color:#E7C46A;border:1px solid rgba(201,160,80,.65);box-shadow:none}
+.jbw-enter-alt:hover{box-shadow:0 12px 30px -14px rgba(184,146,74,.5)}
 .jbw-enter2{display:block;margin:16px auto 0;background:none;border:none;cursor:pointer;font:600 12px/1 system-ui;letter-spacing:.04em;color:#C9A050;text-decoration:none;opacity:.9;transition:opacity .18s ease}
 .jbw-enter2:hover{opacity:1}
 .jbw-replay{display:block;margin:22px auto 0;background:none;border:none;cursor:pointer;font:500 11.5px/1 system-ui;color:#6a6478;letter-spacing:.04em}
@@ -787,8 +791,10 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
     <div class="jbw-paths" id="jbw-paths" hidden>
       <div class="jbw-choose" id="jbw-choose">Tres caminos para entrar</div>
       <div class="jbw-grid" id="jbw-grid"></div>
-      <a class="jbw-enter" id="jbw-enter" href="onboarding.html">Empezar el reto de 30 días <span aria-hidden="true">→</span></a>
-      <button class="jbw-enter2" id="jbw-enter2">o conoce las 7 apps</button>
+      <div class="jbw-choice">
+        <a class="jbw-enter" id="jbw-enter" href="retos.html">Empezar el reto <span aria-hidden="true">→</span></a>
+        <button class="jbw-enter jbw-enter-alt" id="jbw-enter2">Ver las 7 apps <span aria-hidden="true">→</span></button>
+      </div>
       <button class="jbw-replay" id="jbw-replay">↺ Escuchar de nuevo</button>
     </div>
   </section>
@@ -802,7 +808,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
       <p class="lede" data-i18n-html="hero.lede">Tu energía, tu mente, tu tiempo, tus hábitos, tu método, tu dinero y tus ventas — siete apps que trabajan como una sola. <b>Un reto guiado de 30 días</b> para transformar lo que de verdad mueve tu vida.</p>
 
       <div class="actions">
-        <a class="btn primary" href="onboarding.html" data-i18n="hero.cta1">Empezar el reto de 30 días →</a>
+        <a class="btn primary" href="retos.html" data-i18n="hero.cta1">Empezar el reto de 30 días →</a>
         <button class="btn ghost" id="hero-apps" data-i18n="hero.cta2">Ver todas las apps</button>
       </div>
     </div>
@@ -1757,11 +1763,11 @@ Lo que dijo la persona: «${text}»`;
     es:"Hola, soy Joga.\nDurante 30 d\u00edas te acompa\u00f1o a despertar siete poderes que ya viven en ti \u2014 tu energ\u00eda, tu mente, tu tiempo, tus h\u00e1bitos, tu m\u00e9todo, tu dinero y tus ventas.\nElige por d\u00f3nde quieres empezar:",
     en:"Hi, I'm Joga.\nFor 30 days I'll help you awaken seven powers that already live in you \u2014 your energy, mind, time, habits, method, money and sales.\nChoose where you'd like to begin:" };
   var CARDS={ es:[
-    {ic:'\ud83d\udd25',k:'El camino completo',t:'Empezar el reto de 30 d\u00edas',d:'Un paso cada d\u00eda, sin romper la cadena. La transformaci\u00f3n guiada del d\u00eda 1 al 30.',go:'Empezar el reto',ac:'#E2703A',href:'onboarding.html',scroll:null},
+    {ic:'\ud83d\udd25',k:'El camino completo',t:'Empezar el reto de 30 d\u00edas',d:'Un paso cada d\u00eda, sin romper la cadena. La transformaci\u00f3n guiada del d\u00eda 1 al 30.',go:'Empezar el reto',ac:'#E2703A',href:'retos.html',scroll:null},
     {ic:'\u2728',k:'Explora',t:'Conoce las 7 apps',d:'Mira cada poder por dentro \u2014 energ\u00eda, mente, tiempo, h\u00e1bitos, m\u00e9todo, dinero y ventas.',go:'Ver las apps',ac:'#9a6cf6',href:'#apps',scroll:'apps'},
     {ic:'\ud83d\udcac',k:'\u00bfNo sabes?',t:'Deja que Joga te gu\u00ede',d:'Dime qu\u00e9 necesitas en tus palabras y te llevo al lugar correcto.',go:'Preguntar a Joga',ac:'#C9A050',href:'#concierge-section',scroll:'concierge-section'} ],
     en:[
-    {ic:'\ud83d\udd25',k:'The full path',t:'Start the 30-day challenge',d:'One step a day, no breaking the chain. The guided transformation from day 1 to 30.',go:'Begin the challenge',ac:'#E2703A',href:'onboarding.html',scroll:null},
+    {ic:'\ud83d\udd25',k:'The full path',t:'Start the 30-day challenge',d:'One step a day, no breaking the chain. The guided transformation from day 1 to 30.',go:'Begin the challenge',ac:'#E2703A',href:'retos.html',scroll:null},
     {ic:'\u2728',k:'Explore',t:'Meet the 7 apps',d:'See each power from the inside \u2014 energy, mind, time, habits, method, money, sales.',go:'See the apps',ac:'#9a6cf6',href:'#apps',scroll:'apps'},
     {ic:'\ud83d\udcac',k:'Not sure?',t:'Let Joga guide you',d:'Tell me what you need in your own words and I will point you to the right place.',go:'Ask Joga',ac:'#C9A050',href:'#concierge-section',scroll:'concierge-section'} ] };
   function hexA(hex,a){ var n=parseInt(hex.slice(1),16); return 'rgba('+((n>>16)&255)+','+((n>>8)&255)+','+(n&255)+','+a+')'; }
