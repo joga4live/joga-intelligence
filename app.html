@@ -817,6 +817,25 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
   <section class="manifesto" id="apps">
     <div class="shell">
       <p class="reveal" data-i18n="man.p">No vendemos apps sueltas. Despertamos lo que de verdad importa, un poder a la vez.</p>
+      <style>
+#jmap{margin:0 0 26px;border:1px solid rgba(201,160,80,.28);border-radius:22px;padding:20px 18px 16px;background:linear-gradient(165deg,rgba(220,183,102,.07),rgba(20,16,10,.35))}
+#jmap .jm-k{font:600 10px/1 system-ui;letter-spacing:.3em;text-transform:uppercase;color:#C9A050;margin-bottom:10px;text-align:center}
+#jmap .jm-top{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
+#jmap .jm-stat{border:1px solid rgba(201,160,80,.3);border-radius:999px;padding:7px 14px;font:600 12px system-ui;color:#F2ECDD;background:rgba(220,183,102,.08)}
+#jmap .jm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:10px;margin-bottom:14px}
+#jmap .jm-p{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border-radius:16px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02)}
+#jmap .jm-p.on{border-color:rgba(201,160,80,.5);background:rgba(220,183,102,.07);box-shadow:0 0 22px -8px rgba(220,183,102,.55)}
+#jmap .jm-ring{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(#dcb766 var(--p,0%),rgba(255,255,255,.09) 0)}
+#jmap .jm-ring>span{width:42px;height:42px;border-radius:50%;background:#141009;display:grid;place-items:center;font:700 13px system-ui;color:#F2ECDD}
+#jmap .jm-n{font:600 10.5px system-ui;color:#cfc8ba;text-align:center}
+#jmap .jm-p.on .jm-n{color:#F2ECDD}
+#jmap .jm-s{font:600 10px system-ui;color:#C9A050}
+#jmap .jm-meds{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+#jmap .jm-m{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 11px;font:600 11px system-ui;border:1px solid rgba(255,255,255,.1);color:#8d8677;background:rgba(255,255,255,.03)}
+#jmap .jm-m.won{border-color:rgba(201,160,80,.55);color:#F2ECDD;background:linear-gradient(135deg,rgba(220,183,102,.18),rgba(220,183,102,.06));box-shadow:0 0 16px -8px rgba(220,183,102,.6)}
+#jmap .jm-hint{margin-top:12px;text-align:center;font:500 11.5px system-ui;color:#8d8677}
+</style>
+      <div id="jmap" aria-label="Mapa de poderes"></div>
       <div class="apps-grid" id="apps-grid" aria-label="Siete poderes, siete apps"></div>
     </div>
   </section>
@@ -1809,6 +1828,61 @@ Lo que dijo la persona: «${text}»`;
   replay.addEventListener('click', start);
   var lt=document.getElementById('lang-toggle'); if(lt){ lt.addEventListener('click',function(e){ if(e.target.closest('button[data-lang]')){ setHint(); setBackLabel(); buildCards(); setTimeout(function(){ if(hint && hint.style.display!=='none') return; start(); },60); } }); }
   var ie=document.getElementById('intro-enter'); if(ie){ ie.addEventListener('click', function(){ setTimeout(go,450); }); }
+})();
+</script>
+<script>
+/* Mapa de Poderes: lee el progreso real que cada app guarda en localStorage / Power Map: reads real progress each app stores in localStorage */
+(function(){
+  function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function stats(k){ try{ return JSON.parse(g('jiStats_'+k)||'{}')||{}; }catch(e){ return {}; } }
+  var POWERS=[
+    {n:'JogaBody', k:null},
+    {n:'JogaMind', k:'subment'},
+    {n:'JogaTime', k:'jogatime'},
+    {n:'JogaBit', k:'protoneutron'},
+    {n:'JogaPath', k:'pasley'},
+    {n:'JogaCapital', k:'monexium'},
+    {n:'JogaVentix', k:'ventmex'}
+  ];
+  function data(){
+    var out=[], totalS=0, best=0, active=0;
+    POWERS.forEach(function(p){
+      var st, ses;
+      if(p.k===null){ st=parseInt(g('jfStreak')||'0',10)||0; ses=st; }
+      else { var d=stats(p.k); st=(typeof d.streak==='number')?d.streak:0; ses=(typeof d.totalSessions==='number')?d.totalSessions:0; }
+      if(st>best) best=st;
+      totalS+=ses;
+      if(st>0||ses>0) active++;
+      out.push({n:p.n, streak:st, ses:ses, on:(st>0||ses>0)});
+    });
+    return {p:out, best:best, total:totalS, active:active};
+  }
+  function render(){
+    var el=document.getElementById('jmap'); if(!el) return;
+    var EN=(g('jiLang')==='en'), d=data();
+    var T=EN?{map:'Power Map',streak:'Strongest chain',days:'days',ses:'Total sessions',hint0:'Your map lights up with your first practice. Open any app and begin.',
+      m:[['\uD83C\uDF31','First step',d.total>=1||d.best>=1],['\uD83D\uDD17','3-day chain',d.best>=3],['\uD83C\uDFF5\uFE0F','Perfect week',d.best>=7],['\uD83E\uDDED','Explorer \u00b7 3 powers',d.active>=3],['\uD83D\uDC51','All 7 awakened',d.active>=7],['\uD83D\uDC8E','30 sessions',d.total>=30]]}
+    :{map:'Mapa de Poderes',streak:'Racha m\u00e1s fuerte',days:'d\u00edas',ses:'Sesiones totales',hint0:'Tu mapa se enciende con tu primera pr\u00e1ctica. Abre cualquier app y comienza.',
+      m:[['\uD83C\uDF31','Primer paso',d.total>=1||d.best>=1],['\uD83D\uDD17','Cadena de 3',d.best>=3],['\uD83C\uDFF5\uFE0F','Semana perfecta',d.best>=7],['\uD83E\uDDED','Explorador \u00b7 3 poderes',d.active>=3],['\uD83D\uDC51','Los 7 despertados',d.active>=7],['\uD83D\uDC8E','30 sesiones',d.total>=30]]};
+    var h='<div class="jm-k">\u2726 '+T.map+' \u2726</div>';
+    h+='<div class="jm-top"><span class="jm-stat">\uD83D\uDD25 '+T.streak+': '+d.best+' '+T.days+'</span><span class="jm-stat">\u2728 '+T.ses+': '+d.total+'</span></div>';
+    h+='<div class="jm-grid">';
+    d.p.forEach(function(p){
+      var pct=Math.min(p.streak,7)/7*100;
+      h+='<div class="jm-p'+(p.on?' on':'')+'"><div class="jm-ring" style="--p:'+pct+'%"><span>'+(p.streak>0?p.streak:'\u00b7')+'</span></div><div class="jm-n">'+p.n+'</div><div class="jm-s">'+(p.on?('\uD83D\uDD25 '+p.streak):'\u2014')+'</div></div>';
+    });
+    h+='</div><div class="jm-meds">';
+    T.m.forEach(function(m){ h+='<span class="jm-m'+(m[2]?' won':'')+'">'+m[0]+' '+m[1]+(m[2]?'':' \uD83D\uDD12')+'</span>'; });
+    h+='</div>';
+    if(d.total===0&&d.best===0) h+='<div class="jm-hint">'+T.hint0+'</div>';
+    el.innerHTML=h;
+  }
+  var t=null;
+  function later(){ if(t)clearTimeout(t); t=setTimeout(render,250); }
+  document.addEventListener('click', later, true);
+  window.addEventListener('focus', later);
+  window.addEventListener('pageshow', later);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', render); else render();
 })();
 </script>
 </body>
