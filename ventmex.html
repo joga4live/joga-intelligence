@@ -1,6 +1,12 @@
 <!doctype html>
 <html lang="es">
 <head>
+<script>
+/* Candado Joga: requiere codigo validado en index.html / Joga gate: requires code validated at index.html */
+if (localStorage.getItem("jiPaid") !== "1") {
+  window.location.replace("index.html");
+}
+</script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>VENTEMEX — El Método</title>

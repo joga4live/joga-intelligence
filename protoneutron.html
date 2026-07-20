@@ -58,6 +58,12 @@
 
   <!-- HEADER -->
   <header class="hero">
+<script>
+/* Candado Joga: requiere codigo validado en index.html / Joga gate: requires code validated at index.html */
+if (localStorage.getItem("jiPaid") !== "1") {
+  window.location.replace("index.html");
+}
+</script>
     <div class="atom-logo" id="atom-logo" aria-hidden="true">
       <div class="nucleus"></div>
       <div class="orbit o1"><span class="electron"></span></div>
