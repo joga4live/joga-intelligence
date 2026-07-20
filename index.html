@@ -437,6 +437,13 @@
         font-size: 0.95rem;
       }
 
+      .price-compare { margin: 26px auto 0; max-width: 560px; text-align: left; }
+      .price-compare h4 { text-align: center; margin: 0 0 12px; font-size: 1.05rem; }
+      .compare-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
+      .compare-row .compare-price { white-space: nowrap; opacity: 0.75; }
+      .compare-row.joga { border: 1px solid #eec25f; border-radius: 12px; background: linear-gradient(135deg, #fff8e7, #fdf1d3); font-weight: 700; margin-top: 6px; }
+      .compare-row.joga .compare-price { opacity: 1; color: #7c5c14; }
+      .compare-note { text-align: center; font-size: 0.78rem; opacity: 0.6; margin: 10px 0 0; }
       a.module { display: block; text-decoration: none; cursor: pointer; }
       .module .mod-lock { font-size: 0.8em; opacity: 0.55; margin-left: 4px; }
       .module .mod-badge { font-size: 0.62em; font-weight: 800; letter-spacing: 0.08em; color: #7c5c14; background: linear-gradient(135deg, #f7dc8a, #eec25f); border-radius: 999px; padding: 3px 9px; margin-left: 6px; vertical-align: middle; }
@@ -890,6 +897,14 @@
               <a class="btn btn-primary plan-btn" id="planPremiumBtn" href="#ctaStart">Desbloquear premium</a>
             </article>
           </div>
+          <div class="price-compare">
+            <h4 id="compareTitle">Lo mismo, en otras apps</h4>
+            <div class="compare-row"><span class="compare-name">Headspace</span><span class="compare-price" id="compareHs">$69.99 USD · cada año</span></div>
+            <div class="compare-row"><span class="compare-name">Calm</span><span class="compare-price" id="compareCalm">$69.99 USD · cada año</span></div>
+            <div class="compare-row"><span class="compare-name">Fabulous</span><span class="compare-price" id="compareFab">$39.99 USD · cada año</span></div>
+            <div class="compare-row joga"><span class="compare-name">Joga Intelligence · 7 apps + reto</span><span class="compare-price" id="compareJoga">$20 USD · una sola vez</span></div>
+            <p class="compare-note" id="compareNote">Precios públicos de cada app (julio 2026).</p>
+          </div>
           <p class="pricing-footnote" id="pricingFootnote">Pago seguro. Tu código personal llega por WhatsApp en minutos.</p>
         </div>
       </div>
@@ -1022,6 +1037,12 @@
           planPremiumFeatureThree: 'Otras apps cobran $70+ USD cada año. Aquí: $0.66 al día durante tu reto de 30 días.',
           planPremiumBtn: 'Desbloquear premium',
           pricingFootnote: 'Pago seguro. Tu código personal llega por WhatsApp en minutos.',
+          compareTitle: 'Lo mismo, en otras apps',
+          compareHs: '$69.99 USD · cada año',
+          compareCalm: '$69.99 USD · cada año',
+          compareFab: '$39.99 USD · cada año',
+          compareJoga: '$20 USD · una sola vez',
+          compareNote: 'Precios públicos de cada app (julio 2026).',
           flowTitle: 'Cómo se vive la experiencia',
           flowOneTitle: '1. Recibe orientación',
           flowOneDesc: 'Una ruta diaria clara, breve y alineada con tu energía.',
@@ -1096,6 +1117,12 @@
           planPremiumFeatureThree: 'Other apps charge $70+ USD every year. Here: $0.66 a day during your 30-day challenge.',
           planPremiumBtn: 'Unlock premium',
           pricingFootnote: 'Secure checkout. Your personal code arrives via WhatsApp within minutes.',
+          compareTitle: 'The same, in other apps',
+          compareHs: '$69.99 USD · every year',
+          compareCalm: '$69.99 USD · every year',
+          compareFab: '$39.99 USD · every year',
+          compareJoga: '$20 USD · one time only',
+          compareNote: 'Public pricing of each app (July 2026).',
           flowTitle: 'How the experience works',
           flowOneTitle: '1. Receive guidance',
           flowOneDesc: 'A clear, short daily route aligned with your energy.',
