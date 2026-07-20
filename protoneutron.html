@@ -571,7 +571,7 @@ class Component extends DCLogic {
 
     return {
       muteIcon: st.muted ? '🔇' : '🔊',
-      toggleMute: () => this.toggleMute(), exitApp: () => { try{ if(window.parent&&window.parent!==window&&typeof window.parent.closeApp==='function'){ window.parent.closeApp(); return; } }catch(e){} try{ if(window.parent&&window.parent!==window){ window.parent.postMessage({type:'jogaExit'},'*'); return; } }catch(e){} try{ if(history.length>1){ history.back(); return; } }catch(e){} location.href='index.html'; },
+      toggleMute: () => this.toggleMute(), exitApp: () => { try{ if(window.parent&&window.parent!==window&&typeof window.parent.closeApp==='function'){ window.parent.closeApp(); return; } }catch(e){} try{ if(window.parent&&window.parent!==window){ window.parent.postMessage({type:'jogaExit'},'*'); return; } }catch(e){} try{ if(history.length>1){ history.back(); return; } }catch(e){} location.href='app.html'; },
       langLabel: L==='es' ? 'ES' : 'EN',
       toggleLang: () => this.toggleLang(),
       intentionLabel: t.intention, focusLabel: t.focusLabel, ritualTitle: t.ritualT, ritualSub: t.ritualS,
