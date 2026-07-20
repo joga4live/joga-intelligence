@@ -64,7 +64,7 @@
           <sc-for list="{{ powers }}" as="p" hint-placeholder-count="7">
             <button onClick="{{ p.toggle }}" style="{{ p.cardStyle }}">
               <div style="{{ p.checkStyle }}">✓</div>
-              <img src="{{ p.logo }}" alt="{{ p.name }}" style="width:84px;height:auto;margin:2px 0 8px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))" />
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-tpl-logo="p" alt="{{ p.name }}" style="width:84px;height:auto;margin:2px 0 8px;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))" />
               <div style="font:600 11.5px Inter;color:#F2ECDD">{{ p.name }}</div>
               <div style="font-size:10.5px;color:#9a92b4;margin-top:1px">{{ p.tag }}</div>
             </button>
@@ -124,7 +124,7 @@
         <div style="display:flex;flex-direction:column;gap:10px">
           <sc-for list="{{ planSteps }}" as="s" hint-placeholder-count="7">
             <div style="{{ s.rowStyle }}">
-              <img src="{{ s.logo }}" alt="{{ s.name }}" style="width:52px;height:auto;flex:0 0 auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))" />
+              <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-tpl-logo="s" alt="{{ s.name }}" style="width:52px;height:auto;flex:0 0 auto;filter:drop-shadow(0 4px 10px rgba(0,0,0,.5))" />
               <div style="flex:1;min-width:0">
                 <div style="display:flex;align-items:center;gap:7px">
                   <span style="font:600 13px Inter;color:#F2ECDD">{{ s.name }}</span>
@@ -184,7 +184,7 @@ class Component extends DCLogic {
     let _lang='es'; try{ const sv=localStorage.getItem('jiLang'); if(sv==='en'||sv==='es') _lang=sv; }catch(e){}
     const backLabel = _lang==='en' ? 'Main menu' : 'Menú principal';
     const POWERS = [
-      { key:'energia', name:'JogaFlow',    tag:'Tu energía',       logo:'assets/logo-jogaflow.png',    hue:230, glow:'47,108,160',  days:'Días 1–5'  },
+      { key:'energia', name:'JogaBody',    tag:'Tu energía',       logo:'assets/logo-jogaflow.png',    hue:230, glow:'47,108,160',  days:'Días 1–5'  },
       { key:'mind',    name:'JogaMind',    tag:'Tu subconsciente', logo:'assets/logo-jogamind.png',    hue:276, glow:'150,108,246', days:'Días 6–10' },
       { key:'time',    name:'JogaTime',    tag:'Tu tiempo',        logo:'assets/logo-jogatime.png',    hue:70,  glow:'231,150,60',  days:'Días 11–14'},
       { key:'bit',     name:'JogaBit',     tag:'Tus hábitos',      logo:'assets/logo-jogabit.png',     hue:195, glow:'50,196,205',  days:'Días 15–18'},
