@@ -9,7 +9,7 @@ if (localStorage.getItem("jiPaid") !== "1") {
 </script>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>PASLEY · El Método del Éxito</title>
+<title>JogaPath · El Método del Éxito</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Archivo:wght@400;500;600;700&display=swap');
   :root{ --ink:#0e1419; --ink2:#121b22; --surface:#172129; --surface2:#1d2932; --line:#2a3a45; --gold:#d4b078; --goldHi:#ecd2a0; --goldDim:#9c845a; --goldDimA:#9c845a55; --text:#ece6da; --muted:#8b97a0; }
@@ -158,7 +158,7 @@ if (localStorage.getItem("jiPaid") !== "1") {
 
 <script>
 (function(){
-  var KEY="joga_progress_v1", POWER="PASLEY", NEXT="MONEXIUM", TOTAL=3, LANGKEY="pasley_idioma";
+  var KEY="joga_progress_v1", POWER="PASLEY", NEXT="JogaCapital", TOTAL=3, LANGKEY="pasley_idioma";
   function lang(){ try{ return localStorage.getItem(LANGKEY)||'es'; }catch(e){ return 'es'; } }
   function store(){ try{ return JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ return {}; } }
   function save(s){ try{ localStorage.setItem(KEY,JSON.stringify(s)); }catch(e){} }
@@ -182,8 +182,8 @@ if (localStorage.getItem("jiPaid") !== "1") {
   function toast(){
     var L=lang(), t=document.createElement('div'); t.className='jp-toast';
     t.innerHTML=(L==='en')
-      ? '\u2728 You have awakened PASLEY. '+NEXT+' is waiting for you.'
-      : '\u2728 Has despertado PASLEY. '+NEXT+' te espera.';
+      ? '\u2728 You have awakened JogaPath. '+NEXT+' is waiting for you.'
+      : '\u2728 Has despertado JogaPath. '+NEXT+' te espera.';
     document.body.appendChild(t);
     requestAnimationFrame(function(){ t.classList.add('show'); });
     setTimeout(function(){ t.classList.remove('show'); setTimeout(function(){ t.remove(); },500); },5000);
@@ -1311,7 +1311,7 @@ function App() {
     style: S.wrap
   }, React.createElement("img", {
     src: LOGO,
-    alt: "PASLEY",
+    alt: "JogaPath",
     onClick: () => {
       sfx.click();
       setTheme(v => (v + 1) % THEMES.length);
@@ -1990,7 +1990,7 @@ function Intro({
   onEnter
 }) {
   const icons = ["target", "compass", "spark"];
-  const letters = "PASLEY".split("");
+  const letters = "JOGAPATH".split("");
   const scatter = React.useMemo(() => letters.map(() => ({
     sx: ((Math.random() * 2 - 1) * 270).toFixed(0) + "px",
     sy: ((Math.random() * 2 - 1) * 180 - 70).toFixed(0) + "px",
@@ -1999,7 +1999,7 @@ function Intro({
   const soup = React.useMemo(() => Array.from({
     length: 24
   }).map(() => ({
-    ch: "PASLEY"[Math.floor(Math.random() * 6)],
+    ch: "JOGAPATH"[Math.floor(Math.random() * 8)],
     x: (Math.random() * 96).toFixed(1),
     y: (Math.random() * 92).toFixed(1),
     s: (11 + Math.random() * 24).toFixed(0),
@@ -2030,7 +2030,7 @@ function Intro({
       }
     }, React.createElement("img", {
       src: LOGO,
-      alt: "PASLEY",
+      alt: "JogaPath",
       className: "ls-pulse",
       style: {
         width: 120,
@@ -2105,7 +2105,7 @@ function Intro({
     style: SI.inner
   }, React.createElement("img", {
     src: LOGO,
-    alt: "PASLEY",
+    alt: "JogaPath",
     style: SI.logo,
     className: "pl-logo"
   }), React.createElement("div", {

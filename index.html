@@ -1014,8 +1014,8 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 <script>
   const NEEDS = [
     { num:"01", need:"El poder de tu energía", essence:"Cuido mi cuerpo y mi energía cada día.",
-      body:"Sin energía, ningún poder se sostiene. Tu cuerpo es la base de todo lo demás: tu mente, tu tiempo y tus metas dependen de cómo te sientes. JOGAFLOW te enseña a cuidar tu cuerpo y tu energía con respiración, movimiento y descanso, para que cada día tengas la fuerza de avanzar. Cuando tu energía fluye, todo lo demás fluye contigo.",
-      app:{key:"energia", name:"JOGAFLOW", tag:"Energía en equilibrio", glyph:"F", file:"jogaflow.html", accent:"oklch(0.72 0.155 250)"} },
+      body:"Sin energía, ningún poder se sostiene. Tu cuerpo es la base de todo lo demás: tu mente, tu tiempo y tus metas dependen de cómo te sientes. JOGABODY te enseña a cuidar tu cuerpo y tu energía con respiración, movimiento y descanso, para que cada día tengas la fuerza de avanzar. Cuando tu energía fluye, todo lo demás fluye contigo.",
+      app:{key:"energia", name:"JOGABODY", tag:"Energía en equilibrio", glyph:"F", file:"jogaflow.html", accent:"oklch(0.72 0.155 250)"} },
     { num:"02", need:"El poder de tu transformación", essence:"Despierto la fuerza que ya vive en mí.",
       body:"Dentro de ti vive el poder más grande que existe, y nadie te lo enseñó: tu subconsciente. Es ahí donde de verdad te encuentras contigo mismo y donde empieza tu transformación. Domina este poder y ningún obstáculo de la vida volverá a detenerte. Aquí empieza tu despertar.",
       app:{key:"poder", name:"JOGAMIND", tag:"Entrena tu subconsciente", glyph:"S", file:"subment.html", accent:"oklch(0.72 0.155 300)"} },
@@ -1072,7 +1072,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
       body:"You were not born with your habits: you learned them. As a child you copied your family\u2019s, good and bad, without noticing; as an adult you added more. The question is which ones build you and which ones destroy you. JOGABIT reveals them, down to the smallest one, so you decide who you want to be.",
       tag:"Core habits"},
     energia:{need:"The power of your energy",essence:"I care for my body and my energy every day.",
-      body:"Without energy, no power holds up. Your body is the foundation of everything else: your mind, your time and your goals depend on how you feel. JOGAFLOW teaches you to care for your body and energy through breath, movement and rest, so every day you have the strength to move forward. When your energy flows, everything else flows with you.",
+      body:"Without energy, no power holds up. Your body is the foundation of everything else: your mind, your time and your goals depend on how you feel. JOGABODY teaches you to care for your body and energy through breath, movement and rest, so every day you have the strength to move forward. When your energy flows, everything else flows with you.",
       tag:"Energy in balance"},
   };
   function L(n){ if(LANG==="en"){const e=NEEDS_EN[n.app.key];return {need:e.need,essence:e.essence,body:e.body,tag:e.tag};}
@@ -1374,8 +1374,8 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
       '<p class="ju-disc" id="ju-disc"></p></div>';
     document.body.appendChild(m);
   })();
-  var UM={ es:{title:"Reto completo bloqueado",sub:"JogaMind es gratis. Para desbloquear las otras 5 apps y el reto de 30 días, escríbeme por WhatsApp y te paso tu código personal.",wa:"Desbloquear por WhatsApp",or:"¿Ya tienes tu código?",ph:"TU CÓDIGO",go:"Entrar",bad:"Código incorrecto o ya usado. Verifícalo o escríbeme por WhatsApp.",disc:"🔒 Tu código es personal e intransferible y está ligado a tu acceso. Compartirlo cancela tu suscripción sin reembolso. Cada acceso queda registrado."},
-    en:{title:"Full challenge locked",sub:"JogaMind is free. To unlock the other 5 apps and the 30-day challenge, message me on WhatsApp and I'll send your personal code.",wa:"Unlock via WhatsApp",or:"Already have your code?",ph:"YOUR CODE",go:"Enter",bad:"Wrong or already-used code. Check it or message me on WhatsApp.",disc:"🔒 Your code is personal and non-transferable, tied to your access. Sharing it cancels your subscription with no refund. Every access is logged."} };
+  var UM={ es:{title:"Reto completo bloqueado",sub:"JogaBody es gratis. Para desbloquear las otras 6 apps y el reto de 30 días, escríbeme por WhatsApp y te paso tu código personal.",wa:"Desbloquear por WhatsApp",or:"¿Ya tienes tu código?",ph:"TU CÓDIGO",go:"Entrar",bad:"Código incorrecto o ya usado. Verifícalo o escríbeme por WhatsApp.",disc:"🔒 Tu código es personal e intransferible y está ligado a tu acceso. Compartirlo cancela tu suscripción sin reembolso. Cada acceso queda registrado."},
+    en:{title:"Full challenge locked",sub:"JogaBody is free. To unlock the other 6 apps and the 30-day challenge, message me on WhatsApp and I'll send your personal code.",wa:"Unlock via WhatsApp",or:"Already have your code?",ph:"YOUR CODE",go:"Enter",bad:"Wrong or already-used code. Check it or message me on WhatsApp.",disc:"🔒 Your code is personal and non-transferable, tied to your access. Sharing it cancels your subscription with no refund. Every access is logged."} };
   function openUnlock(){ var u=UM[LANG]||UM.es;
     document.getElementById("ju-title").textContent=u.title;
     document.getElementById("ju-sub").textContent=u.sub;
