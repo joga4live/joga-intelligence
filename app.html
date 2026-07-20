@@ -1768,8 +1768,8 @@ Lo que dijo la persona: «${text}»`;
   function buildCards(){ var Lg=lang(); if(chooseEl){ chooseEl.style.display='none'; } replay.textContent='\u21ba '+(Lg==='en'?'Hear it again':'Escuchar de nuevo'); grid.innerHTML='';
     /* Las 3 tarjetas ("tres caminos") se movieron a la pagina de inicio (index.html). Aqui queda el orbe + audio + un CTA limpio. */
     var enter=document.getElementById('jbw-enter'), enter2=document.getElementById('jbw-enter2');
-    if(enter){ enter.innerHTML=(Lg==='en'?'Start the 30-day challenge':'Empezar el reto de 30 d\u00edas')+' <span aria-hidden="true">\u2192</span>'; }
-    if(enter2){ enter2.textContent=(Lg==='en'?'or meet the 7 apps':'o conoce las 7 apps'); enter2.onclick=function(e){ e.preventDefault(); setView('apps'); }; }
+    if(enter){ enter.innerHTML=(Lg==='en'?'Start the challenge':'Empezar el reto')+' <span aria-hidden="true">\u2192</span>'; }
+    if(enter2){ enter2.innerHTML=(Lg==='en'?'See the 7 apps':'Ver las 7 apps')+' <span aria-hidden="true">\u2192</span>'; enter2.onclick=function(e){ e.preventDefault(); setView('apps'); }; }
   }
   var dur={}, voice, music, raf, t0, BASE=0.16, curVoiceLang=lang(), done=false;
   function vsrc(l){ return 'voz-bienvenida'+(l==='en'?'-en':'')+'.mp3'; }
