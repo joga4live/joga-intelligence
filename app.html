@@ -836,6 +836,19 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 #jmap .jm-m{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font:600 10px var(--grot);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--hair);color:rgba(201,195,180,.62);background:transparent}
 #jmap .jm-m.won{border-color:var(--line);color:var(--gold);background:rgba(231,196,106,.08)}
 #jmap .jm-hint{margin-top:14px;text-align:center;font:italic 500 13.5px var(--serif);color:#C9C3B4}
+#jmap .jm-cert{margin-top:16px;text-align:center;border-top:1px solid var(--hair);padding-top:16px}
+#jmap .jm-cert .locked{font:600 10.5px var(--grot);letter-spacing:.12em;text-transform:uppercase;color:rgba(201,195,180,.6)}
+#jmap .jm-cert button{cursor:pointer;border:0;border-radius:999px;padding:13px 26px;font:600 12px var(--grot);letter-spacing:.14em;text-transform:uppercase;color:#1a130a;background:linear-gradient(180deg,#e7c46a,#b8924a);box-shadow:0 14px 32px -12px rgba(231,196,106,.6)}
+#jcert{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(6,5,8,.92);backdrop-filter:blur(6px);padding:20px}
+#jcert .jc-box{max-width:420px;width:100%;max-height:92vh;overflow-y:auto;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#15121a,#0B0B0C);padding:24px;text-align:center}
+#jcert .jc-t{font:500 15px var(--serif);letter-spacing:.26em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+#jcert .jc-d{font:italic 500 14px var(--serif);color:#C9C3B4;margin-bottom:16px}
+#jcert input{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:14px;background:rgba(242,236,221,.04);color:var(--bone);font:500 16px var(--serif);text-align:center;padding:12px;margin-bottom:12px;outline:none}
+#jcert .jc-img{width:100%;border-radius:14px;border:1px solid var(--hair);display:none;margin-bottom:12px}
+#jcert .jc-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+#jcert .jc-row a,#jcert .jc-row button{cursor:pointer;text-decoration:none;border-radius:999px;padding:11px 18px;font:600 11px var(--grot);letter-spacing:.12em;text-transform:uppercase}
+#jcert .jc-gold{border:0;color:#1a130a;background:linear-gradient(180deg,#e7c46a,#b8924a)}
+#jcert .jc-ghost{border:1px solid var(--line);background:transparent;color:var(--gold)}
 </style>
       <div id="jmap" aria-label="Mapa de poderes"></div>
       <style>
@@ -1886,8 +1899,14 @@ Lo que dijo la persona: «${text}»`;
     h+='</div><div class="jm-meds">';
     T.m.forEach(function(m){ h+='<span class="jm-m'+(m[2]?' won':'')+'">'+m[0]+' '+m[1]+'</span>'; });
     h+='</div>';
+    var certOk = d.active>=7;
+    h+='<div class="jm-cert">'+(certOk
+      ?'<button id="jm-cert-btn">\u2726 '+(EN?'Get my certificate':'Obtener mi certificado')+'</button>'
+      :'<span class="locked">\u2726 '+(EN?'30-day certificate \u2014 awaken all 7 powers to unlock':'Certificado de los 30 d\u00edas \u2014 despierta los 7 poderes para desbloquearlo')+'</span>')+'</div>';
     if(d.total===0&&d.best===0) h+='<div class="jm-hint">'+T.hint0+'</div>';
     el.innerHTML=h;
+    var cb=document.getElementById('jm-cert-btn');
+    if(cb) cb.onclick=function(){ window.__jogaCert && window.__jogaCert(EN); };
   }
   var t=null;
   function later(){ if(t)clearTimeout(t); t=setTimeout(render,250); }
@@ -1939,6 +1958,83 @@ Lo que dijo la persona: «${text}»`;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ render(); ping(); });
   else { render(); ping(); }
   setInterval(ping, 5*60*1000);
+})();
+</script>
+<script>
+/* Certificado de los 7 Poderes / 7 Powers certificate */
+(function(){
+  function overlay(){
+    var el=document.getElementById('jcert');
+    if(el) return el;
+    el=document.createElement('div'); el.id='jcert';
+    el.innerHTML='<div class="jc-box"><div class="jc-t" id="jc-t"></div><div class="jc-d" id="jc-d"></div>'+
+      '<input id="jc-name" maxlength="40"><img class="jc-img" id="jc-img" alt="Certificado">'+
+      '<div class="jc-row"><button class="jc-gold" id="jc-gen"></button><a class="jc-gold" id="jc-dl" style="display:none"></a><button class="jc-ghost" id="jc-close"></button></div></div>';
+    document.body.appendChild(el);
+    return el;
+  }
+  function draw(name, EN){
+    var W=1080,H=1350,c=document.createElement('canvas');c.width=W;c.height=H;
+    var x=c.getContext('2d');
+    x.fillStyle='#0B0B0C';x.fillRect(0,0,W,H);
+    var rg=x.createRadialGradient(W/2,H*0.36,60,W/2,H*0.36,700);
+    rg.addColorStop(0,'rgba(231,196,106,.14)');rg.addColorStop(1,'rgba(231,196,106,0)');
+    x.fillStyle=rg;x.fillRect(0,0,W,H);
+    x.strokeStyle='rgba(231,196,106,.85)';x.lineWidth=3;x.strokeRect(46,46,W-92,H-92);
+    x.strokeStyle='rgba(231,196,106,.3)';x.lineWidth=1;x.strokeRect(62,62,W-124,H-124);
+    x.textAlign='center';
+    function sp(t){ return t.split('').join('\u2009'); }
+    x.fillStyle='#E7C46A';x.font='500 44px Newsreader, Georgia, serif';
+    x.fillText(sp('JOGA INTELLIGENCE'),W/2,190);
+    x.font='500 26px Newsreader, Georgia, serif';x.fillStyle='rgba(231,196,106,.75)';
+    x.fillText(sp(EN?'30-DAY CHALLENGE':'RETO DE 30 D\u00cdAS'),W/2,240);
+    x.fillStyle='#C9C3B4';x.font='italic 400 34px Newsreader, Georgia, serif';
+    x.fillText(EN?'This certifies that':'Se certifica que',W/2,400);
+    x.fillStyle='#F2ECDD';x.font='500 84px Newsreader, Georgia, serif';
+    var nm=name||'';if(x.measureText(nm).width>W-220){x.font='500 62px Newsreader, Georgia, serif';}
+    x.fillText(nm,W/2,510);
+    x.strokeStyle='rgba(231,196,106,.5)';x.lineWidth=1;
+    x.beginPath();x.moveTo(W/2-260,548);x.lineTo(W/2+260,548);x.stroke();
+    x.fillStyle='#C9C3B4';x.font='400 34px Newsreader, Georgia, serif';
+    x.fillText(EN?'has awakened the seven powers':'ha despertado los siete poderes',W/2,620);
+    x.fillText(EN?'that already lived within':'que ya viv\u00edan en su interior',W/2,668);
+    var P=['JogaBody','JogaMind','JogaTime','JogaBit','JogaPath','JogaCapital','JogaVentix'];
+    x.fillStyle='#E7C46A';x.font='500 30px Newsreader, Georgia, serif';
+    x.fillText(P.slice(0,4).join('  \u00b7  '),W/2,790);
+    x.fillText(P.slice(4).join('  \u00b7  '),W/2,840);
+    x.fillStyle='rgba(231,196,106,.9)';x.font='500 60px Newsreader, Georgia, serif';
+    x.fillText('\u2726',W/2,960);
+    var d=new Date();
+    var fecha=EN?(['January','February','March','April','May','June','July','August','September','October','November','December'][d.getMonth()]+' '+d.getDate()+', '+d.getFullYear())
+                :(d.getDate()+' de '+['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'][d.getMonth()]+' de '+d.getFullYear());
+    x.fillStyle='#C9C3B4';x.font='400 30px Newsreader, Georgia, serif';
+    x.fillText(fecha,W/2,1080);
+    x.fillStyle='rgba(201,195,180,.55)';x.font='400 24px Newsreader, Georgia, serif';
+    x.fillText(sp('TRANSFORMACI\u00d3N CONSCIENTE'),W/2,1200);
+    return c.toDataURL('image/png');
+  }
+  window.__jogaCert=function(EN){
+    var el=overlay();
+    var t=document.getElementById('jc-t'), dsc=document.getElementById('jc-d'), inp=document.getElementById('jc-name'),
+        gen=document.getElementById('jc-gen'), dl=document.getElementById('jc-dl'), cl=document.getElementById('jc-close'), img=document.getElementById('jc-img');
+    t.textContent=EN?'The 7 powers, awakened':'Los 7 poderes, despertados';
+    dsc.textContent=EN?'Write your name as you want it on your certificate.':'Escribe tu nombre como quieres que aparezca en tu certificado.';
+    inp.placeholder=EN?'Your name':'Tu nombre';
+    try{ inp.value=localStorage.getItem('jiCertName')||''; }catch(e){}
+    gen.textContent=EN?'Create certificate':'Crear certificado';
+    dl.textContent=EN?'Download':'Descargar'; cl.textContent=EN?'Close':'Cerrar';
+    img.style.display='none'; dl.style.display='none';
+    el.style.display='flex';
+    gen.onclick=function(){
+      var nm=(inp.value||'').trim(); if(!nm){ inp.focus(); return; }
+      try{ localStorage.setItem('jiCertName',nm); }catch(e){}
+      var url=draw(nm,EN);
+      img.src=url; img.style.display='block';
+      dl.href=url; dl.setAttribute('download', (EN?'Joga-Certificate-':'Joga-Certificado-')+nm.replace(/\s+/g,'-')+'.png');
+      dl.style.display='inline-block';
+    };
+    cl.onclick=function(){ el.style.display='none'; };
+  };
 })();
 </script>
 </body>
