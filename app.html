@@ -836,6 +836,23 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 #jmap .jm-m{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px;font:600 10px var(--grot);letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--hair);color:rgba(201,195,180,.62);background:transparent}
 #jmap .jm-m.won{border-color:var(--line);color:var(--gold);background:rgba(231,196,106,.08)}
 #jmap .jm-hint{margin-top:14px;text-align:center;font:italic 500 13.5px var(--serif);color:#C9C3B4}
+#jmap .jm-cards{border-top:1px solid var(--hair);padding-top:16px;margin-top:16px}
+#jmap .jm-cards .jc-k{font:600 10px var(--grot);letter-spacing:.24em;text-transform:uppercase;color:#C9C3B4;text-align:center;margin-bottom:12px}
+#jmap .jm-cardrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+#jmap .jm-card{cursor:default;display:flex;flex-direction:column;align-items:center;gap:3px;width:72px;padding:10px 4px;border-radius:12px;border:1px solid var(--hair);background:rgba(242,236,221,.02)}
+#jmap .jm-card .rn{font:500 15px var(--serif);color:rgba(201,195,180,.5)}
+#jmap .jm-card .cn{font:600 7.5px var(--grot);letter-spacing:.08em;text-transform:uppercase;color:rgba(189,182,168,.5);text-align:center}
+#jmap .jm-card.won{cursor:pointer;border-color:var(--line);background:linear-gradient(180deg,rgba(231,196,106,.1),rgba(231,196,106,.03))}
+#jmap .jm-card.won .rn{color:var(--gold)}
+#jmap .jm-card.won .cn{color:var(--bone)}
+#jmap .jm-cards .jc-hint{margin-top:10px;text-align:center;font:500 9.5px var(--grot);letter-spacing:.1em;text-transform:uppercase;color:rgba(201,195,180,.55)}
+#jcardov{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(6,5,8,.92);backdrop-filter:blur(6px);padding:20px}
+#jcardov .jv-box{max-width:360px;width:100%;max-height:92vh;overflow-y:auto;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#15121a,#0B0B0C);padding:20px;text-align:center}
+#jcardov img{width:100%;border-radius:14px;border:1px solid var(--hair);margin-bottom:12px}
+#jcardov .jv-row{display:flex;gap:10px;justify-content:center}
+#jcardov .jv-row a,#jcardov .jv-row button{cursor:pointer;text-decoration:none;border-radius:999px;padding:11px 18px;font:600 11px var(--grot);letter-spacing:.12em;text-transform:uppercase}
+#jcardov .jv-gold{border:0;color:#1a130a;background:linear-gradient(180deg,#e7c46a,#b8924a)}
+#jcardov .jv-ghost{border:1px solid var(--line);background:transparent;color:var(--gold)}
 #jmap .jm-cert{margin-top:16px;text-align:center;border-top:1px solid var(--hair);padding-top:16px}
 #jmap .jm-cert .locked{font:600 10.5px var(--grot);letter-spacing:.12em;text-transform:uppercase;color:rgba(201,195,180,.6)}
 #jmap .jm-cert button{cursor:pointer;border:0;border-radius:999px;padding:13px 26px;font:600 12px var(--grot);letter-spacing:.14em;text-transform:uppercase;color:#1a130a;background:linear-gradient(180deg,#e7c46a,#b8924a);box-shadow:0 14px 32px -12px rgba(231,196,106,.6)}
@@ -850,6 +867,18 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 #jcert .jc-gold{border:0;color:#1a130a;background:linear-gradient(180deg,#e7c46a,#b8924a)}
 #jcert .jc-ghost{border:1px solid var(--line);background:transparent;color:var(--gold)}
 </style>
+      <style>
+#jcheck{margin:0 0 26px;border:1px solid var(--line);border-radius:24px;padding:22px;background:linear-gradient(180deg,#15121a,#0B0B0C 80%);text-align:center;display:none}
+#jcheck .ck-t{font:500 13.5px var(--serif);letter-spacing:.24em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+#jcheck .ck-q{font:italic 500 17px var(--serif);color:var(--bone);margin-bottom:14px}
+#jcheck .ck-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+#jcheck .ck-row button{cursor:pointer;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--gold);font:600 10.5px var(--grot);letter-spacing:.12em;text-transform:uppercase;padding:10px 18px;transition:background .18s ease}
+#jcheck .ck-row button:hover{background:rgba(231,196,106,.09)}
+#jcheck .ck-a{font:italic 500 15px var(--serif);color:#E9E3D4;line-height:1.6;max-width:420px;margin:0 auto}
+#jcheck .ck-go{display:inline-block;margin-top:14px;text-decoration:none;border-radius:999px;padding:11px 22px;font:600 11px var(--grot);letter-spacing:.14em;text-transform:uppercase;color:#1a130a;background:linear-gradient(180deg,#e7c46a,#b8924a)}
+#jcheck .ck-done{margin-top:10px;font:500 10.5px var(--grot);letter-spacing:.1em;text-transform:uppercase;color:#C9C3B4}
+</style>
+      <div id="jcheck" aria-label="Check-in diario"></div>
       <div id="jmap" aria-label="Mapa de poderes"></div>
       <style>
 #jremind{margin:0 0 26px;border:1px solid var(--line);border-radius:24px;padding:20px 22px 18px;background:linear-gradient(180deg,#15121a,#0B0B0C 80%);display:none}
@@ -1899,6 +1928,13 @@ Lo que dijo la persona: «${text}»`;
     h+='</div><div class="jm-meds">';
     T.m.forEach(function(m){ h+='<span class="jm-m'+(m[2]?' won':'')+'">'+m[0]+' '+m[1]+'</span>'; });
     h+='</div>';
+    var ROMAN=['I','II','III','IV','V','VI','VII'];
+    h+='<div class="jm-cards"><div class="jc-k">'+(EN?'The Power Cards':'Las Cartas del Poder')+'</div><div class="jm-cardrow">';
+    d.p.forEach(function(p,idx){
+      var won=(p.streak>=3||p.ses>=3);
+      h+='<div class="jm-card'+(won?' won':'')+'" data-card="'+(won?idx:'')+'"><span class="rn">'+ROMAN[idx]+'</span><span class="cn">'+p.n+'</span></div>';
+    });
+    h+='</div><div class="jc-hint">'+(EN?'Each card unlocks with 3 days of practice of its power':'Cada carta se desbloquea con 3 d\u00edas de pr\u00e1ctica de su poder')+'</div></div>';
     var certOk = d.active>=7;
     h+='<div class="jm-cert">'+(certOk
       ?'<button id="jm-cert-btn">\u2726 '+(EN?'Get my certificate':'Obtener mi certificado')+'</button>'
@@ -1907,6 +1943,9 @@ Lo que dijo la persona: «${text}»`;
     el.innerHTML=h;
     var cb=document.getElementById('jm-cert-btn');
     if(cb) cb.onclick=function(){ window.__jogaCert && window.__jogaCert(EN); };
+    Array.prototype.forEach.call(el.querySelectorAll('.jm-card.won'),function(cd){
+      cd.onclick=function(){ var ix=parseInt(cd.getAttribute('data-card'),10); if(!isNaN(ix)&&window.__jogaCard) window.__jogaCard(ix,EN); };
+    });
   }
   var t=null;
   function later(){ if(t)clearTimeout(t); t=setTimeout(render,250); }
@@ -2034,6 +2073,126 @@ Lo que dijo la persona: «${text}»`;
       dl.style.display='inline-block';
     };
     cl.onclick=function(){ el.style.display='none'; };
+  };
+})();
+</script>
+<script>
+/* Check-in diario con Joga / Daily check-in with Joga */
+(function(){
+  function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function st(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function day(){ var d=new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+  function stats(k){ try{ return JSON.parse(g('jiStats_'+k)||'{}')||{}; }catch(e){ return {}; } }
+  var POW=[['JogaBody','jogaflow.html',null],['JogaMind','subment.html','subment'],['JogaTime','jogatime.html','jogatime'],['JogaBit','protoneutron.html','protoneutron'],['JogaPath','metodoexito.html','pasley'],['JogaCapital','monexium.html','monexium'],['JogaVentix','ventmex.html','ventmex']];
+  function streaks(){ return POW.map(function(p){ var st_; if(p[2]===null){ st_=parseInt(g('jfStreak')||'0',10)||0; } else { var d=stats(p[2]); st_=(typeof d.streak==='number')?d.streak:0; } return {n:p[0],h:p[1],s:st_}; }); }
+  function pick(mood){
+    var ss=streaks();
+    if(mood==='low') return ss[0];
+    var act=ss.filter(function(x){return x.s>0;});
+    if(mood==='high'){ if(!act.length) return ss[1]; return act.sort(function(a,b){return b.s-a.s;})[0]; }
+    var rest=ss.slice(1); rest.sort(function(a,b){return a.s-b.s;}); return rest[0];
+  }
+  function phase(){ var h=new Date().getHours(); return h<12?0:(h<19?1:2); }
+  var R={
+    es:{ low:[['Llegar cansado tambi\u00e9n es llegar. Hoy no se trata de fuerza, sino de presencia: tres respiraciones y un paso peque\u00f1o.','Empieza suave con'],
+             ['El cansancio es informaci\u00f3n, no derrota. Recarga primero \u2014 lo dem\u00e1s puede esperar unos minutos.','Recup\u00e9rate con'],
+             ['Cierra el d\u00eda con calma. Un momento contigo vale m\u00e1s que mil pendientes.','Suelta el d\u00eda con']],
+        mid:[['Un d\u00eda normal es terreno f\u00e9rtil: sin drama, sin euforia \u2014 perfecto para construir.','Hoy te toca equilibrar'],
+             ['La constancia se construye en d\u00edas como este. Una pr\u00e1ctica breve y la cadena sigue viva.','Dale su d\u00eda a'],
+             ['Sin prisa. Diez minutos con intenci\u00f3n valen m\u00e1s que una hora dispersa.','Avanza hoy con']],
+        high:[['Est\u00e1s encendido \u2014 canaliza esa fuerza donde ya traes impulso y ll\u00e9vala m\u00e1s lejos.','Profundiza en'],
+              ['Esa energ\u00eda es oro: no la gastes en mil cosas. Conc\u00e9ntrala en un solo poder.','Aprovecha tu racha en'],
+              ['Termina el d\u00eda en alto. Sella tu impulso con una pr\u00e1ctica m\u00e1s.','Corona tu d\u00eda con']]},
+    en:{ low:[['Arriving tired still counts as arriving. Today is not about strength but presence: three breaths and one small step.','Start gently with'],
+             ['Tiredness is information, not defeat. Recharge first \u2014 everything else can wait a few minutes.','Recover with'],
+             ['Close the day calmly. A moment with yourself is worth more than a thousand pending tasks.','Let the day go with']],
+        mid:[['An ordinary day is fertile ground: no drama, no euphoria \u2014 perfect for building.','Today, balance with'],
+             ['Consistency is built on days like this. One short practice and the chain stays alive.','Give its day to'],
+             ['No rush. Ten minutes with intention beat a scattered hour.','Move forward with']],
+        high:[['You are switched on \u2014 channel that force where you already have momentum and take it further.','Go deeper into'],
+              ['That energy is gold: do not scatter it. Focus it on one single power.','Ride your streak in'],
+              ['End the day on a high. Seal your momentum with one more practice.','Crown your day with']]}
+  };
+  function render(){
+    var el=document.getElementById('jcheck'); if(!el) return;
+    var EN=(g('jiLang')==='en'), L=EN?'en':'es';
+    var done=g('jiCheckDay')===day();
+    var h='<div class="ck-t">'+(EN?'Daily check-in':'Check-in del d\u00eda')+'</div>';
+    if(!done){
+      h+='<div class="ck-q">'+(EN?'How are you arriving today?':'\u00bfC\u00f3mo llegas hoy?')+'</div>';
+      h+='<div class="ck-row"><button data-m="low">'+(EN?'Tired':'Cansado')+'</button><button data-m="mid">'+(EN?'Steady':'Normal')+'</button><button data-m="high">'+(EN?'On fire':'Encendido')+'</button></div>';
+    } else {
+      var m=g('jiCheckMood')||'mid', ph=phase(), rr=R[L][m][ph], p=pick(m);
+      h+='<div class="ck-a">\u201c'+rr[0]+'\u201d</div>';
+      h+='<a class="ck-go" href="'+p.h+'">'+rr[1]+' '+p.n+' \u2192</a>';
+      h+='<div class="ck-done">'+(EN?'Checked in \u00b7 see you tomorrow':'Check-in hecho \u00b7 nos vemos ma\u00f1ana')+'</div>';
+    }
+    el.innerHTML=h; el.style.display='block';
+    Array.prototype.forEach.call(el.querySelectorAll('[data-m]'),function(b){
+      b.onclick=function(){ st('jiCheckDay',day()); st('jiCheckMood',b.getAttribute('data-m')); render(); };
+    });
+  }
+  document.addEventListener('click', function(){ setTimeout(render,320); }, true);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', render); else render();
+})();
+</script>
+<script>
+/* Cartas del Poder coleccionables / Collectible Power Cards */
+(function(){
+  var CARDS=[
+    ['JogaBody','I',['Tu energ\u00eda es la base de todo.','Your energy is the base of everything.']],
+    ['JogaMind','II',['Tu mente crea tu mundo.','Your mind creates your world.']],
+    ['JogaTime','III',['Tu tiempo es tu reino.','Your time is your kingdom.']],
+    ['JogaBit','IV',['Tus h\u00e1bitos te construyen.','Your habits build you.']],
+    ['JogaPath','V',['Cada paso tiene direcci\u00f3n.','Every step has direction.']],
+    ['JogaCapital','VI',['El dinero fluye hacia el orden.','Money flows toward order.']],
+    ['JogaVentix','VII',['Vender es servir.','Selling is serving.']]
+  ];
+  function overlay(){
+    var el=document.getElementById('jcardov'); if(el) return el;
+    el=document.createElement('div'); el.id='jcardov';
+    el.innerHTML='<div class="jv-box"><img id="jv-img" alt="Carta"><div class="jv-row"><a class="jv-gold" id="jv-dl"></a><button class="jv-ghost" id="jv-close"></button></div></div>';
+    document.body.appendChild(el); return el;
+  }
+  function draw(i, EN){
+    var C=CARDS[i], W=900, H=1400, c=document.createElement('canvas'); c.width=W; c.height=H;
+    var x=c.getContext('2d');
+    x.fillStyle='#0B0B0C'; x.fillRect(0,0,W,H);
+    var rg=x.createRadialGradient(W/2,H*0.4,40,W/2,H*0.4,620);
+    rg.addColorStop(0,'rgba(231,196,106,.16)'); rg.addColorStop(1,'rgba(231,196,106,0)');
+    x.fillStyle=rg; x.fillRect(0,0,W,H);
+    x.strokeStyle='rgba(231,196,106,.85)'; x.lineWidth=3; x.strokeRect(40,40,W-80,H-80);
+    x.strokeStyle='rgba(231,196,106,.3)'; x.lineWidth=1; x.strokeRect(56,56,W-112,H-112);
+    x.textAlign='center';
+    function sp(t){ return t.split('').join('\u2009'); }
+    x.fillStyle='rgba(231,196,106,.75)'; x.font='500 30px Newsreader, Georgia, serif';
+    x.fillText(sp(EN?'POWER CARD':'CARTA DEL PODER'),W/2,150);
+    x.fillStyle='#E7C46A'; x.font='500 150px Newsreader, Georgia, serif';
+    x.fillText(C[1],W/2,420);
+    x.font='500 56px Newsreader, Georgia, serif'; x.fillStyle='#F2ECDD';
+    x.fillText(C[0],W/2,560);
+    x.strokeStyle='rgba(231,196,106,.5)'; x.beginPath(); x.moveTo(W/2-180,600); x.lineTo(W/2+180,600); x.stroke();
+    x.fillStyle='#C9C3B4'; x.font='italic 400 36px Newsreader, Georgia, serif';
+    var tag=C[2][EN?1:0];
+    x.fillText(tag,W/2,690);
+    x.fillStyle='rgba(231,196,106,.9)'; x.font='500 54px Newsreader, Georgia, serif';
+    x.fillText('\u2726',W/2,880);
+    x.fillStyle='rgba(201,195,180,.6)'; x.font='400 26px Newsreader, Georgia, serif';
+    x.fillText(EN?'Awakened with 3 days of practice':'Despertada con 3 d\u00edas de pr\u00e1ctica',W/2,1080);
+    x.fillStyle='rgba(201,195,180,.45)'; x.font='400 24px Newsreader, Georgia, serif';
+    x.fillText(sp('JOGA INTELLIGENCE'),W/2,1280);
+    return c.toDataURL('image/png');
+  }
+  window.__jogaCard=function(i, EN){
+    var el=overlay();
+    var img=document.getElementById('jv-img'), dl=document.getElementById('jv-dl'), cl=document.getElementById('jv-close');
+    var url=draw(i,EN);
+    img.src=url;
+    dl.href=url; dl.textContent=EN?'Download':'Descargar';
+    dl.setAttribute('download','Joga-Carta-'+CARDS[i][0]+'.png');
+    cl.textContent=EN?'Close':'Cerrar';
+    cl.onclick=function(){ el.style.display='none'; };
+    el.style.display='flex';
   };
 })();
 </script>
