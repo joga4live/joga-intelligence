@@ -824,7 +824,16 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 #jmap .jm-stat{font:600 10.5px var(--grot);letter-spacing:.14em;text-transform:uppercase;color:#C9C3B4;text-align:center}
 #jmap .jm-stat em{display:block;font:500 30px/1.1 var(--serif);font-style:normal;color:var(--bone);letter-spacing:0;margin-bottom:3px}
 #jmap .jm-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:10px;margin-bottom:18px}
-#jmap .jm-p{display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 4px 11px;border-radius:18px;border:1px solid var(--hair);background:rgba(242,236,221,.015)}
+#jmap .jm-p{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 4px 11px;border-radius:18px;border:1px solid var(--hair);background:rgba(242,236,221,.015)}
+#jq{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(6,5,8,.92);backdrop-filter:blur(6px);padding:20px}
+#jq .jq-box{max-width:420px;width:100%;max-height:88vh;overflow-y:auto;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#15121a,#0B0B0C);padding:24px;text-align:center}
+#jq .jq-t{font:500 15px var(--serif);letter-spacing:.24em;text-transform:uppercase;color:var(--gold)}
+#jq .jq-c{font:600 10px var(--grot);letter-spacing:.14em;text-transform:uppercase;color:#C9C3B4;margin:6px 0 16px}
+#jq .jq-item{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--hair);border-radius:14px;padding:12px 14px;margin-bottom:9px;background:rgba(242,236,221,.02)}
+#jq .jq-item p{flex:1;margin:0;font:italic 500 13.5px var(--serif);line-height:1.5;color:#E9E3D4}
+#jq .jq-item button{cursor:pointer;flex:0 0 auto;border:1px solid var(--line);background:transparent;color:var(--gold);border-radius:999px;width:32px;height:32px;font-size:14px}
+#jq .jq-lock{border:1px dashed var(--hair);border-radius:14px;padding:10px 14px;margin-bottom:9px;font:600 9.5px var(--grot);letter-spacing:.12em;text-transform:uppercase;color:rgba(201,195,180,.45);text-align:center}
+#jq .jq-close{margin-top:8px;cursor:pointer;border:1px solid var(--line);background:transparent;color:var(--gold);border-radius:999px;padding:11px 20px;font:600 11px var(--grot);letter-spacing:.12em;text-transform:uppercase}
 #jmap .jm-p.on{border-color:var(--line);background:linear-gradient(180deg,rgba(231,196,106,.1),rgba(231,196,106,.03));box-shadow:0 0 28px -12px rgba(231,196,106,.55)}
 #jmap .jm-ring{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--gold) var(--p,0%),rgba(242,236,221,.13) 0)}
 #jmap .jm-ring>span{width:44px;height:44px;border-radius:50%;background:#0B0B0C;display:grid;place-items:center;font:500 17px var(--serif);color:var(--bone)}
@@ -1946,6 +1955,9 @@ Lo que dijo la persona: «${text}»`;
     Array.prototype.forEach.call(el.querySelectorAll('.jm-card.won'),function(cd){
       cd.onclick=function(){ var ix=parseInt(cd.getAttribute('data-card'),10); if(!isNaN(ix)&&window.__jogaCard) window.__jogaCard(ix,EN); };
     });
+    Array.prototype.forEach.call(el.querySelectorAll('.jm-p'),function(pp,ix){
+      pp.onclick=function(){ if(window.__jogaFrases) window.__jogaFrases(ix, d.p[ix], EN); };
+    });
   }
   var t=null;
   function later(){ if(t)clearTimeout(t); t=setTimeout(render,250); }
@@ -2077,6 +2089,25 @@ Lo que dijo la persona: «${text}»`;
 })();
 </script>
 <script>
+/* Frases del Poder: 10 por app, se revelan con los dias de practica / Power quotes: 10 per app, revealed with practice days */
+window.__jogaQuotes={
+ JogaBody:{es:["Tu cuerpo es el primer territorio que conquistas cada d\u00eda.","La energ\u00eda no se encuentra: se cultiva.","Respirar hondo es la forma m\u00e1s r\u00e1pida de volver a ti.","Descansar tambi\u00e9n es entrenar.","Un cuerpo que se mueve despierta una mente que crea.","Tu postura le habla a tu \u00e1nimo: p\u00e1rate como quien puede.","El agua, el aire y el sue\u00f1o son tus primeras medicinas.","No necesitas m\u00e1s horas: necesitas m\u00e1s energ\u00eda en tus horas.","Escucha a tu cuerpo cuando susurra y no tendr\u00e1 que gritar.","Cada respiraci\u00f3n consciente es una peque\u00f1a victoria."],
+  en:["Your body is the first territory you conquer each day.","Energy is not found: it is cultivated.","A deep breath is the fastest way back to yourself.","Resting is also training.","A body that moves awakens a mind that creates.","Your posture speaks to your mood: stand like someone who can.","Water, air and sleep are your first medicines.","You do not need more hours: you need more energy in your hours.","Listen to your body when it whispers and it will not have to shout.","Every conscious breath is a small victory."]},
+ JogaMind:{es:["Tu mente repite lo que le ense\u00f1as en silencio.","Lo que crees de ti se convierte en tu techo o en tu puerta.","Habla contigo como le hablar\u00edas a quien m\u00e1s amas.","La calma no es ausencia de ruido: es dominio del foco.","Cada pensamiento es una semilla: elige cu\u00e1les riegas.","Tu subconsciente escucha todo lo que dices despu\u00e9s de \u2018yo soy\u2019.","Visualizar no es so\u00f1ar: es ensayar.","La repetici\u00f3n convence a la mente de lo que la duda negaba.","Donde pones tu atenci\u00f3n, pones tu vida.","Reprogramarte no es cambiarte: es recordarte."],
+  en:["Your mind repeats what you teach it in silence.","What you believe about yourself becomes your ceiling or your door.","Speak to yourself as you would to the one you love most.","Calm is not the absence of noise: it is mastery of focus.","Every thought is a seed: choose which ones you water.","Your subconscious hears everything you say after \u2018I am\u2019.","Visualizing is not dreaming: it is rehearsing.","Repetition convinces the mind of what doubt denied.","Where you place your attention, you place your life.","Reprogramming yourself is not changing you: it is remembering you."]},
+ JogaTime:{es:["El tiempo no se pierde: se regala sin darse cuenta.","Una hora protegida vale m\u00e1s que un d\u00eda disperso.","Decir no a lo menor es decir s\u00ed a lo mayor.","Tu calendario es tu verdadera lista de valores.","Empieza por lo importante: lo urgente siempre encuentra lugar.","Los minutos cuidados se convierten en a\u00f1os ganados.","El foco es un m\u00fasculo: cada bloque de tiempo lo entrena.","No administres el tiempo: admin\u00edstrate en el tiempo.","Cada ma\u00f1ana te entrega 24 monedas: g\u00e1stalas despierto.","Lo que se agenda, sucede."],
+  en:["Time is not lost: it is given away without noticing.","One protected hour is worth more than a scattered day.","Saying no to the lesser is saying yes to the greater.","Your calendar is your true list of values.","Start with what matters: the urgent always finds a place.","Minutes cared for become years earned.","Focus is a muscle: every time block trains it.","Do not manage time: manage yourself within time.","Each morning hands you 24 coins: spend them awake.","What gets scheduled, happens."]},
+ JogaBit:{es:["Eres lo que repites cuando nadie te mira.","Un h\u00e1bito peque\u00f1o sostenido vence a un gran prop\u00f3sito abandonado.","No rompas la cadena: el eslab\u00f3n de hoy es el m\u00e1s importante.","Cambia el entorno y el h\u00e1bito te seguir\u00e1.","Dos minutos de comienzo derrotan a una hora de intenci\u00f3n.","Tus rutinas son votos por la persona que quieres ser.","El mal h\u00e1bito no se borra: se reemplaza.","La constancia aburre \u2014 hasta que te vuelve imparable.","Hazlo f\u00e1cil de empezar y dif\u00edcil de evitar.","El d\u00eda que menos quieras es el d\u00eda que m\u00e1s cuenta."],
+  en:["You are what you repeat when no one is watching.","A small habit sustained beats a great purpose abandoned.","Do not break the chain: today\u2019s link is the most important one.","Change the environment and the habit will follow.","Two minutes of starting defeat an hour of intending.","Your routines are votes for the person you want to become.","A bad habit is not erased: it is replaced.","Consistency is boring \u2014 until it makes you unstoppable.","Make it easy to start and hard to avoid.","The day you least want to is the day that counts the most."]},
+ JogaPath:{es:["Un plan imperfecto en marcha vence al plan perfecto en pausa.","La claridad llega caminando, no esperando.","Divide la monta\u00f1a en pasos y desaparece la monta\u00f1a.","Cada meta escrita es un compromiso contigo.","La direcci\u00f3n importa m\u00e1s que la velocidad.","Revisa tu rumbo cada semana: corrige sin castigarte.","El \u00e9xito es una escalera, no un salto.","Lo que se mide, mejora: lo que se ignora, se repite.","Tu siguiente paso es el \u00fanico que necesitas ver completo.","Los principios correctos hacen inevitables los resultados."],
+  en:["An imperfect plan in motion beats a perfect plan on pause.","Clarity arrives by walking, not by waiting.","Divide the mountain into steps and the mountain disappears.","Every written goal is a commitment to yourself.","Direction matters more than speed.","Review your course weekly: correct without punishing yourself.","Success is a staircase, not a leap.","What gets measured improves: what gets ignored repeats.","Your next step is the only one you need to see completely.","The right principles make results inevitable."]},
+ JogaCapital:{es:["El dinero obedece al orden y huye del caos.","P\u00e1gate a ti primero: es la regla que cambia todo.","Cada peso tiene un trabajo: as\u00edgnaselo.","Gastar sin plan es votar por un futuro ajeno.","La riqueza silenciosa vence al lujo ruidoso.","Aprender de dinero es aprender de ti.","El inter\u00e9s compuesto premia a los pacientes.","Tu presupuesto no te limita: te libera.","No es cu\u00e1nto ganas: es cu\u00e1nto conservas y multiplicas.","El dinero es energ\u00eda: fluye hacia donde hay prop\u00f3sito."],
+  en:["Money obeys order and flees from chaos.","Pay yourself first: it is the rule that changes everything.","Every dollar has a job: assign it.","Spending without a plan is voting for someone else\u2019s future.","Quiet wealth beats loud luxury.","Learning about money is learning about yourself.","Compound interest rewards the patient.","Your budget does not limit you: it frees you.","It is not how much you earn: it is how much you keep and multiply.","Money is energy: it flows toward purpose."]},
+ JogaVentix:{es:["Vender es servir con convicci\u00f3n.","Primero entiende, despu\u00e9s ofrece.","El \u2018no\u2019 es informaci\u00f3n, no sentencia.","La confianza se construye antes de la oferta.","Habla del problema del cliente y te escuchar\u00e1 completo.","El seguimiento amable cierra m\u00e1s que la insistencia.","Tu producto mejora vidas: decirlo es tu deber.","Cada conversaci\u00f3n es una siembra: algunas florecen tarde.","El mejor vendedor escucha el doble de lo que habla.","Vende como te gustar\u00eda que te vendieran."],
+  en:["Selling is serving with conviction.","First understand, then offer.","A \u2018no\u2019 is information, not a sentence.","Trust is built before the offer.","Speak to the client\u2019s problem and they will hear you completely.","Kind follow-up closes more than insistence.","Your product improves lives: saying so is your duty.","Every conversation is a seed: some bloom late.","The best seller listens twice as much as they speak.","Sell the way you would like to be sold to."]}
+};
+</script>
+<script>
 /* Check-in diario con Joga / Daily check-in with Joga */
 (function(){
   function g(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
@@ -2124,6 +2155,9 @@ Lo que dijo la persona: «${text}»`;
     } else {
       var m=g('jiCheckMood')||'mid', ph=phase(), rr=R[L][m][ph], p=pick(m);
       h+='<div class="ck-a">\u201c'+rr[0]+'\u201d</div>';
+      var QB=window.__jogaQuotes&&window.__jogaQuotes[p.n];
+      if(QB){ var deck=EN?QB.en:QB.es, di=Math.floor((Date.now()/86400000))%10;
+        h+='<div class="ck-a" style="margin-top:10px;color:#C9C3B4;font-size:13px">\u2726 '+(EN?'Quote of the day':'Frase del d\u00eda')+': \u201c'+deck[di]+'\u201d</div>'; }
       h+='<a class="ck-go" href="'+p.h+'">'+rr[1]+' '+p.n+' \u2192</a>';
       h+='<div class="ck-done">'+(EN?'Checked in \u00b7 see you tomorrow':'Check-in hecho \u00b7 nos vemos ma\u00f1ana')+'</div>';
     }
@@ -2191,6 +2225,74 @@ Lo que dijo la persona: «${text}»`;
     dl.href=url; dl.textContent=EN?'Download':'Descargar';
     dl.setAttribute('download','Joga-Carta-'+CARDS[i][0]+'.png');
     cl.textContent=EN?'Close':'Cerrar';
+    cl.onclick=function(){ el.style.display='none'; };
+    el.style.display='flex';
+  };
+})();
+</script>
+<script>
+/* Visor de frases por poder / Per-power quote viewer */
+(function(){
+  var NAMES=['JogaBody','JogaMind','JogaTime','JogaBit','JogaPath','JogaCapital','JogaVentix'];
+  function overlay(){
+    var el=document.getElementById('jq'); if(el) return el;
+    el=document.createElement('div'); el.id='jq';
+    el.innerHTML='<div class="jq-box"><div class="jq-t" id="jq-t"></div><div class="jq-c" id="jq-c"></div><div id="jq-list"></div><button class="jq-close" id="jq-close"></button></div>';
+    document.body.appendChild(el); return el;
+  }
+  function wrap(x,text,maxW){
+    var words=text.split(' '), lines=[], cur='';
+    words.forEach(function(w){ var t=cur?cur+' '+w:w; if(x.measureText(t).width>maxW&&cur){ lines.push(cur); cur=w; } else cur=t; });
+    if(cur) lines.push(cur); return lines;
+  }
+  function drawQuote(name,q,idx,EN){
+    var W=1080,H=1080,c=document.createElement('canvas');c.width=W;c.height=H;
+    var x=c.getContext('2d');
+    x.fillStyle='#0B0B0C';x.fillRect(0,0,W,H);
+    var rg=x.createRadialGradient(W/2,H/2,50,W/2,H/2,640);
+    rg.addColorStop(0,'rgba(231,196,106,.13)');rg.addColorStop(1,'rgba(231,196,106,0)');
+    x.fillStyle=rg;x.fillRect(0,0,W,H);
+    x.strokeStyle='rgba(231,196,106,.85)';x.lineWidth=3;x.strokeRect(42,42,W-84,H-84);
+    x.strokeStyle='rgba(231,196,106,.3)';x.lineWidth=1;x.strokeRect(58,58,W-116,H-116);
+    x.textAlign='center';
+    function sp(t){ return t.split('').join('\u2009'); }
+    x.fillStyle='rgba(231,196,106,.8)';x.font='500 30px Newsreader, Georgia, serif';
+    x.fillText(sp('JOGA '+name.replace('Joga','').toUpperCase()),W/2,170);
+    x.fillStyle='rgba(231,196,106,.9)';x.font='500 90px Newsreader, Georgia, serif';
+    x.fillText('\u201c',W/2,330);
+    x.fillStyle='#F2ECDD';x.font='italic 500 52px Newsreader, Georgia, serif';
+    var lines=wrap(x,q,W-260), y=430, lh=72;
+    if(lines.length>5){x.font='italic 500 42px Newsreader, Georgia, serif';lines=wrap(x,q,W-240);lh=60;}
+    lines.forEach(function(l){ x.fillText(l,W/2,y); y+=lh; });
+    x.fillStyle='rgba(231,196,106,.9)';x.font='500 44px Newsreader, Georgia, serif';
+    x.fillText('\u2726',W/2,y+60);
+    x.fillStyle='rgba(201,195,180,.6)';x.font='400 26px Newsreader, Georgia, serif';
+    x.fillText((EN?'Quote':'Frase')+' '+(idx+1)+' \u00b7 10',W/2,H-170);
+    x.fillStyle='rgba(201,195,180,.45)';x.font='400 24px Newsreader, Georgia, serif';
+    x.fillText(sp('JOGA INTELLIGENCE'),W/2,H-110);
+    return c.toDataURL('image/png');
+  }
+  window.__jogaFrases=function(ix,p,EN){
+    var Q=window.__jogaQuotes&&window.__jogaQuotes[NAMES[ix]]; if(!Q) return;
+    var deck=EN?Q.en:Q.es;
+    var u=Math.min(10, Math.max(p.streak||0, p.ses||0));
+    var el=overlay();
+    document.getElementById('jq-t').textContent=(EN?'Quotes of ':'Frases de ')+NAMES[ix];
+    document.getElementById('jq-c').textContent=u+' '+(EN?'of 10 revealed \u00b7 one per practice day':'de 10 reveladas \u00b7 una por d\u00eda de pr\u00e1ctica');
+    var list=document.getElementById('jq-list'), h='';
+    if(u===0){ h+='<div class="jq-lock">'+(EN?'Your first quote is revealed with your first day of practice':'Tu primera frase se revela con tu primer d\u00eda de pr\u00e1ctica')+'</div>'; }
+    for(var i=0;i<u;i++){ h+='<div class="jq-item"><p>\u201c'+deck[i]+'\u201d</p><button data-q="'+i+'" title="'+(EN?'Download':'Descargar')+'">\u2193</button></div>'; }
+    for(var j=Math.max(u,0);j<10&&u>0;j++){ h+='<div class="jq-lock">\u2726 '+(EN?'Day':'D\u00eda')+' '+(j+1)+'</div>'; }
+    list.innerHTML=h;
+    Array.prototype.forEach.call(list.querySelectorAll('[data-q]'),function(b){
+      b.onclick=function(){
+        var i=parseInt(b.getAttribute('data-q'),10);
+        var url=drawQuote(NAMES[ix],deck[i],i,EN);
+        var a=document.createElement('a'); a.href=url; a.download='Joga-'+NAMES[ix]+'-'+(EN?'Quote':'Frase')+'-'+(i+1)+'.png';
+        document.body.appendChild(a); a.click(); a.remove();
+      };
+    });
+    var cl=document.getElementById('jq-close'); cl.textContent=EN?'Close':'Cerrar';
     cl.onclick=function(){ el.style.display='none'; };
     el.style.display='flex';
   };
