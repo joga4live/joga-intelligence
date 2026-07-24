@@ -29,9 +29,10 @@ verificar que sigan funcionando antes de dar por cerrado el trabajo.
    filtrarse la lista de códigos en texto plano en un archivo público.
 2. **Service Worker / PWA offline** — la app debe seguir cargando sin conexión.
    No romper el registro del SW ni la lista de archivos cacheados.
-3. **i18n (traducciones)** — el toggle de idioma y los atributos `data-i18n` deben
-   seguir funcionando. **Nota:** i18n está ROTO en `Monexium`, `VentMex` y `Retos` →
-   ver sección 5.
+3. **i18n (traducciones)** — el toggle de idioma (`toggleLang` + `jiLang` en
+   localStorage) y los diccionarios `es:{...}` / `en:{...}` deben seguir
+   funcionando. **Nota:** auditoría completa (23-jul-2026) confirmó que
+   `Monexium`, `VentMex` y `Retos` YA están completos y correctos → ver sección 5.
 4. **Diseño / branding JOGA** — logo, colores y estilo visual no se alteran sin permiso.
 
 ---
@@ -61,9 +62,34 @@ Si no se sube la versión, el fix no llega al usuario. No lo olvides.
 
 ## 5. Estado conocido / Known issues
 
-- **i18n roto** en `Monexium`, `VentMex` y `Retos`. Si trabajas ahí, revisa los
-  atributos `data-i18n` y el toggle de idioma. Pendiente: pase de i18n completo para
-  expandir a mercado en inglés.
+- **Licencias (`gate.js`)** — los 71 códigos (1 maestro + 50 originales + 20 nuevos)
+  viven como hashes SHA-256 en `gate.js` (`window.jogaGate.validate`, async).
+  `index.html` y `app.html` ya no tienen códigos en texto plano; ambos llaman a
+  `await window.jogaGate.validate(v)`. Verificado: `grep -rn "JOGA-4ET2L\|JOGA7K2M9"
+  *.html *.js` → cero resultados.
+- **Service worker** en `joga-v25`, con `./gate.js` agregado a la lista CORE.
+- **i18n — auditoría completa (23-jul-2026):** se revisaron `monexium.html`,
+  `ventmex.html` y `retos.html` en detalle, comparando contra el patrón de
+  referencia (`subment.html`: diccionarios `es:{...}`/`en:{...}`, `toggleLang`,
+  `jiLang` en localStorage). **Las tres apps ya están 100% bien** — todo el texto
+  visible dentro de la pantalla del teléfono (home, prácticas/técnicas,
+  leyes/ideas, diagnóstico IA, modales "about"/unlock, nav inferior, reproductor,
+  toasts, diagnóstico local de IA y los prompts de IA) sale de los diccionarios
+  `es`/`en` y cambia con el toggle. No se encontró texto hardcodeado roto; no se
+  hizo ningún cambio de código en estas tres apps.
+  - El check de `init.sh` que marca estos archivos con `!` ("sin data-i18n") es
+    una **falsa alarma conocida**: ninguna app del proyecto (ni siquiera
+    `subment.html`, la referencia que sí funciona) usa atributos `data-i18n`;
+    todas usan el patrón de diccionario + `toggleLang`. El warning se deja tal
+    cual (no bloquea, exit 0) pero no indica un problema real.
+  - Único texto que queda fijo en español sin traducir (por diseño, igual que en
+    `subment.html`): el nombre de marca de cada app (ej. "JogaCapital",
+    "JogaVentix") y el `aria-label` de los botones de icono superiores
+    ("Salir", "Idioma", "Silenciar", "otra frase") — accesibilidad, no texto
+    visible del flujo principal. También el caption lateral fuera del "teléfono"
+    (visible solo en la vista de escritorio/preview, no en el uso real en
+    móvil porque `.ji-phone` pasa a `position:fixed;inset:0` y lo cubre) queda
+    en español, igual que en la referencia — no se tocó.
 - Retos usa `localStorage` para persistencia — no borrar ni renombrar las llaves
   existentes o los usuarios pierden su progreso.
 

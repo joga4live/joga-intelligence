@@ -982,6 +982,7 @@
         <button id="unlockCancel" type="button" style="margin-top:10px;width:100%;padding:12px;border:none;border-radius:12px;background:transparent;color:#6a5f56;font-size:.9rem;cursor:pointer;" data-i18n="unlockCancel">Cancelar</button>
       </div>
     </div>
+    <script src="./gate.js"></script>
     <script>
       const LANGUAGE_STORAGE_KEY = 'joga.language';
       let currentLanguage = 'es';
@@ -1293,15 +1294,14 @@
 
       /* ============================================================
          ACCESO PREMIUM — mismo sistema que app.html (fuente oficial).
-         Códigos: el maestro JOGA7K2M9 + los 50 individuales.
+         Validación por hash SHA-256 vía gate.js (window.jogaGate.validate).
+         Access via SHA-256 hash validation through gate.js (window.jogaGate.validate).
          Al desbloquear activa la MISMA llave (jiPaid) que usan los apps,
          así desbloquear aquí abre los módulos en app.html.
          ============================================================ */
-      const UNLOCK_CODE = "JOGA7K2M9";
-      const VALID_CODES = ["JOGA-4ET2L","JOGA-LVG2V","JOGA-9A4LV","JOGA-RAXR4","JOGA-G6XXH","JOGA-3HJSA","JOGA-BD8SL","JOGA-LVC3L","JOGA-ESDRT","JOGA-YAJMT","JOGA-AFPYV","JOGA-KJUYX","JOGA-BGVNL","JOGA-ZTZHD","JOGA-6QTGW","JOGA-DC8GC","JOGA-YMXEJ","JOGA-APXXG","JOGA-82KUS","JOGA-FZY9B","JOGA-8XDJD","JOGA-QUUFD","JOGA-XEARV","JOGA-A5LUD","JOGA-QSYE6","JOGA-XCGZV","JOGA-26ABC","JOGA-X3JB7","JOGA-WJ45D","JOGA-8HQTP","JOGA-8U9RY","JOGA-BGGUR","JOGA-4N6BQ","JOGA-EDE2Z","JOGA-QBEZQ","JOGA-YD7CF","JOGA-SNDQ3","JOGA-P6J72","JOGA-DQDTB","JOGA-M4AN3","JOGA-Q59TM","JOGA-6JQU5","JOGA-9C9M2","JOGA-G4PHH","JOGA-NGQSK","JOGA-AMJTA","JOGA-FUYPG","JOGA-SX6KY","JOGA-TP4Z2","JOGA-VH8MX"];
       const UNLOCK_KEY = {"subment.html":"subment","jogatime.html":"jogatime","protoneutron.html":"protoneutron","metodoexito.html":"pasley","monexium.html":"monexium","ventmex.html":"ventmex","jogaflow.html":"jogaflow"};
 
-      function codeValid(v){ if(!v) return false; v=v.trim().toUpperCase(); if(v===UNLOCK_CODE) return true; for(var i=0;i<VALID_CODES.length;i++){ if(VALID_CODES[i]===v) return true; } return false; }
+      async function codeValid(v){ if(!v) return false; return await window.jogaGate.validate(v); }
       function doUnlock(){ try{ localStorage.setItem("jiPaid","1"); for(var k in UNLOCK_KEY){ localStorage.setItem("jiUnlocked_"+UNLOCK_KEY[k],"1"); } }catch(e){} }
 
       const ov = document.getElementById("unlockOverlay");
@@ -1337,9 +1337,9 @@
         a.addEventListener("click", function(e){ if(!isUnlocked()){ e.preventDefault(); openUnlock(); } });
       });
       if(isUnlocked()){ document.querySelectorAll(".mod-lock").forEach(function(el){ el.style.display="none"; }); }
-      function tryUnlock(){
+      async function tryUnlock(){
         const val=(inp.value||"").trim();
-        if(codeValid(val)){
+        if(await codeValid(val)){
           doUnlock();
           closeUnlock(); reflectPremium();
           window.location.href="app.html?tour=1&present=1";
