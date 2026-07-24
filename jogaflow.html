@@ -14,13 +14,15 @@
     --bg:#fbf5ea; --ink:#242029; --muted:#8a8296; --soft:#7c7488;
     --line:rgba(45,38,58,.12);
     --flow:#2f6ca0; --flow2:#3a8fb0; --flow-soft:rgba(47,108,160,.12);
+    --deep:#16344e; --deep2:#0e2438; --lite:#9fd3ec; --lite2:#7fc4e6;
     --gold:#b8923a; --card:#ffffff;
   }
   body{background:#ffffff;font-family:Inter,system-ui,sans-serif;color:var(--ink)}
-  button{font-family:inherit}
+  button,textarea{font-family:inherit}
   @keyframes jfRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   @keyframes jfTwinkle{0%,100%{opacity:.25}50%{opacity:.9}}
   @keyframes jfFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+  @keyframes jfPulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.12);opacity:1}}
   .jf-scroll{scrollbar-width:none}
   .jf-scroll::-webkit-scrollbar{display:none}
   .tapfx{transition:transform .12s ease}
@@ -50,11 +52,11 @@
         <div style="position:absolute;top:330px;left:120px;width:2px;height:2px;border-radius:50%;background:var(--flow2);animation:jfTwinkle 6s ease-in-out infinite"></div>
       </div>
 
-      <!-- back -->
+      <!-- back / exit -->
       <button id="jfBack" aria-label="Salir" class="tapfx" style="position:absolute;top:16px;left:16px;z-index:50;cursor:pointer;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.74);backdrop-filter:blur(8px);color:var(--ink);font-size:23px;line-height:1;display:grid;place-items:center;box-shadow:0 5px 16px -7px rgba(0,0,0,.3)">‹</button>
 
-      <!-- HOME -->
-      <div class="jf-scroll" id="jfHome" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 40px">
+      <!-- ============ HOY ============ -->
+      <div class="jf-scroll" id="jfHome" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 104px">
         <!-- header -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
           <div>
@@ -75,29 +77,25 @@
         <div style="position:relative;border-radius:26px;overflow:hidden;padding:30px 24px 26px;margin-bottom:22px;background:linear-gradient(165deg,#eaf3fb,#dcebf7 60%,#e8f1f6);border:1px solid rgba(47,108,160,.28);box-shadow:0 24px 50px -28px rgba(47,108,160,.55)">
           <div id="jfIntentionLabel" style="font:600 9.5px Inter;letter-spacing:.3em;text-transform:uppercase;color:var(--flow);margin-bottom:14px">Intención de hoy</div>
           <div id="jfAffirmation" style="font-family:Newsreader,serif;font-weight:500;font-size:26px;line-height:1.3;color:var(--ink);letter-spacing:-.01em;min-height:102px">Mi energía fluye y mi cuerpo me sostiene.</div>
-          <div style="margin-top:22px;display:flex;align-items:center;gap:9px">
-            <button id="jfAffirm" class="tapfx" style="cursor:pointer;border:0;border-radius:999px;padding:13px 22px;font:600 13px Inter;color:#fff;background:linear-gradient(135deg,var(--flow),var(--flow2));box-shadow:0 10px 24px -10px rgba(47,108,160,.9);display:inline-flex;align-items:center;gap:8px">Lo siento hoy</button>
+          <div style="margin-top:22px;display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+            <button id="jfAffirm" class="tapfx" style="cursor:pointer;border:0;border-radius:999px;padding:13px 22px;font:600 13px Inter;color:#fff;background:linear-gradient(135deg,var(--flow),var(--flow2));box-shadow:0 10px 24px -10px rgba(47,108,160,.9);display:inline-flex;align-items:center;gap:8px">Hecho</button>
             <button id="jfCycle" class="tapfx" aria-label="otra frase" style="cursor:pointer;border:1px solid var(--line);background:rgba(45,38,58,.08);color:var(--ink);border-radius:999px;width:44px;height:44px;font-size:17px;line-height:1">↻</button>
             <button id="jfVoiceBtn" class="tapfx" aria-label="Escuchar" style="cursor:pointer;border:1px solid rgba(47,108,160,.3);background:var(--flow-soft);color:var(--flow);border-radius:999px;height:44px;padding:0 16px;font:600 13px Inter;display:inline-flex;align-items:center;gap:7px"><span id="jfVoiceIco">▶</span><span id="jfVoiceLbl">Escuchar</span></button>
           </div>
         </div>
 
-        <!-- breathing -->
-        <div id="jfBreatheLabel" style="font:600 10px Inter;letter-spacing:.28em;text-transform:uppercase;color:var(--soft);margin:0 2px 12px">Respiración guiada</div>
-        <button id="jfOpenBreathe" class="tapfx" style="width:100%;text-align:left;cursor:pointer;border:1px solid rgba(47,108,160,.24);border-radius:22px;padding:20px;margin-bottom:22px;background:linear-gradient(160deg,#16344e,#2f6ca0);display:flex;align-items:center;gap:16px">
-          <div style="flex:0 0 auto;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#7fc4e6,#3a8fb0);box-shadow:0 12px 26px -10px rgba(47,108,160,.9)">
-            <span style="font-size:26px">🫧</span>
+        <!-- practice of the day -->
+        <div id="jfPodLabel" style="font:600 10px Inter;letter-spacing:.28em;text-transform:uppercase;color:var(--soft);margin:0 2px 12px">Práctica sugerida de hoy</div>
+        <button id="jfOpenPod" class="tapfx" style="width:100%;text-align:left;cursor:pointer;border:1px solid rgba(47,108,160,.24);border-radius:22px;padding:20px;margin-bottom:22px;background:linear-gradient(160deg,#16344e,#2f6ca0);display:flex;align-items:center;gap:16px">
+          <div id="jfPodIconWrap" style="flex:0 0 auto;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#7fc4e6,#3a8fb0);box-shadow:0 12px 26px -10px rgba(47,108,160,.9)">
+            <span id="jfPodIcon" style="font-size:26px">🫧</span>
           </div>
           <div style="flex:1;min-width:0;color:#fff">
-            <div id="jfBreatheTitle" style="font:600 16px Inter;margin-bottom:3px">Respira conmigo</div>
-            <div id="jfBreatheSub" style="font-size:12px;color:rgba(255,255,255,.78);line-height:1.4">Ciclo 4·7·8 para calmar y recargar tu energía.</div>
+            <div id="jfPodTitle" style="font:600 16px Inter;margin-bottom:3px">Respiración guiada</div>
+            <div id="jfPodSub" style="font-size:12px;color:rgba(255,255,255,.78);line-height:1.4">Ciclo 4·7·8 para calmar y recargar tu energía.</div>
           </div>
           <span style="color:#fff;font-size:20px">▶</span>
         </button>
-
-        <!-- rituals -->
-        <div id="jfRitualsLabel" style="font:600 10px Inter;letter-spacing:.28em;text-transform:uppercase;color:var(--soft);margin:0 2px 12px">Rituales de energía</div>
-        <div id="jfRituals" style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px"></div>
 
         <!-- energy check-in -->
         <div id="jfCheckLabel" style="font:600 10px Inter;letter-spacing:.28em;text-transform:uppercase;color:var(--soft);margin:0 2px 12px">¿Cómo está tu energía?</div>
@@ -107,7 +105,33 @@
         </div>
       </div>
 
-      <!-- BREATHE OVERLAY -->
+      <!-- ============ IA ============ -->
+      <div class="jf-scroll" id="jfIA" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 104px;display:none"></div>
+
+      <!-- ============ PRÁCTICAS ============ -->
+      <div class="jf-scroll" id="jfPracticas" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 104px;display:none">
+        <div id="jfPracKicker" style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:var(--flow);margin-bottom:4px">Prácticas</div>
+        <h2 id="jfPracTitle" style="font-family:Newsreader,serif;font-weight:500;font-size:28px;color:var(--ink);margin:0 0 6px">Tus 3 prácticas diarias</h2>
+        <p id="jfPracSub" style="font-size:13px;color:var(--soft);margin:0 0 18px;line-height:1.5">Elige una y márcala como completada al terminar.</p>
+        <div style="margin-bottom:22px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
+            <span id="jfPracProgLabel" style="font:600 10px Inter;letter-spacing:.18em;text-transform:uppercase;color:var(--flow)">Progreso de hoy</span>
+            <span id="jfPracCount" style="font-family:Newsreader,serif;font-weight:600;font-size:15px;color:var(--ink)">0 / 3</span>
+          </div>
+          <div style="height:7px;border-radius:7px;background:rgba(45,38,58,.09);overflow:hidden">
+            <div id="jfPracBar" style="width:0%;height:100%;border-radius:7px;background:linear-gradient(90deg,var(--flow),var(--flow2));transition:width .5s ease"></div>
+          </div>
+        </div>
+        <div id="jfPracList" style="display:flex;flex-direction:column;gap:13px"></div>
+      </div>
+
+      <!-- ============ LEYES ============ -->
+      <div class="jf-scroll" id="jfLeyes" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 104px;display:none"></div>
+
+      <!-- ============ BOTTOM NAV ============ -->
+      <div id="jfTabbar" style="position:absolute;bottom:0;left:0;right:0;z-index:30;padding:12px 20px 24px;background:linear-gradient(to top,var(--bg) 70%,transparent);display:flex;justify-content:space-between"></div>
+
+      <!-- BREATHE OVERLAY (Práctica 1: Respiración guiada) -->
       <div id="jfBreatheView" style="position:absolute;inset:0;z-index:40;display:none;background:linear-gradient(180deg,#0e2438,#16344e 55%,#1d4566)">
         <button id="jfBreatheBack" aria-label="Cerrar" class="tapfx" style="position:absolute;top:18px;left:18px;z-index:5;cursor:pointer;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;font-size:23px;display:grid;place-items:center">‹</button>
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center">
@@ -122,16 +146,31 @@
         </div>
       </div>
 
-      <!-- RITUAL OVERLAY -->
-      <div id="jfRitualView" class="jf-scroll" style="position:absolute;inset:0;z-index:40;display:none;overflow-y:auto;background:var(--bg);padding:74px 24px 40px">
-        <button id="jfRitualBack" aria-label="Volver" class="tapfx" style="position:absolute;top:16px;left:16px;z-index:5;cursor:pointer;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.8);color:var(--ink);font-size:23px;display:grid;place-items:center">‹</button>
-        <div id="jfRitualHead" style="margin-bottom:8px"></div>
-        <div id="jfRitualSteps" style="display:flex;flex-direction:column;gap:12px;margin-top:18px"></div>
-        <button id="jfRitualDone" class="tapfx" style="margin-top:24px;width:100%;cursor:pointer;border:0;border-radius:999px;padding:15px;font:600 14px Inter;color:#fff;background:linear-gradient(135deg,var(--flow),var(--flow2));box-shadow:0 12px 28px -12px rgba(47,108,160,.9)">Completar ritual</button>
+      <!-- SESSION PLAYER OVERLAY (Prácticas 2 y 3) -->
+      <div id="jfPlayerView" class="jf-scroll" style="position:absolute;inset:0;z-index:40;display:none;overflow-y:auto;background:linear-gradient(180deg,#0e2438,#16344e 60%,#1d4566);padding:74px 24px 40px">
+        <button id="jfPlayerBack" aria-label="Cerrar" class="tapfx" style="position:absolute;top:18px;left:18px;z-index:5;cursor:pointer;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;font-size:23px;display:grid;place-items:center">‹</button>
+        <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:10px">
+          <div id="jfPlayerKicker" style="font:600 10px Inter;letter-spacing:.3em;text-transform:uppercase;color:#9fd3ec;margin-bottom:8px">Práctica</div>
+          <div id="jfPlayerTitle" style="font-family:Newsreader,serif;font-weight:500;font-size:24px;color:#fff;margin-bottom:26px">Título</div>
+          <div style="position:relative;width:150px;height:150px;display:grid;place-items:center;margin-bottom:22px">
+            <div id="jfPlayerOrb" style="width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 38% 32%,rgba(159,211,236,.95),rgba(58,143,176,.55));box-shadow:0 0 60px -6px rgba(127,196,230,.8);display:grid;place-items:center;font-size:32px">🌅</div>
+          </div>
+          <div style="width:100%;max-width:300px">
+            <div style="height:4px;border-radius:4px;background:rgba(255,255,255,.16);overflow:hidden">
+              <div id="jfPlayerBar" style="width:0%;height:100%;border-radius:4px;background:linear-gradient(90deg,#9fd3ec,#7fc4e6);transition:width 1s linear"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:8px;font:500 11px Inter;color:rgba(255,255,255,.65)">
+              <span id="jfPlayerElapsed">0:00</span><span id="jfPlayerRemain">-1:00</span>
+            </div>
+          </div>
+          <button id="jfPlayerToggle" class="tapfx" style="margin-top:22px;cursor:pointer;border:0;border-radius:50%;width:64px;height:64px;font-size:22px;color:#0e2438;background:linear-gradient(135deg,#9fd3ec,#7fc4e6);box-shadow:0 12px 28px -10px rgba(127,196,230,.9)">▶</button>
+        </div>
+        <div id="jfPlayerSteps" style="display:flex;flex-direction:column;gap:11px;margin-top:30px"></div>
+        <button id="jfPlayerDone" class="tapfx" style="margin-top:22px;width:100%;cursor:pointer;border:0;border-radius:999px;padding:15px;font:600 14px Inter;color:#0e2438;background:linear-gradient(135deg,#9fd3ec,#7fc4e6);box-shadow:0 12px 28px -12px rgba(127,196,230,.9)">Completar sesión</button>
       </div>
 
       <!-- TOAST -->
-      <div id="jfToast" style="position:absolute;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);z-index:80;display:flex;align-items:center;gap:9px;background:rgba(14,36,56,.94);color:#fff;border:1px solid rgba(159,211,236,.3);border-radius:999px;padding:11px 16px;font:600 12.5px Inter;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s">
+      <div id="jfToast" style="position:absolute;left:50%;bottom:100px;transform:translateX(-50%) translateY(16px);z-index:80;display:flex;align-items:center;gap:9px;background:rgba(14,36,56,.94);color:#fff;border:1px solid rgba(159,211,236,.3);border-radius:999px;padding:11px 16px;font:600 12.5px Inter;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s">
         <span style="color:#9fd3ec">✦</span><span id="jfToastText">Listo</span>
       </div>
 
@@ -142,19 +181,33 @@
 <script>
 (function(){
   "use strict";
-  var LS={lang:"jfLang",mute:"jfMute",streak:"jfStreak",last:"jfLastDay",energy:"jfEnergy"};
+  /* ===== almacenamiento / storage keys =====
+     jfStreak/jfLastDay se mantienen SIN cambio: app.html (Mapa de Poderes,
+     check-in del hub) los lee directo para JogaBody porque es la app gratis
+     (ver POW/streaks() en app.html). No renombrar.
+     jfStreak/jfLastDay are kept unchanged: app.html (Power Map, hub daily
+     check-in) reads them directly for JogaBody since it's the free app
+     (see POW/streaks() in app.html). Do not rename. */
+  var LS={lang:"jfLang",mute:"jfMute",streak:"jfStreak",last:"jfLastDay",energy:"jfEnergy",
+          affirmed:"jfAffirmedDay",practices:"jiPractices_jogaflow"};
   function get(k){try{return localStorage.getItem(k);}catch(e){return null;}}
   function set(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  function isPaid(){try{return localStorage.getItem("jiPaid")==="1";}catch(e){return false;}}
 
   var lang = (get(LS.lang)==="en")?"en":"es";
   var muted = get(LS.mute)==="1";
+  var view = "hoy"; /* hoy | ia | practicas | leyes */
 
   /* audio: nombres exactos como están en GitHub (sin guiones) */
-  var voice=null, music=null, voicePlaying=false;
+  var voice=null, music=null, voicePlaying=false, audioCtxUse="home"; /* home | breathe | player */
   function voiceSrc(){ return lang==="en" ? "vozjogaflowen.mp3" : "vozjogaflow.mp3"; }
   function ensureAudio(){
-    if(!voice){ try{ voice=new Audio(voiceSrc()); voice.preload="auto"; voice.addEventListener("ended", stopVoice); }catch(e){ voice=null; } }
+    if(!voice){ try{ voice=new Audio(voiceSrc()); voice.preload="auto"; voice.addEventListener("ended", onVoiceEnded); }catch(e){ voice=null; } }
     if(!music){ try{ music=new Audio("musicajogaflow.mp3"); music.preload="auto"; music.loop=true; music.volume=0.18; }catch(e){ music=null; } }
+  }
+  function onVoiceEnded(){
+    if(audioCtxUse==="player"){ finishPlayerSession(); return; }
+    stopVoice();
   }
   function applyVoiceLabel(){
     var lbl=document.getElementById("jfVoiceLbl"), ico=document.getElementById("jfVoiceIco");
@@ -163,8 +216,13 @@
   }
   function stopVoice(){ voicePlaying=false; try{ if(voice) voice.pause(); if(music) music.pause(); }catch(e){} applyVoiceLabel(); }
   function toggleVoice(){
+    audioCtxUse="home";
     ensureAudio(); if(!voice) return;
     if(voicePlaying){ stopVoice(); return; }
+    playSessionAudio();
+  }
+  function playSessionAudio(){
+    ensureAudio(); if(!voice) return;
     var want=voiceSrc(); if((voice.getAttribute("src")||"").indexOf(want)<0){ voice.src=want; try{ voice.load(); }catch(e){} }
     try{ voice.currentTime=0; }catch(e){}
     voice.volume = muted?0:1;
@@ -179,14 +237,14 @@
       langLabel:"ES",
       greetMorning:"Buenos días",greetAfternoon:"Buenas tardes",greetEvening:"Buenas noches",
       intentionLabel:"Intención de hoy",
-      affirmLabel:"Lo siento hoy",affirmed:"Sentido ✓",
+      affirmLabel:"Hecho",affirmed:"Hecho ✓",
       voiceListen:"Escuchar",voicePause:"Pausar",
-      breatheLabel:"Respiración guiada",breatheTitle:"Respira conmigo",breatheSub:"Ciclo 4·7·8 para calmar y recargar tu energía.",
-      ritualsLabel:"Rituales de energía",checkLabel:"¿Cómo está tu energía?",
+      podLabel:"Práctica sugerida de hoy",podStart:"Empezar",
+      checkLabel:"¿Cómo está tu energía?",
+      navHoy:"Hoy",navIA:"IA",navPrac:"Prácticas",navLeyes:"Leyes",
       prepare:"Prepárate",inhale:"Inhala",hold:"Sostén",exhale:"Exhala",
       cueInhale:"Inhala lento por la nariz",cueHold:"Sostén el aire con calma",cueExhale:"Exhala suave por la boca",
       start:"Comenzar",pause:"Pausar",round:"Ronda",of:"de",breatheDone:"Respiración completa. Tu energía se renueva.",
-      stepsLabel:"Pasos",completeRitual:"Completar ritual",ritualDone:"¡Ritual completado. Bien hecho!",
       streakUp:"Racha +1 · sigue así",
       tips:["Tómalo con calma: una acción pequeña ya cuenta.",
             "Tu cuerpo te pide movimiento suave. Estírate un momento.",
@@ -201,27 +259,55 @@
             "Tengo la fuerza para avanzar un paso más.",
             "Equilibrio: ni de más, ni de menos."],
       energyTip0:"Sin presión. Empieza con tres respiraciones lentas.",
-      rituals:[
-        {icon:"🌅",t:"Energizante matutino",d:"3 min · despierta tu cuerpo",
+      practicesKicker:"Prácticas",practicesTitle:"Tus 3 prácticas diarias",
+      practicesSub:"Elige una y márcala como completada al terminar.",
+      progressLabel:"Progreso de hoy",
+      markDone:"Marcar como completada",doneLabel:"Completada ✓",playSession:"Reproducir sesión",
+      playerComplete:"Completar sesión",
+      practices:[
+        {icon:"🫧",type:"breathe",title:"Respiración guiada",desc:"3 min · calma y recarga",
+         extra:"Tip: hazlo apenas despiertes o antes de dormir.",
+         steps:["Inhala lento 4 segundos por la nariz.","Sostén el aire 7 segundos con calma.","Exhala suave 8 segundos por la boca.","Repite el ciclo cuatro veces."]},
+        {icon:"🌅",type:"steps",title:"Energizante matutino",desc:"3 min · despierta tu cuerpo",
+         extra:"Tip: hazlo antes de revisar el teléfono.",
          steps:["Estira los brazos hacia el cielo y respira hondo 3 veces.","Rota los hombros hacia atrás, 10 veces, lento.","Bebe un vaso de agua antes de cualquier otra cosa.","Di tu intención del día en voz alta."]},
-        {icon:"☀️",t:"Reinicio de mediodía",d:"2 min · recupera el enfoque",
-         steps:["Levántate y camina 30 segundos.","Cierra los ojos y respira 4·4·4 dos veces.","Suelta la mandíbula y los hombros.","Bebe agua y vuelve con la mente despejada."]},
-        {icon:"🌙",t:"Cierre de la noche",d:"4 min · libera y descansa",
-         steps:["Baja las luces y silencia notificaciones.","Respira 4·7·8 durante cuatro rondas.","Repasa una cosa buena de tu día.","Agradece a tu cuerpo por hoy y descansa."]}
+        {icon:"☀️",type:"steps",title:"Reinicio de mediodía",desc:"2 min · recupera el enfoque",
+         extra:"Tip: úsalo cuando notes que tu mente se dispersa.",
+         steps:["Levántate y camina 30 segundos.","Cierra los ojos y respira 4·4·4 dos veces.","Suelta la mandíbula y los hombros.","Bebe agua y vuelve con la mente despejada."]}
+      ],
+      navLockedIA:"El diagnóstico con IA se abre con tu acceso premium.",
+      navLockedLeyes:"Las leyes de tu energía se abren con tu acceso premium.",
+      inviteKicker:"Acceso premium",
+      inviteBody:"Hoy y Prácticas son gratis para siempre. Con tu acceso premium desbloqueas esta sección en JogaBody y en las 6 apps del suite.",
+      inviteCta:"Ver planes",
+      iaKicker:"Diagnóstico IA",iaTitle:"¿Cómo está tu energía hoy?",
+      iaSub:"Cuéntame cómo te sientes y te sugiero qué ajustar.",
+      iaGreeting:"Hola, soy Joga 👋 Tu guía de energía corporal. Cuéntame cómo estás y te doy una sugerencia para hoy.",
+      iaPlaceholder:"Escribe cómo te sientes hoy…",
+      iaBtn:"Analizar mi energía",iaThinking:"Analizando…",
+      leyesKicker:"Leyes del cuerpo",leyesTitle:"6 leyes de tu energía",
+      leyesSub:"Principios originales de JogaBody para sostener tu energía todos los días.",
+      leyes:[
+        {title:"La energía sigue al movimiento",idea:"Un cuerpo quieto acumula tensión; un cuerpo que se mueve la libera y genera más energía de la que gasta.",ej:"Levántate y muévete 60 segundos cada hora que estés sentado."},
+        {title:"El descanso es productivo",idea:"Descansar no es debilidad: es la fase donde tu cuerpo repara lo que el día desgastó.",ej:"Agenda un bloque de descanso real, sin pantallas, antes de dormir."},
+        {title:"La respiración dirige el estado",idea:"Cambiar el ritmo de tu respiración cambia tu sistema nervioso en segundos, sin esperar a que cambie la situación.",ej:"Ante el estrés, exhala más lento de lo que inhalas durante un minuto."},
+        {title:"El cuerpo habla antes que la mente",idea:"La tensión en el cuello, el estómago cerrado o los hombros altos avisan antes de que la mente ponga nombre al problema.",ej:"Haz un chequeo corporal de pies a cabeza dos veces al día."},
+        {title:"La hidratación es la primera medicina",idea:"Gran parte del cansancio del día no es falta de fuerza: es falta de agua.",ej:"Bebe un vaso de agua completo antes de tu primer café."},
+        {title:"La constancia vence a la intensidad",idea:"Diez minutos de movimiento cada día transforman más que una hora intensa una vez por semana.",ej:"Elige una práctica de 2 minutos que puedas repetir sin excusas."}
       ]
     },
     en:{
       langLabel:"EN",
       greetMorning:"Good morning",greetAfternoon:"Good afternoon",greetEvening:"Good evening",
       intentionLabel:"Today's intention",
-      affirmLabel:"I feel it today",affirmed:"Felt ✓",
+      affirmLabel:"Done",affirmed:"Done ✓",
       voiceListen:"Listen",voicePause:"Pause",
-      breatheLabel:"Guided breathing",breatheTitle:"Breathe with me",breatheSub:"4·7·8 cycle to calm and recharge your energy.",
-      ritualsLabel:"Energy rituals",checkLabel:"How is your energy?",
+      podLabel:"Today's suggested practice",podStart:"Start",
+      checkLabel:"How is your energy?",
+      navHoy:"Today",navIA:"AI",navPrac:"Practices",navLeyes:"Laws",
       prepare:"Get ready",inhale:"Inhale",hold:"Hold",exhale:"Exhale",
       cueInhale:"Breathe in slowly through your nose",cueHold:"Hold the air calmly",cueExhale:"Breathe out gently through your mouth",
       start:"Start",pause:"Pause",round:"Round",of:"of",breatheDone:"Breathing complete. Your energy renews.",
-      stepsLabel:"Steps",completeRitual:"Complete ritual",ritualDone:"Ritual completed. Well done!",
       streakUp:"Streak +1 · keep going",
       tips:["Take it easy: one small action already counts.",
             "Your body wants gentle movement. Stretch for a moment.",
@@ -236,13 +322,41 @@
             "I have the strength to take one more step.",
             "Balance: not too much, not too little."],
       energyTip0:"No pressure. Start with three slow breaths.",
-      rituals:[
-        {icon:"🌅",t:"Morning energizer",d:"3 min · wake up your body",
+      practicesKicker:"Practices",practicesTitle:"Your 3 daily practices",
+      practicesSub:"Pick one and mark it as completed when you finish.",
+      progressLabel:"Today's progress",
+      markDone:"Mark as completed",doneLabel:"Completed ✓",playSession:"Play session",
+      playerComplete:"Complete session",
+      practices:[
+        {icon:"🫧",type:"breathe",title:"Guided breathing",desc:"3 min · calm and recharge",
+         extra:"Tip: do it right after waking or before sleep.",
+         steps:["Breathe in slowly for 4 seconds through your nose.","Hold the air calmly for 7 seconds.","Breathe out gently for 8 seconds through your mouth.","Repeat the cycle four times."]},
+        {icon:"🌅",type:"steps",title:"Morning energizer",desc:"3 min · wake up your body",
+         extra:"Tip: do it before checking your phone.",
          steps:["Stretch your arms to the sky and breathe deep 3 times.","Roll your shoulders back, 10 times, slowly.","Drink a glass of water before anything else.","Say your intention for the day out loud."]},
-        {icon:"☀️",t:"Midday reset",d:"2 min · regain focus",
-         steps:["Stand up and walk for 30 seconds.","Close your eyes and breathe 4·4·4 twice.","Release your jaw and shoulders.","Drink water and return with a clear mind."]},
-        {icon:"🌙",t:"Evening wind-down",d:"4 min · release and rest",
-         steps:["Dim the lights and silence notifications.","Breathe 4·7·8 for four rounds.","Recall one good thing from your day.","Thank your body for today and rest."]}
+        {icon:"☀️",type:"steps",title:"Midday reset",desc:"2 min · regain focus",
+         extra:"Tip: use it when you notice your mind drifting.",
+         steps:["Stand up and walk for 30 seconds.","Close your eyes and breathe 4·4·4 twice.","Release your jaw and shoulders.","Drink water and return with a clear mind."]}
+      ],
+      navLockedIA:"AI diagnosis unlocks with your premium access.",
+      navLockedLeyes:"The laws of your energy unlock with your premium access.",
+      inviteKicker:"Premium access",
+      inviteBody:"Today and Practices are free forever. With your premium access you unlock this section in JogaBody and in all 6 apps of the suite.",
+      inviteCta:"See plans",
+      iaKicker:"AI diagnosis",iaTitle:"How is your energy today?",
+      iaSub:"Tell me how you feel and I'll suggest what to adjust.",
+      iaGreeting:"Hi, I'm Joga 👋 Your body-energy guide. Tell me how you're doing and I'll give you a suggestion for today.",
+      iaPlaceholder:"Write how you feel today…",
+      iaBtn:"Analyze my energy",iaThinking:"Analyzing…",
+      leyesKicker:"Body laws",leyesTitle:"6 laws of your energy",
+      leyesSub:"Original JogaBody principles to sustain your energy every day.",
+      leyes:[
+        {title:"Energy follows movement",idea:"A still body accumulates tension; a body that moves releases it and generates more energy than it spends.",ej:"Get up and move for 60 seconds every hour you spend sitting."},
+        {title:"Rest is productive",idea:"Resting is not weakness: it's the phase where your body repairs what the day wore down.",ej:"Schedule a real rest block, no screens, before you sleep."},
+        {title:"Breath directs your state",idea:"Changing your breathing rhythm changes your nervous system in seconds, without waiting for the situation to change.",ej:"When stressed, exhale slower than you inhale for one minute."},
+        {title:"The body speaks before the mind",idea:"Tension in your neck, a tight stomach, or raised shoulders warn you before your mind can name the problem.",ej:"Do a head-to-toe body scan twice a day."},
+        {title:"Hydration is the first medicine",idea:"Much of the day's tiredness isn't a lack of strength: it's a lack of water.",ej:"Drink a full glass of water before your first coffee."},
+        {title:"Consistency beats intensity",idea:"Ten minutes of movement every day transforms more than one intense hour once a week.",ej:"Pick a 2-minute practice you can repeat without excuses."}
       ]
     }
   };
@@ -276,6 +390,7 @@
     toastTimer=setTimeout(function(){el.style.opacity="0";el.style.transform="translateX(-50%) translateY(16px)";},1700);
   }
   function todayKey(){var d=new Date();return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();}
+  function dayIndex(){return Math.floor(Date.now()/86400000);}
   function bumpStreak(){
     var last=get(LS.last), today=todayKey();
     if(last===today) return false;
@@ -284,67 +399,57 @@
     $("jfStreak").textContent=n;
     return true;
   }
+  function fmt(s){ s=Math.max(0,Math.round(s)); var m=Math.floor(s/60), r=s%60; return m+":"+(r<10?"0":"")+r; }
 
-  var affIdx=0;
+  /* ===== prácticas: estado diario / daily practice state ===== */
+  function practiceState(){
+    try{
+      var d=JSON.parse(get(LS.practices)||"{}")||{};
+      if(d.day!==todayKey()) return {day:todayKey(),done:{}};
+      return {day:d.day,done:d.done||{}};
+    }catch(e){ return {day:todayKey(),done:{}}; }
+  }
+  function setPracticeDone(i,val){
+    var st=practiceState();
+    st.done[i]=val;
+    try{ localStorage.setItem(LS.practices, JSON.stringify(st)); }catch(e){}
+    return st;
+  }
+
+  var affIdx=dayIndex()%7;
   function greeting(){
     var h=new Date().getHours(), s=t();
     return h<12?s.greetMorning:h<19?s.greetAfternoon:s.greetEvening;
-  }
-  function renderStatic(){
-    var s=t();
-    $("jfLang").textContent=s.langLabel;
-    $("jfMute").textContent=muted?"🔇":"🔊";
-    $("jfStreak").textContent=parseInt(get(LS.streak)||"0",10)||0;
-    $("jfGreeting").textContent=greeting();
-    $("jfIntentionLabel").textContent=s.intentionLabel;
-    $("jfAffirm").textContent=s.affirmLabel;
-    $("jfBreatheLabel").textContent=s.breatheLabel;
-    $("jfBreatheTitle").textContent=s.breatheTitle;
-    $("jfBreatheSub").textContent=s.breatheSub;
-    $("jfRitualsLabel").textContent=s.ritualsLabel;
-    $("jfCheckLabel").textContent=s.checkLabel;
-    $("jfAffirmation").textContent=s.affs[affIdx % s.affs.length];
-    document.documentElement.lang=lang;
-    applyVoiceLabel();
-    renderRituals();
-    renderCheck();
   }
   function cycleAff(dir){
     var s=t(); affIdx=(affIdx+(dir||1)+s.affs.length)%s.affs.length;
     $("jfAffirmation").textContent=s.affs[affIdx];
   }
 
-  function renderRituals(){
-    var s=t(), wrap=$("jfRituals"); wrap.innerHTML="";
-    s.rituals.forEach(function(r,i){
-      var b=document.createElement("button");
-      b.className="tapfx";
-      b.style.cssText="width:100%;text-align:left;cursor:pointer;border:1px solid var(--line);border-radius:18px;padding:15px 16px;background:var(--card);display:flex;align-items:center;gap:14px";
-      b.innerHTML='<div style="flex:0 0 auto;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:var(--flow-soft);font-size:21px">'+r.icon+'</div>'+
-        '<div style="flex:1;min-width:0"><div style="font:600 14.5px Inter;color:var(--ink)">'+r.t+'</div>'+
-        '<div style="font-size:12px;color:var(--muted);margin-top:2px">'+r.d+'</div></div>'+
-        '<span style="color:var(--flow);font-size:18px">→</span>';
-      b.addEventListener("click",function(){tone("tap");openRitual(i);});
-      wrap.appendChild(b);
-    });
+  /* ===== HOY ===== */
+  function renderHome(){
+    var s=t();
+    $("jfLang").textContent=s.langLabel;
+    $("jfMute").textContent=muted?"🔇":"🔊";
+    $("jfStreak").textContent=parseInt(get(LS.streak)||"0",10)||0;
+    $("jfGreeting").textContent=greeting();
+    $("jfIntentionLabel").textContent=s.intentionLabel;
+    $("jfAffirmation").textContent=s.affs[affIdx % s.affs.length];
+    var done=get(LS.affirmed)===todayKey();
+    $("jfAffirm").textContent= done ? s.affirmed : s.affirmLabel;
+    $("jfPodLabel").textContent=s.podLabel;
+    $("jfCheckLabel").textContent=s.checkLabel;
+    document.documentElement.lang=lang;
+    applyVoiceLabel();
+    renderPod();
+    renderCheck();
   }
-  function openRitual(i){
-    var s=t(), r=s.rituals[i];
-    $("jfRitualHead").innerHTML='<div style="font:600 10px Inter;letter-spacing:.28em;text-transform:uppercase;color:var(--flow);margin-bottom:8px">'+r.d+'</div>'+
-      '<div style="font-family:Newsreader,serif;font-weight:600;font-size:27px;line-height:1.15;color:var(--ink)">'+r.icon+' '+r.t+'</div>';
-    var st=$("jfRitualSteps"); st.innerHTML="";
-    r.steps.forEach(function(step,n){
-      var d=document.createElement("div");
-      d.style.cssText="display:flex;gap:13px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;animation:jfRise .35s ease both;animation-delay:"+(n*60)+"ms";
-      d.innerHTML='<div style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--flow),var(--flow2));color:#fff;font:700 12px Inter">'+(n+1)+'</div>'+
-        '<div style="font-size:14px;line-height:1.5;color:var(--ink)">'+step+'</div>';
-      st.appendChild(d);
-    });
-    $("jfRitualDone").textContent=s.completeRitual;
-    $("jfRitualView").style.display="block";
-    $("jfRitualView").scrollTop=0;
+  function renderPod(){
+    var s=t(), p=s.practices[dayIndex()%s.practices.length];
+    $("jfPodIcon").textContent=p.icon;
+    $("jfPodTitle").textContent=p.title;
+    $("jfPodSub").textContent=p.desc;
   }
-
   function renderCheck(){
     var s=t(), wrap=$("jfCheckScale"); wrap.innerHTML="";
     var saved=parseInt(get(LS.energy)||"0",10)||0;
@@ -364,10 +469,200 @@
     $("jfCheckTip").textContent= saved? (s.tips[saved-1]||"") : s.energyTip0;
   }
 
+  /* ===== PRÁCTICAS ===== */
+  function renderPracticas(){
+    var s=t();
+    $("jfPracKicker").textContent=s.practicesKicker;
+    $("jfPracTitle").textContent=s.practicesTitle;
+    $("jfPracSub").textContent=s.practicesSub;
+    $("jfPracProgLabel").textContent=s.progressLabel;
+    var st=practiceState();
+    var doneCount=Object.keys(st.done).filter(function(k){return st.done[k];}).length;
+    $("jfPracCount").textContent=doneCount+" / "+s.practices.length;
+    $("jfPracBar").style.width=(doneCount/s.practices.length*100)+"%";
+    var wrap=$("jfPracList"); wrap.innerHTML="";
+    s.practices.forEach(function(p,i){
+      var done=!!st.done[i];
+      var card=document.createElement("div");
+      card.style.cssText="border:1px solid "+(done?"rgba(47,108,160,.5)":"var(--line)")+";border-radius:18px;padding:16px;background:"+(done?"var(--flow-soft)":"var(--card)")+";transition:all .3s ease";
+      card.innerHTML=
+        '<div style="display:flex;align-items:flex-start;gap:13px">'+
+          '<div style="flex:0 0 auto;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:'+(done?"rgba(47,108,160,.3)":"var(--flow-soft)")+';font-size:20px">'+p.icon+'</div>'+
+          '<div style="flex:1;min-width:0">'+
+            '<div style="font-family:Newsreader,serif;font-weight:600;font-size:17px;color:var(--ink);line-height:1.2">'+p.title+'</div>'+
+            '<div style="font-size:12px;color:var(--muted);margin-top:2px">'+p.desc+'</div>'+
+            '<div style="font-size:12px;line-height:1.55;color:var(--soft);font-style:italic;margin-top:8px;border-left:2px solid rgba(47,108,160,.4);padding-left:10px">'+p.extra+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div style="display:flex;gap:9px;margin-top:14px">'+
+          '<button data-play="'+i+'" class="tapfx" style="flex:1;cursor:pointer;border:0;border-radius:999px;padding:11px;font:600 12.5px Inter;color:#fff;background:linear-gradient(135deg,var(--flow),var(--flow2))">'+s.playSession+'</button>'+
+          '<button data-toggle="'+i+'" class="tapfx" style="flex:1;cursor:pointer;border:0;border-radius:999px;padding:11px;font:600 12.5px Inter;color:'+(done?"#fff":"var(--flow)")+';background:'+(done?"var(--flow)":"var(--flow-soft)")+'">'+(done?s.doneLabel:s.markDone)+'</button>'+
+        '</div>';
+      wrap.appendChild(card);
+    });
+    Array.prototype.forEach.call(wrap.querySelectorAll("[data-play]"),function(b){
+      b.addEventListener("click",function(){ tone("tap"); openPractice(parseInt(b.getAttribute("data-play"),10)); });
+    });
+    Array.prototype.forEach.call(wrap.querySelectorAll("[data-toggle]"),function(b){
+      b.addEventListener("click",function(){
+        var i=parseInt(b.getAttribute("data-toggle"),10);
+        var wasDone=!!practiceState().done[i];
+        setPracticeDone(i,!wasDone);
+        if(!wasDone){ tone("success"); var up=bumpStreak(); toast(up?t().streakUp:t().doneLabel); }
+        else tone("tap");
+        renderPracticas();
+      });
+    });
+  }
+  function openPractice(i){
+    var s=t(), p=s.practices[i];
+    if(p.type==="breathe") openBreathe(i); else openPlayer(i);
+  }
+
+  /* ===== IA (bloqueada sin jiPaid) ===== */
+  var iaLoading=false, iaResult="";
+  function renderIA(){
+    var box=$("jfIA");
+    if(!isPaid()){ box.innerHTML=inviteHtml(t().navLockedIA); bindInvite(box); return; }
+    var s=t();
+    box.innerHTML=
+      '<div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:var(--flow);margin-bottom:4px">'+s.iaKicker+'</div>'+
+      '<h2 style="font-family:Newsreader,serif;font-weight:500;font-size:26px;color:var(--ink);margin:0 0 6px">'+s.iaTitle+'</h2>'+
+      '<p style="font-size:13px;color:var(--soft);margin:0 0 16px;line-height:1.5">'+s.iaSub+'</p>'+
+      '<div style="display:flex;gap:11px;align-items:flex-start;margin-bottom:16px">'+
+        '<div style="flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,var(--flow),var(--flow2));font-family:Newsreader,serif;font-weight:700;color:#fff;font-size:16px">J</div>'+
+        '<div style="background:rgba(45,38,58,.06);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:var(--ink)">'+s.iaGreeting+'</div>'+
+      '</div>'+
+      '<textarea id="jfIaInput" placeholder="'+s.iaPlaceholder+'" style="width:100%;min-height:110px;resize:vertical;box-sizing:border-box;background:rgba(45,38,58,.06);border:1px solid var(--line);border-radius:14px;padding:14px;color:var(--ink);font:400 13.5px Inter;line-height:1.5;outline:none"></textarea>'+
+      '<button id="jfIaBtn" class="tapfx" style="width:100%;margin-top:12px;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#fff;background:linear-gradient(135deg,var(--flow),var(--flow2))">'+(iaLoading?s.iaThinking:s.iaBtn)+'</button>'+
+      (iaResult ? '<div style="margin-top:18px;border:1px solid rgba(47,108,160,.3);border-radius:16px;padding:16px;background:var(--flow-soft)"><div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:var(--ink);white-space:pre-wrap">'+iaResult+'</div></div>' : '');
+    $("jfIaInput").value="";
+    $("jfIaBtn").addEventListener("click",runDiagnosis);
+  }
+  var IA_THEMES=[
+    {k:["cansad","fatiga","sueño","dormir","exhaust","tired","sleep"],
+     es:{n:"Tu cuerpo pide recuperación",w:"El cansancio acumulado no se resuelve con fuerza de voluntad: se resuelve con descanso real y buen sueño.",a1:"Acuéstate 30 minutos antes hoy, sin pantalla la última media hora.",a2:"Haz una respiración 4·7·8 antes de dormir para bajar el ritmo."},
+     en:{n:"Your body is asking for recovery",w:"Built-up tiredness isn't solved with willpower — it's solved with real rest and good sleep.",a1:"Go to bed 30 minutes earlier today, no screens in the last half hour.",a2:"Do a 4·7·8 breathing round before sleep to slow your rhythm."}},
+    {k:["estres","estrés","tension","tensión","ansied","nervi","stress","anxious","tense"],
+     es:{n:"Tu sistema nervioso necesita una pausa",w:"La tensión sostenida agota más energía que cualquier tarea física. Bajar el ritmo también es productivo.",a1:"Haz tres rondas de respiración lenta antes de tu próxima tarea.",a2:"Suelta la mandíbula y los hombros ahora mismo, literalmente."},
+     en:{n:"Your nervous system needs a pause",w:"Sustained tension drains more energy than any physical task. Slowing down is also productive.",a1:"Do three rounds of slow breathing before your next task.",a2:"Release your jaw and shoulders right now, literally."}},
+    {k:["sentad","sedentari","espalda","sin mover","quiet","sedentary","desk","back pain"],
+     es:{n:"Tu cuerpo necesita movimiento, no más esfuerzo",w:"Pasar horas quieto agota tanto como el ejercicio, pero sin ninguno de sus beneficios.",a1:"Levántate y estira los brazos hacia el cielo por 30 segundos.",a2:"Camina dos minutos cada hora que trabajes sentado."},
+     en:{n:"Your body needs movement, not more effort",w:"Hours of stillness drain you as much as exercise, but with none of the benefits.",a1:"Stand up and stretch your arms to the sky for 30 seconds.",a2:"Walk for two minutes every hour you spend sitting."}},
+    {k:[],
+     es:{n:"Cuida el equilibrio, no el extremo",w:"Tu energía no se trata de dar el máximo siempre, sino de alternar esfuerzo y recuperación con intención.",a1:"Elige una práctica de JogaBody y hazla hoy, sin esperar el momento perfecto.",a2:"Bebe agua y respira hondo antes de tu siguiente actividad."},
+     en:{n:"Care for balance, not extremes",w:"Your energy isn't about always giving your max — it's about alternating effort and recovery with intention.",a1:"Pick one JogaBody practice and do it today, without waiting for the perfect moment.",a2:"Drink water and take a deep breath before your next activity."}}
+  ];
+  function localDiag(q,L){
+    var s=(q||"").toLowerCase(), best=IA_THEMES[IA_THEMES.length-1], bestScore=0;
+    IA_THEMES.forEach(function(th){
+      if(!th.k.length) return;
+      var sc=0; th.k.forEach(function(w){ if(s.indexOf(w)>=0) sc++; });
+      if(sc>bestScore){ bestScore=sc; best=th; }
+    });
+    var d=best[L]||best.es;
+    if(L==="en") return "Here's what I see:\n\n"+d.w+"\n\nKey principle — "+d.n+"\n\nDo this:\n→ "+d.a1+"\n→ "+d.a2;
+    return "Esto es lo que veo:\n\n"+d.w+"\n\nPrincipio clave — "+d.n+"\n\nHaz esto:\n→ "+d.a1+"\n→ "+d.a2;
+  }
+  function runDiagnosis(){
+    var q=($("jfIaInput").value||"").trim();
+    if(!q||iaLoading) return;
+    tone("tap"); iaLoading=true; iaResult=""; renderIA();
+    var L=lang;
+    var prompt=(L==="es"
+      ? "Eres el guía de energía corporal de JogaBody. Analiza esta situación y responde en español, breve y accionable (máx 110 palabras): nombra el PRINCIPIO clave de energía corporal, la posible causa, y 2 acciones concretas para hoy.\n\nSituación: "
+      : "You are the JogaBody body-energy guide. Analyze this situation and answer in English, brief and actionable (max 110 words): name the key body-energy PRINCIPLE, the likely cause, and 2 concrete actions for today.\n\nSituation: ")+q;
+    function done(txt){ iaLoading=false; iaResult=txt; renderIA(); }
+    function fail(){ done(localDiag(q,L)); }
+    var ep=""; try{ ep=localStorage.getItem("jiAiEndpoint")||(window.JOGA_AI_ENDPOINT||""); }catch(e){}
+    if(!(window.claude&&window.claude.complete)&&!ep){ done(localDiag(q,L)); return; }
+    if(window.claude&&window.claude.complete){
+      window.claude.complete(prompt).then(function(r){ done(String(r||"").trim()||localDiag(q,L)); }).catch(fail);
+    } else if(ep){
+      fetch(ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:prompt})})
+        .then(function(r){return r.json();})
+        .then(function(d){ var tx=(d&&(d.text||d.completion||d.result))||""; if(tx) done(String(tx).trim()); else fail(); })
+        .catch(fail);
+    } else { fail(); }
+  }
+
+  /* ===== LEYES (bloqueada sin jiPaid) ===== */
+  function renderLeyes(){
+    var box=$("jfLeyes");
+    if(!isPaid()){ box.innerHTML=inviteHtml(t().navLockedLeyes); bindInvite(box); return; }
+    var s=t();
+    var html='<div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:var(--flow);margin-bottom:4px">'+s.leyesKicker+'</div>'+
+      '<h2 style="font-family:Newsreader,serif;font-weight:500;font-size:28px;color:var(--ink);margin:0 0 6px">'+s.leyesTitle+'</h2>'+
+      '<p style="font-size:13px;color:var(--soft);margin:0 0 18px;line-height:1.5">'+s.leyesSub+'</p>'+
+      '<div style="display:flex;flex-direction:column;gap:12px">';
+    s.leyes.forEach(function(b){
+      html+='<div style="border:1px solid var(--line);border-radius:18px;padding:16px;background:var(--card)">'+
+        '<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px">'+
+          '<div style="flex:0 0 auto;width:10px;height:10px;border-radius:50%;background:var(--flow)"></div>'+
+          '<div style="font-family:Newsreader,serif;font-weight:600;font-size:16px;color:var(--ink);line-height:1.2">'+b.title+'</div>'+
+        '</div>'+
+        '<div style="font-size:13px;line-height:1.55;color:var(--muted)">'+b.idea+'</div>'+
+        '<div style="font-size:12px;line-height:1.5;color:var(--flow);margin-top:10px;background:var(--flow-soft);border-radius:10px;padding:10px 12px"><b style="color:var(--flow)">→ </b>'+b.ej+'</div>'+
+      '</div>';
+    });
+    html+='</div>';
+    box.innerHTML=html;
+  }
+
+  /* ===== invitación premium (compartida IA/Leyes) ===== */
+  function inviteHtml(title){
+    var s=t();
+    return '<div style="min-height:70vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px 6px">'+
+      '<div style="font-size:44px;margin-bottom:18px">🔒</div>'+
+      '<div style="font:600 10px Inter;letter-spacing:.3em;text-transform:uppercase;color:var(--flow);margin-bottom:14px">'+s.inviteKicker+'</div>'+
+      '<div style="font-family:Newsreader,serif;font-weight:500;font-size:23px;line-height:1.35;color:var(--ink);margin-bottom:14px;max-width:22ch">'+title+'</div>'+
+      '<p style="font-size:13px;line-height:1.6;color:var(--soft);max-width:26ch;margin:0 0 26px">'+s.inviteBody+'</p>'+
+      '<a id="jfInviteCta" href="index.html#pricing" target="_top" class="tapfx" style="text-decoration:none;cursor:pointer;border:0;border-radius:999px;padding:15px 34px;font:600 13px Inter;color:#fff;background:linear-gradient(135deg,var(--flow),var(--flow2));box-shadow:0 14px 34px -14px rgba(47,108,160,.9)">'+s.inviteCta+'</a>'+
+    '</div>';
+  }
+  function bindInvite(box){
+    var a=box.querySelector("#jfInviteCta");
+    if(a) a.addEventListener("click",function(){ tone("tap"); });
+  }
+
+  /* ===== bottom nav ===== */
+  function renderTabbar(){
+    var s=t(), bar=$("jfTabbar"); bar.innerHTML="";
+    var defs=[
+      {key:"hoy",icon:"◈",label:s.navHoy},
+      {key:"ia",icon:"✶",label:s.navIA},
+      {key:"practicas",icon:"☰",label:s.navPrac},
+      {key:"leyes",icon:"❖",label:s.navLeyes}
+    ];
+    defs.forEach(function(d){
+      var active=view===d.key;
+      var b=document.createElement("button");
+      b.className="tapfx";
+      b.style.cssText="border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;padding:4px 14px";
+      b.innerHTML='<span style="font-size:19px;color:'+(active?"var(--flow)":"var(--soft)")+'">'+d.icon+'</span>'+
+        '<span style="font:600 9.5px Inter;letter-spacing:.04em;color:'+(active?"var(--flow)":"var(--soft)")+'">'+d.label+'</span>';
+      b.addEventListener("click",function(){ tone("tap"); goView(d.key); });
+      bar.appendChild(b);
+    });
+  }
+  function goView(v){
+    view=v;
+    $("jfHome").style.display = v==="hoy" ? "block" : "none";
+    $("jfIA").style.display = v==="ia" ? "block" : "none";
+    $("jfPracticas").style.display = v==="practicas" ? "block" : "none";
+    $("jfLeyes").style.display = v==="leyes" ? "block" : "none";
+    if(v==="ia") renderIA();
+    else if(v==="practicas") renderPracticas();
+    else if(v==="leyes") renderLeyes();
+    renderTabbar();
+  }
+
+  /* ===== BREATHE (práctica 1) ===== */
   var bz={running:false,phase:0,round:1,rounds:4,timer:null};
   function breatheReset(){
     bz.running=false; bz.phase=0; bz.round=1;
     if(bz.timer){clearTimeout(bz.timer);bz.timer=null;}
+    if(bz._iv){clearInterval(bz._iv);bz._iv=null;}
     var s=t();
     $("jfBreathePhase").textContent=s.prepare;
     $("jfBreatheCue").textContent=s.cueInhale;
@@ -416,6 +711,7 @@
   function breatheStart(){
     bz.running=true;
     $("jfBreatheToggle").textContent=t().pause;
+    audioCtxUse="breathe"; playSessionAudio();
     runPhase();
   }
   function breathePause(){
@@ -423,6 +719,7 @@
     if(bz.timer){clearTimeout(bz.timer);bz.timer=null;}
     if(bz._iv) clearInterval(bz._iv);
     $("jfBreatheToggle").textContent=t().start;
+    stopVoice();
   }
   function breatheFinish(){
     breathePause();
@@ -431,15 +728,102 @@
     $("jfBreathePhase").textContent="✓";
     $("jfBreatheCount").textContent="";
     $("jfBreatheCue").textContent=s.breatheDone;
+    setPracticeDone(0,true);
     var up=bumpStreak();
     setTimeout(function(){
       $("jfBreatheView").style.display="none";
       breatheReset();
       toast(up?s.streakUp:s.breatheDone);
+      if(view==="practicas") renderPracticas();
     },1400);
+  }
+  function openBreathe(){
+    tone("tap"); breatheReset(); $("jfBreatheView").style.display="block";
+  }
+
+  /* ===== PLAYER genérico (prácticas 2 y 3) ===== */
+  var pl={practiceIdx:1,playing:false,elapsed:0,duration:60,timer:null};
+  function playerReset(i){
+    pl.practiceIdx=i; pl.playing=false; pl.elapsed=0; pl.duration=60;
+    if(pl.timer){clearInterval(pl.timer);pl.timer=null;}
+    var s=t(), p=s.practices[i];
+    $("jfPlayerKicker").textContent=p.desc;
+    $("jfPlayerTitle").textContent=p.title;
+    $("jfPlayerOrb").textContent=p.icon;
+    $("jfPlayerOrb").style.animation="none";
+    $("jfPlayerBar").style.width="0%";
+    $("jfPlayerElapsed").textContent="0:00";
+    $("jfPlayerRemain").textContent="-"+fmt(pl.duration);
+    $("jfPlayerToggle").textContent="▶";
+    $("jfPlayerDone").textContent=s.playerComplete;
+    var steps=$("jfPlayerSteps"); steps.innerHTML="";
+    p.steps.forEach(function(step,n){
+      var d=document.createElement("div");
+      d.setAttribute("data-step",n);
+      d.style.cssText="display:flex;gap:13px;align-items:flex-start;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:15px 16px;transition:background .3s ease,border-color .3s ease";
+      d.innerHTML='<div style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#9fd3ec,#7fc4e6);color:#0e2438;font:700 12px Inter">'+(n+1)+'</div>'+
+        '<div style="font-size:14px;line-height:1.5;color:#eaf6fc">'+step+'</div>';
+      steps.appendChild(d);
+    });
+  }
+  function highlightStep(){
+    var s=t(), p=s.practices[pl.practiceIdx];
+    var frac= pl.duration ? Math.min(1, pl.elapsed/pl.duration) : 0;
+    var idx=Math.min(p.steps.length-1, Math.floor(frac*p.steps.length));
+    var steps=$("jfPlayerSteps");
+    Array.prototype.forEach.call(steps.children,function(el,n){
+      if(n===idx){ el.style.background="rgba(159,211,236,.22)"; el.style.borderColor="rgba(159,211,236,.5)"; }
+      else { el.style.background="rgba(255,255,255,.08)"; el.style.borderColor="rgba(255,255,255,.14)"; }
+    });
+  }
+  function playerTick(){
+    pl.elapsed++;
+    if(voice && voice.duration && !isNaN(voice.duration)) pl.duration=Math.max(20,Math.round(voice.duration));
+    var pct= pl.duration ? Math.min(100, pl.elapsed/pl.duration*100) : 0;
+    $("jfPlayerBar").style.width=pct+"%";
+    $("jfPlayerElapsed").textContent=fmt(pl.elapsed);
+    $("jfPlayerRemain").textContent="-"+fmt(Math.max(0,pl.duration-pl.elapsed));
+    highlightStep();
+    if(pl.elapsed>=pl.duration) finishPlayerSession();
+  }
+  function playerStart(){
+    pl.playing=true;
+    $("jfPlayerToggle").textContent="❚❚";
+    $("jfPlayerOrb").style.animation="jfPulse 2.6s ease-in-out infinite";
+    audioCtxUse="player"; playSessionAudio();
+    if(pl.timer) clearInterval(pl.timer);
+    pl.timer=setInterval(playerTick,1000);
+  }
+  function playerPause(){
+    pl.playing=false;
+    $("jfPlayerToggle").textContent="▶";
+    $("jfPlayerOrb").style.animation="none";
+    if(pl.timer){clearInterval(pl.timer);pl.timer=null;}
+    stopVoice();
+  }
+  function finishPlayerSession(){
+    playerPause();
+    tone("success");
+    setPracticeDone(pl.practiceIdx,true);
+    var up=bumpStreak();
+    toast(up?t().streakUp:t().doneLabel);
+    $("jfPlayerView").style.display="none";
+    if(view==="practicas") renderPracticas();
+  }
+  function openPlayer(i){
+    tone("tap"); playerReset(i); $("jfPlayerView").style.display="block"; $("jfPlayerView").scrollTop=0;
+  }
+
+  function renderStatic(){
+    renderHome();
+    renderTabbar();
+    if(view==="ia") renderIA();
+    else if(view==="practicas") renderPracticas();
+    else if(view==="leyes") renderLeyes();
   }
 
   function init(){
+    goView("hoy");
     renderStatic();
     $("jfLang").addEventListener("click",function(){
       lang=(lang==="es")?"en":"es"; set(LS.lang,lang); tone("tap");
@@ -451,15 +835,15 @@
     });
     $("jfAffirm").addEventListener("click",function(){
       tone("success");
+      set(LS.affirmed,todayKey());
       var up=bumpStreak();
       $("jfAffirm").textContent=t().affirmed;
-      setTimeout(function(){ $("jfAffirm").textContent=t().affirmLabel; },1400);
       toast(up?t().streakUp:t().affirmed);
     });
     $("jfCycle").addEventListener("click",function(){tone("tap");cycleAff(1);});
     $("jfVoiceBtn").addEventListener("click",function(){tone("tap");toggleVoice();});
-    $("jfOpenBreathe").addEventListener("click",function(){
-      tone("tap"); breatheReset(); $("jfBreatheView").style.display="block";
+    $("jfOpenPod").addEventListener("click",function(){
+      tone("tap"); openPractice(dayIndex()%t().practices.length);
     });
     $("jfBreatheBack").addEventListener("click",function(){
       breathePause(); breatheReset(); $("jfBreatheView").style.display="none";
@@ -468,17 +852,25 @@
       tone("tap");
       if(bz.running) breathePause(); else breatheStart();
     });
-    $("jfRitualBack").addEventListener("click",function(){
-      tone("tap"); $("jfRitualView").style.display="none";
+    $("jfPlayerBack").addEventListener("click",function(){
+      playerPause(); $("jfPlayerView").style.display="none";
     });
-    $("jfRitualDone").addEventListener("click",function(){
-      tone("success"); var up=bumpStreak();
-      $("jfRitualView").style.display="none";
-      toast(up?t().streakUp:t().ritualDone);
+    $("jfPlayerToggle").addEventListener("click",function(){
+      tone("tap");
+      if(pl.playing) playerPause(); else playerStart();
     });
+    $("jfPlayerDone").addEventListener("click",function(){ finishPlayerSession(); });
     $("jfBack").addEventListener("click",function(){
       tone("tap"); stopVoice();
-      try{ history.length>1 ? history.back() : null; }catch(e){}
+      try{ if(window.parent&&window.parent!==window&&typeof window.parent.closeApp==="function"){ window.parent.closeApp(); return; } }catch(e){}
+      try{ if(window.parent&&window.parent!==window){ window.parent.postMessage({type:"jogaExit"},"*"); return; } }catch(e){}
+      try{ if(history.length>1){ history.back(); return; } }catch(e){}
+      location.href="app.html";
+    });
+    /* si el usuario compra en otra pestaña/hub y vuelve, refleja el desbloqueo */
+    /* if the user buys in another tab/hub and returns, reflect the unlock */
+    window.addEventListener("storage",function(e){
+      if(e && e.key==="jiPaid"){ if(view==="ia") renderIA(); else if(view==="leyes") renderLeyes(); }
     });
   }
 
