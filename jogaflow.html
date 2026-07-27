@@ -522,6 +522,7 @@
 
   /* ===== IA (bloqueada sin jiPaid) ===== */
   var iaLoading=false, iaResult="";
+  function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function renderIA(){
     var box=$("jfIA");
     if(!isPaid()){ box.innerHTML=inviteHtml(t().navLockedIA); bindInvite(box); return; }
@@ -536,7 +537,7 @@
       '</div>'+
       '<textarea id="jfIaInput" placeholder="'+s.iaPlaceholder+'" style="width:100%;min-height:110px;resize:vertical;box-sizing:border-box;background:rgba(45,38,58,.06);border:1px solid var(--line);border-radius:14px;padding:14px;color:var(--ink);font:400 13.5px Inter;line-height:1.5;outline:none"></textarea>'+
       '<button id="jfIaBtn" class="tapfx" style="width:100%;margin-top:12px;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#fff;background:linear-gradient(135deg,var(--flow),var(--flow2))">'+(iaLoading?s.iaThinking:s.iaBtn)+'</button>'+
-      (iaResult ? '<div style="margin-top:18px;border:1px solid rgba(47,108,160,.3);border-radius:16px;padding:16px;background:var(--flow-soft)"><div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:var(--ink);white-space:pre-wrap">'+iaResult+'</div></div>' : '');
+      (iaResult ? '<div style="margin-top:18px;border:1px solid rgba(47,108,160,.3);border-radius:16px;padding:16px;background:var(--flow-soft)"><div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:var(--ink);white-space:pre-wrap">'+esc(iaResult)+'</div></div>' : '');
     $("jfIaInput").value="";
     $("jfIaBtn").addEventListener("click",runDiagnosis);
   }
@@ -575,16 +576,21 @@
       : "You are the JogaBody body-energy guide. Analyze this situation and answer in English, brief and actionable (max 110 words): name the key body-energy PRINCIPLE, the likely cause, and 2 concrete actions for today.\n\nSituation: ")+q;
     function done(txt){ iaLoading=false; iaResult=txt; renderIA(); }
     function fail(){ done(localDiag(q,L)); }
-    var ep=""; try{ ep=localStorage.getItem("jiAiEndpoint")||(window.JOGA_AI_ENDPOINT||""); }catch(e){}
-    if(!(window.claude&&window.claude.complete)&&!ep){ done(localDiag(q,L)); return; }
+    var JOGA_AI_URL="https://joga-ai.omhotien90.workers.dev";
+    var JOGA_AI_APP="jogabody";
+    function worker(){
+      fetch(JOGA_AI_URL,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({app:JOGA_AI_APP,situacion:q,idioma:L})})
+        .then(function(r){return r.json();})
+        .then(function(d){
+          if(d&&d.texto){ done(String(d.texto).trim()); }
+          else if(d&&(d.error==="limite_diario"||d.error==="limite_mensual")&&d.mensaje){ done(String(d.mensaje)); }
+          else { fail(); }
+        })
+        .catch(fail);
+    }
     if(window.claude&&window.claude.complete){
       window.claude.complete(prompt).then(function(r){ done(String(r||"").trim()||localDiag(q,L)); }).catch(fail);
-    } else if(ep){
-      fetch(ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:prompt})})
-        .then(function(r){return r.json();})
-        .then(function(d){ var tx=(d&&(d.text||d.completion||d.result))||""; if(tx) done(String(tx).trim()); else fail(); })
-        .catch(fail);
-    } else { fail(); }
+    } else { worker(); }
   }
 
   /* ===== LEYES (bloqueada sin jiPaid) ===== */
