@@ -1,0 +1,26 @@
+<!-- joga-lockup.svg — Lockup JOGA (grosor C, degradado dorado) + palabra INTELLIGENCE.
+     El texto usa Manrope con fallback a sans-serif del sistema: si Manrope no
+     está cargada, se ve bien igual (no depende de una fuente externa).
+     JOGA lockup (weight C, gold gradient) + the word INTELLIGENCE.
+     Text uses Manrope with a system sans-serif fallback: it still looks right
+     if Manrope isn't loaded (no dependency on an external font). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" fill="none" role="img" aria-label="JOGA INTELLIGENCE">
+  <defs>
+    <linearGradient id="jogaOroLockup" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8a6a24"/>
+      <stop offset=".26" stop-color="#e7c46a"/>
+      <stop offset=".47" stop-color="#fff6dc"/>
+      <stop offset=".68" stop-color="#dfb85c"/>
+      <stop offset="1" stop-color="#9a7a2e"/>
+    </linearGradient>
+  </defs>
+  <g stroke="url(#jogaOroLockup)" stroke-width="24">
+    <path d="M155 45 V168 C155 208 124 234 80 234"/>
+    <circle cx="330" cy="140" r="94" stroke-dasharray="260 35" stroke-dashoffset="-17.5"/>
+    <path d="M700 45 H600 A55 55 0 0 0 545 100 V180 A55 55 0 0 0 600 235 H700 V148 H636"/>
+    <path d="M768 235 L862 45 L956 235"/>
+  </g>
+  <text x="518" y="322" text-anchor="middle"
+        font-family="Manrope, 'Segoe UI', system-ui, sans-serif" font-weight="600"
+        font-size="46" letter-spacing="22" fill="url(#jogaOroLockup)">INTELLIGENCE</text>
+</svg>

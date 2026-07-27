@@ -208,7 +208,8 @@ if (localStorage.getItem("jiPaid") !== "1") {
       <!-- unlock-overlay -->
       <sc-if value="{{ locked }}" hint-placeholder-val="{{ false }}">
       <div style="position:absolute;inset:0;z-index:100;background:radial-gradient(120% 75% at 50% 38%,#f8f1ea,#f3eae2 78%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 34px;text-align:center">
-        <img src="joga-logo.png" alt="Joga Intelligence" style="height:26px;width:auto;margin-bottom:18px;opacity:.92" />
+        <svg class="joga-emblem" viewBox="0 0 120 120" fill="none" aria-hidden="true" style="width:48px;height:48px;color:#c2564a;margin-bottom:14px"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg>
+        <div style="font:600 9px Inter;letter-spacing:.2em;text-transform:uppercase;color:#8a7464;margin-bottom:18px">JOGA INTELLIGENCE</div>
         <div style="position:relative;margin-bottom:30px;display:grid;place-items:center">
           <div style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(194,86,74,.28),transparent 66%);filter:blur(16px)"></div>
           <img src="assets/logo-jogaventix.png" alt="JogaVentix" style="position:relative;width:212px;height:auto;filter:drop-shadow(0 16px 38px rgba(0,0,0,.55))" />
@@ -292,7 +293,7 @@ if (localStorage.getItem("jiPaid") !== "1") {
         <div style="position:absolute;inset:0;pointer-events:none">
           <sc-for list="{{ confetti }}" as="c" hint-placeholder-count="16"><div style="{{ c.pieceStyle }}"></div></sc-for>
         </div>
-        <img src="joga-logo.png" alt="Joga" style="height:22px;width:auto;opacity:.9;margin-bottom:26px;position:relative;z-index:2" />
+        <svg class="joga-emblem" viewBox="0 0 120 120" fill="none" role="img" aria-label="JOGA" style="width:24px;height:24px;color:#c2564a;opacity:.9;margin-bottom:26px;position:relative;z-index:2"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg>
         <div style="position:relative;width:140px;height:140px;display:grid;place-items:center;margin-bottom:26px">
           <div style="position:absolute;width:110px;height:110px;border-radius:50%;border:2px solid #c2564a;animation:jiCelebRing 1.1s ease-out forwards"></div>
           <div style="position:absolute;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,#c2564a55,transparent 68%);filter:blur(6px)"></div>
@@ -571,7 +572,7 @@ class Component extends DCLogic {
 
     return {
       muteIcon: st.muted ? '🔇' : '🔊',
-      toggleMute: () => this.toggleMute(), exitApp: () => { try{ if(window.parent&&window.parent!==window&&typeof window.parent.closeApp==='function'){ window.parent.closeApp(); return; } }catch(e){} try{ if(window.parent&&window.parent!==window){ window.parent.postMessage({type:'jogaExit'},'*'); return; } }catch(e){} try{ if(history.length>1){ history.back(); return; } }catch(e){} location.href='app.html'; },
+      toggleMute: () => this.toggleMute(), exitApp: () => { this.play('tap'); try{ if(window.parent&&window.parent!==window&&typeof window.parent.closeApp==='function'){ window.parent.closeApp(); return; } }catch(e){} try{ if(window.parent&&window.parent!==window){ window.parent.postMessage({type:'jogaExit'},'*'); return; } }catch(e){} try{ if(history.length>1){ history.back(); return; } }catch(e){} location.href='app.html'; },
       langLabel: L==='es' ? 'ES' : 'EN',
       toggleLang: () => this.toggleLang(),
       intentionLabel: t.intention, focusLabel: t.focusLabel, ritualTitle: t.ritualT, ritualSub: t.ritualS,
@@ -596,7 +597,7 @@ class Component extends DCLogic {
           color: mode===c.key ? '#c2564a' : '#9a7866' } })),
       isHome: st.view==='home', isLibrary: st.view==='library', isIdeas: st.view==='ideas', isIA: st.view==='ia',
       greeting, streak: st.streak, totalSessions: st.totalSessions, totalMin: st.baseMin,
-      affirmation: (affList[st.affIdx % affList.length] || t.aff), aboutOpen: st.aboutOpen, enterApp: () => { if(st.lockOpening) return; this.play('unlock'); this.setState({ lockOpening:true }); setTimeout(()=>{ try{ localStorage.setItem('jiUnlocked_ventmex','1'); }catch(e){} this.setState({ locked:false, lockOpening:false }); }, 850); }, locked: st.locked, lockOpening: st.lockOpening, lockGlyph: st.lockOpening ? '\uD83D\uDD13' : '\uD83D\uDD12', lockStyle: { fontSize:'62px', lineHeight:1, animation: st.lockOpening ? 'jiLockBurst .85s ease-in forwards' : 'jiLockPop .6s ease-out both' }, ringStyle: { position:'absolute', width:'120px', height:'120px', borderRadius:'50%', border:'2px solid rgba(80,40,26,.2)', animation: st.lockOpening ? 'jiRingPulse .85s ease-out forwards' : 'none', opacity: st.lockOpening ? 1 : 0 }, unlockTag: t.unlockTag, unlockCta: t.unlockCta, aboutTitle: t.aboutTitle, aboutBody: t.aboutBody, aboutClose: t.aboutClose, openAbout: () => { this.play('tap'); this.setState({ aboutOpen:true }); }, closeAbout: () => this.setState({ aboutOpen:false }), challengeDays: t.cday, challengeDef: t.cdef, chainRule: t.crule,
+      affirmation: (affList[st.affIdx % affList.length] || t.aff), aboutOpen: st.aboutOpen, enterApp: () => { if(st.lockOpening) return; this.play('unlock'); this.setState({ lockOpening:true }); setTimeout(()=>{ try{ localStorage.setItem('jiUnlocked_ventmex','1'); }catch(e){} this.setState({ locked:false, lockOpening:false }); }, 850); }, locked: st.locked, lockOpening: st.lockOpening, lockGlyph: st.lockOpening ? '\uD83D\uDD13' : '\uD83D\uDD12', lockStyle: { fontSize:'62px', lineHeight:1, animation: st.lockOpening ? 'jiLockBurst .85s ease-in forwards' : 'jiLockPop .6s ease-out both' }, ringStyle: { position:'absolute', width:'120px', height:'120px', borderRadius:'50%', border:'2px solid rgba(80,40,26,.2)', animation: st.lockOpening ? 'jiRingPulse .85s ease-out forwards' : 'none', opacity: st.lockOpening ? 1 : 0 }, unlockTag: t.unlockTag, unlockCta: t.unlockCta, aboutTitle: t.aboutTitle, aboutBody: t.aboutBody, aboutClose: t.aboutClose, openAbout: () => { this.play('tap'); this.setState({ aboutOpen:true }); }, closeAbout: () => { this.play('tap'); this.setState({ aboutOpen:false }); }, challengeDays: t.cday, challengeDef: t.cdef, chainRule: t.crule,
       affirmLabel: st.affirmed ? t.owned : t.own,
       affirm: () => this.affirm(), cycleAff: () => { this.play('tap'); this.setState(s2=>({ affIdx:s2.affIdx+1, affirmed:false })); },
       featured: sessions[0],

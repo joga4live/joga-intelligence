@@ -670,7 +670,13 @@
 .manifesto .apps-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:26px}
 .appcard{display:flex;align-items:center;gap:10px;min-width:0;text-align:left;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:13px 14px;cursor:pointer;color:var(--bone);font-family:var(--grot);transition:border-color .2s,background .2s,transform .2s;width:100%}
 .appcard:hover,.appcard:focus-visible{border-color:var(--ac);background:rgba(255,255,255,.06);transform:translateY(-2px);outline:none}
-.appcard .ac-g{flex:0 0 auto;width:42px;height:42px;border-radius:50%;position:relative;background:radial-gradient(circle at 36% 28%,rgba(255,255,255,.95),rgba(255,255,255,0) 40%),repeating-linear-gradient(0deg,rgba(255,255,255,.13) 0 1px,transparent 1px 5px),radial-gradient(circle at 50% 56%,var(--ac),color-mix(in srgb,var(--ac) 42%,#06040a) 100%);box-shadow:0 6px 18px -7px var(--ac),0 0 22px -4px var(--ac),inset 0 0 0 1px rgba(255,255,255,.1)}
+/* Vuelta 4: brillo bajado/movido + velo oscuro detrás del emblema para que el ícono blanco
+   tenga >=3:1 de contraste (antes 1.25-1.28:1, el brillo casi blanco lo tapaba). El acento
+   (var(--ac)) y el tamaño de la esfera (42px) NO cambian.
+   Round 4: highlight dimmed/moved + dark veil behind the emblem so the white icon reaches
+   >=3:1 contrast (was 1.25-1.28:1, the near-white highlight washed it out). Accent color
+   (var(--ac)) and sphere size (42px) are unchanged. */
+.appcard .ac-g{flex:0 0 auto;width:42px;height:42px;border-radius:50%;position:relative;background:radial-gradient(circle at 26% 18%,rgba(255,255,255,.5),rgba(255,255,255,0) 24%),radial-gradient(circle at 50% 50%,rgba(6,4,10,.48) 0%,rgba(6,4,10,.36) 35%,rgba(6,4,10,0) 58%),repeating-linear-gradient(0deg,rgba(255,255,255,.13) 0 1px,transparent 1px 5px),radial-gradient(circle at 50% 56%,var(--ac),color-mix(in srgb,var(--ac) 42%,#06040a) 100%);box-shadow:0 6px 18px -7px var(--ac),0 0 22px -4px var(--ac),inset 0 0 0 1px rgba(255,255,255,.1)}
 .appcard .ac-g::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid color-mix(in srgb,var(--ac) 55%,transparent);transform:rotate(-18deg) scaleY(.42);opacity:.7;pointer-events:none}
 .appcard .ac-t{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
 .appcard .ac-t b{font-size:13px;letter-spacing:.2px;line-height:1.15}
@@ -689,7 +695,6 @@
 #welcome{min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 22px;position:relative;text-align:center;background:radial-gradient(120% 80% at 50% 6%,rgba(21,18,42,.6),transparent 60%)}
 #jbw-mute{position:absolute;top:18px;left:18px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#cfc6b4;font-size:15px;cursor:pointer;display:grid;place-items:center;z-index:5}
 .jbw-brand{display:flex;align-items:center;gap:10px;margin-bottom:26px;opacity:.9}
-.jbw-brand span{font-family:var(--serif);font-weight:600;letter-spacing:.42em;font-size:15px;color:#E7D9B8}
 .jbw-brand small{font:600 8px/1 system-ui;letter-spacing:.34em;text-transform:uppercase;color:#8a8276}
 .jbw-orb{position:relative;width:200px;height:200px;margin-bottom:28px;animation:jbwFloat 6s ease-in-out infinite;cursor:pointer}
 .jbw-glow{position:absolute;left:50%;top:50%;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(150,108,246,.55),rgba(150,108,246,0) 66%);animation:jbwPulse 5s ease-in-out infinite,jbwHue 18s linear infinite}
@@ -779,7 +784,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 
   <section id="welcome">
     <button id="jbw-mute" aria-label="Silenciar / Mute">🔊</button>
-    <div class="jbw-brand"><span>JOGA</span><small>Intelligence</small></div>
+    <div class="jbw-brand"><svg class="joga-emblem" viewBox="0 0 120 120" fill="none" aria-hidden="true" style="width:20px;height:20px;flex-shrink:0;color:var(--gold)"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg><small>JOGA INTELLIGENCE</small></div>
     <div class="jbw-orb" id="jbw-orb" title="Toca para escuchar a Joga">
       <div class="jbw-glow"></div>
       <div class="jbw-rings"><i class="r1"></i><i class="r2"></i></div>
@@ -1416,6 +1421,8 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
     try{ var _k=UNLOCK_KEY[a.file]; if(_k) localStorage.setItem("jiUnlocked_"+_k,"1"); }catch(e){}
     vtitle.childNodes[0].nodeValue=a.name; vsub.textContent=tagFor(a);
     vframe.src=a.file; vopen.href=a.file;
+    /* Apaga voz+música de bienvenida antes de abrir la app / stop welcome voice+music before opening the app */
+    try{ if(window.__jogaStopWelcome) window.__jogaStopWelcome(); }catch(e){}
     playBoomSfx();
     viewer.classList.add("open"); document.body.style.overflow="hidden";
     document.getElementById("vback").focus();
@@ -1475,11 +1482,15 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
     document.getElementById("ju-err").textContent="";
     document.getElementById("jbw-unlock").classList.add("open"); }
   function closeUnlock(){ document.getElementById("jbw-unlock").classList.remove("open"); }
-  document.getElementById("ju-close").addEventListener("click",closeUnlock);
+  document.getElementById("ju-close").addEventListener("click",function(){ playTapSfx(); closeUnlock(); });
   document.getElementById("jbw-unlock").addEventListener("click",function(e){ if(e.target.id==="jbw-unlock") closeUnlock(); });
+  /* Vuelta 4: un solo sonido por intento. Codigo valido -> solo open (celebra el desbloqueo);
+     codigo invalido -> solo tap (el hueco real que se venia a tapar).
+     Round 4: one sound per attempt. Valid code -> only open (celebrates the unlock);
+     invalid code -> only tap (the real gap this was meant to cover). */
   async function trySubmitCode(){ var u=UM[LANG]||UM.es; var v=(document.getElementById("ju-input").value||"").trim().toUpperCase();
     if(await codeValid(v)){ try{ localStorage.setItem("jiCode",v); }catch(e){} unlockAll(); closeUnlock(); try{playOpenSfx();}catch(e){} var ls=document.querySelectorAll(".appcard.locked"); for(var i=0;i<ls.length;i++){ ls[i].classList.remove("locked"); var lk=ls[i].querySelector(".ac-lock"); if(lk) lk.remove(); var go=ls[i].querySelector(".ac-go"); if(go) go.textContent="\u2192"; } }
-    else { document.getElementById("ju-err").textContent=u.bad; } }
+    else { playTapSfx(); document.getElementById("ju-err").textContent=u.bad; } }
   document.getElementById("ju-go").addEventListener("click",trySubmitCode);
   document.getElementById("ju-input").addEventListener("keydown",function(e){ if(e.key==="Enter") trySubmitCode(); });
 
@@ -1493,11 +1504,19 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
         var c=document.createElement("button");
         c.type="button"; c.className="appcard"+(locked?" locked":""); c.style.setProperty("--ac",a.accent);
         c.setAttribute("aria-label", a.name);
-        c.innerHTML='<span class="ac-g"></span>'+
+        /* Emblema JOGA centrado dentro de la esfera de acento (blanco, para contraste con var(--ac)).
+           Vuelta 4: 22->28px y stroke-width 8/7.5->10/9 para que el trazo efectivo sea >=2px
+           (antes 1.38-1.47px); drop-shadow lo despega del brillo/velo de fondo. Formas y viewBox
+           sin cambios (mismo círculo partido, mismos 3 chevrones).
+           JOGA emblem centered inside the accent sphere (white, for contrast against var(--ac)).
+           Round 4: 22->28px and stroke-width 8/7.5->10/9 so the effective stroke is >=2px
+           (was 1.38-1.47px); drop-shadow lifts it off the background highlight/veil. Shapes and
+           viewBox unchanged (same split circle, same 3 chevrons). */
+        c.innerHTML='<span class="ac-g"><svg class="joga-emblem" viewBox="0 0 120 120" fill="none" aria-hidden="true" style="position:absolute;inset:0;margin:auto;width:28px;height:28px;color:#fff;filter:drop-shadow(0 1px 1.5px rgba(6,4,10,.55)) drop-shadow(0 0 1px rgba(6,4,10,.45))"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="10" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="9"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg></span>'+
           (locked?'<span class="ac-lock">\ud83d\udd12</span>':'')+
           '<span class="ac-t"><b>'+a.name+'</b><span class="ac-tag">'+tagFor(a)+'</span></span>'+
           '<span class="ac-go">'+(locked?'\ud83d\udd12':'\u2192')+'</span>';
-        c.addEventListener("click",function(){ if(!appAvailable(a.file)){ openUnlock(); } else { openApp(a); } });
+        c.addEventListener("click",function(){ if(!appAvailable(a.file)){ playTapSfx(); openUnlock(); } else { openApp(a); } });
         g.appendChild(c);
       });
     }catch(e){}
@@ -1768,6 +1787,7 @@ Lo que dijo la persona: «${text}»`;
     setTimeout(()=>iosHint.classList.add("show"),2200);
   }
   document.getElementById("ios-hint-close").addEventListener("click",()=>{
+    playTapSfx();
     iosHint.classList.remove("show");
     try{ sessionStorage.setItem("jiHintSeen","1"); }catch(e){}
   });
@@ -1884,13 +1904,15 @@ Lo que dijo la persona: «${text}»`;
   function setBackLabel(){ if(backT) backT.textContent=(lang()==='en'?'Main menu':'Menú principal'); }
   function go(){ if(hint) hint.style.display='none'; start(); }
   setMuteIcon(); buildCards(); setHint(); setBackLabel();
-  if(backBtn) backBtn.addEventListener('click', function(){ if(document.body.classList.contains('jbw-v-welcome')){ location.href='index.html'; } else { location.hash=''; setView('welcome'); } });
+  if(backBtn) backBtn.addEventListener('click', function(){ try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){} if(document.body.classList.contains('jbw-v-welcome')){ location.href='index.html'; } else { location.hash=''; setView('welcome'); } });
   muteBtn.addEventListener('click',function(){ muted=!muted; try{localStorage.setItem('jiMute',muted?'1':'0');}catch(e){} try{ if(voice)voice.volume=muted?0:1; if(music)music.volume=muted?0:BASE; }catch(e){} setMuteIcon(); });
   if(hint) hint.addEventListener('click', go);
   orb.addEventListener('click', go);
   replay.addEventListener('click', start);
   var lt=document.getElementById('lang-toggle'); if(lt){ lt.addEventListener('click',function(e){ if(e.target.closest('button[data-lang]')){ setHint(); setBackLabel(); buildCards(); setTimeout(function(){ if(hint && hint.style.display!=='none') return; start(); },60); } }); }
   var ie=document.getElementById('intro-enter'); if(ie){ ie.addEventListener('click', function(){ setTimeout(go,450); }); }
+  /* Expone forma de apagar voz+música+tipeo de la bienvenida desde fuera del IIFE (p.ej. openApp) / expose a way to stop welcome voice+music+typing from outside this IIFE (e.g. openApp) */
+  window.__jogaStopWelcome = function(){ try{ if(raf){ cancelAnimationFrame(raf); raf=null; } if(voice){ voice.pause(); } if(music){ music.pause(); } }catch(e){} };
 })();
 </script>
 <script>
@@ -1951,12 +1973,12 @@ Lo que dijo la persona: «${text}»`;
     if(d.total===0&&d.best===0) h+='<div class="jm-hint">'+T.hint0+'</div>';
     el.innerHTML=h;
     var cb=document.getElementById('jm-cert-btn');
-    if(cb) cb.onclick=function(){ window.__jogaCert && window.__jogaCert(EN); };
+    if(cb) cb.onclick=function(){ try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){} window.__jogaCert && window.__jogaCert(EN); };
     Array.prototype.forEach.call(el.querySelectorAll('.jm-card.won'),function(cd){
-      cd.onclick=function(){ var ix=parseInt(cd.getAttribute('data-card'),10); if(!isNaN(ix)&&window.__jogaCard) window.__jogaCard(ix,EN); };
+      cd.onclick=function(){ try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){} var ix=parseInt(cd.getAttribute('data-card'),10); if(!isNaN(ix)&&window.__jogaCard) window.__jogaCard(ix,EN); };
     });
     Array.prototype.forEach.call(el.querySelectorAll('.jm-p'),function(pp,ix){
-      pp.onclick=function(){ if(window.__jogaFrases) window.__jogaFrases(ix, d.p[ix], EN); };
+      pp.onclick=function(){ try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){} if(window.__jogaFrases) window.__jogaFrases(ix, d.p[ix], EN); };
     });
   }
   var t=null;
@@ -1994,6 +2016,7 @@ Lo que dijo la persona: «${text}»`;
     el.innerHTML=h; el.style.display='block';
     var tog=document.getElementById('jr-tog');
     if(tog) tog.onclick=function(){
+      try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){}
       if(g('jiRemindOn')==='1'){ st('jiRemindOn','0'); saveCfg(); render(); return; }
       Notification.requestPermission().then(function(p){
         if(p!=='granted'){ alert(EN?'Enable notifications in your browser to use the reminder.':'Activa las notificaciones en tu navegador para usar el recordatorio.'); return; }
@@ -2002,7 +2025,7 @@ Lo que dijo la persona: «${text}»`;
       });
     };
     Array.prototype.forEach.call(el.querySelectorAll('.jr-h'),function(b){
-      b.onclick=function(){ st('jiRemindHour',b.getAttribute('data-h')); saveCfg(); render(); };
+      b.onclick=function(){ try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){} st('jiRemindHour',b.getAttribute('data-h')); saveCfg(); render(); };
     });
   }
   document.addEventListener('click', function(){ setTimeout(render,300); }, true);
@@ -2077,6 +2100,7 @@ Lo que dijo la persona: «${text}»`;
     img.style.display='none'; dl.style.display='none';
     el.style.display='flex';
     gen.onclick=function(){
+      try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){}
       var nm=(inp.value||'').trim(); if(!nm){ inp.focus(); return; }
       try{ localStorage.setItem('jiCertName',nm); }catch(e){}
       var url=draw(nm,EN);
@@ -2084,7 +2108,7 @@ Lo que dijo la persona: «${text}»`;
       dl.href=url; dl.setAttribute('download', (EN?'Joga-Certificate-':'Joga-Certificado-')+nm.replace(/\s+/g,'-')+'.png');
       dl.style.display='inline-block';
     };
-    cl.onclick=function(){ el.style.display='none'; };
+    cl.onclick=function(){ try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){} el.style.display='none'; };
   };
 })();
 </script>
@@ -2163,7 +2187,7 @@ window.__jogaQuotes={
     }
     el.innerHTML=h; el.style.display='block';
     Array.prototype.forEach.call(el.querySelectorAll('[data-m]'),function(b){
-      b.onclick=function(){ st('jiCheckDay',day()); st('jiCheckMood',b.getAttribute('data-m')); render(); };
+      b.onclick=function(){ try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){} st('jiCheckDay',day()); st('jiCheckMood',b.getAttribute('data-m')); render(); };
     });
   }
   document.addEventListener('click', function(){ setTimeout(render,320); }, true);
@@ -2225,7 +2249,7 @@ window.__jogaQuotes={
     dl.href=url; dl.textContent=EN?'Download':'Descargar';
     dl.setAttribute('download','Joga-Carta-'+CARDS[i][0]+'.png');
     cl.textContent=EN?'Close':'Cerrar';
-    cl.onclick=function(){ el.style.display='none'; };
+    cl.onclick=function(){ try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){} el.style.display='none'; };
     el.style.display='flex';
   };
 })();
@@ -2286,6 +2310,7 @@ window.__jogaQuotes={
     list.innerHTML=h;
     Array.prototype.forEach.call(list.querySelectorAll('[data-q]'),function(b){
       b.onclick=function(){
+        try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){}
         var i=parseInt(b.getAttribute('data-q'),10);
         var url=drawQuote(NAMES[ix],deck[i],i,EN);
         var a=document.createElement('a'); a.href=url; a.download='Joga-'+NAMES[ix]+'-'+(EN?'Quote':'Frase')+'-'+(i+1)+'.png';
@@ -2293,7 +2318,7 @@ window.__jogaQuotes={
       };
     });
     var cl=document.getElementById('jq-close'); cl.textContent=EN?'Close':'Cerrar';
-    cl.onclick=function(){ el.style.display='none'; };
+    cl.onclick=function(){ try{ if(typeof playTapSfx==='function') playTapSfx(); }catch(e){} el.style.display='none'; };
     el.style.display='flex';
   };
 })();
