@@ -1418,7 +1418,15 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
         vopen=document.getElementById("vopen");
   function openApp(a){
     if(!appAvailable(a.file)){ openUnlock(); return; }
-    try{ var _k=UNLOCK_KEY[a.file]; if(_k) localStorage.setItem("jiUnlocked_"+_k,"1"); }catch(e){}
+    /* Fase A: NO estampar la llave por-app aquí para el FREE_FILE (JogaBody) — antes esto
+       marcaba jiUnlocked_jogaflow="1" con solo abrir la tarjeta gratis, sin haber pagado
+       nada, lo que habría regalado las secciones premium de IA/Leyes de JogaBody a
+       cualquiera. Para las apps de pago es redundante (appAvailable ya exigió la llave).
+       Phase A: do NOT stamp the per-app key here for the FREE_FILE (JogaBody) — this used
+       to set jiUnlocked_jogaflow="1" just by opening the free card, with nothing paid,
+       which would have given away JogaBody's premium AI/Laws sections to anyone. For paid
+       apps this write is redundant (appAvailable already required the key). */
+    try{ if(a.file!==FREE_FILE){ var _k=UNLOCK_KEY[a.file]; if(_k) localStorage.setItem("jiUnlocked_"+_k,"1"); } }catch(e){}
     vtitle.childNodes[0].nodeValue=a.name; vsub.textContent=tagFor(a);
     vframe.src=a.file; vopen.href=a.file;
     /* Apaga voz+música de bienvenida antes de abrir la app / stop welcome voice+music before opening the app */
@@ -1428,15 +1436,53 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
     document.getElementById("vback").focus();
   }
 
-  /* ===== Sistema de candados (paywall) ===== */
+  /* ===== Sistema de candados (paywall) — Fase A: candado por app, 28-jul ===== */
+  /* ===== Lock system (paywall) — Phase A: per-app lock, Jul 28 ===== */
   var FREE_FILE="jogaflow.html";
   var UNLOCK_KEY={"subment.html":"subment","jogatime.html":"jogatime","protoneutron.html":"protoneutron","metodoexito.html":"pasley","monexium.html":"monexium","ventmex.html":"ventmex","jogaflow.html":"jogaflow"};
-  /* Validación por hash SHA-256 vía gate.js / SHA-256 hash validation via gate.js */
-  async function codeValid(v){ if(!v) return false; return await window.jogaGate.validate(v); }
+  /* Las 6 llaves de pago (sin JogaBody, que es gratis y tiene la suya aparte para su
+     sección premium). Se usa para saber si un código/migración cubre el paquete completo.
+     The 6 paid keys (JogaBody excluded — it's free and has its own key for its premium
+     section). Used to tell whether a code/migration covers the full bundle. */
+  var PAID_KEYS=["subment","jogatime","protoneutron","pasley","monexium","ventmex"];
+  function appUnlocked(key){ try{ return localStorage.getItem("jiUnlocked_"+key)==="1"; }catch(e){ return false; } }
+  /* Migración defensiva (una vez, idempotente): si ya tenías acceso completo (jiPaid=1)
+     de antes del candado por-app, se te otorgan las 6 llaves de pago + JogaBody, para que
+     nadie pierda acceso. No reintroduce jiPaid como criterio de entrada: solo se lee aquí
+     para donar las llaves nuevas; abajo, appAvailable ya no lo consulta.
+     Defensive migration (once, idempotent): if you already had full access (jiPaid=1)
+     from before the per-app gate, you're granted the 6 paid keys + JogaBody, so nobody
+     loses access. Does not reintroduce jiPaid as an entry criterion: it's only read here
+     to hand out the new keys; appAvailable below no longer consults it. */
+  (function migrateUnlockKeys(){
+    try{
+      if(localStorage.getItem("jiPaid")==="1"){
+        PAID_KEYS.concat(["jogaflow"]).forEach(function(k){
+          if(localStorage.getItem("jiUnlocked_"+k)!=="1") localStorage.setItem("jiUnlocked_"+k,"1");
+        });
+      }
+    }catch(e){}
+  })();
+  /* Validación por hash SHA-256 vía gate.js; ahora informa QUÉ apps abre el código.
+     SHA-256 hash validation via gate.js; now reports WHICH apps the code unlocks. */
+  async function checkCode(v){ if(!v) return {valid:false,apps:[]}; return await window.jogaGate.validate(v); }
   var WA_NUMBER="12107496420";   /* tu número WhatsApp: +1 210 749 6420 */
-  function jiPaid(){ try{return localStorage.getItem("jiPaid")==="1";}catch(e){return false;} }
-  function unlockAll(){ try{ localStorage.setItem("jiPaid","1"); for(var k in UNLOCK_KEY){ localStorage.setItem("jiUnlocked_"+UNLOCK_KEY[k],"1"); } }catch(e){} }
-  function appAvailable(file){ return file===FREE_FILE || jiPaid(); }
+  /* Aplica el desbloqueo de un código válido: llave por cada app que reporta validate().
+     Si esa lista cubre las 6 de pago, además regala la de JogaBody (bono, no vendido
+     aparte) y jiPaid (bandera agregada que ya usan retos.html y el badge "Premium activo"
+     de index.html — deja de ser criterio de entrada, pasa a ser un derivado).
+     Applies the unlock for a valid code: a key for each app validate() reports. If that
+     list covers the 6 paid ones, it also grants the JogaBody key (bonus, not sold on its
+     own) and jiPaid (an aggregate flag already used by retos.html and index.html's
+     "Premium active" badge — no longer an entry criterion, now a derived signal). */
+  function applyUnlock(apps){
+    try{
+      (apps||[]).forEach(function(k){ localStorage.setItem("jiUnlocked_"+k,"1"); });
+      var hasAll=PAID_KEYS.every(function(k){ return (apps||[]).indexOf(k)>=0; });
+      if(hasAll){ localStorage.setItem("jiUnlocked_jogaflow","1"); localStorage.setItem("jiPaid","1"); }
+    }catch(e){}
+  }
+  function appAvailable(file){ if(file===FREE_FILE) return true; var k=UNLOCK_KEY[file]; return !!k && appUnlocked(k); }
   function waHref(){ var msg=encodeURIComponent(LANG==="en"?"Hi! I want to unlock the full Joga 30-day challenge":"¡Hola! Quiero desbloquear el Reto Joga completo de 30 días"); return WA_NUMBER? ("https://wa.me/"+WA_NUMBER+"?text="+msg) : "#"; }
   (function(){ var s=document.createElement("style"); s.textContent=
     ".appcard{position:relative}"+
@@ -1469,8 +1515,14 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
       '<p class="ju-disc" id="ju-disc"></p></div>';
     document.body.appendChild(m);
   })();
-  var UM={ es:{title:"Reto completo bloqueado",sub:"JogaBody es gratis. Para desbloquear las otras 6 apps y el reto de 30 días, escríbeme por WhatsApp y te paso tu código personal.",wa:"Desbloquear por WhatsApp",or:"¿Ya tienes tu código?",ph:"TU CÓDIGO",go:"Entrar",bad:"Código incorrecto o ya usado. Verifícalo o escríbeme por WhatsApp.",disc:"🔒 Tu código es personal e intransferible y está ligado a tu acceso. Compartirlo cancela tu suscripción sin reembolso. Cada acceso queda registrado."},
-    en:{title:"Full challenge locked",sub:"JogaBody is free. To unlock the other 6 apps and the 30-day challenge, message me on WhatsApp and I'll send your personal code.",wa:"Unlock via WhatsApp",or:"Already have your code?",ph:"YOUR CODE",go:"Enter",bad:"Wrong or already-used code. Check it or message me on WhatsApp.",disc:"🔒 Your code is personal and non-transferable, tied to your access. Sharing it cancels your subscription with no refund. Every access is logged."} };
+  /* T4: el texto ya no promete "las 6 apps" con un solo código — hay dos niveles
+     ($50/año una app, $150/año las seis) y este modal se abre al tocar CUALQUIER
+     tarjeta bloqueada, no solo desde el reto de 30 días.
+     T4: the copy no longer promises "all 6 apps" from one code — there are two tiers
+     ($50/yr one app, $150/yr all six) and this modal opens from ANY locked card, not
+     just from the 30-day challenge. */
+  var UM={ es:{title:"App bloqueada",sub:"JogaBody es gratis. Para desbloquear esta app (o las seis con el plan completo), escríbeme por WhatsApp y te paso tu código.",wa:"Desbloquear por WhatsApp",or:"¿Ya tienes tu código?",ph:"TU CÓDIGO",go:"Entrar",bad:"Código incorrecto o ya usado. Verifícalo o escríbeme por WhatsApp.",disc:"🔒 Tu código es personal e intransferible y está ligado a tu acceso. Compartirlo cancela tu suscripción sin reembolso. Cada acceso queda registrado."},
+    en:{title:"App locked",sub:"JogaBody is free. To unlock this app (or all six with the full plan), message me on WhatsApp and I'll send your code.",wa:"Unlock via WhatsApp",or:"Already have your code?",ph:"YOUR CODE",go:"Enter",bad:"Wrong or already-used code. Check it or message me on WhatsApp.",disc:"🔒 Your code is personal and non-transferable, tied to your access. Sharing it cancels your subscription with no refund. Every access is logged."} };
   function openUnlock(){ var u=UM[LANG]||UM.es;
     document.getElementById("ju-title").textContent=u.title;
     document.getElementById("ju-sub").textContent=u.sub;
@@ -1489,7 +1541,17 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
      Round 4: one sound per attempt. Valid code -> only open (celebrates the unlock);
      invalid code -> only tap (the real gap this was meant to cover). */
   async function trySubmitCode(){ var u=UM[LANG]||UM.es; var v=(document.getElementById("ju-input").value||"").trim().toUpperCase();
-    if(await codeValid(v)){ try{ localStorage.setItem("jiCode",v); }catch(e){} unlockAll(); closeUnlock(); try{playOpenSfx();}catch(e){} var ls=document.querySelectorAll(".appcard.locked"); for(var i=0;i<ls.length;i++){ ls[i].classList.remove("locked"); var lk=ls[i].querySelector(".ac-lock"); if(lk) lk.remove(); var go=ls[i].querySelector(".ac-go"); if(go) go.textContent="\u2192"; } }
+    var result=await checkCode(v);
+    if(result && result.valid){
+      try{ localStorage.setItem("jiCode",v); }catch(e){} applyUnlock(result.apps); closeUnlock(); try{playOpenSfx();}catch(e){}
+      /* Solo quita el candado visual de las tarjetas que este codigo si abrio (per-app), no de todas.
+         Only clears the visual lock on the cards this code actually unlocked (per-app), not all of them. */
+      var ls=document.querySelectorAll(".appcard.locked");
+      for(var i=0;i<ls.length;i++){
+        if(!appAvailable(ls[i].getAttribute("data-file"))) continue;
+        ls[i].classList.remove("locked"); var lk=ls[i].querySelector(".ac-lock"); if(lk) lk.remove(); var go=ls[i].querySelector(".ac-go"); if(go) go.textContent="\u2192";
+      }
+    }
     else { playTapSfx(); document.getElementById("ju-err").textContent=u.bad; } }
   document.getElementById("ju-go").addEventListener("click",trySubmitCode);
   document.getElementById("ju-input").addEventListener("keydown",function(e){ if(e.key==="Enter") trySubmitCode(); });
@@ -1504,6 +1566,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
         var c=document.createElement("button");
         c.type="button"; c.className="appcard"+(locked?" locked":""); c.style.setProperty("--ac",a.accent);
         c.setAttribute("aria-label", a.name);
+        c.setAttribute("data-file", a.file); /* para refrescar la tarjeta correcta tras un código / to refresh the right card after a code */
         /* Emblema JOGA centrado dentro de la esfera de acento (blanco, para contraste con var(--ac)).
            Vuelta 4: 22->28px y stroke-width 8/7.5->10/9 para que el trazo efectivo sea >=2px
            (antes 1.38-1.47px); drop-shadow lo despega del brillo/velo de fondo. Formas y viewBox

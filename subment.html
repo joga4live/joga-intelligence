@@ -2,10 +2,30 @@
 <html>
 <head>
 <script>
-/* Candado Joga: requiere codigo validado en index.html / Joga gate: requires code validated at index.html */
-if (localStorage.getItem("jiPaid") !== "1") {
-  window.location.replace("index.html");
-}
+/* Candado Joga (Fase A, 28-jul): esta app revisa SU PROPIA llave (jiUnlocked_subment),
+   no la bandera global jiPaid — así un código de $50 (una app) no regala las otras 5.
+   Migración defensiva (una vez, idempotente): si ya tenías acceso completo (jiPaid=1)
+   de antes de este candado por-app, se te otorgan las 6 llaves de pago + JogaBody para
+   que nadie pierda acceso. jiPaid deja de ser criterio de entrada aquí; solo se lee
+   para donar las llaves nuevas.
+   Joga gate (Phase A, Jul 28): this app checks ITS OWN key (jiUnlocked_subment), not
+   the global jiPaid flag — so a $50 code (one app) doesn't give away the other 5.
+   Defensive migration (once, idempotent): if you already had full access (jiPaid=1)
+   from before this per-app gate, you're granted the 6 paid keys + JogaBody so nobody
+   loses access. jiPaid is no longer an entry criterion here; it's only read to hand
+   out the new keys. */
+(function(){
+  try{
+    if (localStorage.getItem("jiPaid") === "1") {
+      ["subment","jogatime","protoneutron","pasley","monexium","ventmex","jogaflow"].forEach(function(k){
+        if (localStorage.getItem("jiUnlocked_"+k) !== "1") localStorage.setItem("jiUnlocked_"+k, "1");
+      });
+    }
+  }catch(e){}
+  if (localStorage.getItem("jiUnlocked_subment") !== "1") {
+    window.location.replace("index.html");
+  }
+})();
 </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

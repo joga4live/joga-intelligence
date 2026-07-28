@@ -1417,18 +1417,63 @@
          ACCESO PREMIUM — mismo sistema que app.html (fuente oficial).
          Validación por hash SHA-256 vía gate.js (window.jogaGate.validate).
          Access via SHA-256 hash validation through gate.js (window.jogaGate.validate).
-         Al desbloquear activa la MISMA llave (jiPaid) que usan los apps,
-         así desbloquear aquí abre los módulos en app.html.
+         Fase A (28-jul): cada módulo abre con SU propia llave (jiUnlocked_<app>), no con
+         una bandera global — así un código de $50 (una app) no regala las otras cinco.
+         Phase A (Jul 28): each module unlocks with ITS OWN key (jiUnlocked_<app>), not a
+         global flag — so a $50 code (one app) doesn't give away the other five.
          ============================================================ */
       const UNLOCK_KEY = {"subment.html":"subment","jogatime.html":"jogatime","protoneutron.html":"protoneutron","metodoexito.html":"pasley","monexium.html":"monexium","ventmex.html":"ventmex","jogaflow.html":"jogaflow"};
+      /* Las 6 llaves de pago (JogaBody es gratis y tiene la suya aparte para su sección
+         premium). Sirve para saber si un código/migración cubre el paquete completo.
+         The 6 paid keys (JogaBody is free and has its own key for its premium section).
+         Used to tell whether a code/migration covers the full bundle. */
+      const PAID_KEYS = ["subment","jogatime","protoneutron","pasley","monexium","ventmex"];
+      function appUnlocked(key){ try{ return localStorage.getItem("jiUnlocked_"+key)==="1"; }catch(e){ return false; } }
+      function moduleUnlocked(a){ const k=UNLOCK_KEY[a.getAttribute("href")]; return !k || appUnlocked(k); }
+      /* Migración defensiva (una vez, idempotente): si ya tenías acceso completo (jiPaid=1)
+         de antes del candado por-app, se te otorgan las 6 llaves de pago + JogaBody, para
+         que nadie pierda acceso. No reintroduce jiPaid como criterio de entrada.
+         Defensive migration (once, idempotent): if you already had full access (jiPaid=1)
+         from before the per-app gate, you're granted the 6 paid keys + JogaBody, so nobody
+         loses access. Does not reintroduce jiPaid as an entry criterion. */
+      (function migrateUnlockKeys(){
+        try{
+          if(localStorage.getItem("jiPaid")==="1"){
+            PAID_KEYS.concat(["jogaflow"]).forEach(function(k){
+              if(localStorage.getItem("jiUnlocked_"+k)!=="1") localStorage.setItem("jiUnlocked_"+k,"1");
+            });
+          }
+        }catch(e){}
+      })();
 
-      async function codeValid(v){ if(!v) return false; return await window.jogaGate.validate(v); }
-      function doUnlock(){ try{ localStorage.setItem("jiPaid","1"); for(var k in UNLOCK_KEY){ localStorage.setItem("jiUnlocked_"+UNLOCK_KEY[k],"1"); } }catch(e){} }
+      /* Ahora informa QUÉ apps abre el código, no solo si es válido / now reports WHICH
+         apps the code unlocks, not just valid or not. */
+      async function checkCode(v){ if(!v) return {valid:false,apps:[]}; return await window.jogaGate.validate(v); }
+      /* Aplica el desbloqueo: llave por cada app que reporta validate(); si cubre las 6 de
+         pago, además regala JogaBody (bono) y jiPaid (bandera agregada que ya usan
+         retos.html y el sello "Premium activo" de aquí abajo — deja de ser criterio de
+         entrada, pasa a ser un derivado).
+         Applies the unlock: a key per app validate() reports; if it covers the 6 paid
+         ones, it also grants JogaBody (bonus) and jiPaid (an aggregate flag already used
+         by retos.html and the "Premium active" badge below — no longer an entry
+         criterion, now a derived signal). */
+      function applyUnlock(apps){
+        try{
+          (apps||[]).forEach(function(k){ localStorage.setItem("jiUnlocked_"+k,"1"); });
+          const hasAll = PAID_KEYS.every(function(k){ return (apps||[]).indexOf(k)>=0; });
+          if(hasAll){ localStorage.setItem("jiUnlocked_jogaflow","1"); localStorage.setItem("jiPaid","1"); }
+        }catch(e){}
+      }
 
       const ov = document.getElementById("unlockOverlay");
       const inp = document.getElementById("unlockInput");
       const err = document.getElementById("unlockError");
 
+      /* isUnlocked() = "tiene el paquete completo" (jiPaid, derivado — ver applyUnlock).
+         Se usa para el sello "Premium activo" y para saltar directo al hub desde los
+         botones de precio. isUnlocked() = "has the full bundle" (jiPaid, derived — see
+         applyUnlock). Used for the "Premium active" badge and to jump straight to the hub
+         from the pricing buttons. */
       function isUnlocked(){ try { return localStorage.getItem("jiPaid") === "1"; } catch(e){ return false; } }
 
       function reflectPremium(){
@@ -1456,14 +1501,21 @@
         err.textContent=""; inp.value=""; ov.style.display="flex"; setTimeout(()=>inp.focus(),50);
       }
       function closeUnlock(){ ov.style.display="none"; }
+      /* Fase A: cada módulo revisa SU propia llave, no isUnlocked() (que es "las 6").
+         Un código de una sola app deja a esa app abierta y las otras cinco bloqueadas.
+         Phase A: each module checks ITS OWN key, not isUnlocked() (which means "all 6").
+         A single-app code leaves that app open and the other five locked. */
       document.querySelectorAll('a.module[data-lock="1"]').forEach(function(a){
-        a.addEventListener("click", function(e){ if(!isUnlocked()){ e.preventDefault(); openUnlock(); } });
+        a.addEventListener("click", function(e){ if(!moduleUnlocked(a)){ e.preventDefault(); openUnlock(); } });
       });
-      if(isUnlocked()){ document.querySelectorAll(".mod-lock").forEach(function(el){ el.style.display="none"; }); }
+      document.querySelectorAll('a.module[data-lock="1"]').forEach(function(a){
+        if(moduleUnlocked(a)){ const lk=a.querySelector(".mod-lock"); if(lk) lk.style.display="none"; }
+      });
       async function tryUnlock(){
         const val=(inp.value||"").trim();
-        if(await codeValid(val)){
-          doUnlock();
+        const result = await checkCode(val);
+        if(result && result.valid){
+          applyUnlock(result.apps);
           closeUnlock(); reflectPremium();
           window.location.href="app.html?tour=1&present=1";
         } else {

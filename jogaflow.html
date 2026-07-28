@@ -193,7 +193,48 @@
           affirmed:"jfAffirmedDay",practices:"jiPractices_jogaflow"};
   function get(k){try{return localStorage.getItem(k);}catch(e){return null;}}
   function set(k,v){try{localStorage.setItem(k,v);}catch(e){}}
-  function isPaid(){try{return localStorage.getItem("jiPaid")==="1";}catch(e){return false;}}
+  /* Fase A (28-jul): JogaBody es gratis (Hoy+Prácticas), pero IA y Leyes son premium y
+     ahora se gatean con SU PROPIA llave (jiUnlocked_jogaflow), no con jiPaid global —
+     mismo criterio por-app que las otras 6. Se otorga como bono junto con el paquete
+     completo de 6 (ver applyUnlock en app.html/index.html), no se vende aparte.
+     Phase A (Jul 28): JogaBody is free (Today+Practices), but AI and Laws are premium and
+     now gate on THEIR OWN key (jiUnlocked_jogaflow), not the global jiPaid — same
+     per-app criterion as the other 6. Granted as a bonus together with the full 6-app
+     bundle (see applyUnlock in app.html/index.html), not sold on its own. */
+  function isPaid(){try{return localStorage.getItem("jiUnlocked_jogaflow")==="1";}catch(e){return false;}}
+  /* Migración defensiva (una vez, idempotente): si ya tenías acceso completo (jiPaid=1)
+     de antes del candado por-app, se te otorga la llave de JogaBody (y las 6 de pago,
+     por si esta es la primera app que abres) para que no pierdas esta sección.
+     Defensive migration (once, idempotent): if you already had full access (jiPaid=1)
+     from before the per-app gate, you're granted JogaBody's key (and the 6 paid ones,
+     in case this is the first app you open) so you don't lose this section. */
+  (function migrateUnlockKeys(){
+    try{
+      if(localStorage.getItem("jiPaid")==="1"){
+        ["subment","jogatime","protoneutron","pasley","monexium","ventmex","jogaflow"].forEach(function(k){
+          if(localStorage.getItem("jiUnlocked_"+k)!=="1") localStorage.setItem("jiUnlocked_"+k,"1");
+        });
+      }
+    }catch(e){}
+  })();
+  /* Barrido (28-jul, vuelta 2): la openApp() vieja, en vivo hoy, estampaba
+     jiUnlocked_jogaflow con solo tocar la tarjeta GRATIS de JogaBody, antes de que esta
+     llave gateara nada. Ahora que sí gatea IA/Leyes, ese residuo se volvería una llave
+     premium regalada. Se barre una vez: todo poseedor legítimo tiene jiPaid="1" en el
+     mismo acto (unlockAll/doUnlock viejos, applyUnlock nuevo y la migración de arriba),
+     así que esto nunca toca a quien sí pagó.
+     Sweep (Jul 28, round 2): the old openApp(), live today, stamped jiUnlocked_jogaflow
+     just from tapping JogaBody's FREE card, before this key gated anything. Now that it
+     gates AI/Laws, that leftover would become a free premium key. Swept once: every
+     legitimate holder also has jiPaid="1" in the same act (old unlockAll/doUnlock, new
+     applyUnlock, and the migration above), so this never touches a real buyer. */
+  (function sweepFreeCardResidue(){
+    try{
+      if(localStorage.getItem("jiPaid")!=="1" && localStorage.getItem("jiUnlocked_jogaflow")==="1"){
+        localStorage.removeItem("jiUnlocked_jogaflow");
+      }
+    }catch(e){}
+  })();
 
   var lang = (get(LS.lang)==="en")?"en":"es";
   var muted = get(LS.mute)==="1";
@@ -279,7 +320,7 @@
       navLockedIA:"El diagnóstico con IA se abre con tu acceso premium.",
       navLockedLeyes:"Las leyes de tu energía se abren con tu acceso premium.",
       inviteKicker:"Acceso premium",
-      inviteBody:"Hoy y Prácticas son gratis para siempre. Con tu acceso premium desbloqueas esta sección en JogaBody y en las 6 apps del suite.",
+      inviteBody:"Hoy y Prácticas son gratis para siempre. Esta sección viene incluida con el plan completo de las seis apps.",
       inviteCta:"Ver planes",
       iaKicker:"Diagnóstico IA",iaTitle:"¿Cómo está tu energía hoy?",
       iaSub:"Cuéntame cómo te sientes y te sugiero qué ajustar.",
@@ -342,7 +383,7 @@
       navLockedIA:"AI diagnosis unlocks with your premium access.",
       navLockedLeyes:"The laws of your energy unlock with your premium access.",
       inviteKicker:"Premium access",
-      inviteBody:"Today and Practices are free forever. With your premium access you unlock this section in JogaBody and in all 6 apps of the suite.",
+      inviteBody:"Today and Practices are free forever. This section comes included with the full six-app plan.",
       inviteCta:"See plans",
       iaKicker:"AI diagnosis",iaTitle:"How is your energy today?",
       iaSub:"Tell me how you feel and I'll suggest what to adjust.",
@@ -520,7 +561,7 @@
     if(p.type==="breathe") openBreathe(i); else openPlayer(i);
   }
 
-  /* ===== IA (bloqueada sin jiPaid) ===== */
+  /* ===== IA (bloqueada sin jiUnlocked_jogaflow) ===== */
   var iaLoading=false, iaResult="";
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function cleanMd(s){
@@ -604,7 +645,7 @@
     } else { worker(); }
   }
 
-  /* ===== LEYES (bloqueada sin jiPaid) ===== */
+  /* ===== LEYES (bloqueada sin jiUnlocked_jogaflow) ===== */
   function renderLeyes(){
     var box=$("jfLeyes");
     if(!isPaid()){ box.innerHTML=inviteHtml(t().navLockedLeyes); bindInvite(box); return; }
@@ -888,7 +929,7 @@
     /* si el usuario compra en otra pestaña/hub y vuelve, refleja el desbloqueo */
     /* if the user buys in another tab/hub and returns, reflect the unlock */
     window.addEventListener("storage",function(e){
-      if(e && e.key==="jiPaid"){ if(view==="ia") renderIA(); else if(view==="leyes") renderLeyes(); }
+      if(e && e.key==="jiUnlocked_jogaflow"){ if(view==="ia") renderIA(); else if(view==="leyes") renderLeyes(); }
     });
   }
 
