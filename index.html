@@ -440,12 +440,13 @@
         font-size: 0.95rem;
       }
 
-      .deal-chip { display: inline-block; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: #7c2d12; background: linear-gradient(135deg, #fde68a, #fbbf24); border-radius: 999px; padding: 4px 12px; margin-bottom: 8px; }
-      .plan-under { font-size: 0.78rem; opacity: 0.7; text-align: center; margin: 8px 0 0; }
+      /* Especificidad (1,3,0) para ganarle a .section-card p (0,1,1) sin !important; color aclarado a .9 (mismo valor que .plan-features li de la tarjeta premium) para contraste AA /
+         Specificity (1,3,0) to beat .section-card p (0,1,1) without !important; color lightened to .9 (same value already used by the premium card's .plan-features li) for AA contrast */
+      #pricing .price-plan.premium .plan-under { font-size: 0.78rem; opacity: 0.7; text-align: center; margin: 8px 0 0; color: rgba(255, 255, 255, 0.9); }
       .price-compare { margin: 26px auto 0; max-width: 560px; text-align: left; }
       .price-compare h4 { text-align: center; margin: 0 0 12px; font-size: 1.05rem; }
       .compare-row { display: flex; justify-content: space-between; gap: 12px; padding: 9px 14px; border-bottom: 1px solid var(--border); font-size: 0.95rem; }
-      .compare-row .compare-price { white-space: nowrap; opacity: 0.75; }
+      .compare-row .compare-price { opacity: 0.75; }
       .compare-row.joga { border: 1px solid #eec25f; border-radius: 12px; background: linear-gradient(135deg, #fff8e7, #fdf1d3); font-weight: 700; margin-top: 6px; }
       .compare-row.joga .compare-price { opacity: 1; color: #7c5c14; }
       .compare-note { text-align: center; font-size: 0.78rem; opacity: 0.6; margin: 10px 0 0; }
@@ -487,7 +488,7 @@
 
       .pricing-grid {
         display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 14px;
       }
 
@@ -536,41 +537,27 @@
         letter-spacing: -0.02em;
       }
 
-      .plan-price-row {
-        display: flex;
-        align-items: baseline;
-        gap: 8px;
-        margin-bottom: 4px;
-      }
-
-      .plan-price-label {
-        font-size: 0.76rem;
-        font-weight: 700;
-        letter-spacing: 0.04em;
-        text-transform: uppercase;
-      }
-
-      .plan-price-value {
-        font-size: 1.06rem;
-      }
-
-      .plan-price-value.was {
-        text-decoration: line-through;
-        opacity: 0.72;
-      }
-
-      .plan-price-value.now {
+      /* D1 fix: .plan-price no declara color propio, así que sin esta regla el precio premium
+         hereda .section-card p { color: var(--muted) } y queda ilegible sobre el fondo oscuro de
+         la tarjeta (2.67:1 / 2.18:1). Especificidad (1,3,0) para ganarle a .section-card p (0,1,1)
+         sin !important. #f9e6bb + 1.34rem son los mismos valores que usaba HEAD en
+         .plan-price-value.now, que daban 12.31:1 / 10.05:1 sobre este mismo fondo /
+         D1 fix: .plan-price declares no color of its own, so without this rule the premium price
+         inherits .section-card p { color: var(--muted) } and becomes illegible on the card's dark
+         background (2.67:1 / 2.18:1). Specificity (1,3,0) to beat .section-card p (0,1,1) without
+         !important. #f9e6bb + 1.34rem match what HEAD used on .plan-price-value.now, which gave
+         12.31:1 / 10.05:1 on this same background */
+      #pricing .price-plan.premium .plan-price {
+        color: #f9e6bb;
         font-size: 1.34rem;
       }
 
-      .price-plan.premium .plan-price-value.now {
-        color: #f9e6bb;
-      }
-
-      .plan-offer-note {
+      /* Especificidad (1,3,0) para ganarle a .section-card p (0,1,1) sin !important; color aclarado a .9 (mismo valor que .plan-features li de la tarjeta premium) para contraste AA /
+         Specificity (1,3,0) to beat .section-card p (0,1,1) without !important; color lightened to .9 (same value already used by the premium card's .plan-features li) for AA contrast */
+      #pricing .price-plan.premium .plan-offer-note {
         margin: -2px 0 12px;
         font-size: 0.78rem;
-        color: rgba(255, 255, 255, 0.84);
+        color: rgba(255, 255, 255, 0.9);
       }
 
       .plan-features {
@@ -597,6 +584,61 @@
         margin-top: 14px;
         color: var(--muted);
         font-size: 0.86rem;
+      }
+
+      /* Nota sincera del fundador / Founder's honest note (T1) */
+      .founder-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin: 20px 0;
+      }
+
+      .note-block {
+        border-left: 3px solid var(--border);
+        background: var(--surface-2);
+        border-radius: 12px;
+        padding: 16px 18px;
+      }
+
+      .note-block strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .note-block span {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .note-block.is-yes {
+        border-left-color: var(--accent);
+        background: var(--accent-soft);
+      }
+
+      .founder-list {
+        margin: 0 0 16px;
+        padding-left: 18px;
+        color: var(--muted);
+      }
+
+      .founder-list li {
+        margin-bottom: 6px;
+      }
+
+      /* Especificidad (1,1,0) para ganarle a .section-card p (0,1,1) sin !important /
+         Specificity (1,1,0) to beat .section-card p (0,1,1) without !important */
+      #founderNote .founder-signature {
+        margin-top: 18px;
+        font-family: "Cormorant Garamond", Georgia, serif;
+        font-size: 1.2rem;
+        color: var(--accent);
+      }
+
+      /* Separación entre párrafos de la nota (:not evita pisar el margin-top de la firma) /
+         Spacing between note paragraphs (:not keeps this from touching the signature's margin-top) */
+      #founderNote .section-card p:not(.founder-signature) {
+        margin: 0 0 14px;
       }
 
       .headline-block {
@@ -719,9 +761,11 @@
         .benefits-grid, .module-grid { grid-template-columns: 1fr; }
         .section-card { padding: 24px; }
         .hero { padding-top: 20px; }
-        .topbar-inner { border-radius: 20px; }
-        .topbar nav { gap: 10px; font-size: 0.9rem; }
+        .topbar-inner { border-radius: 20px; padding: 10px 8px; }
+        /* Menu de anclas oculto en movil: la marca y el idioma ya no comparten espacio con 4 links y se desborda / Anchor menu hidden on mobile: brand and language no longer fight 4 links for space and overflow */
+        .topbar nav { display: none; }
         .topbar-controls { gap: 8px; }
+        .founder-grid { grid-template-columns: 1fr; }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -862,65 +906,90 @@
       </div>
     </section>
 
+    <!-- ===== T1: Nota sincera del fundador / Founder's honest note ===== -->
+    <section class="section" id="founderNote">
+      <div class="container">
+        <div class="section-card">
+          <span class="eyebrow" id="founderEyebrow">Una nota sincera</span>
+          <h3 id="founderTitle">Por qué Joga Intelligence cuesta lo que cuesta</h3>
+          <p id="founderLead">No es barato porque sea poca cosa. Es accesible porque quiero que llegue a quien lo necesita, no solo a quien puede pagar mucho.</p>
+          <div class="founder-grid">
+            <div class="note-block">
+              <strong id="founderNotLabel">Lo que no es</strong>
+              <span id="founderNotText">No es un curso extenso. No vas a encontrar veinte horas de video ni un manual de trescientas páginas. Eso ya existe, y casi nadie lo termina.</span>
+            </div>
+            <div class="note-block is-yes">
+              <strong id="founderYesLabel">Lo que sí es</strong>
+              <span id="founderYesText">Es el método destilado. Lo esencial de cada área de tu vida, convertido en algo que practicas en minutos, todos los días.</span>
+            </div>
+          </div>
+          <p id="founderWhy">Porque el cambio no viene de saber más. Viene de practicar lo correcto, con constancia. Por eso cada app te da tres cosas y ya:</p>
+          <ul class="founder-list">
+            <li id="founderListOne">Tu movimiento del día, uno solo, claro</li>
+            <li id="founderListTwo">Tus prácticas, cortas y concretas</li>
+            <li id="founderListThree">Una sesión guiada con voz, para hacerla ahí mismo</li>
+          </ul>
+          <p id="founderRoutine">Entras, practicas, sales y sigues con tu vida. Al día siguiente, otra vez. Eso es todo, y eso es justamente lo que funciona.</p>
+          <p id="founderClosing">Si practicas, lo vas a notar pronto. No te prometo magia ni resultados sin esfuerzo: te prometo un método claro, sin relleno, y que no te va a costar una fortuna probarlo.</p>
+          <p class="founder-signature" id="founderSignature">— Joga, fundador de Joga Intelligence</p>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="pricing">
       <div class="container">
         <div class="section-card pricing-card">
           <h3 id="pricingTitle">Elige tu acceso</h3>
-          <p class="pricing-intro" id="pricingDesc">Empieza gratis con JogaBody. Desbloquea las 6 premium desde $7.99 al mes, $79 al año — o tuyas para siempre por $180.</p>
+          <p class="pricing-intro" id="pricingDesc">Empieza gratis con JogaBody. Lleva una app suelta, o las seis premium, con un plan anual.</p>
           <div class="pricing-grid">
             <article class="price-plan">
-              <span class="plan-badge" id="planFreeBadge">Publico</span>
+              <span class="plan-badge" id="planFreeBadge">Público</span>
               <h4 class="plan-name" id="planFreeTitle">Inicio gratuito</h4>
               <p class="plan-price" id="planFreePrice">$0</p>
               <ul class="plan-features">
-                <li id="planFreeFeatureOne">Acceso completo a JogaBody.</li>
+                <li id="planFreeFeatureOne">Acceso completo a JogaBody, para siempre.</li>
                 <li id="planFreeFeatureTwo">Ruta diaria y progreso personal.</li>
-                <li id="planFreeFeatureThree">Ideal para probar el metodo.</li>
+                <li id="planFreeFeatureThree">Ideal para probar el método.</li>
               </ul>
               <a class="btn btn-secondary plan-btn" id="planFreeBtn" href="app.html?tour=1&present=1">Empezar gratis</a>
             </article>
+            <article class="price-plan">
+              <span class="plan-badge" id="planSingleBadge">Individual</span>
+              <h4 class="plan-name" id="planSingleTitle">Una app</h4>
+              <p class="plan-price" id="planSinglePrice">$50 USD · al año</p>
+              <ul class="plan-features">
+                <li id="planSingleFeatureOne">La app premium que elijas: JogaMind, JogaTime, JogaBit, JogaPath, JogaCapital o JogaVentix.</li>
+                <li id="planSingleFeatureTwo">Se renueva cada año.</li>
+                <li id="planSingleFeatureThree">Ideal si por ahora solo necesitas un área.</li>
+              </ul>
+              <!-- TODO Gumroad: aquí va el enlace del producto -->
+              <a class="btn btn-primary plan-btn" id="planSingleBtn" href="#ctaStart">Comprar esta app →</a>
+            </article>
             <article class="price-plan premium">
               <span class="plan-badge" id="planPremiumBadge">Premium</span>
-              <h4 class="plan-name" id="planPremiumTitle">Acceso completo</h4>
-              <span class="deal-chip" id="planDealChip">Mejor valor: anual — ahorras $95</span>
-              <div class="plan-price" aria-live="polite">
-                <div class="plan-price-row">
-                  <span class="plan-price-label" id="planPriceWasLabel">Mensual</span>
-                  <span class="plan-price-value" id="planPremiumOldPrice">$7.99 USD / mes</span>
-                </div>
-                <div class="plan-price-row">
-                  <span class="plan-price-label" id="planPriceEachLabel">Una por una ($29/año c/u)</span>
-                  <span class="plan-price-value was" id="planPremiumEachPrice">$174 USD / año</span>
-                </div>
-                <div class="plan-price-row">
-                  <span class="plan-price-label" id="planPriceNowLabel">Anual · todo</span>
-                  <span class="plan-price-value now" id="planPremiumPrice">$79 USD / año</span>
-                </div>
-                <div class="plan-price-row">
-                  <span class="plan-price-label" id="planLifeLabel">De por vida</span>
-                  <span class="plan-price-value" id="planLifePrice">$180 USD · pago único</span>
-                </div>
-              </div>
-              <p class="plan-offer-note" id="planPremiumOfferNote">El anual sale a $6.58 al mes — dos meses gratis frente al mensual. ¿Odias las suscripciones? Llévatelo de por vida por $180, un solo pago.</p>
+              <h4 class="plan-name" id="planPremiumTitle">Las seis premium</h4>
+              <p class="plan-price" id="planPremiumPrice">$150 USD · al año</p>
+              <p class="plan-offer-note" id="planPremiumOfferNote">Las seis por separado costarían $300 al año. El paquete te sale a mitad de precio.</p>
               <ul class="plan-features">
                 <li id="planPremiumFeatureOne">Desbloquea las 6 apps premium: JogaMind, JogaTime, JogaBit, JogaPath, JogaCapital y JogaVentix.</li>
-                <li id="planPremiumFeatureTwo">Empieza mensual, ahorra con el anual — o hazlo tuyo para siempre con un pago.</li>
-                <li id="planPremiumFeatureThree">Lo que otras apps cobran por UNA al año, aquí te da las 7: desde $0.22 al día.</li>
-                <li id="planPremiumFeatureFour">Garantía de 7 días: si no sientes el cambio, te devolvemos tu dinero por WhatsApp.</li>
+                <li id="planPremiumFeatureTwo">Un solo pago cubre las seis, en vez de manejar seis suscripciones por separado.</li>
+                <li id="planPremiumFeatureThree">Se renueva cada año.</li>
+                <li id="planPremiumFeatureFour">Garantía de 7 días: si no sientes el cambio, te devolvemos tu dinero.</li>
               </ul>
+              <!-- TODO Gumroad: aquí va el enlace del producto -->
               <a class="btn btn-primary plan-btn" id="planPremiumBtn" href="#ctaStart">Quiero mi acceso →</a>
-              <p class="plan-under" id="planPremiumUnder">Garantía de 7 días · El plan mensual se cancela cuando quieras</p>
+              <p class="plan-under" id="planPremiumUnder">Suscripción anual · Renueva cada 12 meses</p>
             </article>
           </div>
           <div class="price-compare">
-            <h4 id="compareTitle">Lo mismo, en otras apps</h4>
-            <div class="compare-row"><span class="compare-name">Headspace · 1 app</span><span class="compare-price" id="compareHs">$69.99 USD · cada año</span></div>
-            <div class="compare-row"><span class="compare-name">Calm · 1 app</span><span class="compare-price" id="compareCalm">$69.99 USD · cada año</span></div>
-            <div class="compare-row"><span class="compare-name">Fabulous · 1 app</span><span class="compare-price" id="compareFab">$39.99 USD · cada año</span></div>
-            <div class="compare-row joga"><span class="compare-name" id="compareJogaName">Joga Intelligence · 7 apps + reto de 30 días</span><span class="compare-price" id="compareJoga">$79 USD/año · las 7 apps</span></div>
-            <p class="compare-note" id="compareNote">Precios públicos (julio 2026). Aun con promos de primer año (ej. Headspace a $41.99), pagas cada año — y por una sola app.</p>
+            <h4 id="compareTitle">Un enfoque, o seis</h4>
+            <div class="compare-row"><span class="compare-name" id="compareHsName">Headspace · 1 área</span><span class="compare-price" id="compareHs">Meditación y sueño</span></div>
+            <div class="compare-row"><span class="compare-name" id="compareCalmName">Calm · 1 área</span><span class="compare-price" id="compareCalm">Meditación y sueño</span></div>
+            <div class="compare-row"><span class="compare-name" id="compareFabName">Fabulous · 1 área</span><span class="compare-price" id="compareFab">Hábitos diarios</span></div>
+            <div class="compare-row joga"><span class="compare-name" id="compareJogaName">Joga Intelligence · 6 áreas</span><span class="compare-price" id="compareJoga">Coach de IA en cada una</span></div>
+            <p class="compare-note" id="compareNote">Headspace, Calm y Fabulous se enfocan en un área. Joga Intelligence junta seis — mente, tiempo, hábitos, propósito, dinero y ventas — cada una con su propio coach de IA.</p>
           </div>
-          <p class="pricing-footnote" id="pricingFootnote">Pago seguro. Tu código personal llega por WhatsApp en minutos.</p>
+          <p class="pricing-footnote" id="pricingFootnote">Pago seguro. Recibes tu código por correo al instante.</p>
         </div>
       </div>
     </section>
@@ -978,11 +1047,11 @@
       <div style="background:var(--bg);border:1px solid rgba(184,146,74,.3);border-radius:20px;max-width:420px;width:100%;padding:32px 28px;box-shadow:0 30px 80px rgba(0,0,0,.3);text-align:center;">
         <div style="font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:10px;" id="unlockKicker">Acceso premium</div>
         <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;margin:0 0 8px;color:var(--text);" id="unlockTitle">Ingresa tu código</h3>
-        <p style="color:#6a5f56;font-size:.95rem;margin:0 0 20px;" id="unlockSub">Escribe el código que recibiste en tu compra para desbloquear los 6 módulos premium.</p>
+        <p style="color:#6a5f56;font-size:.95rem;margin:0 0 20px;" id="unlockSub">Escribe el código que recibiste por correo al completar tu compra.</p>
         <input id="unlockInput" type="text" autocomplete="off" placeholder="Tu código" style="width:100%;box-sizing:border-box;padding:14px 16px;border:1px solid rgba(184,146,74,.4);border-radius:12px;font-size:1rem;text-align:center;letter-spacing:.06em;background:#fff;color:var(--text);outline:none;" />
         <div id="unlockError" style="color:#c0392b;font-size:.85rem;min-height:18px;margin:8px 0 0;"></div>
-        <button id="unlockConfirm" type="button" style="margin-top:14px;width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),#d8b06a);color:#1f1916;font-weight:700;font-size:1rem;cursor:pointer;" data-i18n="unlockConfirm">Desbloquear</button>
-        <button id="unlockCancel" type="button" style="margin-top:10px;width:100%;padding:12px;border:none;border-radius:12px;background:transparent;color:#6a5f56;font-size:.9rem;cursor:pointer;" data-i18n="unlockCancel">Cancelar</button>
+        <button id="unlockConfirm" type="button" style="margin-top:14px;width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),#d8b06a);color:#1f1916;font-weight:700;font-size:1rem;cursor:pointer;">Desbloquear</button>
+        <button id="unlockCancel" type="button" style="margin-top:10px;width:100%;padding:12px;border:none;border-radius:12px;background:transparent;color:#6a5f56;font-size:.9rem;cursor:pointer;">Cancelar</button>
       </div>
     </div>
     <script src="./gate.js"></script>
@@ -1031,41 +1100,57 @@
           metricThreeDesc: 'sin ruido, solo claridad y acompañamiento.',
           modulesTitle: 'Los 7 módulos',
           modBodyBadge: 'GRATIS',
+          founderEyebrow: 'Una nota sincera',
+          founderTitle: 'Por qué Joga Intelligence cuesta lo que cuesta',
+          founderLead: 'No es barato porque sea poca cosa. Es accesible porque quiero que llegue a quien lo necesita, no solo a quien puede pagar mucho.',
+          founderNotLabel: 'Lo que no es',
+          founderNotText: 'No es un curso extenso. No vas a encontrar veinte horas de video ni un manual de trescientas páginas. Eso ya existe, y casi nadie lo termina.',
+          founderYesLabel: 'Lo que sí es',
+          founderYesText: 'Es el método destilado. Lo esencial de cada área de tu vida, convertido en algo que practicas en minutos, todos los días.',
+          founderWhy: 'Porque el cambio no viene de saber más. Viene de practicar lo correcto, con constancia. Por eso cada app te da tres cosas y ya:',
+          founderListOne: 'Tu movimiento del día, uno solo, claro',
+          founderListTwo: 'Tus prácticas, cortas y concretas',
+          founderListThree: 'Una sesión guiada con voz, para hacerla ahí mismo',
+          founderRoutine: 'Entras, practicas, sales y sigues con tu vida. Al día siguiente, otra vez. Eso es todo, y eso es justamente lo que funciona.',
+          founderClosing: 'Si practicas, lo vas a notar pronto. No te prometo magia ni resultados sin esfuerzo: te prometo un método claro, sin relleno, y que no te va a costar una fortuna probarlo.',
+          founderSignature: '— Joga, fundador de Joga Intelligence',
           pricingTitle: 'Elige tu acceso',
-          pricingDesc: 'Empieza gratis con JogaBody. Desbloquea las 6 premium desde $7.99 al mes, $79 al año — o tuyas para siempre por $180.',
+          pricingDesc: 'Empieza gratis con JogaBody. Lleva una app suelta, o las seis premium, con un plan anual.',
           planFreeBadge: 'Público',
           planFreeTitle: 'Inicio gratuito',
           planFreePrice: '$0',
-          planFreeFeatureOne: 'Acceso completo a JogaBody.',
+          planFreeFeatureOne: 'Acceso completo a JogaBody, para siempre.',
           planFreeFeatureTwo: 'Ruta diaria y progreso personal.',
           planFreeFeatureThree: 'Ideal para probar el método.',
           planFreeBtn: 'Empezar gratis',
+          planSingleBadge: 'Individual',
+          planSingleTitle: 'Una app',
+          planSinglePrice: '$50 USD · al año',
+          planSingleFeatureOne: 'La app premium que elijas: JogaMind, JogaTime, JogaBit, JogaPath, JogaCapital o JogaVentix.',
+          planSingleFeatureTwo: 'Se renueva cada año.',
+          planSingleFeatureThree: 'Ideal si por ahora solo necesitas un área.',
+          planSingleBtn: 'Comprar esta app →',
           planPremiumBadge: 'Premium',
-          planPremiumTitle: 'Acceso completo',
-          planPriceWasLabel: 'Mensual',
-          planPremiumOldPrice: '$7.99 USD / mes',
-          planPriceNowLabel: 'Anual · todo',
-          planLifeLabel: 'De por vida',
-          planLifePrice: '$180 USD · pago único',
-          planPremiumPrice: '$79 USD / año',
-          planPriceEachLabel: 'Una por una ($29/año c/u)',
-          planPremiumEachPrice: '$174 USD / año',
-          planPremiumOfferNote: 'El anual sale a $6.58 al mes — dos meses gratis frente al mensual. ¿Odias las suscripciones? Llévatelo de por vida por $180, un solo pago.',
+          planPremiumTitle: 'Las seis premium',
+          planPremiumPrice: '$150 USD · al año',
+          planPremiumOfferNote: 'Las seis por separado costarían $300 al año. El paquete te sale a mitad de precio.',
           planPremiumFeatureOne: 'Desbloquea las 6 apps premium: JogaMind, JogaTime, JogaBit, JogaPath, JogaCapital y JogaVentix.',
-          planPremiumFeatureTwo: 'Empieza mensual, ahorra con el anual — o hazlo tuyo para siempre con un pago.',
-          planPremiumFeatureFour: 'Garantía de 7 días: si no sientes el cambio, te devolvemos tu dinero por WhatsApp.',
-          planPremiumFeatureThree: 'Lo que otras apps cobran por UNA al año, aquí te da las 7: desde $0.22 al día.',
+          planPremiumFeatureTwo: 'Un solo pago cubre las seis, en vez de manejar seis suscripciones por separado.',
+          planPremiumFeatureFour: 'Garantía de 7 días: si no sientes el cambio, te devolvemos tu dinero.',
+          planPremiumFeatureThree: 'Se renueva cada año.',
           planPremiumBtn: 'Quiero mi acceso →',
-          planDealChip: 'Mejor valor: anual — ahorras $95',
-          planPremiumUnder: 'Garantía de 7 días · El plan mensual se cancela cuando quieras',
-          pricingFootnote: 'Pago seguro. Tu código personal llega por WhatsApp en minutos.',
-          compareTitle: 'Lo mismo, en otras apps',
-          compareHs: '$69.99 USD · cada año',
-          compareCalm: '$69.99 USD · cada año',
-          compareFab: '$39.99 USD · cada año',
-          compareJoga: '$79 USD/año · las 7 apps',
-          compareJogaName: 'Joga Intelligence · 7 apps + reto de 30 días',
-          compareNote: 'Precios públicos (julio 2026). Aun con promos de primer año (ej. Headspace a $41.99), pagas cada año — y por una sola app.',
+          planPremiumUnder: 'Suscripción anual · Renueva cada 12 meses',
+          pricingFootnote: 'Pago seguro. Recibes tu código por correo al instante.',
+          compareTitle: 'Un enfoque, o seis',
+          compareHsName: 'Headspace · 1 área',
+          compareHs: 'Meditación y sueño',
+          compareCalmName: 'Calm · 1 área',
+          compareCalm: 'Meditación y sueño',
+          compareFabName: 'Fabulous · 1 área',
+          compareFab: 'Hábitos diarios',
+          compareJoga: 'Coach de IA en cada una',
+          compareJogaName: 'Joga Intelligence · 6 áreas',
+          compareNote: 'Headspace, Calm y Fabulous se enfocan en un área. Joga Intelligence junta seis — mente, tiempo, hábitos, propósito, dinero y ventas — cada una con su propio coach de IA.',
           flowTitle: 'Cómo se vive la experiencia',
           flowOneTitle: '1. Recibe orientación',
           flowOneDesc: 'Una ruta diaria clara, breve y alineada con tu energía.',
@@ -1078,7 +1163,13 @@
           ctaTitle: 'Despierta tu potencial.',
           ctaDesc: 'Comienza hoy.',
           ctaButton: 'Iniciar demo',
-          footerText: 'Joga Intelligence · Transformación consciente'
+          footerText: 'Joga Intelligence · Transformación consciente',
+          unlockKicker: 'Acceso premium',
+          unlockTitle: 'Ingresa tu código',
+          unlockSub: 'Escribe el código que recibiste por correo al completar tu compra.',
+          unlockInput: 'Tu código',
+          unlockConfirm: 'Desbloquear',
+          unlockCancel: 'Cancelar'
         },
         en: {
           navEcosystem: 'Ecosystem',
@@ -1118,41 +1209,57 @@
           metricThreeDesc: 'no noise, only clarity and guidance.',
           modulesTitle: 'The 7 modules',
           modBodyBadge: 'FREE',
+          founderEyebrow: 'An honest note',
+          founderTitle: 'Why Joga Intelligence costs what it costs',
+          founderLead: 'It isn\'t cheap because it\'s thin. It\'s affordable because I want it to reach the people who need it, not only the people who can pay a lot.',
+          founderNotLabel: 'What it is not',
+          founderNotText: 'It is not a long course. You won\'t find twenty hours of video or a three-hundred-page manual. That already exists, and almost nobody finishes it.',
+          founderYesLabel: 'What it is',
+          founderYesText: 'It\'s the method, distilled. The essentials of each area of your life, turned into something you practice in minutes, every day.',
+          founderWhy: 'Because change doesn\'t come from knowing more. It comes from practicing the right thing, consistently. That\'s why each app gives you three things and nothing else:',
+          founderListOne: 'Your move for today — one, clear',
+          founderListTwo: 'Your practices — short and concrete',
+          founderListThree: 'A guided session with voice, to do right there',
+          founderRoutine: 'You come in, you practice, you leave and get on with your life. The next day, again. That\'s all it is, and that\'s exactly what works.',
+          founderClosing: 'If you practice, you\'ll feel it soon. I\'m not promising magic or results without effort. I\'m promising a clear method, with no filler, that won\'t cost you a fortune to try.',
+          founderSignature: '— Joga, founder of Joga Intelligence',
           pricingTitle: 'Choose your access',
-          pricingDesc: 'Start free with JogaBody. Unlock the 6 premium apps from $7.99 a month, $79 a year — or yours forever for $180.',
+          pricingDesc: 'Start free with JogaBody. Take a single app, or all six premium, with an annual plan.',
           planFreeBadge: 'Public',
           planFreeTitle: 'Free starter',
           planFreePrice: '$0',
-          planFreeFeatureOne: 'Full access to JogaBody.',
+          planFreeFeatureOne: 'Full access to JogaBody, forever.',
           planFreeFeatureTwo: 'Daily route and personal progress.',
           planFreeFeatureThree: 'Perfect to validate the method.',
           planFreeBtn: 'Start free',
+          planSingleBadge: 'Individual',
+          planSingleTitle: 'One app',
+          planSinglePrice: '$50 USD · per year',
+          planSingleFeatureOne: 'The premium app you choose: JogaMind, JogaTime, JogaBit, JogaPath, JogaCapital or JogaVentix.',
+          planSingleFeatureTwo: 'Renews every year.',
+          planSingleFeatureThree: 'Perfect if you only need one area right now.',
+          planSingleBtn: 'Buy this app →',
           planPremiumBadge: 'Premium',
-          planPremiumTitle: 'Full access',
-          planPriceWasLabel: 'Monthly',
-          planPremiumOldPrice: '$7.99 USD / mo',
-          planPriceNowLabel: 'Annual · everything',
-          planLifeLabel: 'Lifetime',
-          planLifePrice: '$180 USD · one-time',
-          planPremiumPrice: '$79 USD / yr',
-          planPriceEachLabel: 'One by one ($29/yr each)',
-          planPremiumEachPrice: '$174 USD / yr',
-          planPremiumOfferNote: 'Annual works out to $6.58 a month — two months free vs monthly. Hate subscriptions? Take it lifetime for $180, one single payment.',
+          planPremiumTitle: 'All six premium',
+          planPremiumPrice: '$150 USD · per year',
+          planPremiumOfferNote: 'All six separately would cost $300 a year. The bundle is half price.',
           planPremiumFeatureOne: 'Unlock all 6 premium apps: JogaMind, JogaTime, JogaBit, JogaPath, JogaCapital and JogaVentix.',
-          planPremiumFeatureTwo: 'Start monthly, save with annual — or make it yours forever with one payment.',
-          planPremiumFeatureFour: '7-day guarantee: if you don’t feel the change, we refund you via WhatsApp.',
-          planPremiumFeatureThree: 'What other apps charge for ONE app a year gets you all 7 here: from $0.22 a day.',
+          planPremiumFeatureTwo: 'One payment covers all six, instead of juggling six separate subscriptions.',
+          planPremiumFeatureFour: '7-day guarantee: if you do not feel the change, we will refund your money.',
+          planPremiumFeatureThree: 'Renews every year.',
           planPremiumBtn: 'Get my access →',
-          planDealChip: 'Best value: annual — save $95',
-          planPremiumUnder: '7-day guarantee · Monthly plan cancels anytime',
-          pricingFootnote: 'Secure checkout. Your personal code arrives via WhatsApp within minutes.',
-          compareTitle: 'The same, in other apps',
-          compareHs: '$69.99 USD · every year',
-          compareCalm: '$69.99 USD · every year',
-          compareFab: '$39.99 USD · every year',
-          compareJoga: '$79 USD/yr · all 7 apps',
-          compareJogaName: 'Joga Intelligence · 7 apps + 30-day challenge',
-          compareNote: 'Public prices (July 2026). Even with first-year promos (e.g. Headspace at $41.99), you pay every year — for one single app.',
+          planPremiumUnder: 'Annual subscription · Renews every 12 months',
+          pricingFootnote: 'Secure checkout. You get your code by email instantly.',
+          compareTitle: 'One focus, or six',
+          compareHsName: 'Headspace · 1 area',
+          compareHs: 'Meditation & sleep',
+          compareCalmName: 'Calm · 1 area',
+          compareCalm: 'Meditation & sleep',
+          compareFabName: 'Fabulous · 1 area',
+          compareFab: 'Daily habits',
+          compareJoga: 'AI coach in each one',
+          compareJogaName: 'Joga Intelligence · 6 areas',
+          compareNote: 'Headspace, Calm, and Fabulous each focus on one area. Joga Intelligence brings together six — mind, time, habits, purpose, money, and sales — each with its own AI coach.',
           flowTitle: 'How the experience works',
           flowOneTitle: '1. Receive guidance',
           flowOneDesc: 'A clear, short daily route aligned with your energy.',
@@ -1165,7 +1272,13 @@
           ctaTitle: 'Awaken your potential.',
           ctaDesc: 'Start today.',
           ctaButton: 'Launch demo',
-          footerText: 'Joga Intelligence · Conscious transformation'
+          footerText: 'Joga Intelligence · Conscious transformation',
+          unlockKicker: 'Premium access',
+          unlockTitle: 'Enter your code',
+          unlockSub: 'Enter the code you received by email after your purchase.',
+          unlockInput: 'Your code',
+          unlockConfirm: 'Unlock',
+          unlockCancel: 'Cancel'
         }
       };
 
@@ -1201,7 +1314,12 @@
         Object.keys(ui).forEach((key) => {
           const el = document.getElementById(key);
           if (el) {
-            el.textContent = ui[key];
+            // Los <input> no pintan texto por textContent; usan placeholder / <input> elements don't render text via textContent; they use placeholder
+            if (el.tagName === 'INPUT' && 'placeholder' in el) {
+              el.placeholder = ui[key];
+            } else {
+              el.textContent = ui[key];
+            }
           }
         });
         if (typeof reflectPremium === "function") reflectPremium();
@@ -1315,9 +1433,11 @@
 
       function reflectPremium(){
         if(!isUnlocked()) return;
-        // Botón premium pasa a "Entrar a mis módulos"
-        const pb = document.getElementById("planPremiumBtn");
-        if(pb){ pb.textContent = (currentLanguage==="en"?"Enter my modules →":"Entrar a mis módulos →"); pb.setAttribute("href","app.html?tour=1&present=1"); pb.onclick=null; }
+        // Botones premium pasan a "Entrar a mis módulos" (acceso individual y las 6) / premium buttons switch to "Enter my modules" (single app and all 6)
+        ["planPremiumBtn","planSingleBtn"].forEach(function(btnId){
+          const pb = document.getElementById(btnId);
+          if(pb){ pb.textContent = (currentLanguage==="en"?"Enter my modules →":"Entrar a mis módulos →"); pb.setAttribute("href","app.html?tour=1&present=1"); pb.onclick=null; }
+        });
         // Sello "Premium activo" en la sección de precios
         if(!document.getElementById("premiumActiveBadge")){
           const desc = document.getElementById("pricingDesc");
@@ -1352,9 +1472,11 @@
         }
       }
 
-      // Conectar el botón "Desbloquear premium"
+      // Conectar los botones de compra (abren la ventanita de código; aún sin enlace de pago) / wire purchase buttons (open the code modal; no payment link yet)
       const premiumBtn=document.getElementById("planPremiumBtn");
       if(premiumBtn) premiumBtn.addEventListener("click", openUnlock);
+      const singleBtn=document.getElementById("planSingleBtn");
+      if(singleBtn) singleBtn.addEventListener("click", openUnlock);
 
       document.getElementById("unlockConfirm").addEventListener("click", tryUnlock);
       document.getElementById("unlockCancel").addEventListener("click", closeUnlock);

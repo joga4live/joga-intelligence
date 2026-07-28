@@ -523,6 +523,17 @@
   /* ===== IA (bloqueada sin jiPaid) ===== */
   var iaLoading=false, iaResult="";
   function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function cleanMd(s){
+    /* Limpia marcadores markdown (**negrita**, # títulos, *cursiva*) ANTES de escapar con esc().
+       Strip markdown markers (**bold**, # headings, *italics*) BEFORE escaping with esc(). Conserva
+       saltos de línea, listas numeradas y guiones de viñeta / preserves line breaks, numbered lists, dash bullets. */
+    if(s==null) return s;
+    var out=String(s);
+    out=out.replace(/^#{1,6}[ \t]+/gm,'');
+    out=out.replace(/\*\*([^*]+?)\*\*/g,'$1');
+    out=out.split('\n').map(function(line){ return line.replace(/\*([^*]+?)\*/g,'$1'); }).join('\n');
+    return out;
+  }
   function renderIA(){
     var box=$("jfIA");
     if(!isPaid()){ box.innerHTML=inviteHtml(t().navLockedIA); bindInvite(box); return; }
@@ -574,7 +585,7 @@
     var prompt=(L==="es"
       ? "Eres el guía de energía corporal de JogaBody. Analiza esta situación y responde en español, breve y accionable (máx 110 palabras): nombra el PRINCIPIO clave de energía corporal, la posible causa, y 2 acciones concretas para hoy.\n\nSituación: "
       : "You are the JogaBody body-energy guide. Analyze this situation and answer in English, brief and actionable (max 110 words): name the key body-energy PRINCIPLE, the likely cause, and 2 concrete actions for today.\n\nSituation: ")+q;
-    function done(txt){ iaLoading=false; iaResult=txt; renderIA(); }
+    function done(txt){ iaLoading=false; iaResult=cleanMd(txt); renderIA(); }
     function fail(){ done(localDiag(q,L)); }
     var JOGA_AI_URL="https://joga-ai.omhotien90.workers.dev";
     var JOGA_AI_APP="jogabody";
