@@ -211,6 +211,9 @@
         <div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:#4f9e6a;margin-bottom:4px">{{ iaKicker }}</div>
         <h2 style="font-family:Newsreader,serif;font-weight:500;font-size:26px;color:#242029;margin:0 0 6px">{{ iaTitle }}</h2>
         <p style="font-size:13px;color:#7c7468;margin:0 0 16px;line-height:1.5">{{ iaSub }}</p>
+        <!-- Aviso legal T2: no es asesoría financiera profesional. Contraste medido ~8.6:1 (#5A3B00 sobre #FBEBC7).
+             Legal notice T2: not professional financial advice. Measured contrast ~8.6:1 (#5A3B00 on #FBEBC7). -->
+        <div style="background:#FBEBC7;border:1px solid #E8C874;border-radius:12px;padding:11px 14px;font:600 12px Inter;line-height:1.5;color:#5A3B00;margin-bottom:16px">{{ iaDisclaimer }}</div>
         <div style="display:flex;gap:11px;align-items:flex-start;margin-bottom:16px">
           <div style="flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#b8923a,#E2703A);font-family:Newsreader,serif;font-weight:700;color:#0b0b0c;font-size:16px">J</div>
           <div style="background:rgba(45,38,58,.07);border:1px solid rgba(45,38,58,.1);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:#242029">{{ iaGreeting }}</div>
@@ -219,7 +222,7 @@
         <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#ffffff;background:linear-gradient(135deg,#4f9e6a,#4f9e6a)">{{ iaBtnLabel }}</button>
         <sc-if value="{{ iaResult }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:18px;border:1px solid rgba(111,180,135,.3);border-radius:16px;padding:16px;background:rgba(80,70,24,.25)">
-          <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#ffffff;white-space:pre-wrap">{{ iaResult }}</div>
+          <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#242029;white-space:pre-wrap">{{ iaResult }}</div>
         </div>
         </sc-if>
       </div>
@@ -478,7 +481,7 @@ class Component extends DCLogic {
         nav:['Hoy','Prácticas','Leyes','IA'], days:['L','M','M','J','V','S','D'], modes:['☀ Día','⛅ Tarde','☾ Noche'],
         pKicker:'Tu práctica diaria', pTitle:'Tus 3 prácticas', pSub:'Complétalas para tomar el control de tu dinero.', pProgress:'Progreso', pMark:'Marcar como completada ✓', pDone:'Completada ✓',
         ideasKicker:'Las leyes del dinero', ideasTitle:'Principios para crecer tu patrimonio', ideasSub:'Las reglas que siguen quienes manejan bien su dinero.',
-        iaKicker:'Diagnóstico IA', iaTitle:'¿En qué se te va el dinero?', iaSub:'Cuéntame tu situación y te digo qué ajustar.', iaPlaceholder:'Escribe tu situación financiera…', iaBtn:'Analizar mis finanzas', iaThinking:'Analizando…', iaGreeting:"Hola, soy Joga 👋 Tu coach de dinero. Cuéntame tu situación y te digo qué ajustar esta semana.",
+        iaKicker:'Diagnóstico IA', iaTitle:'¿En qué se te va el dinero?', iaSub:'Cuéntame tu situación y te digo qué ajustar.', iaPlaceholder:'Escribe tu situación financiera…', iaBtn:'Analizar mis finanzas', iaThinking:'Analizando…', iaGreeting:"Hola, soy Joga 👋 Tu coach de dinero. Cuéntame tu situación y te digo qué ajustar esta semana.", iaDisclaimer:'⚠️ Los consejos de esta app son educativos y generales. No son asesoría financiera profesional ni sustituyen a un asesor certificado. Antes de tomar una decisión importante de dinero, consulta con un profesional calificado.',
         practices:[
           {icon:'📝', num:'Práctica 01', title:'Dale destino a cada peso', desc:'Antes de gastar hoy, decide en qué categoría entra cada salida de dinero.', extra:'Un presupuesto no te limita: te da permiso de gastar sin culpa en lo que sí importa. Cada peso con un trabajo asignado.'},
           {icon:'💰', num:'Práctica 02', title:'Págate primero', desc:'Apenas entra dinero, aparta una parte para ti antes de cualquier gasto.', extra:'Ahorra primero, gasta lo que queda — no al revés. Aunque sea el 5%: el hábito vale más que el monto.'},
@@ -498,7 +501,7 @@ class Component extends DCLogic {
         nav:['Today','Practices','Laws','AI'], days:['M','T','W','T','F','S','S'], modes:['☀ Day','⛅ Afternoon','☾ Night'],
         pKicker:'Your daily practice', pTitle:'Your 3 practices', pSub:'Complete them to take control of your money.', pProgress:'Progress', pMark:'Mark as completed ✓', pDone:'Completed ✓',
         ideasKicker:'The laws of money', ideasTitle:'Principles to grow your wealth', ideasSub:'The rules followed by people who manage money well.',
-        iaKicker:'AI Diagnosis', iaTitle:'Where does your money go?', iaSub:'Tell me your situation and I’ll tell you what to adjust.', iaPlaceholder:'Write your financial situation…', iaBtn:'Analyze my finances', iaThinking:'Analyzing…', iaGreeting:"Hi, I'm Joga 👋 Your money coach. Tell me your situation and I'll tell you what to adjust this week.",
+        iaKicker:'AI Diagnosis', iaTitle:'Where does your money go?', iaSub:'Tell me your situation and I’ll tell you what to adjust.', iaPlaceholder:'Write your financial situation…', iaBtn:'Analyze my finances', iaThinking:'Analyzing…', iaGreeting:"Hi, I'm Joga 👋 Your money coach. Tell me your situation and I'll tell you what to adjust this week.", iaDisclaimer:'⚠️ The advice in this app is educational and general. It is not professional financial advice and does not replace a certified advisor. Before making an important money decision, consult a qualified professional.',
         practices:[
           {icon:'📝', num:'Practice 01', title:'Give every dollar a job', desc:'Before spending today, decide which category each outflow belongs to.', extra:'A budget doesn’t limit you: it gives you permission to spend guilt-free on what matters. Every dollar with an assigned job.'},
           {icon:'💰', num:'Practice 02', title:'Pay yourself first', desc:'As soon as money comes in, set aside a portion for yourself before any expense.', extra:'Save first, spend what’s left — not the other way around. Even 5%: the habit matters more than the amount.'},
@@ -650,7 +653,7 @@ class Component extends DCLogic {
       }),
       ideasKicker: t.ideasKicker, ideasTitle: t.ideasTitle, ideasSub: t.ideasSub, ideas: ideasList,
       iaKicker: t.iaKicker, iaTitle: t.iaTitle, iaSub: t.iaSub, iaPlaceholder: t.iaPlaceholder,
-      iaBtnLabel: st.iaLoading ? t.iaThinking : t.iaBtn, iaGreeting: t.iaGreeting,
+      iaBtnLabel: st.iaLoading ? t.iaThinking : t.iaBtn, iaGreeting: t.iaGreeting, iaDisclaimer: t.iaDisclaimer,
       iaInput: st.iaInput, iaResult: st.iaResult, iaLoading: st.iaLoading,
       onIaInput: (e) => this.setState({ iaInput: e.target.value }),
       runDiagnosis: () => this.diagnose(),

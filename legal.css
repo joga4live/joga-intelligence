@@ -1,0 +1,89 @@
+/* legal.css — Joga Intelligence
+   Estética de la portada (index.html), en archivo aparte para mantener legal.html
+   bajo 200 líneas. Mismas variables y patrones visuales: topbar con pastilla,
+   Cormorant Garamond para títulos, Inter para cuerpo, tarjetas .section-card.
+   Landing-page aesthetic (index.html), split out so legal.html stays under
+   200 lines. Same variables and visual patterns: pill topbar, Cormorant Garamond
+   headings, Inter body text, .section-card cards. */
+
+:root {
+  --bg: #f7f2e8;
+  --bg-2: #efe3cf;
+  --surface: #fffdf9;
+  --text: #1f1916;
+  --muted: #6f655d;
+  --border: #e8dccb;
+  --accent: #b8924a;
+  --accent-soft: rgba(184, 146, 74, 0.14);
+  --shadow: 0 24px 60px rgba(31, 25, 22, 0.08);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", Roboto, Arial, sans-serif;
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.8), transparent 32%),
+              linear-gradient(135deg, var(--bg), var(--bg-2));
+  color: var(--text);
+  line-height: 1.65;
+}
+a { color: inherit; text-decoration: none; }
+.container { width: min(880px, calc(100% - 32px)); margin: 0 auto; }
+
+.topbar { position: sticky; top: 0; z-index: 20; padding: 16px 0 6px; }
+.topbar-inner {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 16px; border: 1px solid rgba(232, 220, 203, 0.8); border-radius: 999px;
+  background: rgba(255, 253, 249, 0.86); backdrop-filter: blur(10px);
+  box-shadow: 0 10px 24px rgba(31, 25, 22, 0.03);
+}
+.brand {
+  display: flex; align-items: center; gap: 8px; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase; font-size: 0.88rem; color: var(--accent);
+}
+.lang-switch { display: inline-flex; gap: 6px; }
+.lang-btn {
+  border: 1px solid var(--border); background: rgba(255, 255, 255, 0.88); color: var(--muted);
+  border-radius: 999px; font-size: 0.72rem; font-weight: 700; padding: 5px 9px; cursor: pointer;
+}
+.lang-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+.legal-hero { padding: 48px 0 20px; text-align: center; }
+.kicker {
+  display: inline-block; padding: 6px 12px; border: 1px solid rgba(184, 146, 74, 0.25);
+  background: rgba(255, 255, 255, 0.75); border-radius: 999px; color: var(--accent);
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 14px;
+}
+.legal-hero h1 { font-family: "Cormorant Garamond", Georgia, serif; font-size: clamp(2.1rem, 5vw, 2.9rem); margin: 0 0 14px; }
+.legal-hero p { color: var(--muted); max-width: 620px; margin: 0 auto 10px; font-size: 1rem; }
+.legal-updated { color: var(--muted); font-size: 0.82rem; }
+
+.legal-nav { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; padding: 18px 0 8px; }
+.legal-nav a {
+  border: 1px solid var(--border); background: rgba(255,255,255,0.86); border-radius: 999px;
+  padding: 8px 16px; font-size: 0.86rem; font-weight: 600; color: var(--text);
+}
+.legal-nav a:hover { border-color: var(--accent); color: var(--accent); }
+
+.legal-section { padding: 22px 0; scroll-margin-top: 92px; }
+.section-card {
+  background: rgba(255, 255, 255, 0.85); border: 1px solid rgba(232, 220, 203, 0.85);
+  border-radius: 26px; padding: 30px; box-shadow: var(--shadow); backdrop-filter: blur(12px);
+}
+.section-card .kicker { margin-bottom: 8px; }
+.section-card h2 { font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.9rem; margin: 0 0 16px; }
+.section-card p { color: var(--muted); margin: 0 0 14px; font-size: 0.98rem; }
+.section-card p:last-child { margin-bottom: 0; }
+.section-card h3 { font-size: 1.05rem; margin: 18px 0 6px; }
+.section-card ul { margin: 0 0 14px; padding-left: 20px; color: var(--muted); }
+.section-card li { margin-bottom: 7px; font-size: 0.96rem; }
+.section-card strong { color: var(--text); }
+
+footer { text-align: center; color: var(--muted); padding: 26px 0 48px; font-size: 0.86rem; }
+footer a { color: var(--accent); font-weight: 600; }
+
+@media (max-width: 640px) {
+  .section-card { padding: 22px; }
+  .topbar-inner { border-radius: 20px; padding: 10px 8px; }
+}

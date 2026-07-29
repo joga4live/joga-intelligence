@@ -190,7 +190,12 @@
       <div class="sub-scroll" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 110px">
         <div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:#5cbcc4;margin-bottom:4px">{{ ideasKicker }}</div>
         <h2 style="font-family:Newsreader,serif;font-weight:500;font-size:28px;color:#242029;margin:0 0 6px">{{ ideasTitle }}</h2>
-        <p style="font-size:13px;color:#7c7488;margin:0 0 18px;line-height:1.5">{{ ideasSub }}</p>
+        <p style="font-size:13px;color:#7c7488;margin:0 0 4px;line-height:1.5">{{ ideasSub }}</p>
+        <!-- T3: crédito de autor, mismo patrón que subment.html (b.author) / T3: author credit, same pattern as subment.html (b.author) -->
+        <!-- T2 28-jul: decisión del dueño, "que se note el cambio" — gris más oscuro de la misma familia (antes #7c7488, 4.11:1),
+             apunta a ≥7:1 en vez de rascar el mínimo AA / owner's call, "make the change noticeable" — darker gray, same
+             family (was #7c7488, 4.11:1), targets ≥7:1 instead of scraping the minimum. -->
+        <p style="font-size:11.5px;color:#413c48;margin:0 0 18px;line-height:1.4">{{ ideasCredit }}</p>
         <div style="display:flex;flex-direction:column;gap:12px">
           <sc-for list="{{ ideas }}" as="b" hint-placeholder-count="6">
             <div style="border:1px solid rgba(45,38,58,.09);border-radius:18px;padding:16px;background:linear-gradient(160deg,#ffffff,#ffffff)">
@@ -220,7 +225,7 @@
         <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#ffffff;background:linear-gradient(135deg,#2c8d97,#2c8d97)">{{ iaBtnLabel }}</button>
         <sc-if value="{{ iaResult }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:18px;border:1px solid rgba(92,188,196,.3);border-radius:16px;padding:16px;background:rgba(14,70,75,.25)">
-          <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#ffffff;white-space:pre-wrap">{{ iaResult }}</div>
+          <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#242029;white-space:pre-wrap">{{ iaResult }}</div>
         </div>
         </sc-if>
       </div>
@@ -478,7 +483,7 @@ class Component extends DCLogic {
         breath:['Empieza…','Mantén el ritmo…','Un paso más…'],
         nav:['Hoy','Prácticas','Leyes','IA'], days:['L','M','M','J','V','S','D'], modes:['☀ Día','⛅ Tarde','☾ Noche'],
         pKicker:'Tu práctica diaria', pTitle:'Tus 3 prácticas', pSub:'Complétalas para construir tus hábitos.', pProgress:'Progreso', pMark:'Marcar como completada ✓', pDone:'Completada ✓',
-        ideasKicker:'Las leyes del hábito', ideasTitle:'Cómo se forma una costumbre', ideasSub:'Los principios que hacen que un hábito se quede — o se vaya.',
+        ideasKicker:'Las leyes del hábito', ideasTitle:'Cómo se forma una costumbre', ideasSub:'Los principios que hacen que un hábito se quede — o se vaya.', ideasCredit:'Inspirado en el libro Atomic Habits, de James Clear.',
         iaKicker:'Diagnóstico IA', iaTitle:'¿Qué hábito quieres cambiar?', iaSub:'Cuéntame el hábito y te digo cómo reprogramarlo.', iaPlaceholder:'Escribe el hábito que quieres cambiar…', iaBtn:'Analizar mi hábito', iaThinking:'Analizando…', iaGreeting:"Hola, soy Joga 👋 Tu coach de hábitos. Cuéntame qué hábito quieres cambiar y te digo cómo.",
         practices:[
           {icon:'🔍', num:'Práctica 01', title:'Caza la señal', desc:'Identifica qué dispara el hábito que quieres cambiar: hora, lugar, emoción o persona.', extra:'Un hábito siempre tiene un gatillo. Si no ves la señal, no puedes cambiar la rutina.'},
@@ -498,7 +503,7 @@ class Component extends DCLogic {
         breath:['Begin…','Keep the rhythm…','One more step…'],
         nav:['Today','Practices','Laws','AI'], days:['M','T','W','T','F','S','S'], modes:['☀ Day','⛅ Afternoon','☾ Night'],
         pKicker:'Your daily practice', pTitle:'Your 3 practices', pSub:'Complete them to build your habits.', pProgress:'Progress', pMark:'Mark as completed ✓', pDone:'Completed ✓',
-        ideasKicker:'The laws of habit', ideasTitle:'How a habit is formed', ideasSub:'The principles that make a habit stick — or leave.',
+        ideasKicker:'The laws of habit', ideasTitle:'How a habit is formed', ideasSub:'The principles that make a habit stick — or leave.', ideasCredit:'Inspired by the book Atomic Habits, by James Clear.',
         iaKicker:'AI Diagnosis', iaTitle:'Which habit do you want to change?', iaSub:'Tell me the habit and I’ll tell you how to reprogram it.', iaPlaceholder:'Write the habit you want to change…', iaBtn:'Analyze my habit', iaThinking:'Analyzing…', iaGreeting:"Hi, I'm Joga 👋 Your habits coach. Tell me which habit you want to change and I'll show you how.",
         practices:[
           {icon:'🔍', num:'Practice 01', title:'Hunt the cue', desc:'Identify what triggers the habit you want to change: time, place, emotion or person.', extra:'A habit always has a trigger. If you can’t see the cue, you can’t change the routine.'},
@@ -649,7 +654,7 @@ class Component extends DCLogic {
           btnStyle: { width:'100%', marginTop:'14px', appearance:'none', cursor:'pointer', borderRadius:'999px', padding:'11px', font:'600 12.5px Inter', border:'0', color: done?'#ffffff':'#2c8d97', background: done?'#2c8d97':'rgba(44,141,151,.12)', transition:'all .3s ease' },
           toggle: () => this.togglePractice(i) };
       }),
-      ideasKicker: t.ideasKicker, ideasTitle: t.ideasTitle, ideasSub: t.ideasSub, ideas: ideasList,
+      ideasKicker: t.ideasKicker, ideasTitle: t.ideasTitle, ideasSub: t.ideasSub, ideasCredit: t.ideasCredit, ideas: ideasList,
       iaKicker: t.iaKicker, iaTitle: t.iaTitle, iaSub: t.iaSub, iaPlaceholder: t.iaPlaceholder,
       iaBtnLabel: st.iaLoading ? t.iaThinking : t.iaBtn, iaGreeting: t.iaGreeting,
       iaInput: st.iaInput, iaResult: st.iaResult, iaLoading: st.iaLoading,

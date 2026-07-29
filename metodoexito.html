@@ -267,7 +267,12 @@
       <div class="sub-scroll" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 110px">
         <div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:#3a8fb0;margin-bottom:4px">{{ lawsKicker }}</div>
         <h2 style="font-family:Newsreader,serif;font-weight:500;font-size:28px;color:#242029;margin:0 0 6px">{{ lawsTitle }}</h2>
-        <p style="font-size:13px;color:#7c7488;margin:0 0 18px;line-height:1.5">{{ lawsSub }}</p>
+        <p style="font-size:13px;color:#7c7488;margin:0 0 4px;line-height:1.5">{{ lawsSub }}</p>
+        <!-- T3: crédito de autor, mismo patrón que subment.html (b.author) / T3: author credit, same pattern as subment.html (b.author) -->
+        <!-- T2 28-jul: decisión del dueño, "que se note el cambio" — gris más oscuro de la misma familia (antes #7c7488, 4.11:1),
+             apunta a ≥7:1 en vez de rascar el mínimo AA / owner's call, "make the change noticeable" — darker gray, same
+             family (was #7c7488, 4.11:1), targets ≥7:1 instead of scraping the minimum. -->
+        <p style="font-size:11.5px;color:#413c48;margin:0 0 18px;line-height:1.4">{{ lawsCredit }}</p>
         <div style="display:flex;flex-direction:column;gap:12px">
           <sc-for list="{{ leyes }}" as="law" hint-placeholder-count="7">
             <div style="border:1px solid rgba(45,38,58,.09);border-radius:18px;padding:16px;background:linear-gradient(160deg,#ffffff,#ffffff)">
@@ -302,7 +307,7 @@
         <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#ffffff;background:linear-gradient(135deg,#2f6ca0,#3a8fb0)">{{ iaBtnLabel }}</button>
         <sc-if value="{{ iaResult }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:18px;border:1px solid rgba(90,160,200,.3);border-radius:16px;padding:16px;background:rgba(34,90,50,.25)">
-          <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#ffffff;white-space:pre-wrap">{{ iaResult }}</div>
+          <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#242029;white-space:pre-wrap">{{ iaResult }}</div>
         </div>
         </sc-if>
       </div>
@@ -521,7 +526,7 @@ class Component extends DCLogic {
         quote:'"Un paso ordenado vale más que mil saltos sin rumbo."', comeback:'Vuelve mañana para dar tu siguiente paso.',
         toast:'Paso completado · racha', paused:'En pausa', script:["Respirá profundo.","No necesitás saltar; necesitás el siguiente paso.","Repetí:","Crezco un peldaño cada día.","Avanzo con estrategia, no con suerte.","Mi mundo exterior refleja mi orden interior.","Sé hacia dónde voy, y eso me da calma.","Inhala claridad… exhala la prisa.","No comparo mi camino con el de nadie.","Cada paso ordenado me acerca. Hoy doy uno, con intención.","El método me sostiene."], glowNote:'El glow cambia con la hora', aboutTitle:"Sobre este poder", aboutBody:"El método del éxito, paso a paso. Alinea cada movimiento con las leyes que de verdad funcionan, no con la suerte. La reina no improvisa: avanza con estrategia.", aboutClose:"Entendido", unlockTag:"Domina el método", unlockCta:"Entrar", cday:"Días 16–20", cdef:"El método del éxito, paso a paso. Avanza con estrategia, no con suerte.", crule:"Nunca dos días seguidos sin hacerlo.",
         breath:['Prepara…','Da el paso…','Afianza…'],
-        nav:['Hoy','Pasos','Leyes','IA'], lawsKicker:'Las 7 Leyes', lawsTitle:'Las 7 Leyes', lawsSub:'Los principios que rigen tu éxito — úsalos a tu favor.', iaKicker:'Diagnóstico IA', iaTitle:'¿En qué te ayudo?', iaSub:'Cuéntame tu situación y te digo qué ley y qué paso activar.', iaPlaceholder:'Escribe tu situación…', iaBtn:'Analizar mi situación', iaThinking:'Analizando…', iaGreeting:"Hola, soy Joga 👋 Tu coach del método. Cuéntame dónde estás atorado y te digo qué ley y qué paso activar.", days:['L','M','M','J','V','S','D'], modes:['☀ Día','⛅ Tarde','☾ Noche'],
+        nav:['Hoy','Pasos','Leyes','IA'], lawsKicker:'Las 7 Leyes', lawsTitle:'Las 7 Leyes', lawsSub:'Los principios que rigen tu éxito — úsalos a tu favor.', lawsCredit:'Inspirado en las Siete Leyes Mentales del Éxito de Brian Tracy.', iaKicker:'Diagnóstico IA', iaTitle:'¿En qué te ayudo?', iaSub:'Cuéntame tu situación y te digo qué ley y qué paso activar.', iaPlaceholder:'Escribe tu situación…', iaBtn:'Analizar mi situación', iaThinking:'Analizando…', iaGreeting:"Hola, soy Joga 👋 Tu coach del método. Cuéntame dónde estás atorado y te digo qué ley y qué paso activar.", days:['L','M','M','J','V','S','D'], modes:['☀ Día','⛅ Tarde','☾ Noche'],
         pKicker:'Tu camino', pTitle:'Tus 3 prácticas', pSub:'Complétalas para despertar tu poder.', pProgress:'Progreso', pMark:'Marcar como completada ✓', pDone:'Completada ✓',
         practices:[
           {icon:'🧭', title:'La estrella del año', desc:'Escribe en una sola frase quién quieres ser al final del año — no qué quieres lograr, sino en quién te quieres convertir.', extra:'Ejemplo: «Quiero ser una persona en paz, con un negocio que me sostiene sin agotarme.»'},
@@ -539,7 +544,7 @@ class Component extends DCLogic {
         quote:'"One ordered step beats a thousand aimless leaps."', comeback:'Come back tomorrow to take your next step.',
         toast:'Step complete · streak', paused:'Paused', script:["Breathe deep.","You don't need to leap; you need the next step.","Repeat:","I grow one step every day.","I advance with strategy, not luck.","My outer world reflects my inner order.","I know where I'm going, and that gives me calm.","Inhale clarity… exhale the rush.","I don't compare my path to anyone's.","Every ordered step brings me closer. Today I take one, with intention.","The method holds me."], glowNote:'The glow shifts with the time', aboutTitle:"About this power", aboutBody:"The method of success, step by step. Align every move with the laws that truly work, not with luck. The queen doesn’t improvise: she advances with strategy.", aboutClose:"Got it", unlockTag:"Master the method", unlockCta:"Enter", cday:"Days 16–20", cdef:"The method of success, step by step. Advance with strategy, not luck.", crule:"Never two days in a row without doing it.",
         breath:['Prepare…','Take the step…','Lock it in…'],
-        nav:['Today','Steps','Laws','AI'], lawsKicker:'The 7 Laws', lawsTitle:'The 7 Laws', lawsSub:'The principles that govern your success — use them in your favor.', iaKicker:'AI Diagnosis', iaTitle:'How can I help?', iaSub:'Tell me your situation and I’ll tell you which law and step to activate.', iaPlaceholder:'Write your situation…', iaBtn:'Analyze my situation', iaThinking:'Analyzing…', iaGreeting:"Hi, I'm Joga 👋 Your method coach. Tell me where you're stuck and I'll tell you which law and step to activate.", days:['M','T','W','T','F','S','S'], modes:['☀ Day','⛅ Afternoon','☾ Night'],
+        nav:['Today','Steps','Laws','AI'], lawsKicker:'The 7 Laws', lawsTitle:'The 7 Laws', lawsSub:'The principles that govern your success — use them in your favor.', lawsCredit:'Inspired by Brian Tracy’s Seven Mental Laws of Success.', iaKicker:'AI Diagnosis', iaTitle:'How can I help?', iaSub:'Tell me your situation and I’ll tell you which law and step to activate.', iaPlaceholder:'Write your situation…', iaBtn:'Analyze my situation', iaThinking:'Analyzing…', iaGreeting:"Hi, I'm Joga 👋 Your method coach. Tell me where you're stuck and I'll tell you which law and step to activate.", days:['M','T','W','T','F','S','S'], modes:['☀ Day','⛅ Afternoon','☾ Night'],
         pKicker:'Your path', pTitle:'Your 3 practices', pSub:'Complete them to awaken your power.', pProgress:'Progress', pMark:'Mark as completed ✓', pDone:'Completed ✓',
         practices:[
           {icon:'🧭', title:'The star of the year', desc:'Write in a single sentence who you want to be by the end of the year — not what you want to achieve, but who you want to become.', extra:'Example: “I want to be someone at peace, with a business that supports me without burning me out.”'},
@@ -699,7 +704,7 @@ class Component extends DCLogic {
           btnStyle: { width:'100%', marginTop:'14px', appearance:'none', cursor:'pointer', borderRadius:'999px', padding:'11px', font:'600 12.5px Inter', border:'0', color: done?'#ffffff':'#2f6ca0', background: done?'#2f6ca0':'rgba(58,143,176,.12)', transition:'all .3s ease' },
           toggle: () => this.togglePractice(i) };
       }),
-      lawsKicker: t.lawsKicker, lawsTitle: t.lawsTitle, lawsSub: t.lawsSub, leyes: leyesList,
+      lawsKicker: t.lawsKicker, lawsTitle: t.lawsTitle, lawsSub: t.lawsSub, lawsCredit: t.lawsCredit, leyes: leyesList,
       iaKicker: t.iaKicker, iaTitle: t.iaTitle, iaSub: t.iaSub, iaPlaceholder: t.iaPlaceholder,
       iaBtnLabel: st.iaLoading ? t.iaThinking : t.iaBtn, iaGreeting: t.iaGreeting,
       iaInput: st.iaInput, iaResult: st.iaResult, iaLoading: st.iaLoading,

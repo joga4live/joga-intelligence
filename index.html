@@ -697,6 +697,22 @@
         font-size: 0.92rem;
       }
 
+      .footer-legal {
+        margin-top: 8px;
+        font-size: 0.82rem;
+      }
+
+      .footer-legal a {
+        color: var(--text);
+        font-weight: 600;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      .footer-legal a:hover {
+        color: var(--accent);
+      }
+
       .music-toast {
         position: fixed;
         left: 50%;
@@ -1035,6 +1051,11 @@
 
     <footer>
       <div class="container" id="footerText">Joga Intelligence · Transformacion consciente</div>
+      <div class="container footer-legal">
+        <a href="legal.html#terminos" id="footerTerms">Términos</a> ·
+        <a href="legal.html#privacidad" id="footerPrivacy">Privacidad</a> ·
+        <a href="legal.html#reembolsos" id="footerRefunds">Reembolsos</a>
+      </div>
     </footer>
 
     <div class="music-toast" id="musicToast" aria-live="polite" role="status">
@@ -1164,6 +1185,9 @@
           ctaDesc: 'Comienza hoy.',
           ctaButton: 'Iniciar demo',
           footerText: 'Joga Intelligence · Transformación consciente',
+          footerTerms: 'Términos',
+          footerPrivacy: 'Privacidad',
+          footerRefunds: 'Reembolsos',
           unlockKicker: 'Acceso premium',
           unlockTitle: 'Ingresa tu código',
           unlockSub: 'Escribe el código que recibiste por correo al completar tu compra.',
@@ -1273,6 +1297,9 @@
           ctaDesc: 'Start today.',
           ctaButton: 'Launch demo',
           footerText: 'Joga Intelligence · Conscious transformation',
+          footerTerms: 'Terms',
+          footerPrivacy: 'Privacy',
+          footerRefunds: 'Refunds',
           unlockKicker: 'Premium access',
           unlockTitle: 'Enter your code',
           unlockSub: 'Enter the code you received by email after your purchase.',

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Joga Intelligence: términos de servicio, política de privacidad y política de reembolsos." />
+    <meta name="theme-color" content="#f7f2e8" />
+    <title>Joga Intelligence — Legal</title>
+    <link rel="icon" href="favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="legal.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a href="index.html" class="brand"><svg viewBox="0 0 120 120" fill="none" aria-hidden="true" style="width:20px;height:20px;flex-shrink:0;color:var(--accent)"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg>JOGA INTELLIGENCE</a>
+        <div class="lang-switch">
+          <button class="lang-btn active" type="button" data-lang="es" onclick="setLegalLanguage('es')">ES</button>
+          <button class="lang-btn" type="button" data-lang="en" onclick="setLegalLanguage('en')">EN</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="legal-hero container">
+      <span class="kicker" id="pageKicker">Legal</span>
+      <h1 id="pageTitle">Términos, privacidad y reembolsos</h1>
+      <p id="pageIntro"></p>
+      <p class="legal-updated" id="pageUpdated"></p>
+    </section>
+
+    <nav class="legal-nav container" aria-label="Secciones legales / Legal sections">
+      <a href="#terminos" id="navTerms">Términos</a>
+      <a href="#privacidad" id="navPrivacy">Privacidad</a>
+      <a href="#reembolsos" id="navRefunds">Reembolsos</a>
+    </nav>
+
+    <main>
+      <section class="legal-section container" id="terminos">
+        <div class="section-card">
+          <span class="kicker" id="termsKicker">01 · Términos</span>
+          <h2 id="termsTitle">Términos de servicio</h2>
+          <p id="termsIntro"></p>
+          <p id="termsAccounts"></p>
+          <p id="termsSubscription"></p>
+          <p id="termsSharing"></p>
+          <p id="termsAdvice"></p>
+          <p id="termsCredits"></p>
+          <p id="termsLiability"></p>
+          <p id="termsChanges"></p>
+          <p id="termsContact"></p>
+        </div>
+      </section>
+
+      <section class="legal-section container" id="privacidad">
+        <div class="section-card">
+          <span class="kicker" id="privacyKicker">02 · Privacidad</span>
+          <h2 id="privacyTitle">Política de privacidad</h2>
+          <p id="privacyIntro"></p>
+          <h3 id="privacyLocalTitle"></h3>
+          <p id="privacyLocalBody"></p>
+          <ul id="privacyLocalItems"></ul>
+          <h3 id="privacyAITitle"></h3>
+          <p id="privacyAIBody"></p>
+          <p id="privacyAnthropic"></p>
+          <p id="privacyHosting"></p>
+          <p id="privacyPurchase"></p>
+          <p id="privacyNoTracking"></p>
+          <p id="privacyRights"></p>
+          <p id="privacyContact"></p>
+        </div>
+      </section>
+
+      <section class="legal-section container" id="reembolsos">
+        <div class="section-card">
+          <span class="kicker" id="refundsKicker">03 · Reembolsos</span>
+          <h2 id="refundsTitle">Política de reembolsos</h2>
+          <p id="refundsGuarantee"></p>
+          <p id="refundsHow"></p>
+          <p id="refundsProcessing"></p>
+          <p id="refundsRenewals"></p>
+          <p id="refundsException"></p>
+          <p id="refundsContact"></p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p id="footerNote"></p>
+        <a href="index.html" id="footerBack"></a>
+      </div>
+    </footer>
+
+    <script src="legal.js"></script>
+  </body>
+</html>

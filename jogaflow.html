@@ -324,6 +324,7 @@
       inviteCta:"Ver planes",
       iaKicker:"Diagnóstico IA",iaTitle:"¿Cómo está tu energía hoy?",
       iaSub:"Cuéntame cómo te sientes y te sugiero qué ajustar.",
+      iaDisclaimer:"⚠️ Esta app ofrece prácticas de bienestar general. No es consejo médico ni psicológico, no diagnostica ni trata ninguna condición. Si tienes un problema de salud física o mental, consulta a un profesional.",
       iaGreeting:"Hola, soy Joga 👋 Tu guía de energía corporal. Cuéntame cómo estás y te doy una sugerencia para hoy.",
       iaPlaceholder:"Escribe cómo te sientes hoy…",
       iaBtn:"Analizar mi energía",iaThinking:"Analizando…",
@@ -387,6 +388,7 @@
       inviteCta:"See plans",
       iaKicker:"AI diagnosis",iaTitle:"How is your energy today?",
       iaSub:"Tell me how you feel and I'll suggest what to adjust.",
+      iaDisclaimer:"⚠️ This app offers general wellness practices. It is not medical or psychological advice and does not diagnose or treat any condition. If you have a physical or mental health concern, please consult a professional.",
       iaGreeting:"Hi, I'm Joga 👋 Your body-energy guide. Tell me how you're doing and I'll give you a suggestion for today.",
       iaPlaceholder:"Write how you feel today…",
       iaBtn:"Analyze my energy",iaThinking:"Analyzing…",
@@ -583,6 +585,9 @@
       '<div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:var(--flow);margin-bottom:4px">'+s.iaKicker+'</div>'+
       '<h2 style="font-family:Newsreader,serif;font-weight:500;font-size:26px;color:var(--ink);margin:0 0 6px">'+s.iaTitle+'</h2>'+
       '<p style="font-size:13px;color:var(--soft);margin:0 0 16px;line-height:1.5">'+s.iaSub+'</p>'+
+      /* Aviso legal T2: no es consejo medico. Contraste medido ~8.6:1 (#5A3B00 sobre #FBEBC7).
+         Legal notice T2: not medical advice. Measured contrast ~8.6:1 (#5A3B00 on #FBEBC7). */
+      '<div style="background:#FBEBC7;border:1px solid #E8C874;border-radius:12px;padding:11px 14px;font:600 12px Inter;line-height:1.5;color:#5A3B00;margin-bottom:16px">'+s.iaDisclaimer+'</div>'+
       '<div style="display:flex;gap:11px;align-items:flex-start;margin-bottom:16px">'+
         '<div style="flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,var(--flow),var(--flow2));font-family:Newsreader,serif;font-weight:700;color:#fff;font-size:16px">J</div>'+
         '<div style="background:rgba(45,38,58,.06);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:var(--ink)">'+s.iaGreeting+'</div>'+
