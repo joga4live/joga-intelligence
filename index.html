@@ -879,8 +879,8 @@
           <p id="videoSpotDesc">Un vistazo rápido a Joga Intelligence: el método, las apps y cómo empezar hoy.</p>
           <div class="video-spot-frame">
             <video class="video-spot-video" id="videoSpotAria" controls preload="metadata" playsinline>
-              <source src="assets/video/joga-ad-spot.mp4" type="video/mp4">
-              <track kind="subtitles" src="assets/video/joga-ad-spot.es.vtt" srclang="es" label="Español" default>
+              <source src="assets/joga-ad-spot.mp4" type="video/mp4">
+              <track kind="subtitles" src="assets/joga-ad-spot.es.vtt" srclang="es" label="Español" default>
             </video>
           </div>
           <div class="actions video-spot-actions">
@@ -1403,8 +1403,8 @@
         const videoSpotVideo = document.querySelector('.video-spot-video');
         if (videoSpotVideo) {
           const wantedSrc = currentLanguage === 'en'
-            ? 'assets/video/joga-ad-spot-en.mp4'
-            : 'assets/video/joga-ad-spot.mp4';
+            ? 'assets/joga-ad-spot-en.mp4'
+            : 'assets/joga-ad-spot.mp4';
           const source = videoSpotVideo.querySelector('source');
           if (source && !source.src.endsWith(wantedSrc)) {
             const wasPlaying = !videoSpotVideo.paused;
@@ -1424,8 +1424,8 @@
             const newTrack = document.createElement('track');
             newTrack.kind = 'subtitles';
             newTrack.src = currentLanguage === 'en'
-              ? 'assets/video/joga-ad-spot-en.en.vtt'
-              : 'assets/video/joga-ad-spot.es.vtt';
+              ? 'assets/joga-ad-spot-en.en.vtt'
+              : 'assets/joga-ad-spot.es.vtt';
             newTrack.srclang = currentLanguage === 'en' ? 'en' : 'es';
             newTrack.label = currentLanguage === 'en' ? 'English' : 'Español';
             newTrack.default = true;
