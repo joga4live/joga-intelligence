@@ -353,6 +353,26 @@
         font-size: 1rem;
       }
 
+      .video-spot-frame {
+        margin-top: 20px;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: 0 10px 24px rgba(31, 25, 22, 0.05);
+        background: #000;
+      }
+
+      .video-spot-video {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+      }
+
+      .video-spot-actions {
+        margin-top: 20px;
+      }
+
       .benefits-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -774,7 +794,7 @@
       }
 
       @media (max-width: 640px) {
-        .benefits-grid, .module-grid { grid-template-columns: 1fr; }
+        .benefits-grid, .module-grid, .metric-strip { grid-template-columns: 1fr; }
         .section-card { padding: 24px; }
         .hero { padding-top: 20px; }
         .topbar-inner { border-radius: 20px; padding: 10px 8px; }
@@ -847,6 +867,24 @@
               <span class="pill" id="pillTwo">Acompanamiento</span>
               <span class="pill" id="pillThree">Progreso</span>
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="videoSpot">
+      <div class="container">
+        <div class="section-card">
+          <h3 id="videoSpotTitle">Mira cómo funciona</h3>
+          <p id="videoSpotDesc">Un vistazo rápido a Joga Intelligence: el método, las apps y cómo empezar hoy.</p>
+          <div class="video-spot-frame">
+            <video class="video-spot-video" id="videoSpotAria" controls preload="metadata" playsinline>
+              <source src="assets/video/joga-ad-spot.mp4" type="video/mp4">
+              <track kind="subtitles" src="assets/video/joga-ad-spot.es.vtt" srclang="es" label="Español" default>
+            </video>
+          </div>
+          <div class="actions video-spot-actions">
+            <a class="btn btn-primary" id="videoSpotBtn" href="#pricing">Ver precios y empezar</a>
           </div>
         </div>
       </div>
@@ -1105,6 +1143,10 @@
           pillOne: 'Claridad',
           pillTwo: 'Acompañamiento',
           pillThree: 'Progreso',
+          videoSpotTitle: 'Mira cómo funciona',
+          videoSpotDesc: 'Un vistazo rápido a Joga Intelligence: el método, las apps y cómo empezar hoy.',
+          videoSpotBtn: 'Ver precios y empezar',
+          videoSpotAria: 'Video promocional de Joga Intelligence, narrado en español.',
           ecosystemTitle: 'Tu evolución, integrada',
           ecosystemDesc: 'Joga Intelligence integra las áreas esenciales de tu vida para que el crecimiento deje de ser disperso y se convierta en una ruta consciente, guiada y transformadora.',
           offerTitle: 'Lo que ofrece',
@@ -1217,6 +1259,10 @@
           pillOne: 'Clarity',
           pillTwo: 'Guidance',
           pillThree: 'Progress',
+          videoSpotTitle: 'See how it works',
+          videoSpotDesc: 'A quick look at Joga Intelligence: the method, the apps, and how to start today.',
+          videoSpotBtn: 'See pricing and start',
+          videoSpotAria: 'Joga Intelligence promotional video, narrated in English.',
           ecosystemTitle: 'Your evolution, integrated',
           ecosystemDesc: 'Joga Intelligence brings together the essential areas of your life so growth stops being fragmented and becomes a conscious, guided, and transformative path.',
           offerTitle: 'What it offers',
@@ -1344,11 +1390,48 @@
             // Los <input> no pintan texto por textContent; usan placeholder / <input> elements don't render text via textContent; they use placeholder
             if (el.tagName === 'INPUT' && 'placeholder' in el) {
               el.placeholder = ui[key];
+            } else if (el.tagName === 'VIDEO') {
+              // El <video> tampoco pinta texto; el nombre accesible va en aria-label / <video> doesn't render text either; the accessible name goes in aria-label
+              el.setAttribute('aria-label', ui[key]);
             } else {
               el.textContent = ui[key];
             }
           }
         });
+        // Video del spot: cambia de fuente según el idioma activo, reusa el toggle ES/EN existente
+        // Spot video: swap source per active language, reuses the existing ES/EN toggle
+        const videoSpotVideo = document.querySelector('.video-spot-video');
+        if (videoSpotVideo) {
+          const wantedSrc = currentLanguage === 'en'
+            ? 'assets/video/joga-ad-spot-en.mp4'
+            : 'assets/video/joga-ad-spot.mp4';
+          const source = videoSpotVideo.querySelector('source');
+          if (source && !source.src.endsWith(wantedSrc)) {
+            const wasPlaying = !videoSpotVideo.paused;
+            source.src = wantedSrc;
+            videoSpotVideo.load();
+            if (wasPlaying) videoSpotVideo.play().catch(() => {});
+            // Subtítulos: se reemplaza el <track> completo (no se mutan sus atributos) porque
+            // algunos navegadores no vuelven a parsear un <track> ya cargado si solo cambia el
+            // src, y dejarían cues del idioma anterior. Un <track> nuevo garantiza que no quede
+            // nada del idioma previo.
+            // Subtitles: the whole <track> is replaced (its attributes aren't mutated) because
+            // some browsers won't re-parse an already-loaded <track> on a src-only change, which
+            // would leave stale cues from the previous language. A fresh <track> guarantees
+            // nothing from the previous language remains.
+            const oldTrack = videoSpotVideo.querySelector('track');
+            if (oldTrack) oldTrack.remove();
+            const newTrack = document.createElement('track');
+            newTrack.kind = 'subtitles';
+            newTrack.src = currentLanguage === 'en'
+              ? 'assets/video/joga-ad-spot-en.en.vtt'
+              : 'assets/video/joga-ad-spot.es.vtt';
+            newTrack.srclang = currentLanguage === 'en' ? 'en' : 'es';
+            newTrack.label = currentLanguage === 'en' ? 'English' : 'Español';
+            newTrack.default = true;
+            videoSpotVideo.appendChild(newTrack);
+          }
+        }
         if (typeof reflectPremium === "function") reflectPremium();
       }
 
