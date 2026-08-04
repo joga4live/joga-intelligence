@@ -637,9 +637,6 @@
     #intro{display:none!important}
   }
 
-  /* Centrar el túnel cuando vive en la sección launcher */
-  #launcher #chips{display:flex;justify-content:center;align-items:center;width:100%}
-  #launcher #chips .tunnel3d{max-width:1120px;margin-left:auto;margin-right:auto}
   /* Centrar el contenido interno del túnel */
   .tunnel3d .t-stage{margin:0 auto;max-width:1120px}
   .tunnel3d .t-hint{max-width:1120px;margin-left:auto;margin-right:auto}
@@ -764,7 +761,6 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
       <div class="navactions">
         <div class="langtoggle" id="lang-toggle" role="group" aria-label="Idioma / Language"><button data-lang="es">ES</button><button data-lang="en">EN</button></div>
         <button class="navcta install" id="install-btn" hidden data-i18n="nav.install">Instalar app</button>
-        <button class="navcta" id="nav-apps" data-i18n="nav.apps">Abrir las apps</button>
       </div>
     </div>
   </nav>
@@ -775,7 +771,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
     <button id="jbw-mute" aria-label="Silenciar / Mute">🔊</button>
     <div class="jbw-brand"><svg class="joga-emblem" viewBox="0 0 120 120" fill="none" aria-hidden="true" style="width:20px;height:20px;flex-shrink:0;color:var(--gold)"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg><small>JOGA INTELLIGENCE</small></div>
     <div class="jbw-orb" id="jbw-orb" title="Toca para escuchar a Joga">
-      <video class="jbw-orb-video" src="assets/joga-welcome-orb.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+      <video class="jbw-orb-video" src="joga-welcome-orb.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
     </div>
     <button class="jbw-hint" id="jbw-hint">▶ Presiona para escuchar a Joga</button>
     <div class="jbw-speech"><span id="jbw-typed"></span><span class="jbw-caret" id="jbw-caret">▍</span></div>
@@ -1161,7 +1157,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 
   const SHARE_SVG='<svg class="share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg>';
   const T={
-    es:{ "nav.apps":"Abrir las apps","nav.install":"Instalar app","hero.eyebrow":"Inteligencia para la vida",
+    es:{ "nav.install":"Instalar app","hero.eyebrow":"Inteligencia para la vida",
       "hero.h1":"Despierta los siete poderes que ya viven en ti. <em>En 30 días.</em>",
       "hero.lede":"Tu energía, tu mente, tu tiempo, tus hábitos, tu método, tu dinero y tus ventas — siete apps que trabajan como una sola. <b>Un reto guiado de 30 días</b> para transformar lo que de verdad mueve tu vida.",
       "hero.cta1":"Empezar el reto de 30 días →","hero.cta2":"Ver todas las apps",
@@ -1182,7 +1178,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
       "founder.promise":"En 30 días empiezas a despertar el poder que ya vive en ti.",
       "proof.eyebrow":"No es promesa, es real","proof.title":"Mírala funcionando",
       "open":"Abrir" },
-    en:{ "nav.apps":"Open the apps","nav.install":"Install app","hero.eyebrow":"Intelligence for life",
+    en:{ "nav.install":"Install app","hero.eyebrow":"Intelligence for life",
       "hero.h1":"Awaken the seven powers already alive in you. <em>In 30 days.</em>",
       "hero.lede":"Your energy, your mind, your time, your habits, your method, your money and your sales — seven apps that work as one. <b>A guided 30-day challenge</b> to transform what truly moves your life.",
       "hero.cta1":"Start the 30-day challenge →","hero.cta2":"See all the apps",
@@ -1577,11 +1573,6 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
   document.getElementById("vback").addEventListener("click",()=>{ playTapSfx(); closeApp(); });
   window.addEventListener("message",e=>{ if(e&&e.data&&e.data.type==="jogaExit"&&viewer.classList.contains("open")) closeApp(); });
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&viewer.classList.contains("open"))closeApp();});
-
-  // "ver apps" buttons → scroll to launcher
-  const toLauncher=()=>{ playTapSfx(); document.getElementById("launcher").scrollIntoView({behavior:"smooth"}); };
-  document.getElementById("nav-apps").addEventListener("click",toLauncher);
-  document.getElementById("hero-apps").addEventListener("click",toLauncher);
 
   /* ---------------- Joga concierge ---------------- */
   const appByKey = {};
