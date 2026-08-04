@@ -637,9 +637,6 @@
     #intro{display:none!important}
   }
 
-  /* Centrar el túnel cuando vive en la sección launcher */
-  #launcher #chips{display:flex;justify-content:center;align-items:center;width:100%}
-  #launcher #chips .tunnel3d{max-width:1120px;margin-left:auto;margin-right:auto}
   /* Centrar el contenido interno del túnel */
   .tunnel3d .t-stage{margin:0 auto;max-width:1120px}
   .tunnel3d .t-hint{max-width:1120px;margin-left:auto;margin-right:auto}
@@ -696,14 +693,8 @@
 #jbw-mute{position:absolute;top:18px;left:18px;width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#cfc6b4;font-size:15px;cursor:pointer;display:grid;place-items:center;z-index:5}
 .jbw-brand{display:flex;align-items:center;gap:10px;margin-bottom:26px;opacity:.9}
 .jbw-brand small{font:600 8px/1 system-ui;letter-spacing:.34em;text-transform:uppercase;color:#8a8276}
-.jbw-orb{position:relative;width:200px;height:200px;margin-bottom:28px;animation:jbwFloat 6s ease-in-out infinite;cursor:pointer}
-.jbw-glow{position:absolute;left:50%;top:50%;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(150,108,246,.55),rgba(150,108,246,0) 66%);animation:jbwPulse 5s ease-in-out infinite,jbwHue 18s linear infinite}
-.jbw-rings{position:absolute;inset:-14px;border-radius:50%;transform-style:preserve-3d;perspective:600px}
-.jbw-rings i{position:absolute;border-radius:50%;display:block}
-.jbw-rings .r1{inset:0;border:1.5px solid rgba(205,182,255,.5);box-shadow:0 0 16px rgba(150,108,246,.4);animation:jbwR1 14s linear infinite}
-.jbw-rings .r2{inset:6px;border:1px solid rgba(231,196,106,.4);animation:jbwR2 19s linear infinite}
-.jbw-core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:124px;height:124px;border-radius:50%;background:radial-gradient(circle at 36% 28%,rgba(255,255,255,.95),rgba(255,255,255,0) 42%),repeating-linear-gradient(0deg,rgba(255,255,255,.16) 0 1px,transparent 1px 6px),radial-gradient(circle at 50% 58%,#9a6cf6,#3a1f6e 100%);box-shadow:0 12px 40px -8px rgba(150,108,246,.7),inset 0 0 0 1px rgba(255,255,255,.14),inset 0 -10px 26px rgba(20,8,40,.6);animation:jbwHue 18s linear infinite}
-.jbw-word{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-family:var(--serif);font-weight:600;font-size:22px;letter-spacing:.16em;animation:jbwWord 5.5s ease-in-out infinite;z-index:3}
+.jbw-orb{position:relative;width:240px;height:240px;margin-bottom:28px;overflow:hidden;border-radius:50%;animation:jbwFloat 6s ease-in-out infinite;cursor:pointer}
+.jbw-orb-video{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(2);transform-origin:center;width:240px;height:240px;border-radius:50%;object-fit:cover;pointer-events:none}
 .jbw-speech{min-height:120px;max-width:600px;margin-bottom:6px;font-family:var(--serif);font-weight:500;font-size:clamp(20px,3.4vw,27px);line-height:1.42;color:var(--bone,#F2ECDD)}
 .jbw-caret{display:inline-block;margin-left:1px;color:#9a6cf6;animation:jbwCaret 1s steps(1) infinite}
 .jbw-paths{width:100%}
@@ -738,11 +729,6 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 @media(max-width:720px){.jbw-grid{grid-template-columns:1fr}}
 @media (prefers-reduced-motion: reduce){
   .jbw-orb{animation:jbwFloat 6s ease-in-out infinite!important}
-  .jbw-glow{animation:jbwPulse 5s ease-in-out infinite,jbwHue 18s linear infinite!important}
-  .jbw-core{animation:jbwHue 18s linear infinite!important}
-  .jbw-rings .r1{animation:jbwR1 14s linear infinite!important}
-  .jbw-rings .r2{animation:jbwR2 19s linear infinite!important}
-  .jbw-word{animation:jbwWord 5.5s ease-in-out infinite!important}
   .jbw-caret{animation:jbwCaret 1s steps(1) infinite!important}
   .jbw-hint{animation:jbwHint 2.2s ease-in-out infinite!important}
 }
@@ -775,7 +761,6 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
       <div class="navactions">
         <div class="langtoggle" id="lang-toggle" role="group" aria-label="Idioma / Language"><button data-lang="es">ES</button><button data-lang="en">EN</button></div>
         <button class="navcta install" id="install-btn" hidden data-i18n="nav.install">Instalar app</button>
-        <button class="navcta" id="nav-apps" data-i18n="nav.apps">Abrir las apps</button>
       </div>
     </div>
   </nav>
@@ -786,10 +771,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
     <button id="jbw-mute" aria-label="Silenciar / Mute">🔊</button>
     <div class="jbw-brand"><svg class="joga-emblem" viewBox="0 0 120 120" fill="none" aria-hidden="true" style="width:20px;height:20px;flex-shrink:0;color:var(--gold)"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg><small>JOGA INTELLIGENCE</small></div>
     <div class="jbw-orb" id="jbw-orb" title="Toca para escuchar a Joga">
-      <div class="jbw-glow"></div>
-      <div class="jbw-rings"><i class="r1"></i><i class="r2"></i></div>
-      <div class="jbw-core"></div>
-      <div class="jbw-word">JOGA</div>
+      <video class="jbw-orb-video" src="assets/joga-welcome-orb.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
     </div>
     <button class="jbw-hint" id="jbw-hint">▶ Presiona para escuchar a Joga</button>
     <div class="jbw-speech"><span id="jbw-typed"></span><span class="jbw-caret" id="jbw-caret">▍</span></div>
@@ -1175,7 +1157,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
 
   const SHARE_SVG='<svg class="share" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4M12 4l-4 4M12 4l4 4"/><path d="M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg>';
   const T={
-    es:{ "nav.apps":"Abrir las apps","nav.install":"Instalar app","hero.eyebrow":"Inteligencia para la vida",
+    es:{ "nav.install":"Instalar app","hero.eyebrow":"Inteligencia para la vida",
       "hero.h1":"Despierta los siete poderes que ya viven en ti. <em>En 30 días.</em>",
       "hero.lede":"Tu energía, tu mente, tu tiempo, tus hábitos, tu método, tu dinero y tus ventas — siete apps que trabajan como una sola. <b>Un reto guiado de 30 días</b> para transformar lo que de verdad mueve tu vida.",
       "hero.cta1":"Empezar el reto de 30 días →","hero.cta2":"Ver todas las apps",
@@ -1196,7 +1178,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
       "founder.promise":"En 30 días empiezas a despertar el poder que ya vive en ti.",
       "proof.eyebrow":"No es promesa, es real","proof.title":"Mírala funcionando",
       "open":"Abrir" },
-    en:{ "nav.apps":"Open the apps","nav.install":"Install app","hero.eyebrow":"Intelligence for life",
+    en:{ "nav.install":"Install app","hero.eyebrow":"Intelligence for life",
       "hero.h1":"Awaken the seven powers already alive in you. <em>In 30 days.</em>",
       "hero.lede":"Your energy, your mind, your time, your habits, your method, your money and your sales — seven apps that work as one. <b>A guided 30-day challenge</b> to transform what truly moves your life.",
       "hero.cta1":"Start the 30-day challenge →","hero.cta2":"See all the apps",
@@ -1591,11 +1573,6 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
   document.getElementById("vback").addEventListener("click",()=>{ playTapSfx(); closeApp(); });
   window.addEventListener("message",e=>{ if(e&&e.data&&e.data.type==="jogaExit"&&viewer.classList.contains("open")) closeApp(); });
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&viewer.classList.contains("open"))closeApp();});
-
-  // "ver apps" buttons → scroll to launcher
-  const toLauncher=()=>{ playTapSfx(); document.getElementById("launcher").scrollIntoView({behavior:"smooth"}); };
-  document.getElementById("nav-apps").addEventListener("click",toLauncher);
-  document.getElementById("hero-apps").addEventListener("click",toLauncher);
 
   /* ---------------- Joga concierge ---------------- */
   const appByKey = {};
