@@ -1,53 +1,21 @@
 /* gate.js — Joga Intelligence
-   Validación de códigos de licencia: primero el código personal de José (hash
-   SHA-256 local, offline, sin códigos en claro), y si no es ese, contra los 7
-   productos reales de Gumroad (POST /v2/licenses/verify, en paralelo).
-   License code validation: José's personal code first (local SHA-256 hash,
-   offline, no plaintext codes), then — if it's not that — the 7 real Gumroad
-   products (POST /v2/licenses/verify, in parallel).
-   NUNCA agregar códigos en texto plano en este archivo.
-   NEVER add plaintext codes in this file.
-   Fase A (28-jul): de 71 hashes (1 maestro + 50 originales + 20 vendibles) a 1 solo —
-   el código personal de José. Los 50 originales quedaron expuestos en el historial
-   público de git y los 20 vendibles ya no hacen falta: cada venta futura (Fase B)
-   generará el suyo, con su propia lista de apps.
-   Phase A (Jul 28): from 71 hashes (1 master + 50 original + 20 sellable) down to just
-   1 — José's personal code. The 50 originals were exposed in git's public history and
-   the 20 sellable ones are no longer needed: each future sale (Phase B) will generate
-   its own, with its own app list.
-   Fase B (05-ago): agrega el camino de Gumroad. El código de José se sigue probando
-   primero y sigue funcionando exactamente igual, offline, sin tocar la red. Solo si NO
-   es el código de José se consulta Gumroad. `validate()` sigue devolviendo
-   { valid, apps } — se le suma un campo opcional `productId` cuando el acierto viene de
-   Gumroad, sin quitar ni cambiar los dos campos que ya existían.
-   Phase B (Aug 5): adds the Gumroad path. José's code is still tried first and still
-   works exactly the same, offline, without touching the network. Only if it's NOT
-   José's code does it query Gumroad. `validate()` still returns { valid, apps } — an
-   optional `productId` field is added when the match comes from Gumroad, without
-   removing or changing the two fields that already existed.
+   Validación: código de José (hash SHA-256 local, offline) primero, luego los 7 productos de Gumroad (POST /v2/licenses/verify, en paralelo). NUNCA códigos en claro aquí. / Validation: José's code (local SHA-256, offline) first, then the 7 Gumroad products (POST /v2/licenses/verify, in parallel). NEVER plaintext codes in this file.
+   Historial / History: Fase A (28-jul/Jul 28) 71 hashes -> 1 (José). Fase B (05-ago AM/Aug 5 AM): + camino Gumroad, `productId` opcional / + Gumroad path, optional `productId`.
+   Fase B-2 (05-ago PM/Aug 5 PM) — caducidad real / real expiry: un match de Gumroad deja jiLicense/jiProductId/jiLastCheck en localStorage; José no escribe nada de esto, sigue de por vida, intocado / a Gumroad match leaves jiLicense/jiProductId/jiLastCheck in localStorage; José writes none of it, still lifetime, untouched.
+   Al cargar, revalida en silencio SOLO si ese trío existe: cierra el acceso si la suscripción terminó o el código fue revocado; 30 días de gracia sin red (pasada la gracia bloquea SIN borrar el trío, así se autorrestaura al volver el internet) / On load, silently revalidates ONLY if that trio exists: closes access if the subscription ended or the code was revoked; 30-day offline grace period (past grace it locks WITHOUT deleting the trio, so it self-restores once back online).
    Uso / usage: await window.jogaGate.validate(code) -> { valid, apps, productId? } */
 (function () {
   "use strict";
 
-  // Cada entrada: hash SHA-256 (hex, minúsculas) del código + qué apps abre.
-  // Each entry: SHA-256 hash (hex, lowercase) of the code + which apps it unlocks.
+  // Hash SHA-256 (hex) del código de José + apps que abre / José's code SHA-256 hash (hex) + apps it unlocks.
   var ENTRIES = [
     {
       hash: "1569b405a3d87c672b34ffe27e9c520a287122da200ab0e65b1d8d93f7174ba1",
-      // Código personal de José: abre las 6 apps de pago.
-      // José's personal code: unlocks the 6 paid apps.
       apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex"]
     }
   ];
 
-  // Mapa producto de Gumroad -> qué apps abre. Los 7 product_id son los reales,
-  // confirmados en pantalla por José (ver .joga/handoff/estado.md) — no inventar
-  // ni cambiar estos valores. Las claves de apps son los nombres de archivo/variable
-  // exactos que ya usa el resto del proyecto (no los nombres bonitos de marca).
-  // Gumroad product -> apps it unlocks map. The 7 product_ids are the real ones,
-  // confirmed on-screen by José (see .joga/handoff/estado.md) — do not invent or
-  // change these values. The app keys are the exact file/variable names the rest of
-  // the project already uses (not the pretty brand names).
+  // Producto Gumroad -> apps que abre. 7 product_id reales, confirmados por José (ver .joga/handoff/estado.md) — no inventar ni cambiar. / Gumroad product -> apps it unlocks. 7 real product_ids, confirmed by José (see .joga/handoff/estado.md) — do not invent or change.
   var PRODUCTOS = [
     { id: "FIR5ex737E3w3ZhJSMYe6A==", apps: ["subment"] },      // JogaMind
     { id: "MOPITeFr2uk-aJVy4oyoDw==", apps: ["jogatime"] },     // JogaTime
@@ -55,14 +23,15 @@
     { id: "qeGGuidKBaAt-1dhMPM7vw==", apps: ["pasley"] },       // JogaPath
     { id: "4mNWy38AGMWXN3FtRIBc8Q==", apps: ["protoneutron"] }, // JogaBit
     { id: "91_zOPTy6LlBmvfvKi24Ww==", apps: ["ventmex"] },      // JogaVentix
-    {
-      id: "Rkm_T0TEEiq45fl1lzd4Rg==", // Acceso Completo (las 6 + bono JogaBody)
-      apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex", "jogaflow"]
-    }
+    { id: "Rkm_T0TEEiq45fl1lzd4Rg==", // Acceso Completo (las 6 + bono JogaBody)
+      apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex", "jogaflow"] }
   ];
 
-  // bytes -> hex (minúsculas) / bytes -> hex (lowercase)
-  function bufToHex(buf) {
+  // Las 6 apps de pago (igual a PAID_KEYS de app.html/index.html) / the 6 paid apps (same as app.html/index.html's PAID_KEYS).
+  var PAID_KEYS = ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex"];
+  var GRACE_MS = 30 * 24 * 60 * 60 * 1000; // gracia sin red / offline grace: 30 días/days
+
+  function bufToHex(buf) { // bytes -> hex (minúsculas) / bytes -> hex (lowercase)
     var bytes = new Uint8Array(buf), hex = "";
     for (var i = 0; i < bytes.length; i++) {
       var h = bytes[i].toString(16);
@@ -77,67 +46,59 @@
     return bufToHex(digest);
   }
 
-  // Prueba un código contra UN producto de Gumroad. Nunca lanza error: cualquier
-  // falla de red o respuesta inesperada se trata como "no coincide".
-  // Tries a code against ONE Gumroad product. Never throws: any network failure or
-  // unexpected response is treated as "no match".
-  async function verifyGumroad(productId, licenseKey) {
+  // Única llamada real a Gumroad, la reutilizan verifyGumroad() y revalidate() (no duplicar el fetch). Nunca lanza error: networkError:true = sin red/JSON roto; networkError:false = sí hubo respuesta (data = JSON crudo, sin filtrar por res.ok — Gumroad responde 404 hasta para códigos inválidos pero SIEMPRE con JSON legible, confirmado con curl real). / The one real Gumroad call, reused by verifyGumroad() and revalidate() (don't duplicate the fetch). Never throws: networkError:true = no network/broken JSON; networkError:false = got an answer (data = raw JSON, not filtered by res.ok — Gumroad answers 404 even for invalid codes but ALWAYS with readable JSON, confirmed via real curl).
+  async function callGumroad(productId, licenseKey) {
     try {
       var body = new URLSearchParams();
       body.set("product_id", productId);
       body.set("license_key", licenseKey);
-      body.set("increment_uses_count", "false"); // solo probar, no gastar el contador de usos
+      body.set("increment_uses_count", "false"); // no gastar el contador de usos / don't spend the uses counter
       var res = await fetch("https://api.gumroad.com/v2/licenses/verify", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: body.toString()
       });
-      // Ojo: Gumroad responde 404 (no 200) hasta para códigos inválidos, pero SIEMPRE
-      // con un cuerpo JSON legible — confirmado con curl real contra un product_id de
-      // este proyecto. Por eso no filtramos por res.ok: leemos el JSON pase lo que
-      // pase con el status y decidimos solo por el campo success.
-      // Careful: Gumroad answers 404 (not 200) even for invalid codes, but ALWAYS with
-      // a readable JSON body — confirmed with a real curl call against one of this
-      // project's product_ids. That's why we don't filter on res.ok: we read the JSON
-      // no matter the status and decide only from the success field.
-      if (!res) return null;
+      if (!res) return { networkError: true };
       var data = await res.json();
-      return (data && data.success === true) ? data : null;
+      return { networkError: false, data: data || {} };
     } catch (e) {
-      return null;
+      return { networkError: true };
     }
   }
 
-  // Valida un código: primero contra el hash local (offline), y si no coincide,
-  // contra los 7 productos de Gumroad en paralelo. Nunca lanza error.
-  // Validates a code: first against the local hash (offline), and if it doesn't
-  // match, against the 7 Gumroad products in parallel. Never throws.
-  // Retorno / return: { valid: boolean, apps: string[], productId?: string } —
-  // apps vacío si valid es false. productId solo presente si el acierto es de Gumroad.
-  // apps is empty when valid is false. productId only present on a Gumroad match.
+  // Reduce callGumroad() a "coincide o no" para el validate() inicial. Nunca lanza error. / Reduces callGumroad() to "matched or not" for the initial validate() path. Never throws.
+  async function verifyGumroad(productId, licenseKey) {
+    var r = await callGumroad(productId, licenseKey);
+    if (r.networkError) return null;
+    return (r.data && r.data.success === true) ? r.data : null;
+  }
+
+  // Valida: hash local primero (offline); si no, los 7 de Gumroad en paralelo. Nunca lanza error. Retorno: { valid, apps, productId? }. / Validates: local hash first (offline); if not, all 7 Gumroad products in parallel. Never throws. Returns: { valid, apps, productId? }.
   async function validate(code) {
     try {
       if (!(window.crypto && window.crypto.subtle && window.crypto.subtle.digest)) {
-        return { valid: false, apps: [] }; // fallback sin crypto.subtle / no-crypto fallback
+        return { valid: false, apps: [] };
       }
       var v = (code == null ? "" : String(code)).trim().toUpperCase();
       if (!v) return { valid: false, apps: [] };
 
-      // 1) Código personal de José: hash local, offline, sin tocar la red.
-      // 1) José's personal code: local hash, offline, no network.
+      // 1) José: hash local, offline, sin red. NUNCA escribe jiLicense/jiProductId/jiLastCheck — de por vida. / 1) José: local hash, offline, no network. NEVER writes jiLicense/jiProductId/jiLastCheck — lifetime.
       var hash = await sha256Hex(v);
       for (var i = 0; i < ENTRIES.length; i++) {
         if (ENTRIES[i].hash === hash) return { valid: true, apps: ENTRIES[i].apps.slice() };
       }
 
-      // 2) No es el código de José: probar contra Gumroad, los 7 en paralelo.
-      // 2) Not José's code: try Gumroad, all 7 in parallel.
+      // 2) No es José: los 7 de Gumroad en paralelo / 2) Not José: all 7 Gumroad products in parallel.
       if (!window.fetch) return { valid: false, apps: [] };
-      var results = await Promise.all(
-        PRODUCTOS.map(function (p) { return verifyGumroad(p.id, v); })
-      );
+      var results = await Promise.all(PRODUCTOS.map(function (p) { return verifyGumroad(p.id, v); }));
       for (var j = 0; j < results.length; j++) {
         if (results[j]) {
+          // Match de Gumroad: guarda el trío para revalidate() (abajo). Si localStorage falla (privado/cuota) no tumba esta validación válida. / Gumroad match: save the trio for revalidate() (below). If localStorage fails (private/quota) it must not break this valid result.
+          try {
+            localStorage.setItem("jiLicense", v);
+            localStorage.setItem("jiProductId", PRODUCTOS[j].id);
+            localStorage.setItem("jiLastCheck", String(Date.now()));
+          } catch (e) {}
           return { valid: true, apps: PRODUCTOS[j].apps.slice(), productId: PRODUCTOS[j].id };
         }
       }
@@ -147,5 +108,76 @@
     }
   }
 
+  // ===== Fase B-2 — Revalidación silenciosa / silent revalidation =====
+  // Escribe/borra jiUnlocked_<app> de un producto (+ jiPaid si cubre las 6 de pago, como applyUnlock en app.html/index.html). Nunca lanza error. / Writes/removes a product's jiUnlocked_<app> keys (+ jiPaid if it covers all 6 paid apps, like applyUnlock in app.html/index.html). Never throws.
+  function setProductAccess(product, on) {
+    try {
+      var apps = product.apps || [];
+      apps.forEach(function (k) {
+        if (on) localStorage.setItem("jiUnlocked_" + k, "1"); else localStorage.removeItem("jiUnlocked_" + k);
+      });
+      if (PAID_KEYS.every(function (k) { return apps.indexOf(k) >= 0; })) {
+        if (on) localStorage.setItem("jiPaid", "1"); else localStorage.removeItem("jiPaid");
+      }
+    } catch (e) {}
+  }
+
+  function clearTrio() { // borra el trío de revalidación / removes the revalidation trio
+    try {
+      localStorage.removeItem("jiLicense");
+      localStorage.removeItem("jiProductId");
+      localStorage.removeItem("jiLastCheck");
+    } catch (e) {}
+  }
+
+  // Corre al cargar, fire-and-forget (no bloquea, no espera DOMContentLoaded). Solo llama a Gumroad si existe jiLicense + jiProductId — José y gratuitos nunca disparan red aquí. / Runs on load, fire-and-forget (doesn't block, no DOMContentLoaded wait). Only calls Gumroad if jiLicense + jiProductId exist — José and free users never trigger network here.
+  async function revalidate() {
+    try {
+      var license, productId, lastCheck;
+      try {
+        license = localStorage.getItem("jiLicense");
+        productId = localStorage.getItem("jiProductId");
+        lastCheck = localStorage.getItem("jiLastCheck");
+      } catch (e) { return; }
+      if (!license || !productId) return; // José o gratuito: cero red / José or free: zero network
+      if (!window.fetch) return;
+
+      var product = null;
+      for (var i = 0; i < PRODUCTOS.length; i++) {
+        if (PRODUCTOS[i].id === productId) { product = PRODUCTOS[i]; break; }
+      }
+      if (!product) return; // product_id desconocido: no tocar nada / unknown product_id: touch nothing
+
+      var r = await callGumroad(productId, license);
+
+      if (r.networkError) {
+        // Fallo de red: gracia de 30 días desde la última revalidación con éxito. / Network failure: 30-day grace since the last successful revalidation.
+        var last = parseInt(lastCheck, 10);
+        if (!last || isNaN(last)) return; // sin fecha confiable: no castigar / no reliable date: don't punish
+        if (Date.now() - last <= GRACE_MS) return; // dentro de gracia: nada cambia / within grace: untouched
+        setProductAccess(product, false); // fuera de gracia: bloquea, conserva el trío / past grace: lock, keep trio
+        return;
+      }
+
+      var data = r.data || {};
+      // subscription_ended_at vive dentro de "purchase" en la respuesta real de Gumroad (confirmado en .joga/handoff/investigacion-caducidad.md: doc oficial + librerías de terceros) — null/undefined/ausente = viva; string con fecha = terminada. / subscription_ended_at lives inside "purchase" in Gumroad's real response (confirmed in .joga/handoff/investigacion-caducidad.md: official docs + third-party libraries) — null/undefined/missing = alive; a date string = ended.
+      var purchase = data.purchase || {};
+      var alive = data.success === true && !purchase.subscription_ended_at;
+
+      if (alive) {
+        // Éxito y viva: refresca jiLastCheck, re-escribe las llaves / success and alive: refresh jiLastCheck, re-write keys.
+        try { localStorage.setItem("jiLastCheck", String(Date.now())); } catch (e) {}
+        setProductAccess(product, true);
+      } else {
+        // Terminada o success:false: cierre inmediato sin gracia, borra todo + el trío. / Ended or success:false: immediate close, no grace, wipes everything + the trio.
+        setProductAccess(product, false);
+        clearTrio();
+      }
+    } catch (e) {
+      // nunca una excepción hacia afuera / never throw outward
+    }
+  }
+
   window.jogaGate = { validate: validate };
+  revalidate();
 })();
