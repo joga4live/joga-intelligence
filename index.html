@@ -1016,8 +1016,9 @@
                 <li id="planSingleFeatureTwo">Se renueva cada año.</li>
                 <li id="planSingleFeatureThree">Ideal si por ahora solo necesitas un área.</li>
               </ul>
-              <!-- TODO Gumroad: aquí va el enlace del producto -->
-              <a class="btn btn-primary plan-btn" id="planSingleBtn" href="#ctaStart">Comprar esta app →</a>
+              <!-- $50: abre la ventanita "Elige tu app" (#appsOverlay) en vez de navegar -- ver openAppsModal() abajo.
+                   $50: opens the "Choose your app" popup (#appsOverlay) instead of navigating -- see openAppsModal() below. -->
+              <a class="btn btn-primary plan-btn" id="planSingleBtn" href="#ctaStart" aria-haspopup="dialog">Comprar esta app →</a>
             </article>
             <article class="price-plan premium">
               <span class="plan-badge" id="planPremiumBadge">Premium</span>
@@ -1030,8 +1031,7 @@
                 <li id="planPremiumFeatureThree">Se renueva cada año.</li>
                 <li id="planPremiumFeatureFour">Garantía de 7 días: si no sientes el cambio, te devolvemos tu dinero.</li>
               </ul>
-              <!-- TODO Gumroad: aquí va el enlace del producto -->
-              <a class="btn btn-primary plan-btn" id="planPremiumBtn" href="#ctaStart">Quiero mi acceso →</a>
+              <a class="btn btn-primary plan-btn" id="planPremiumBtn" href="https://hotien.gumroad.com/l/wdcniv" target="_blank" rel="noopener noreferrer">Quiero mi acceso →</a>
               <p class="plan-under" id="planPremiumUnder">Suscripción anual · Renueva cada 12 meses</p>
             </article>
           </div>
@@ -1111,6 +1111,39 @@
         <div id="unlockError" style="color:#c0392b;font-size:.85rem;min-height:18px;margin:8px 0 0;"></div>
         <button id="unlockConfirm" type="button" style="margin-top:14px;width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--accent),#d8b06a);color:#1f1916;font-weight:700;font-size:1rem;cursor:pointer;">Desbloquear</button>
         <button id="unlockCancel" type="button" style="margin-top:10px;width:100%;padding:12px;border:none;border-radius:12px;background:transparent;color:#6a5f56;font-size:.9rem;cursor:pointer;">Cancelar</button>
+      </div>
+    </div>
+
+    <!-- ===== Modal: Elige tu app (compra individual, botón $50) / Choose your app modal ($50 button) =====
+         Mismo patrón visual que #unlockOverlay de arriba: mismo overlay, mismo panel, mismos
+         tonos -- para que se vea parte del sitio. A diferencia de ese modal (que no lo tiene),
+         éste sí lleva rol de diálogo, nombre accesible, foco que entra al abrir y regresa al
+         botón al cerrar, y se cierra con botón / clic afuera / Escape.
+         Same visual pattern as #unlockOverlay above: same overlay, same panel, same tones --
+         so it reads as part of the site. Unlike that modal (which lacks these), this one DOES
+         carry dialog role, an accessible name, focus that enters on open and returns to the
+         button on close, and closes via button / outside click / Escape. -->
+    <div id="appsOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(31,25,22,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
+      <div id="appsPanel" role="dialog" aria-modal="true" aria-labelledby="appsTitle" aria-describedby="appsSub" tabindex="-1" style="background:var(--bg);border:1px solid rgba(184,146,74,.3);border-radius:20px;max-width:420px;width:100%;max-height:86vh;overflow-y:auto;padding:32px 28px;box-shadow:0 30px 80px rgba(0,0,0,.3);text-align:center;">
+        <!-- #7c5c14 en vez de var(--accent) para el kicker: var(--accent) sobre var(--bg) mide 2.60:1
+             (no pasa 4.5:1). #7c5c14 ya se usa en .compare-row.joga .compare-price sobre este mismo
+             fondo y mide 5.54:1 -- no es un color inventado, es uno que el proyecto ya usa.
+             #7c5c14 instead of var(--accent) for the kicker: var(--accent) on var(--bg) measures
+             2.60:1 (fails 4.5:1). #7c5c14 is already used by .compare-row.joga .compare-price on
+             this same background and measures 5.54:1 -- not an invented color, one the project
+             already uses. -->
+        <div style="font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:#7c5c14;font-weight:700;margin-bottom:10px;" id="appsKicker">Acceso individual</div>
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.9rem;margin:0 0 8px;color:var(--text);" id="appsTitle">Elige tu app</h3>
+        <p style="color:#6a5f56;font-size:.95rem;margin:0 0 20px;" id="appsSub">Cada app se vende por separado. Elige la tuya para continuar al pago.</p>
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="https://hotien.gumroad.com/l/gmbct" target="_blank" rel="noopener noreferrer" style="display:block;padding:14px 16px;border:1px solid rgba(184,146,74,.4);border-radius:12px;font-size:1rem;font-weight:700;text-align:center;background:#fff;color:var(--text);text-decoration:none;">JogaMind</a>
+          <a href="https://hotien.gumroad.com/l/sxwtr" target="_blank" rel="noopener noreferrer" style="display:block;padding:14px 16px;border:1px solid rgba(184,146,74,.4);border-radius:12px;font-size:1rem;font-weight:700;text-align:center;background:#fff;color:var(--text);text-decoration:none;">JogaTime</a>
+          <a href="https://hotien.gumroad.com/l/nrmkz" target="_blank" rel="noopener noreferrer" style="display:block;padding:14px 16px;border:1px solid rgba(184,146,74,.4);border-radius:12px;font-size:1rem;font-weight:700;text-align:center;background:#fff;color:var(--text);text-decoration:none;">JogaBit</a>
+          <a href="https://hotien.gumroad.com/l/kjemc" target="_blank" rel="noopener noreferrer" style="display:block;padding:14px 16px;border:1px solid rgba(184,146,74,.4);border-radius:12px;font-size:1rem;font-weight:700;text-align:center;background:#fff;color:var(--text);text-decoration:none;">JogaPath</a>
+          <a href="https://hotien.gumroad.com/l/vyoixt" target="_blank" rel="noopener noreferrer" style="display:block;padding:14px 16px;border:1px solid rgba(184,146,74,.4);border-radius:12px;font-size:1rem;font-weight:700;text-align:center;background:#fff;color:var(--text);text-decoration:none;">JogaCapital</a>
+          <a href="https://hotien.gumroad.com/l/ohdsxf" target="_blank" rel="noopener noreferrer" style="display:block;padding:14px 16px;border:1px solid rgba(184,146,74,.4);border-radius:12px;font-size:1rem;font-weight:700;text-align:center;background:#fff;color:var(--text);text-decoration:none;">JogaVentix</a>
+        </div>
+        <button id="appsClose" type="button" style="margin-top:14px;width:100%;padding:12px;border:none;border-radius:12px;background:transparent;color:#6a5f56;font-size:.9rem;cursor:pointer;">Cerrar</button>
       </div>
     </div>
     <script src="./gate.js"></script>
@@ -1235,7 +1268,11 @@
           unlockSub: 'Escribe el código que recibiste por correo al completar tu compra.',
           unlockInput: 'Tu código',
           unlockConfirm: 'Desbloquear',
-          unlockCancel: 'Cancelar'
+          unlockCancel: 'Cancelar',
+          appsKicker: 'Acceso individual',
+          appsTitle: 'Elige tu app',
+          appsSub: 'Cada app se vende por separado. Elige la tuya para continuar al pago.',
+          appsClose: 'Cerrar'
         },
         en: {
           navEcosystem: 'Ecosystem',
@@ -1351,7 +1388,11 @@
           unlockSub: 'Enter the code you received by email after your purchase.',
           unlockInput: 'Your code',
           unlockConfirm: 'Unlock',
-          unlockCancel: 'Cancel'
+          unlockCancel: 'Cancel',
+          appsKicker: 'Individual access',
+          appsTitle: 'Choose your app',
+          appsSub: 'Each app is sold separately. Pick yours to continue to checkout.',
+          appsClose: 'Close'
         }
       };
 
@@ -1578,6 +1619,9 @@
       const ov = document.getElementById("unlockOverlay");
       const inp = document.getElementById("unlockInput");
       const err = document.getElementById("unlockError");
+      const appsOv = document.getElementById("appsOverlay");
+      const appsPanel = document.getElementById("appsPanel");
+      let appsReturnFocus = null;
 
       /* isUnlocked() = "tiene el paquete completo" (jiPaid, derivado — ver applyUnlock).
          Se usa para el sello "Premium activo" y para saltar directo al hub desde los
@@ -1589,9 +1633,11 @@
       function reflectPremium(){
         if(!isUnlocked()) return;
         // Botones premium pasan a "Entrar a mis módulos" (acceso individual y las 6) / premium buttons switch to "Enter my modules" (single app and all 6)
+        // planPremiumBtn trae target="_blank"+rel (enlace a Gumroad); al volverse un link interno hay que quitarlos, si no abriría app.html en pestaña nueva.
+        // planPremiumBtn carries target="_blank"+rel (Gumroad link); once it becomes an internal link those must go, or app.html would open in a new tab.
         ["planPremiumBtn","planSingleBtn"].forEach(function(btnId){
           const pb = document.getElementById(btnId);
-          if(pb){ pb.textContent = (currentLanguage==="en"?"Enter my modules →":"Entrar a mis módulos →"); pb.setAttribute("href","app.html?tour=1&present=1"); pb.onclick=null; }
+          if(pb){ pb.textContent = (currentLanguage==="en"?"Enter my modules →":"Entrar a mis módulos →"); pb.setAttribute("href","app.html?tour=1&present=1"); pb.removeAttribute("target"); pb.removeAttribute("rel"); pb.removeAttribute("aria-haspopup"); pb.onclick=null; }
         });
         // Sello "Premium activo" en la sección de precios
         if(!document.getElementById("premiumActiveBadge")){
@@ -1611,6 +1657,33 @@
         err.textContent=""; inp.value=""; ov.style.display="flex"; setTimeout(()=>inp.focus(),50);
       }
       function closeUnlock(){ ov.style.display="none"; }
+
+      /* Ventanita "Elige tu app" (botón $50): mismo patrón de apertura/cierre que
+         openUnlock/closeUnlock de arriba, pero con lo que ese modal no tiene: el foco entra
+         al panel (role="dialog", nombre accesible vía aria-labelledby) al abrir y regresa al
+         botón que lo abrió al cerrar, más una trampa de Tab para no salirse del diálogo con
+         el teclado. No se "arregla" el modal de código con esto — solo se le pide lo mismo
+         a este, que es lo que exige el plan.
+         "Choose your app" popup ($50 button): same open/close pattern as openUnlock/closeUnlock
+         above, but with what that modal lacks: focus enters the panel (role="dialog",
+         accessible name via aria-labelledby) on open and returns to the triggering button on
+         close, plus a Tab trap so keyboard focus can't leave the dialog. This doesn't "fix" the
+         code modal — it just holds this one to the same bar the plan requires. */
+      function getFocusable(container){
+        return Array.prototype.slice.call(container.querySelectorAll('a[href], button:not([disabled])'));
+      }
+      function openAppsModal(e){
+        if(e) e.preventDefault();
+        if(isUnlocked()){ window.location.href="app.html?tour=1&present=1"; return; }
+        appsReturnFocus = document.activeElement;
+        appsOv.style.display="flex";
+        setTimeout(()=>appsPanel.focus(),50);
+      }
+      function closeAppsModal(){
+        appsOv.style.display="none";
+        if(appsReturnFocus && typeof appsReturnFocus.focus==="function") appsReturnFocus.focus();
+        appsReturnFocus = null;
+      }
       /* Fase A: cada módulo revisa SU propia llave, no isUnlocked() (que es "las 6").
          Un código de una sola app deja a esa app abierta y las otras cinco bloqueadas.
          Phase A: each module checks ITS OWN key, not isUnlocked() (which means "all 6").
@@ -1634,16 +1707,30 @@
         }
       }
 
-      // Conectar los botones de compra (abren la ventanita de código; aún sin enlace de pago) / wire purchase buttons (open the code modal; no payment link yet)
-      const premiumBtn=document.getElementById("planPremiumBtn");
-      if(premiumBtn) premiumBtn.addEventListener("click", openUnlock);
+      // Conectar los botones de compra / wire the purchase buttons
+      // $150 (planPremiumBtn) ya es un <a href="https://hotien.gumroad.com/l/wdcniv" target="_blank">
+      // directo -- sin listener que le haga preventDefault, o nunca llegaría a Gumroad.
+      // $150 (planPremiumBtn) is now a direct <a href="https://hotien.gumroad.com/l/wdcniv"
+      // target="_blank"> -- no listener should preventDefault it, or it would never reach Gumroad.
       const singleBtn=document.getElementById("planSingleBtn");
-      if(singleBtn) singleBtn.addEventListener("click", openUnlock);
+      if(singleBtn) singleBtn.addEventListener("click", openAppsModal);
 
       document.getElementById("unlockConfirm").addEventListener("click", tryUnlock);
       document.getElementById("unlockCancel").addEventListener("click", closeUnlock);
       inp.addEventListener("keydown", e=>{ if(e.key==="Enter") tryUnlock(); });
       ov.addEventListener("click", e=>{ if(e.target===ov) closeUnlock(); });
+
+      document.getElementById("appsClose").addEventListener("click", closeAppsModal);
+      appsOv.addEventListener("click", e=>{ if(e.target===appsOv) closeAppsModal(); });
+      document.addEventListener("keydown", e=>{ if(e.key==="Escape" && appsOv.style.display==="flex") closeAppsModal(); });
+      appsOv.addEventListener("keydown", e=>{
+        if(e.key!=="Tab") return;
+        const f=getFocusable(appsPanel);
+        if(!f.length) return;
+        const first=f[0], last=f[f.length-1];
+        if(e.shiftKey && (document.activeElement===first || document.activeElement===appsPanel)){ e.preventDefault(); last.focus(); }
+        else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+      });
 
       reflectPremium();
     </script>
