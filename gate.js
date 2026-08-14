@@ -18,12 +18,12 @@
   // Producto Gumroad -> apps que abre. 7 product_id reales, confirmados por José (ver .joga/handoff/estado.md) — no inventar ni cambiar. / Gumroad product -> apps it unlocks. 7 real product_ids, confirmed by José (see .joga/handoff/estado.md) — do not invent or change.
   var PRODUCTOS = [
     { id: "FIR5ex737E3w3ZhJSMYe6A==", apps: ["subment"] },      // JogaMind
-    { id: "MOPITeFr2uk-aJVy4oyoDw==", apps: ["jogatime"] },     // JogaTime
-    { id: "IPOWU7xbXHpCH8FxYc-J5A==", apps: ["monexium"] },     // JogaCapital
+    { id: "M0PlTeFr2uk-aJVy4oyoDw==", apps: ["jogatime"] },     // JogaTime
+    { id: "lP0WU7xbXHpCH8FxYc-J5A==", apps: ["monexium"] },     // JogaCapital
     { id: "qeGGuidKBaAt-1dhMPM7vw==", apps: ["pasley"] },       // JogaPath
     { id: "4mNWy38AGMWXN3FtRIBc8Q==", apps: ["protoneutron"] }, // JogaBit
     { id: "91_zOPTy6LlBmvfvKi24Ww==", apps: ["ventmex"] },      // JogaVentix
-    { id: "Rkm_T0TEEiq45fl1lzd4Rg==", // Acceso Completo (las 6 + bono JogaBody)
+    { id: "Rkm_T0TEEiq45fI1lzd4Rg==", // Acceso Completo (las 6 + bono JogaBody)
       apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex", "jogaflow"] }
   ];
 
