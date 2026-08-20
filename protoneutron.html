@@ -398,7 +398,15 @@ class Component extends DCLogic {
         this._voice.addEventListener('timeupdate', ()=>{ try{ const v=this._voice, mu=this._music; if(this.muted||!mu) return; const D=this._curDur||(isFinite(v.duration)?v.duration:0); if(!D) return; const rem=D - v.currentTime; mu.volume = rem<6 ? Math.max(0,(rem/6)*0.22) : 0.22; }catch(e){} });
       }catch(e){}
     }).catch(()=>{});
-    if(window.jogaFeatures) window.jogaFeatures.showNameModal(this.state.lang||'es', function(){});
+    if(window.jogaFeatures) {
+      var _lang = this.state.lang||'es';
+      window.jogaFeatures.showNameModal(_lang, function(){
+        window.jogaFeatures.showQuizModal(_lang, function(){});
+      });
+      if(window.jogaFeatures.getName() && !window.jogaFeatures.getStruggle()) {
+        window.jogaFeatures.showQuizModal(_lang, function(){});
+      }
+    }
   }
   componentWillUnmount(){ clearInterval(this._t); clearInterval(this._b); clearTimeout(this._toast); this.stopSession(); }
 
@@ -468,7 +476,11 @@ class Component extends DCLogic {
              streak:st.streak+1, totalSessions:st.totalSessions+1,
              baseMin: st.baseMin + Math.round(st.duration/60), celebrate:true };
     try{ localStorage.setItem('jiStats_'+(this._key||''), JSON.stringify({ streak:next.streak, totalSessions:next.totalSessions, baseMin:next.baseMin })); }catch(e){}
-    if(window.jogaFeatures) window.jogaFeatures.incrementPractices('protoneutron');
+    if(window.jogaFeatures) {
+        window.jogaFeatures.incrementPractices('protoneutron');
+        var _pTitle = (st.practices && st.practices[st.currentPractice]) ? st.practices[st.currentPractice].title : '';
+        setTimeout(function(){ window.jogaFeatures.showJournalModal(self.state.lang||'es', _pTitle, 'protoneutron', '#2c8d97', function(){}); }, 800);
+      }
     return next;
   }
   togglePlay(){ this.play('tap'); this.setState(st => { const p=!st.playing; if(p){ this.startTick(); this.startBreath(); this.resumeSession(); } else { this.pauseSession(); } return { playing:p }; }); }

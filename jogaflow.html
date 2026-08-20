@@ -108,6 +108,7 @@
           <div id="jfCheckTip" style="margin-top:14px;font-size:13px;line-height:1.5;color:var(--soft);min-height:20px"></div>
         </div>
         <div id="jfHeatmap"></div>
+        <div id="jfDashboard"></div>
       </div>
 
       <!-- ============ IA ============ -->
@@ -519,6 +520,9 @@
       /* Activity heatmap */
       var hmWrap = $("jfHeatmap");
       if (hmWrap) hmWrap.innerHTML = JF.heatmapHtml('jogaflow', lang, 'var(--flow)', 28);
+      /* Weekly dashboard */
+      var dbWrap = $("jfDashboard");
+      if (dbWrap) dbWrap.innerHTML = JF.weeklyDashboardHtml('jogaflow', lang, 'var(--flow)');
       /* Night mode tint */
       var screen = document.querySelector('.jf-screen');
       if (screen) JF.applyNightTint(screen);
@@ -842,6 +846,8 @@
       breatheReset();
       toast(up?s.streakUp:s.breatheDone);
       if(view==="practicas") renderPracticas();
+      /* Journal modal */
+      if(window.jogaFeatures) window.jogaFeatures.showJournalModal(lang, s.practices[0].title, 'jogaflow', '#2f6ca0', function(){ renderHome(); });
     },1400);
   }
   function openBreathe(){
@@ -911,12 +917,15 @@
   function finishPlayerSession(){
     playerPause();
     tone("success");
+    var pTitle = t().practices[pl.practiceIdx].title;
     setPracticeDone(pl.practiceIdx,true);
     if(window.jogaFeatures) window.jogaFeatures.incrementPractices('jogaflow');
     var up=bumpStreak();
     toast(up?t().streakUp:t().doneLabel);
     $("jfPlayerView").style.display="none";
     if(view==="practicas") renderPracticas();
+    /* Journal modal */
+    if(window.jogaFeatures) window.jogaFeatures.showJournalModal(lang, pTitle, 'jogaflow', '#2f6ca0', function(){ renderHome(); });
   }
   function openPlayer(i){
     tone("tap"); playerReset(i); $("jfPlayerView").style.display="block"; $("jfPlayerView").scrollTop=0;
@@ -933,8 +942,17 @@
   function init(){
     goView("hoy");
     renderStatic();
-    /* Show name modal for first-time users */
-    if(window.jogaFeatures) window.jogaFeatures.showNameModal(lang, function() { renderHome(); });
+    /* Show name modal for first-time users, then quiz */
+    if(window.jogaFeatures) {
+      window.jogaFeatures.showNameModal(lang, function() {
+        renderHome();
+        window.jogaFeatures.showQuizModal(lang, function() { renderHome(); });
+      });
+      /* Show quiz if name was already set but quiz wasn't done */
+      if(window.jogaFeatures.getName() && !window.jogaFeatures.getStruggle()) {
+        window.jogaFeatures.showQuizModal(lang, function() { renderHome(); });
+      }
+    }
     $("jfLang").addEventListener("click",function(){
       lang=(lang==="es")?"en":"es"; set(LS.lang,lang); tone("tap");
       stopVoice(); breatheReset(); renderStatic();

@@ -349,4 +349,311 @@
     return !!(JF.getName() || JF._nameSkipped());
   };
 
+
+  /* ===== 7. ONBOARDING QUIZ / QUIZ DE BIENVENIDA ===== */
+  JF.STRUGGLES = [
+    {key:'stress',   emoji:'\ud83e\udee8', es:'Estr\u00e9s y ansiedad',       en:'Stress and anxiety'},
+    {key:'habits',   emoji:'\ud83d\udd04', es:'No puedo mantener h\u00e1bitos', en:"Can't stick to habits"},
+    {key:'focus',    emoji:'\ud83e\udde0', es:'Me falta enfoque',            en:'I lack focus'},
+    {key:'money',    emoji:'\ud83d\udcb0', es:'Problemas con dinero',        en:'Money problems'},
+    {key:'energy',   emoji:'\u26a1',       es:'Poca energ\u00eda',                en:'Low energy'},
+    {key:'all',      emoji:'\ud83c\udf00', es:'Un poco de todo',             en:'A bit of everything'}
+  ];
+
+  JF.getStruggle = function() {
+    try { return localStorage.getItem('jiStruggle') || ''; } catch(e) { return ''; }
+  };
+  JF.setStruggle = function(key) {
+    try { localStorage.setItem('jiStruggle', key); } catch(e) {}
+  };
+
+  JF.quizModalHtml = function(lang) {
+    var L = lang === 'en' ? {
+      title: "What's your biggest struggle?",
+      sub: "This helps us personalize your experience",
+      btn: 'Continue'
+    } : {
+      title: '\u00bfCu\u00e1l es tu mayor lucha?',
+      sub: 'Esto nos ayuda a personalizar tu experiencia',
+      btn: 'Continuar'
+    };
+    var options = '';
+    JF.STRUGGLES.forEach(function(s) {
+      var label = lang === 'en' ? s.en : s.es;
+      options += '<button data-struggle="' + s.key + '" style="width:100%;text-align:left;cursor:pointer;' +
+        'border:1.5px solid rgba(45,38,58,.12);background:rgba(45,38,58,.03);border-radius:14px;' +
+        'padding:13px 16px;font:500 14px Inter,system-ui,sans-serif;color:#242029;display:flex;' +
+        'align-items:center;gap:12px;transition:all .2s ease">' +
+        '<span style="font-size:20px">' + s.emoji + '</span>' + label + '</button>';
+    });
+    return '<div id="jiQuizModal" style="position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.65);' +
+      'backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;' +
+      'animation:jiFadeIn .4s ease">' +
+      '<div style="background:#fff;border-radius:28px;padding:32px 24px;max-width:340px;width:100%;' +
+      'text-align:center;box-shadow:0 40px 80px -20px rgba(0,0,0,.5);animation:jiScaleIn .4s ease">' +
+        '<div style="font-size:38px;margin-bottom:14px">\ud83c\udfaf</div>' +
+        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:20px;color:#242029;margin-bottom:4px">' + L.title + '</div>' +
+        '<div style="font-size:12px;color:#8a8296;margin-bottom:18px">' + L.sub + '</div>' +
+        '<div style="display:flex;flex-direction:column;gap:8px">' + options + '</div>' +
+      '</div>' +
+    '</div>';
+  };
+
+  JF.showQuizModal = function(lang, onDone) {
+    if (JF.getStruggle()) return;
+    var wrap = document.createElement('div');
+    wrap.innerHTML = JF.quizModalHtml(lang);
+    document.body.appendChild(wrap);
+    var btns = wrap.querySelectorAll('[data-struggle]');
+    function close() { try { document.body.removeChild(wrap); } catch(e) {} }
+    Array.prototype.forEach.call(btns, function(b) {
+      b.addEventListener('click', function() {
+        var key = b.getAttribute('data-struggle');
+        JF.setStruggle(key);
+        /* Highlight selected */
+        b.style.border = '2px solid #6d5bb5';
+        b.style.background = 'rgba(109,91,181,.1)';
+        setTimeout(function() {
+          close();
+          if (onDone) onDone(key);
+        }, 300);
+      });
+      b.addEventListener('mouseenter', function() { b.style.background = 'rgba(45,38,58,.06)'; });
+      b.addEventListener('mouseleave', function() { b.style.background = 'rgba(45,38,58,.03)'; });
+    });
+  };
+
+  /* Recommended app based on struggle / App recomendada según lucha */
+  JF.recommendedApp = function() {
+    var s = JF.getStruggle();
+    var map = {
+      stress: 'jogaflow',
+      habits: 'protoneutron',
+      focus: 'jogatime',
+      money: 'monexium',
+      energy: 'jogaflow',
+      all: 'subment'
+    };
+    return map[s] || 'jogaflow';
+  };
+
+
+  /* ===== 8. JOURNAL POST-PRÁCTICA / POST-PRACTICE JOURNAL ===== */
+  JF.journalModalHtml = function(lang, practiceTitle, accentColor) {
+    var color = accentColor || '#6d5bb5';
+    var L = lang === 'en' ? {
+      title: 'How do you feel?',
+      sub: 'After: ' + practiceTitle,
+      note: 'Optional note...',
+      save: 'Save',
+      skip: 'Skip'
+    } : {
+      title: '\u00bfC\u00f3mo te sientes?',
+      sub: 'Despu\u00e9s de: ' + practiceTitle,
+      note: 'Nota opcional...',
+      save: 'Guardar',
+      skip: 'Saltar'
+    };
+    var emojis = [
+      {val:1, icon:'\ud83d\ude2b', label: lang==='en'?'Terrible':'Terrible'},
+      {val:2, icon:'\ud83d\ude15', label: lang==='en'?'Low':'Bajo'},
+      {val:3, icon:'\ud83d\ude10', label: lang==='en'?'Okay':'Normal'},
+      {val:4, icon:'\ud83d\ude0a', label: lang==='en'?'Good':'Bien'},
+      {val:5, icon:'\ud83e\udd29', label: lang==='en'?'Amazing':'Incre\u00edble'}
+    ];
+    var emojiHtml = '';
+    emojis.forEach(function(e) {
+      emojiHtml += '<button data-mood="' + e.val + '" style="flex:1;cursor:pointer;border:1.5px solid rgba(45,38,58,.1);' +
+        'background:#fff;border-radius:14px;padding:10px 4px;text-align:center;transition:all .2s ease">' +
+        '<div style="font-size:24px">' + e.icon + '</div>' +
+        '<div style="font:500 9px Inter,system-ui,sans-serif;color:#8a8296;margin-top:3px">' + e.label + '</div>' +
+      '</button>';
+    });
+    return '<div id="jiJournalModal" style="position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);' +
+      'backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;padding:0;' +
+      'animation:jiFadeIn .3s ease">' +
+      '<div style="background:#fff;border-radius:24px 24px 0 0;padding:28px 22px 34px;width:100%;max-width:400px;' +
+      'box-shadow:0 -20px 60px -10px rgba(0,0,0,.3);animation:jiSlideUp .35s ease">' +
+        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:20px;color:#242029;margin-bottom:3px">' + L.title + '</div>' +
+        '<div style="font-size:12px;color:#8a8296;margin-bottom:16px">' + L.sub + '</div>' +
+        '<div style="display:flex;gap:6px;margin-bottom:16px">' + emojiHtml + '</div>' +
+        '<textarea id="jiJournalNote" placeholder="' + L.note + '" maxlength="200" style="width:100%;box-sizing:border-box;' +
+          'min-height:60px;resize:none;border:1.5px solid rgba(45,38,58,.12);border-radius:14px;padding:12px;' +
+          'font:400 13px Inter,system-ui,sans-serif;color:#242029;outline:none;background:rgba(45,38,58,.03)"></textarea>' +
+        '<div style="display:flex;gap:10px;margin-top:14px">' +
+          '<button id="jiJournalSkip" style="flex:1;cursor:pointer;border:1.5px solid rgba(45,38,58,.12);' +
+            'background:#fff;border-radius:999px;padding:13px;font:600 13px Inter,system-ui,sans-serif;color:#8a8296">' + L.skip + '</button>' +
+          '<button id="jiJournalSave" style="flex:2;cursor:pointer;border:0;border-radius:999px;padding:13px;' +
+            'font:600 13px Inter,system-ui,sans-serif;color:#fff;background:' + color + ';opacity:.4;pointer-events:none">' + L.save + '</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  };
+
+  JF.showJournalModal = function(lang, practiceTitle, appKey, accentColor, onDone) {
+    var wrap = document.createElement('div');
+    wrap.innerHTML = JF.journalModalHtml(lang, practiceTitle, accentColor);
+    /* Inject slideUp animation */
+    if (!document.getElementById('jiSlideUpCSS')) {
+      var s = document.createElement('style');
+      s.id = 'jiSlideUpCSS';
+      s.textContent = '@keyframes jiSlideUp{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}';
+      document.head.appendChild(s);
+    }
+    document.body.appendChild(wrap);
+    var selectedMood = 0;
+    var saveBtn = document.getElementById('jiJournalSave');
+    var skipBtn = document.getElementById('jiJournalSkip');
+    var noteEl = document.getElementById('jiJournalNote');
+    var moodBtns = wrap.querySelectorAll('[data-mood]');
+    function close() { try { document.body.removeChild(wrap); } catch(e) {} }
+
+    Array.prototype.forEach.call(moodBtns, function(b) {
+      b.addEventListener('click', function() {
+        selectedMood = parseInt(b.getAttribute('data-mood'), 10);
+        Array.prototype.forEach.call(moodBtns, function(ob) {
+          ob.style.border = '1.5px solid rgba(45,38,58,.1)';
+          ob.style.background = '#fff';
+          ob.style.transform = 'scale(1)';
+        });
+        b.style.border = '2px solid ' + (accentColor || '#6d5bb5');
+        b.style.background = 'rgba(109,91,181,.1)';
+        b.style.transform = 'scale(1.1)';
+        saveBtn.style.opacity = '1';
+        saveBtn.style.pointerEvents = 'auto';
+      });
+    });
+
+    saveBtn.addEventListener('click', function() {
+      if (!selectedMood) return;
+      var note = (noteEl.value || '').trim();
+      JF._saveJournal(appKey, selectedMood, note, practiceTitle);
+      close();
+      if (onDone) onDone(selectedMood, note);
+    });
+    skipBtn.addEventListener('click', function() {
+      close();
+      if (onDone) onDone(0, '');
+    });
+  };
+
+  JF._saveJournal = function(appKey, mood, note, practiceTitle) {
+    try {
+      var key = 'jiJournal_' + appKey;
+      var data = JSON.parse(localStorage.getItem(key) || '[]');
+      var today = new Date().toISOString().slice(0, 10);
+      data.push({
+        date: today,
+        ts: Date.now(),
+        mood: mood,
+        note: note,
+        practice: practiceTitle
+      });
+      /* Keep last 90 entries */
+      if (data.length > 90) data = data.slice(-90);
+      localStorage.setItem(key, JSON.stringify(data));
+    } catch(e) {}
+  };
+
+  JF.getJournalStats = function(appKey, days) {
+    days = days || 7;
+    try {
+      var data = JSON.parse(localStorage.getItem('jiJournal_' + appKey) || '[]');
+      var cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - days);
+      var cutStr = cutoff.toISOString().slice(0, 10);
+      var recent = data.filter(function(e) { return e.date >= cutStr; });
+      if (!recent.length) return null;
+      var sum = 0;
+      recent.forEach(function(e) { sum += e.mood; });
+      return {
+        avg: Math.round(sum / recent.length * 10) / 10,
+        count: recent.length,
+        entries: recent
+      };
+    } catch(e) { return null; }
+  };
+
+
+  /* ===== 9. DASHBOARD SEMANAL / WEEKLY DASHBOARD ===== */
+  JF.weeklyDashboardHtml = function(appKey, lang, accentColor) {
+    var color = accentColor || '#6d5bb5';
+    var streak = 0;
+    try { streak = parseInt(localStorage.getItem('jiStreak_' + appKey) || localStorage.getItem('jiStreak') || '0', 10) || 0; } catch(e) {}
+    var total = JF.getTotalPractices(appKey);
+    var mastery = JF.getMasteryData(appKey);
+    var journal = JF.getJournalStats(appKey, 7);
+    var heatData = JF.getHeatmapData(appKey, 7);
+    var activeDays = heatData.filter(function(d) { return d.count > 0; }).length;
+    var totalThisWeek = 0;
+    heatData.forEach(function(d) { totalThisWeek += d.count; });
+
+    var L = lang === 'en' ? {
+      title: 'Your week',
+      streak: 'Current streak',
+      days: 'days',
+      practices: 'Practices this week',
+      activeDays: 'Active days',
+      of7: '/ 7',
+      feeling: 'Average feeling',
+      level: 'Level',
+      noData: 'Complete practices to see your stats here'
+    } : {
+      title: 'Tu semana',
+      streak: 'Racha actual',
+      days: 'd\u00edas',
+      practices: 'Pr\u00e1cticas esta semana',
+      activeDays: 'D\u00edas activos',
+      of7: '/ 7',
+      feeling: 'Sentimiento promedio',
+      level: 'Nivel',
+      noData: 'Completa pr\u00e1cticas para ver tus estad\u00edsticas aqu\u00ed'
+    };
+
+    if (total === 0) {
+      return '<div style="border:1px solid rgba(45,38,58,.1);border-radius:18px;padding:20px;' +
+        'background:rgba(255,255,255,.6);margin-bottom:18px;text-align:center">' +
+        '<div style="font-size:28px;margin-bottom:8px">\ud83d\udcca</div>' +
+        '<div style="font:600 14px Inter,system-ui,sans-serif;color:#242029;margin-bottom:4px">' + L.title + '</div>' +
+        '<div style="font:400 12px Inter,system-ui,sans-serif;color:#8a8296">' + L.noData + '</div>' +
+      '</div>';
+    }
+
+    var moodEmojis = ['','😫','😕','😐','😊','🤩'];
+    var moodText = journal ? (moodEmojis[Math.round(journal.avg)] + ' ' + journal.avg) : '—';
+    var levelLabel = lang === 'en' ? mastery.level.en : mastery.level.es;
+
+    return '<div style="border:1px solid rgba(45,38,58,.1);border-radius:18px;padding:16px;' +
+      'background:rgba(255,255,255,.6);margin-bottom:18px">' +
+      '<div style="font:600 13px Inter,system-ui,sans-serif;color:#242029;margin-bottom:14px">' + L.title + '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' +
+        /* Streak */
+        '<div style="background:rgba(45,38,58,.04);border-radius:14px;padding:12px;text-align:center">' +
+          '<div style="font:700 22px Inter,system-ui,sans-serif;color:' + color + '">' + streak + '</div>' +
+          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#8a8296">' + L.streak + '</div>' +
+        '</div>' +
+        /* Practices this week */
+        '<div style="background:rgba(45,38,58,.04);border-radius:14px;padding:12px;text-align:center">' +
+          '<div style="font:700 22px Inter,system-ui,sans-serif;color:' + color + '">' + totalThisWeek + '</div>' +
+          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#8a8296">' + L.practices + '</div>' +
+        '</div>' +
+        /* Active days */
+        '<div style="background:rgba(45,38,58,.04);border-radius:14px;padding:12px;text-align:center">' +
+          '<div style="font:700 22px Inter,system-ui,sans-serif;color:' + color + '">' + activeDays + ' <span style="font:400 14px Inter;color:#8a8296">' + L.of7 + '</span></div>' +
+          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#8a8296">' + L.activeDays + '</div>' +
+        '</div>' +
+        /* Feeling / Level */
+        '<div style="background:rgba(45,38,58,.04);border-radius:14px;padding:12px;text-align:center">' +
+          '<div style="font:700 22px Inter,system-ui,sans-serif;color:' + color + '">' + mastery.level.emoji + '</div>' +
+          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#8a8296">' + L.level + ': ' + levelLabel + '</div>' +
+        '</div>' +
+      '</div>' +
+      (journal ? '<div style="margin-top:10px;background:rgba(45,38,58,.04);border-radius:14px;padding:10px 12px;' +
+        'display:flex;align-items:center;justify-content:space-between">' +
+        '<span style="font:500 11px Inter,system-ui,sans-serif;color:#8a8296">' + L.feeling + '</span>' +
+        '<span style="font:600 14px Inter,system-ui,sans-serif;color:#242029">' + moodText + '</span>' +
+      '</div>' : '') +
+    '</div>';
+  };
+
 })(window);
