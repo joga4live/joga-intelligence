@@ -479,7 +479,7 @@ class Component extends DCLogic {
     if(window.jogaFeatures) {
         window.jogaFeatures.incrementPractices('protoneutron');
         var _pTitle = (st.practices && st.practices[st.currentPractice]) ? st.practices[st.currentPractice].title : '';
-        setTimeout(function(){ window.jogaFeatures.showJournalModal(self.state.lang||'es', _pTitle, 'protoneutron', '#2c8d97', function(){}); }, 800);
+        setTimeout(function(){ window.jogaFeatures.showJournalModal(st.lang||'es', _pTitle, 'protoneutron', '#2c8d97', function(){}); }, 800);
       }
     return next;
   }
