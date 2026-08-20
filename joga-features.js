@@ -74,7 +74,7 @@
     var btn = document.getElementById('jiNameBtn');
     var skip = document.getElementById('jiNameSkip');
     var modal = document.getElementById('jiNameModal');
-    function close() { if (modal && modal.parentNode) modal.parentNode.removeChild(modal.parentNode === wrap ? wrap : modal); }
+    function close() { try { document.body.removeChild(wrap); } catch(e) {} }
     btn.addEventListener('click', function() {
       var v = (input.value || '').trim();
       if (v) JF.setName(v);
