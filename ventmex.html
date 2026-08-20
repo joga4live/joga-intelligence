@@ -518,7 +518,18 @@ class Component extends DCLogic {
       },
     };
     const t = D[L];
-    const AFFP = { es:["Conecto, escucho y cierro con honestidad.","Vender es servir, no presionar.","Escucho más de lo que hablo.","Cada objeción es una puerta, no un muro.","Pido el cierre con confianza.","La confianza vende más que cualquier técnica."], en:["I connect, listen, and close with honesty.","Selling is serving, not pushing.","I listen more than I talk.","Every objection is a door, not a wall.","I ask for the close with confidence.","Trust sells more than any technique."] }; const affList = (AFFP[L]||AFFP.es);
+    /* Merge expanded content from external file / Contenido expandido */
+    var _ext = window.JOGA_CONTENT_VENTMEX;
+    if (_ext && _ext[L]) {
+      if (_ext[L].practices && _ext[L].practices.length > t.practices.length) t.practices = _ext[L].practices;
+      if (_ext[L].affs && _ext[L].affs.length > (t.affs||[]).length) t.affs = _ext[L].affs;
+      if (_ext[L].leyes && _ext[L].leyes.length > (t.leyes||[]).length) t.leyes = _ext[L].leyes;
+    }
+    const AFFP = { es:["Conecto, escucho y cierro con honestidad.","Vender es servir, no presionar.","Escucho más de lo que hablo.","Cada objeción es una puerta, no un muro.","Pido el cierre con confianza.","La confianza vende más que cualquier técnica."], en:["I connect, listen, and close with honesty.","Selling is serving, not pushing.","I listen more than I talk.","Every objection is a door, not a wall.","I ask for the close with confidence.","Trust sells more than any technique."] }; const affList = (function(){
+      var ext = window.JOGA_CONTENT_VENTMEX;
+      if (ext && ext[L] && ext[L].affs && ext[L].affs.length > AFFP[L].length) return ext[L].affs;
+      return AFFP[L]||AFFP.es;
+    })();
     const meta = [
       { len:8, icon:'❂', chipBg:'rgba(194,86,74,.18)' },
       { len:12, icon:'☾', chipBg:'rgba(231,196,106,.16)' },
@@ -609,7 +620,16 @@ class Component extends DCLogic {
       {color:'#c2564a', es:{title:'Pide el cierre', idea:'Muchas ventas se pierden por no atreverse a preguntar. Después de resolver dudas, pide la decisión con claridad.', ej:'«Por lo que me cuentas, esto te sirve. ¿Lo arrancamos?» Y quédate callado.'}, en:{title:'Ask for the close', idea:'Many sales are lost by not daring to ask. After resolving doubts, ask for the decision clearly.', ej:'“From what you tell me, this fits. Shall we start?” Then stay quiet.'}},
       {color:'#9e4339', es:{title:'El seguimiento cierra', idea:'La mayoría de las ventas pasan después del primer «no». Un seguimiento amable, sin acosar, hace la diferencia.', ej:'Si te dijeron «lo pienso», agenda tú el siguiente contacto, no lo dejes al aire.'}, en:{title:'Follow-up closes', idea:'Most sales happen after the first “no.” A kind follow-up, without harassing, makes the difference.', ej:'If they said “I’ll think about it,” you schedule the next contact — don’t leave it open.'}},
     ];
-    const ideasList = PRINS.map(b => ({ color:b.color, title:b[L].title, author:'', idea:b[L].idea, ej:b[L].ej }));
+    const ideasList = (function(){
+          var base = BOOKS.map(b => ({ color:b.color, title:b[L].title, author:b[L].author, idea:b[L].idea, ej:b[L].ej }));
+          var ext = window.JOGA_CONTENT_VENTMEX;
+          if (ext && ext[L] && ext[L].leyes) {
+            ext[L].leyes.forEach(function(ley) {
+              base.push({ color:'#8a8296', title:ley.title, author:'Joga Intelligence', idea:ley.idea, ej:ley.ej });
+            });
+          }
+          return base;
+        })();
 
     return {
       muteIcon: st.muted ? '🔇' : '🔊',
@@ -647,8 +667,8 @@ class Component extends DCLogic {
       exploreList: sessions.slice(1).map(withPlay),
       library: sessions.map(withPlay),
       practicesKicker: t.pKicker, practicesTitle: t.pTitle, practicesSub: t.pSub, progressLabel: t.pProgress,
-      practiceCount: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length) + ' / 3',
-      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/3*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#d4796a,#c2564a)', transition:'width .5s ease' },
+      practiceCount: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length) + ' / ' + t.practices.length,
+      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/t.practices.length*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#d4796a,#c2564a)', transition:'width .5s ease' },
       practices: t.practices.map((p,i) => {
         const done = !!st.doneP[i];
         return { icon:p.icon, num:p.num, title:p.title, desc:p.desc, extra:p.extra,

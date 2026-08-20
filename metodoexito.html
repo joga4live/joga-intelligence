@@ -565,7 +565,18 @@ class Component extends DCLogic {
       },
     };
     const t = D[L];
-    const AFFP = { es:["Crezco un peldaño cada día.","Un paso ordenado vale más que mil saltos.","Avanzo con estrategia, no con suerte.","Mi mundo exterior refleja mi interior.","Espero lo mejor, y actúo para merecerlo.","Llevo las riendas de mi vida."], en:["I grow one step every day.","One ordered step beats a thousand leaps.","I advance with strategy, not luck.","My outer world reflects my inner one.","I expect the best, and act to deserve it.","I hold the reins of my life."] }; const affList = (AFFP[L]||AFFP.es);
+    /* Merge expanded content from external file / Contenido expandido */
+    var _ext = window.JOGA_CONTENT_METODOEXITO;
+    if (_ext && _ext[L]) {
+      if (_ext[L].practices && _ext[L].practices.length > t.practices.length) t.practices = _ext[L].practices;
+      if (_ext[L].affs && _ext[L].affs.length > (t.affs||[]).length) t.affs = _ext[L].affs;
+      if (_ext[L].leyes && _ext[L].leyes.length > (t.leyes||[]).length) t.leyes = _ext[L].leyes;
+    }
+    const AFFP = { es:["Crezco un peldaño cada día.","Un paso ordenado vale más que mil saltos.","Avanzo con estrategia, no con suerte.","Mi mundo exterior refleja mi interior.","Espero lo mejor, y actúo para merecerlo.","Llevo las riendas de mi vida."], en:["I grow one step every day.","One ordered step beats a thousand leaps.","I advance with strategy, not luck.","My outer world reflects my inner one.","I expect the best, and act to deserve it.","I hold the reins of my life."] }; const affList = (function(){
+      var ext = window.JOGA_CONTENT_METODOEXITO;
+      if (ext && ext[L] && ext[L].affs && ext[L].affs.length > AFFP[L].length) return ext[L].affs;
+      return AFFP[L]||AFFP.es;
+    })();
     const meta = [
       { len:8, icon:'❂', chipBg:'rgba(58,143,176,.18)' },
       { len:12, icon:'☾', chipBg:'rgba(231,196,106,.16)' },
@@ -665,7 +676,16 @@ class Component extends DCLogic {
       {num:'06',title:'The Law of Correspondence',tagline:'Your outer world reflects your inner world.',desc:'As within, so without. Your outer life corresponds to your inner thoughts, beliefs, and expectations. To change the outside, transform the inside first.',actions:['Ask: what does my outer world reflect about my inner one?','Change an inner attitude before demanding an outer change.','Tend to your thoughts and self-image today.']},
       {num:'07',title:'The Law of Accident',tagline:'Those who don’t plan their life are left to chance.',desc:'The default, negative law: failing to plan is planning to fail. Those who don’t design their life are subject to chance. The alternative is to choose your own causes.',actions:['Write a concrete plan for something you left to chance.','Replace a “we’ll see” with a decision.','Define the next step so you don’t live by accident.']}
     ] };
-    const leyesList = (LEYES[L]||LEYES.es);
+    const leyesList = (function(){
+      var base = (LEYES[L]||LEYES.es).slice();
+      var ext = window.JOGA_CONTENT_METODOEXITO;
+      if (ext && ext[L] && ext[L].leyes) {
+        ext[L].leyes.forEach(function(ley) {
+          base.push({ color:'#3a8fb0', title:ley.title, idea:ley.idea, ej:ley.ej });
+        });
+      }
+      return base;
+    })();
 
     return {
       muteIcon: st.muted ? '🔇' : '🔊',
@@ -703,8 +723,8 @@ class Component extends DCLogic {
       exploreList: sessions.slice(1).map(withPlay),
       library: sessions.map(withPlay),
       practicesKicker: t.pKicker, practicesTitle: t.pTitle, practicesSub: t.pSub, progressLabel: t.pProgress,
-      practiceCount: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length) + ' / 3',
-      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/3*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#245680,#2f6ca0)', transition:'width .5s ease' },
+      practiceCount: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length) + ' / ' + t.practices.length,
+      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/t.practices.length*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#245680,#2f6ca0)', transition:'width .5s ease' },
       practices: t.practices.map((p,i) => {
         const done = !!st.doneP[i];
         return { icon:p.icon, title:p.title, desc:p.desc, extra:p.extra,

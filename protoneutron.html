@@ -523,7 +523,18 @@ class Component extends DCLogic {
       },
     };
     const t = D[L];
-    const AFFP = { es:["Lo que repito cada día me construye.","El 1% de hoy es el gigante de mañana.","No rompo la cadena.","Reemplazo lo que me frena por lo que me impulsa.","Soy alguien que cumple lo que empieza.","Pequeño y constante le gana a grande y disperso."], en:["What I repeat each day builds me.","Today's 1% is tomorrow's giant.","I don't break the chain.","I replace what holds me back with what drives me.","I am someone who finishes what they start.","Small and steady beats big and scattered."] }; const affList = (AFFP[L]||AFFP.es);
+    /* Merge expanded content from external file / Contenido expandido */
+    var _ext = window.JOGA_CONTENT_PROTONEUTRON;
+    if (_ext && _ext[L]) {
+      if (_ext[L].practices && _ext[L].practices.length > t.practices.length) t.practices = _ext[L].practices;
+      if (_ext[L].affs && _ext[L].affs.length > (t.affs||[]).length) t.affs = _ext[L].affs;
+      if (_ext[L].leyes && _ext[L].leyes.length > (t.leyes||[]).length) t.leyes = _ext[L].leyes;
+    }
+    const AFFP = { es:["Lo que repito cada día me construye.","El 1% de hoy es el gigante de mañana.","No rompo la cadena.","Reemplazo lo que me frena por lo que me impulsa.","Soy alguien que cumple lo que empieza.","Pequeño y constante le gana a grande y disperso."], en:["What I repeat each day builds me.","Today's 1% is tomorrow's giant.","I don't break the chain.","I replace what holds me back with what drives me.","I am someone who finishes what they start.","Small and steady beats big and scattered."] }; const affList = (function(){
+      var ext = window.JOGA_CONTENT_PROTONEUTRON;
+      if (ext && ext[L] && ext[L].affs && ext[L].affs.length > AFFP[L].length) return ext[L].affs;
+      return AFFP[L]||AFFP.es;
+    })();
     const meta = [
       { len:10, icon:'❂', chipBg:'rgba(44,141,151,.18)' },
       { len:15, icon:'☾', chipBg:'rgba(231,196,106,.16)' },
@@ -614,7 +625,16 @@ class Component extends DCLogic {
       {color:'#52cd86', es:{title:'No rompas la cadena', idea:'Cada día que cumples, sumas un eslabón. Ver la cadena crecer te motiva a no cortarla.', ej:'Marca en un calendario cada día que lo hagas. La regla: nunca dos días seguidos sin hacerlo.'}, en:{title:'Don’t break the chain', idea:'Every day you keep it, you add a link. Watching the chain grow motivates you not to cut it.', ej:'Mark a calendar each day you do it. The rule: never two days in a row without doing it.'}},
       {color:'#82cd85', es:{title:'Identidad, no metas', idea:'No busques «correr un maratón», busca «ser alguien que corre». El hábito se sostiene cuando es parte de quién eres.', ej:'Cada vez que cumples, dite: «así soy yo». Refuerzas la identidad, no solo la tarea.'}, en:{title:'Identity, not goals', idea:'Don’t aim to “run a marathon,” aim to “be a runner.” A habit sticks when it’s part of who you are.', ej:'Each time you keep it, tell yourself: “this is who I am.” You reinforce identity, not just the task.'}},
     ];
-    const ideasList = PRINS.map(b => ({ color:b.color, title:b[L].title, author:'', idea:b[L].idea, ej:b[L].ej }));
+    const ideasList = (function(){
+          var base = BOOKS.map(b => ({ color:b.color, title:b[L].title, author:b[L].author, idea:b[L].idea, ej:b[L].ej }));
+          var ext = window.JOGA_CONTENT_PROTONEUTRON;
+          if (ext && ext[L] && ext[L].leyes) {
+            ext[L].leyes.forEach(function(ley) {
+              base.push({ color:'#8a8296', title:ley.title, author:'Joga Intelligence', idea:ley.idea, ej:ley.ej });
+            });
+          }
+          return base;
+        })();
 
     return {
       muteIcon: st.muted ? '🔇' : '🔊',
@@ -652,8 +672,8 @@ class Component extends DCLogic {
       exploreList: sessions.slice(1).map(withPlay),
       library: sessions.map(withPlay),
       practicesKicker: t.pKicker, practicesTitle: t.pTitle, practicesSub: t.pSub, progressLabel: t.pProgress,
-      practiceCount: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length) + ' / 3',
-      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/3*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#2c8d97,#2c8d97)', transition:'width .5s ease' },
+      practiceCount: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length) + ' / ' + t.practices.length,
+      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/t.practices.length*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#2c8d97,#2c8d97)', transition:'width .5s ease' },
       practices: t.practices.map((p,i) => {
         const done = !!st.doneP[i];
         return { icon:p.icon, num:p.num, title:p.title, desc:p.desc, extra:p.extra,

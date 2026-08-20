@@ -408,7 +408,18 @@
       ]
     }
   };
-  function t(){return T[lang];}
+  function t(){
+    var base = T[lang];
+    /* Merge expanded content from external file if available */
+    var ext = window.JOGA_CONTENT_JOGAFLOW;
+    if (ext && ext[lang]) {
+      var e = ext[lang];
+      if (e.practices && e.practices.length > base.practices.length) base.practices = e.practices;
+      if (e.affs && e.affs.length > base.affs.length) base.affs = e.affs;
+      if (e.leyes && e.leyes.length > base.leyes.length) base.leyes = e.leyes;
+    }
+    return base;
+  }
 
   var actx=null;
   function tone(kind){
@@ -464,7 +475,7 @@
     return st;
   }
 
-  var affIdx=dayIndex()%7;
+  var affIdx=dayIndex()%t().affs.length;
   function greeting(){
     var h=new Date().getHours(), s=t();
     var base=h<12?s.greetMorning:h<19?s.greetAfternoon:s.greetEvening;

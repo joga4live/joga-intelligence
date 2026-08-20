@@ -517,7 +517,18 @@ class Component extends DCLogic {
       },
     };
     const t = D[L];
-    const AFFP = { es:["Soy dueño de mis horas y mi enfoque.","Decido en qué merece vivir mi tiempo.","Una cosa a la vez, hecha bien.","Protejo mi foco como mi bien más valioso.","El tiempo que dirijo es el que de verdad vivo.","Hoy elijo lo importante sobre lo urgente."], en:["I own my hours and my focus.","I decide what my time deserves to live in.","One thing at a time, done well.","I protect my focus as my most valuable asset.","The time I steer is the time I truly live.","Today I choose the important over the urgent."] }; const affList = (AFFP[L]||AFFP.es);
+    /* Merge expanded content from external file / Contenido expandido */
+    var _ext = window.JOGA_CONTENT_JOGATIME;
+    if (_ext && _ext[L]) {
+      if (_ext[L].practices && _ext[L].practices.length > t.practices.length) t.practices = _ext[L].practices;
+      if (_ext[L].affs && _ext[L].affs.length > (t.affs||[]).length) t.affs = _ext[L].affs;
+      if (_ext[L].leyes && _ext[L].leyes.length > (t.leyes||[]).length) t.leyes = _ext[L].leyes;
+    }
+    const AFFP = { es:["Soy dueño de mis horas y mi enfoque.","Decido en qué merece vivir mi tiempo.","Una cosa a la vez, hecha bien.","Protejo mi foco como mi bien más valioso.","El tiempo que dirijo es el que de verdad vivo.","Hoy elijo lo importante sobre lo urgente."], en:["I own my hours and my focus.","I decide what my time deserves to live in.","One thing at a time, done well.","I protect my focus as my most valuable asset.","The time I steer is the time I truly live.","Today I choose the important over the urgent."] }; const affList = (function(){
+      var ext = window.JOGA_CONTENT_JOGATIME;
+      if (ext && ext[L] && ext[L].affs && ext[L].affs.length > AFFP[L].length) return ext[L].affs;
+      return AFFP[L]||AFFP.es;
+    })();
     const meta = [
       { len:25, icon:'❂', chipBg:'rgba(192,123,72,.18)' },
       { len:50, icon:'☾', chipBg:'rgba(231,196,106,.16)' },
@@ -608,7 +619,16 @@ class Component extends DCLogic {
       {color:'#d49560', es:{title:'La regla de los 2 minutos', idea:'Si algo toma menos de 2 minutos, hazlo ya. Así no se acumula ni te roba atención después.', ej:'Ese correo de una línea: respondélo ahora, no lo dejes para «luego».'}, en:{title:'The 2-minute rule', idea:'If something takes less than 2 minutes, do it now. It won’t pile up or steal your attention later.', ej:'That one-line email: answer it now, don’t leave it for “later.”'}},
       {color:'#d0915e', es:{title:'Descanso intencional', idea:'El foco se agota; el descanso lo recarga. Pausas cortas y reales te hacen más productivo, no menos.', ej:'Cada ~50 minutos, levántate 5: sin pantalla, solo respira o camina.'}, en:{title:'Intentional rest', idea:'Focus drains; rest recharges it. Short, real breaks make you more productive, not less.', ej:'Every ~50 minutes, get up for 5: no screen, just breathe or walk.'}},
     ];
-    const ideasList = PRINS.map(b => ({ color:b.color, title:b[L].title, author:'', idea:b[L].idea, ej:b[L].ej }));
+    const ideasList = (function(){
+          var base = BOOKS.map(b => ({ color:b.color, title:b[L].title, author:b[L].author, idea:b[L].idea, ej:b[L].ej }));
+          var ext = window.JOGA_CONTENT_JOGATIME;
+          if (ext && ext[L] && ext[L].leyes) {
+            ext[L].leyes.forEach(function(ley) {
+              base.push({ color:'#8a8296', title:ley.title, author:'Joga Intelligence', idea:ley.idea, ej:ley.ej });
+            });
+          }
+          return base;
+        })();
 
     return {
       muteIcon: st.muted ? '🔇' : '🔊',
@@ -646,8 +666,8 @@ class Component extends DCLogic {
       exploreList: sessions.slice(1).map(withPlay),
       library: sessions.map(withPlay),
       practicesKicker: t.pKicker, practicesTitle: t.pTitle, practicesSub: t.pSub, progressLabel: t.pProgress,
-      practiceCount: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length) + ' / 3',
-      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/3*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#d0915e,#c07b48)', transition:'width .5s ease' },
+      practiceCount: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length) + ' / ' + t.practices.length,
+      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/t.practices.length*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#d0915e,#c07b48)', transition:'width .5s ease' },
       practices: t.practices.map((p,i) => {
         const done = !!st.doneP[i];
         return { icon:p.icon, num:p.num, title:p.title, desc:p.desc, extra:p.extra,
