@@ -88,7 +88,9 @@
 
         <!-- practice of the day -->
         <div id="jfEmergency"></div>
+        <div id="jfVoiceCoach"></div>
         <div id="jfMastery"></div>
+        <div id="jfBadges"></div>
         <div id="jfPodLabel" style="font:600 10px Inter;letter-spacing:.28em;text-transform:uppercase;color:var(--soft);margin:0 2px 12px">Práctica sugerida de hoy</div>
         <button id="jfOpenPod" class="tapfx" style="width:100%;text-align:left;cursor:pointer;border:1px solid rgba(47,108,160,.24);border-radius:22px;padding:20px;margin-bottom:22px;background:linear-gradient(160deg,#16344e,#2f6ca0);display:flex;align-items:center;gap:16px">
           <div id="jfPodIconWrap" style="flex:0 0 auto;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#7fc4e6,#3a8fb0);box-shadow:0 12px 26px -10px rgba(47,108,160,.9)">
@@ -510,6 +512,34 @@
       /* Mastery badge */
       var mbWrap = $("jfMastery");
       if (mbWrap) mbWrap.innerHTML = JF.masteryBadgeHtml('jogaflow', lang, 'var(--flow)');
+      /* Badges */
+      var bgWrap = $("jfBadges");
+      if (bgWrap) bgWrap.innerHTML = JF.badgesHtml('jogaflow', lang, 'var(--flow)');
+      /* Voice coach button */
+      var vcWrap = $("jfVoiceCoach");
+      if (vcWrap) {
+        vcWrap.innerHTML = JF.voiceCoachButtonHtml(lang, '#2f6ca0');
+        var vcBtn = document.getElementById("jiVoiceCoach");
+        if (vcBtn) vcBtn.addEventListener("click", function() {
+          tone("tap");
+          var speaking = vcBtn.getAttribute('data-speaking') === '1';
+          if (speaking) {
+            JF.stopSpeaking();
+            vcBtn.setAttribute('data-speaking', '0');
+            var ico = document.getElementById("jiVoiceIcon"); if(ico) ico.textContent = "\u25b6";
+            var st = document.getElementById("jiVoiceStatus"); if(st) st.textContent = lang==='en'?'Tap to hear your daily message':'Toca para escuchar tu mensaje diario';
+          } else {
+            vcBtn.setAttribute('data-speaking', '1');
+            var ico2 = document.getElementById("jiVoiceIcon"); if(ico2) ico2.textContent = "\u23f8";
+            var st2 = document.getElementById("jiVoiceStatus"); if(st2) st2.textContent = lang==='en'?'Speaking...':'Hablando...';
+            JF.speak(JF.coachGreeting(lang), lang, function() {
+              vcBtn.setAttribute('data-speaking', '0');
+              var ico3 = document.getElementById("jiVoiceIcon"); if(ico3) ico3.textContent = "\u25b6";
+              var st3 = document.getElementById("jiVoiceStatus"); if(st3) st3.textContent = lang==='en'?'Tap to hear again':'Toca para escuchar de nuevo';
+            });
+          }
+        });
+      }
       /* Emergency button */
       var emWrap = $("jfEmergency");
       if (emWrap) {
@@ -597,7 +627,11 @@
         var wasDone=!!practiceState().done[i];
         setPracticeDone(i,!wasDone);
         if(!wasDone){ tone("success"); var up=bumpStreak();
-          if(window.jogaFeatures) window.jogaFeatures.incrementPractices('jogaflow');
+          if(window.jogaFeatures) {
+            window.jogaFeatures.incrementPractices('jogaflow');
+            var newBadge = window.jogaFeatures.checkNewBadge('jogaflow');
+            if(newBadge) setTimeout(function(){ window.jogaFeatures.showBadgeModal(newBadge, lang, '#2f6ca0'); }, 600);
+          }
           toast(up?t().streakUp:t().doneLabel); }
         else tone("tap");
         renderPracticas();
@@ -948,10 +982,11 @@
         renderHome();
         window.jogaFeatures.showQuizModal(lang, function() { renderHome(); });
       });
-      /* Show quiz if name was already set but quiz wasn't done */
       if(window.jogaFeatures.getName() && !window.jogaFeatures.getStruggle()) {
         window.jogaFeatures.showQuizModal(lang, function() { renderHome(); });
       }
+      /* Night closure ritual */
+      setTimeout(function() { window.jogaFeatures.showClosureModal(lang, 'jogaflow'); }, 2000);
     }
     $("jfLang").addEventListener("click",function(){
       lang=(lang==="es")?"en":"es"; set(LS.lang,lang); tone("tap");

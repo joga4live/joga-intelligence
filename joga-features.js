@@ -656,4 +656,312 @@
     '</div>';
   };
 
+
+  /* ===== 10. VOZ IA / AI VOICE (Web Speech API) ===== */
+  JF.canSpeak = function() {
+    return !!(W.speechSynthesis && W.SpeechSynthesisUtterance);
+  };
+
+  JF.speak = function(text, lang, onEnd) {
+    if (!JF.canSpeak() || !text) { if (onEnd) onEnd(); return; }
+    W.speechSynthesis.cancel();
+    var u = new W.SpeechSynthesisUtterance(text);
+    u.lang = (lang === 'en') ? 'en-US' : 'es-MX';
+    u.rate = 0.92;
+    u.pitch = 1.0;
+    u.volume = 0.9;
+    /* Try to pick a good voice */
+    var voices = W.speechSynthesis.getVoices();
+    var target = (lang === 'en') ? 'en' : 'es';
+    var preferred = voices.filter(function(v) { return v.lang.indexOf(target) === 0; });
+    if (preferred.length) {
+      /* Prefer non-Google voices (more natural) */
+      var natural = preferred.filter(function(v) { return v.name.indexOf('Google') < 0; });
+      u.voice = (natural.length ? natural[0] : preferred[0]);
+    }
+    u.onend = function() { if (onEnd) onEnd(); };
+    u.onerror = function() { if (onEnd) onEnd(); };
+    W.speechSynthesis.speak(u);
+  };
+
+  JF.stopSpeaking = function() {
+    if (W.speechSynthesis) W.speechSynthesis.cancel();
+  };
+
+  /* Coach greeting based on time + name + struggle */
+  JF.coachGreeting = function(lang) {
+    var name = JF.getName();
+    var h = new Date().getHours();
+    var struggle = JF.getStruggle();
+    var mastery = null;
+    /* Try to get mastery from any app */
+    var apps = ['jogaflow','subment','jogatime','protoneutron','monexium','ventmex','pasley'];
+    var totalAll = 0;
+    apps.forEach(function(a) { totalAll += JF.getTotalPractices(a); });
+
+    if (lang === 'en') {
+      var greet = h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+      if (name) greet += ', ' + name;
+      greet += '. ';
+      if (totalAll === 0) {
+        greet += "Welcome to Joga Intelligence. I'm your personal coach. Let's start with today's practice.";
+      } else if (totalAll < 10) {
+        greet += "You're building a great habit. " + totalAll + " practices so far. Keep going!";
+      } else if (totalAll < 30) {
+        greet += "You're on fire! " + totalAll + " practices completed. Your consistency is paying off.";
+      } else {
+        greet += totalAll + " practices and counting. You've become unstoppable. Let's keep growing.";
+      }
+      return greet;
+    } else {
+      var saludo = h < 12 ? 'Buenos d\u00edas' : h < 18 ? 'Buenas tardes' : 'Buenas noches';
+      if (name) saludo += ', ' + name;
+      saludo += '. ';
+      if (totalAll === 0) {
+        saludo += 'Bienvenido a Joga Intelligence. Soy tu coach personal. Empecemos con la pr\u00e1ctica de hoy.';
+      } else if (totalAll < 10) {
+        saludo += 'Est\u00e1s construyendo un gran h\u00e1bito. ' + totalAll + ' pr\u00e1cticas hasta ahora. \u00a1Sigue as\u00ed!';
+      } else if (totalAll < 30) {
+        saludo += '\u00a1Vas con todo! ' + totalAll + ' pr\u00e1cticas completadas. Tu constancia est\u00e1 dando frutos.';
+      } else {
+        saludo += totalAll + ' pr\u00e1cticas y contando. Te has vuelto imparable. Sigamos creciendo.';
+      }
+      return saludo;
+    }
+  };
+
+  /* Voice coach button HTML */
+  JF.voiceCoachButtonHtml = function(lang, accentColor) {
+    if (!JF.canSpeak()) return '';
+    var color = accentColor || '#6d5bb5';
+    var label = lang === 'en' ? 'Coach voice' : 'Voz del coach';
+    return '<button id="jiVoiceCoach" class="tapfx" style="width:100%;cursor:pointer;border:1.5px solid ' + color + '33;' +
+      'background:linear-gradient(135deg,' + color + '11,' + color + '08);border-radius:16px;' +
+      'padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;text-align:left">' +
+      '<div style="flex:0 0 auto;width:40px;height:40px;border-radius:50%;' +
+        'background:linear-gradient(135deg,' + color + ',' + color + 'cc);' +
+        'display:grid;place-items:center;color:#fff;font-size:18px">\ud83c\udf99\ufe0f</div>' +
+      '<div style="flex:1">' +
+        '<div style="font:600 13px Inter,system-ui,sans-serif;color:#242029">' + label + '</div>' +
+        '<div id="jiVoiceStatus" style="font:400 11px Inter,system-ui,sans-serif;color:#8a8296;margin-top:1px">' +
+          (lang === 'en' ? 'Tap to hear your daily message' : 'Toca para escuchar tu mensaje diario') + '</div>' +
+      '</div>' +
+      '<span id="jiVoiceIcon" style="font-size:20px;color:' + color + '">\u25b6</span>' +
+    '</button>';
+  };
+
+
+  /* ===== 11. BADGES / LOGROS ===== */
+  JF.BADGES = [
+    {id:'first',    threshold:1,   emoji:'\u2b50',    es:'Primera pr\u00e1ctica',    en:'First practice'},
+    {id:'week1',    threshold:7,   emoji:'\ud83d\udd25',    es:'7 d\u00edas seguidos',     en:'7-day streak'},
+    {id:'ten',      threshold:10,  emoji:'\ud83c\udfc5',    es:'10 pr\u00e1cticas',         en:'10 practices'},
+    {id:'month',    threshold:30,  emoji:'\ud83d\udc8e',    es:'30 pr\u00e1cticas',         en:'30 practices'},
+    {id:'fifty',    threshold:50,  emoji:'\ud83d\ude80',    es:'50 pr\u00e1cticas',         en:'50 practices'},
+    {id:'hundred',  threshold:100, emoji:'\ud83d\udc51',    es:'100 pr\u00e1cticas',        en:'100 practices'},
+    {id:'twohun',   threshold:200, emoji:'\u2728',    es:'200 pr\u00e1cticas',        en:'200 practices'}
+  ];
+
+  JF.getEarnedBadges = function(appKey) {
+    var total = JF.getTotalPractices(appKey);
+    return JF.BADGES.filter(function(b) { return total >= b.threshold; });
+  };
+
+  JF.getNextBadge = function(appKey) {
+    var total = JF.getTotalPractices(appKey);
+    for (var i = 0; i < JF.BADGES.length; i++) {
+      if (total < JF.BADGES[i].threshold) return JF.BADGES[i];
+    }
+    return null;
+  };
+
+  JF.checkNewBadge = function(appKey) {
+    var total = JF.getTotalPractices(appKey);
+    var key = 'jiBadgeShown_' + appKey;
+    try {
+      var shown = JSON.parse(localStorage.getItem(key) || '[]');
+      for (var i = 0; i < JF.BADGES.length; i++) {
+        var b = JF.BADGES[i];
+        if (total >= b.threshold && shown.indexOf(b.id) < 0) {
+          shown.push(b.id);
+          localStorage.setItem(key, JSON.stringify(shown));
+          return b;
+        }
+      }
+    } catch(e) {}
+    return null;
+  };
+
+  JF.showBadgeModal = function(badge, lang, accentColor) {
+    if (!badge) return;
+    var color = accentColor || '#6d5bb5';
+    var label = lang === 'en' ? badge.en : badge.es;
+    var title = lang === 'en' ? 'Achievement Unlocked!' : '\u00a1Logro desbloqueado!';
+    var btn = lang === 'en' ? 'Awesome!' : '\u00a1Genial!';
+    var wrap = document.createElement('div');
+    wrap.innerHTML = '<div style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.7);' +
+      'backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:20px;' +
+      'animation:jiFadeIn .3s ease">' +
+      '<div style="background:#fff;border-radius:28px;padding:36px 28px;max-width:300px;width:100%;' +
+      'text-align:center;box-shadow:0 40px 80px -20px rgba(0,0,0,.5);animation:jiScaleIn .5s ease">' +
+        '<div style="font-size:60px;margin-bottom:12px;animation:jiBadgePop .6s ease">' + badge.emoji + '</div>' +
+        '<div style="font:600 11px Inter,system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:' + color + ';margin-bottom:8px">' + title + '</div>' +
+        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:22px;color:#242029;margin-bottom:20px">' + label + '</div>' +
+        '<button id="jiBadgeOk" style="width:100%;cursor:pointer;border:0;border-radius:999px;padding:14px;' +
+          'font:600 14px Inter,system-ui,sans-serif;color:#fff;background:' + color + '">' + btn + '</button>' +
+      '</div>' +
+    '</div>';
+    /* Inject badge pop animation */
+    if (!document.getElementById('jiBadgeCSS')) {
+      var s = document.createElement('style');
+      s.id = 'jiBadgeCSS';
+      s.textContent = '@keyframes jiBadgePop{0%{transform:scale(0) rotate(-20deg);opacity:0}50%{transform:scale(1.3) rotate(5deg)}100%{transform:scale(1) rotate(0);opacity:1}}';
+      document.head.appendChild(s);
+    }
+    document.body.appendChild(wrap);
+    document.getElementById('jiBadgeOk').addEventListener('click', function() {
+      try { document.body.removeChild(wrap); } catch(e) {}
+    });
+  };
+
+  JF.badgesHtml = function(appKey, lang, accentColor) {
+    var earned = JF.getEarnedBadges(appKey);
+    var next = JF.getNextBadge(appKey);
+    var total = JF.getTotalPractices(appKey);
+    if (total === 0) return '';
+    var color = accentColor || '#6d5bb5';
+    var title = lang === 'en' ? 'Achievements' : 'Logros';
+
+    var html = '<div style="border:1px solid rgba(45,38,58,.1);border-radius:18px;padding:14px 16px;' +
+      'background:rgba(255,255,255,.6);margin-bottom:18px">' +
+      '<div style="font:600 11px Inter,system-ui,sans-serif;color:#242029;margin-bottom:10px">' + title + '</div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap">';
+
+    earned.forEach(function(b) {
+      html += '<div title="' + (lang==='en'?b.en:b.es) + '" style="width:40px;height:40px;border-radius:12px;' +
+        'background:' + color + '18;display:grid;place-items:center;font-size:20px">' + b.emoji + '</div>';
+    });
+
+    if (next) {
+      var remaining = next.threshold - total;
+      html += '<div title="' + remaining + ' more" style="width:40px;height:40px;border-radius:12px;' +
+        'background:rgba(45,38,58,.06);display:grid;place-items:center;font-size:14px;color:#8a8296;' +
+        'border:1.5px dashed rgba(45,38,58,.15)">?</div>';
+    }
+
+    html += '</div>';
+    if (next) {
+      var remaining2 = next.threshold - total;
+      html += '<div style="font:400 10px Inter,system-ui,sans-serif;color:#8a8296;margin-top:8px">' +
+        (lang==='en' ? remaining2 + ' more for ' + next.en : remaining2 + ' m\u00e1s para ' + next.es) + '</div>';
+    }
+    html += '</div>';
+    return html;
+  };
+
+
+  /* ===== 12. RITUAL DE CIERRE / DAY CLOSURE RITUAL ===== */
+  JF.shouldShowClosure = function() {
+    var h = new Date().getHours();
+    if (h < 20) return false;
+    try {
+      var last = localStorage.getItem('jiClosureShown');
+      var today = new Date().toISOString().slice(0, 10);
+      return last !== today;
+    } catch(e) { return false; }
+  };
+
+  JF.markClosureShown = function() {
+    try {
+      localStorage.setItem('jiClosureShown', new Date().toISOString().slice(0, 10));
+    } catch(e) {}
+  };
+
+  JF.closureModalHtml = function(lang, appKey) {
+    var name = JF.getName();
+    var total = JF.getTotalPractices(appKey);
+    var mastery = JF.getMasteryData(appKey);
+    var journal = JF.getJournalStats(appKey, 1);
+    var heatData = JF.getHeatmapData(appKey, 1);
+    var todayCount = (heatData.length && heatData[heatData.length - 1].count) || 0;
+    var levelLabel = lang === 'en' ? mastery.level.en : mastery.level.es;
+
+    var L = lang === 'en' ? {
+      title: 'Your day in 30 seconds',
+      greeting: 'Good night' + (name ? ', ' + name : ''),
+      practices: 'practices today',
+      level: 'Level',
+      mood: 'You felt',
+      noPractice: "You didn't practice today — that's okay. Tomorrow is a new chance.",
+      didPractice: 'You showed up today. That matters more than you think.',
+      tomorrow: "Tomorrow's affirmation:",
+      close: 'Good night \ud83c\udf19'
+    } : {
+      title: 'Tu d\u00eda en 30 segundos',
+      greeting: 'Buenas noches' + (name ? ', ' + name : ''),
+      practices: 'pr\u00e1cticas hoy',
+      level: 'Nivel',
+      mood: 'Te sentiste',
+      noPractice: 'Hoy no practicaste \u2014 est\u00e1 bien. Ma\u00f1ana es una nueva oportunidad.',
+      didPractice: 'Hoy te presentaste. Eso importa m\u00e1s de lo que crees.',
+      tomorrow: 'Afirmaci\u00f3n de ma\u00f1ana:',
+      close: 'Buenas noches \ud83c\udf19'
+    };
+
+    var moodEmojis = ['','😫','😕','😐','😊','🤩'];
+    var moodLine = '';
+    if (journal && journal.entries.length) {
+      var lastMood = journal.entries[journal.entries.length - 1].mood;
+      moodLine = '<div style="font:400 13px Inter;color:#8a8296;margin-bottom:8px">' +
+        L.mood + ' ' + moodEmojis[lastMood] + '</div>';
+    }
+
+    var message = todayCount > 0 ? L.didPractice : L.noPractice;
+
+    return '<div id="jiClosureModal" style="position:fixed;inset:0;z-index:9998;' +
+      'background:linear-gradient(180deg,rgba(10,8,20,.85),rgba(20,15,35,.9));' +
+      'backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;' +
+      'animation:jiFadeIn .5s ease">' +
+      '<div style="max-width:320px;width:100%;text-align:center;animation:jiScaleIn .5s ease">' +
+        '<div style="font-size:40px;margin-bottom:16px">\ud83c\udf19</div>' +
+        '<div style="font-family:Newsreader,serif;font-weight:500;font-size:24px;color:#fff;margin-bottom:6px">' + L.greeting + '</div>' +
+        '<div style="font:400 11px Inter;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:24px">' + L.title + '</div>' +
+        '<div style="display:flex;justify-content:center;gap:20px;margin-bottom:20px">' +
+          '<div style="text-align:center"><div style="font:700 28px Inter;color:#fff">' + todayCount + '</div><div style="font:400 10px Inter;color:rgba(255,255,255,.6)">' + L.practices + '</div></div>' +
+          '<div style="text-align:center"><div style="font-size:28px">' + mastery.level.emoji + '</div><div style="font:400 10px Inter;color:rgba(255,255,255,.6)">' + L.level + ': ' + levelLabel + '</div></div>' +
+        '</div>' +
+        moodLine +
+        '<div style="font:italic 400 14px Newsreader,serif;color:rgba(255,255,255,.85);line-height:1.5;margin-bottom:24px;padding:0 10px">' +
+          '"' + message + '"</div>' +
+        '<button id="jiClosureBtn" style="cursor:pointer;border:0;border-radius:999px;padding:14px 40px;' +
+          'font:600 14px Inter;color:#242029;background:linear-gradient(135deg,#e8d5a0,#f0e6c4);' +
+          'box-shadow:0 12px 30px -10px rgba(232,213,160,.6)">' + L.close + '</button>' +
+      '</div>' +
+    '</div>';
+  };
+
+  JF.showClosureModal = function(lang, appKey, onDone) {
+    if (!JF.shouldShowClosure()) return;
+    JF.markClosureShown();
+    var wrap = document.createElement('div');
+    wrap.innerHTML = JF.closureModalHtml(lang, appKey);
+    document.body.appendChild(wrap);
+    var btn = document.getElementById('jiClosureBtn');
+    function close() { try { document.body.removeChild(wrap); } catch(e) {} }
+    btn.addEventListener('click', function() {
+      close();
+      if (onDone) onDone();
+    });
+    /* Auto-close after 30 seconds */
+    setTimeout(function() { close(); }, 30000);
+    /* Voice the closure if possible */
+    if (JF.canSpeak()) {
+      var name = JF.getName();
+      var msg = lang === 'en'
+        ? ('Good night' + (name ? ', ' + name : '') + '. You showed up today. Rest well.')
+        : ('Buenas noches' + (name ? ', ' + name : '') + '. Hoy te presentaste. Descansa bien.');
+      setTimeout(function() { JF.speak(msg, lang); }, 800);
+    }
+  };
+
 })(window);
