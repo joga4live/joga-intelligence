@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <script>
 /* Candado Joga (Fase A, 28-jul): esta app revisa SU PROPIA llave
@@ -369,12 +369,12 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:760,&quot;height&quot;:900}}">
 class Component extends DCLogic {
   state = { aboutOpen:false, locked:true, lockOpening:false, celebrate:false, view:'home', playerOpen:false, playing:false, elapsed:0, duration:420, pTitle:'', pTag:'',
-            streak:0, totalSessions:0, baseMin:0, affirmed:false, showToast:false, breathStep:0, doneP:{}, affIdx:0, iaInput:'', iaResult:'', iaLoading:false };
+            streak:0, totalSessions:0, baseMin:0, affirmed:false, breathStep:0, doneP:{}, affIdx:0, iaInput:'', iaResult:'', iaLoading:false };
 
   componentDidMount(){
     try{ if(!window.__jogaAudioGuard){ window.__jogaAudioGuard=1; window.addEventListener('unhandledrejection', e=>{ try{ const m=String((e.reason&&e.reason.message)||e.reason||''); if(/play\(\)/i.test(m)||/NotAllowed/i.test(m)) e.preventDefault(); }catch(_){} }); } }catch(e){}
     try{ this.muted = localStorage.getItem('jiMute')==='1'; }catch(e){ this.muted=false; }
-    let lang='es'; try{ const sv=localStorage.getItem('jiLang'); if(sv==='en'||sv==='es') lang=sv; }catch(e){}
+    let lang='es'; try{ const sv=localStorage.getItem('jiLang'); if(sv==='en'||sv==='es') lang=sv; }catch(e){} document.documentElement.lang=lang;
     let locked=true; try{ if(localStorage.getItem('jiUnlocked_protoneutron')==='1') locked=false; }catch(e){} let doneP={}; try{ doneP=JSON.parse(localStorage.getItem('jiPractices_protoneutron')||'{}')||{}; }catch(e){} this._key='protoneutron'; let _stats={}; try{ _stats=JSON.parse(localStorage.getItem('jiStats_protoneutron')||'{}')||{}; }catch(e){} const _today=new Date().toISOString().slice(0,10); let _affD=''; try{ _affD=localStorage.getItem('jiAffirmed_protoneutron')||''; }catch(e){} this.setState(Object.assign({ muted: this.muted, lang, locked, doneP, affirmed:_affD===_today }, typeof _stats.streak==='number'?{streak:_stats.streak}:{}, typeof _stats.totalSessions==='number'?{totalSessions:_stats.totalSessions}:{}, typeof _stats.baseMin==='number'?{baseMin:_stats.baseMin}:{}));
     import('./subment-sfx.js').then(m => {
       const mk = src => { try{ const a=new Audio(src); a.preload='auto'; return a; }catch(e){ return null; } };
@@ -401,11 +401,11 @@ class Component extends DCLogic {
 
   play(name){ if(this.muted || !this._sfx || !this._sfx[name]) return; try{ const a=this._sfx[name]; a.currentTime=0; a.volume = name==='unlock'?.9:(name==='boom'?.5:.7); a.play().catch(()=>{}); if(name==='unlock'){ clearTimeout(this._unlockCut); clearInterval(this._unlockFade); this._unlockCut=setTimeout(()=>{ try{ this._unlockFade=setInterval(()=>{ if(a.volume>0.08){ a.volume=Math.max(0,a.volume-0.12); } else { a.pause(); a.currentTime=0; clearInterval(this._unlockFade); } },45); }catch(e){} },1900); } }catch(e){} }
   toggleMute(){ this.muted=!this.muted; try{ localStorage.setItem('jiMute', this.muted?'1':'0'); }catch(e){} try{ if(this._voice) this._voice.volume=this.muted?0:1; if(this._music) this._music.volume=this.muted?0:0.22; }catch(e){} this.setState({ muted:this.muted }); }
-  toggleLang(){ this.play('tap'); this.setState(st => { const lang = st.lang==='en'?'es':'en'; try{ localStorage.setItem('jiLang',lang); }catch(e){} return { lang }; }); }
+  toggleLang(){ this.play('tap'); this.setState(st => { const lang = st.lang==='en'?'es':'en'; try{ localStorage.setItem('jiLang',lang); document.documentElement.lang=lang; }catch(e){} return { lang }; }); }
   togglePractice(i){ this.setState(st => { const d = Object.assign({}, st.doneP); const was = !!d[i]; d[i] = !was; const total = Object.keys(d).filter(k=>d[k]).length; try{ localStorage.setItem('jiPractices_protoneutron', JSON.stringify(d)); }catch(e){} if(!was){ this.play('boom'); if(total>=3){ this._toast = setTimeout(()=>this.setState({celebrate:false}),3400); return { doneP:d, celebrate:true }; } } else { this.play('tap'); } return { doneP:d }; }); }
 
   localDiag(q, L){
-    const THEMES = [{"k":["dejar","vicio","malo","adicc","romper","quitar"],"es":{"n":"No borres el hábito: reemplázalo","w":"Un hábito no se elimina; se sustituye. La señal y la recompensa siguen ahí.","a1":"Identifica qué señal (hora, lugar, emoción) lo dispara.","a2":"Pon una rutina mejor que dé la misma recompensa."},"en":{"n":"Don’t erase the habit: replace it","w":"A habit isn’t removed; it’s swapped. The cue and reward are still there.","a1":"Identify the cue (time, place, emotion) that triggers it.","a2":"Put a better routine that gives the same reward."}},{"k":["empezar","nuevo","crear","constan","manten","disciplin"],"es":{"n":"Hazlo fácil y encadénalo","w":"Un hábito nuevo se sostiene cuando cuesta casi cero empezar y se ancla a algo fijo.","a1":"Empieza con una versión de 2 minutos, ridículamente fácil.","a2":"Pégalo a algo que ya haces: «Después de X, haré Y.»"},"en":{"n":"Make it easy and chain it","w":"A new habit sticks when it costs almost nothing to start and anchors to something fixed.","a1":"Start with a 2-minute version, ridiculously easy.","a2":"Attach it to something you already do: “After X, I’ll do Y.”"}},{"k":["fall","romp","abandon","perd","rendi","volv"],"es":{"n":"Rompiste la cadena, no el camino","w":"Fallar un día no borra tu progreso. Lo que mata es fallar dos seguidos.","a1":"Retoma hoy mismo, aunque sea la versión mínima.","a2":"Regla de oro: nunca dos días seguidos sin hacerlo."},"en":{"n":"You broke the chain, not the path","w":"Missing one day doesn’t erase your progress. What kills it is missing two in a row.","a1":"Restart today, even the minimal version.","a2":"Golden rule: never two days in a row without doing it."}},{"k":[],"es":{"n":"Pequeño y constante gana","w":"El 1% diario no se nota hoy, pero a un año te transforma. Apunta a la identidad, no a la meta.","a1":"Elige UN microhábito que puedas sostener todos los días.","a2":"Cada vez que lo cumplas, dite: «así soy yo»."},"en":{"n":"Small and steady wins","w":"The daily 1% isn’t visible today, but over a year it transforms you. Aim at identity, not the goal.","a1":"Pick ONE micro-habit you can sustain every day.","a2":"Each time you keep it, tell yourself: “this is who I am.”"}}];
+    const THEMES = [{"k":["dejar","vicio","malo","adicc","romper","quitar","quit","bad","addict","break","stop","vice"],"es":{"n":"No borres el hábito: reemplázalo","w":"Un hábito no se elimina; se sustituye. La señal y la recompensa siguen ahí.","a1":"Identifica qué señal (hora, lugar, emoción) lo dispara.","a2":"Pon una rutina mejor que dé la misma recompensa."},"en":{"n":"Don’t erase the habit: replace it","w":"A habit isn’t removed; it’s swapped. The cue and reward are still there.","a1":"Identify the cue (time, place, emotion) that triggers it.","a2":"Put a better routine that gives the same reward."}},{"k":["empezar","nuevo","crear","constan","manten","disciplin","start","new","create","consist","maintain","disciplin"],"es":{"n":"Hazlo fácil y encadénalo","w":"Un hábito nuevo se sostiene cuando cuesta casi cero empezar y se ancla a algo fijo.","a1":"Empieza con una versión de 2 minutos, ridículamente fácil.","a2":"Pégalo a algo que ya haces: «Después de X, haré Y.»"},"en":{"n":"Make it easy and chain it","w":"A new habit sticks when it costs almost nothing to start and anchors to something fixed.","a1":"Start with a 2-minute version, ridiculously easy.","a2":"Attach it to something you already do: “After X, I’ll do Y.”"}},{"k":["fall","romp","abandon","perd","rendi","volv","fail","broke","gave up","lost","quit","relaps"],"es":{"n":"Rompiste la cadena, no el camino","w":"Fallar un día no borra tu progreso. Lo que mata es fallar dos seguidos.","a1":"Retoma hoy mismo, aunque sea la versión mínima.","a2":"Regla de oro: nunca dos días seguidos sin hacerlo."},"en":{"n":"You broke the chain, not the path","w":"Missing one day doesn’t erase your progress. What kills it is missing two in a row.","a1":"Restart today, even the minimal version.","a2":"Golden rule: never two days in a row without doing it."}},{"k":[],"es":{"n":"Pequeño y constante gana","w":"El 1% diario no se nota hoy, pero a un año te transforma. Apunta a la identidad, no a la meta.","a1":"Elige UN microhábito que puedas sostener todos los días.","a2":"Cada vez que lo cumplas, dite: «así soy yo»."},"en":{"n":"Small and steady wins","w":"The daily 1% isn’t visible today, but over a year it transforms you. Aim at identity, not the goal.","a1":"Pick ONE micro-habit you can sustain every day.","a2":"Each time you keep it, tell yourself: “this is who I am.”"}}];
     const s = (q||'').toLowerCase();
     let best=THEMES[THEMES.length-1], bestScore=0;
     for(const th of THEMES){ if(!th.k.length) continue; let sc=0; for(const w of th.k){ if(s.indexOf(w)>=0) sc++; } if(sc>bestScore){ bestScore=sc; best=th; } }
@@ -460,10 +460,10 @@ class Component extends DCLogic {
   finishState(st){
     this.stopSession();
     this.play('boom');
-    this._toast = setTimeout(() => this.setState({ celebrate:false, showToast:false }), 3400);
+    this._toast = setTimeout(() => this.setState({ celebrate:false }), 3400);
     const next = { playing:false, playerOpen:false, elapsed:0,
              streak:st.streak+1, totalSessions:st.totalSessions+1,
-             baseMin: st.baseMin + Math.round(st.duration/60), showToast:false, celebrate:true };
+             baseMin: st.baseMin + Math.round(st.duration/60), celebrate:true };
     try{ localStorage.setItem('jiStats_'+(this._key||''), JSON.stringify({ streak:next.streak, totalSessions:next.totalSessions, baseMin:next.baseMin })); }catch(e){}
     return next;
   }
@@ -483,7 +483,7 @@ class Component extends DCLogic {
         focusLabel:'Tu práctica de hoy', ritualT:'Encadena · no rompas la cadena', ritualS:'Marca tu hábito apenas lo cumplas',
         explore:'Explora', seeAll:'Ver todo', focusModes:'Hábitos', consistency:'Tu constancia',
         currentStreak:'Racha actual', streakUnit:'días sin romper la cadena', minLabel:'repeticiones', blocksLabel:'prácticas completadas',
-        quote:'"Somos lo que hacemos repetidamente."', comeback:'Vuelve mañana para no romper la cadena.',
+        quote:'"Somos lo que hacemos repetidamente."', principleLabel:'Principio de hoy', comeback:'Vuelve mañana para no romper la cadena.',
         toast:'Práctica completada · cadena', paused:'En pausa', script:["Tomá aire… y bajá el ritmo.","No se trata de cambiar todo hoy, sino de repetir lo correcto.","Repetí:","Lo que repito cada día me construye.","Soy la suma de mis pequeños actos.","Un hábito a la vez, sin romper la cadena.","No busco perfección; busco constancia.","Inhala disciplina… exhala la culpa.","Cada vez que cumplo conmigo, refuerzo quién quiero ser.","Hoy hago mi parte, por mínima que sea. Mañana lo agradeceré.","La cadena sigue viva."], glowNote:'El glow cambia con la hora', aboutTitle:"Sobre este poder", aboutBody:"El laboratorio de tus hábitos. Separa los que te construyen de los que te frenan, y reemplaza uno cada día. Pequeñas reacciones diarias, resultados que explotan con el tiempo.", aboutClose:"Entendido", unlockTag:"Activa tus hábitos", unlockCta:"Entrar", cday:"Días 11–15", cdef:"El laboratorio de tus hábitos. Reemplaza uno que te frena cada día.", crule:"Nunca dos días seguidos sin hacerlo.",
         breath:['Empieza…','Mantén el ritmo…','Un paso más…'],
         nav:['Hoy','Prácticas','Leyes','IA'], days:['L','M','M','J','V','S','D'], modes:['☀ Día','⛅ Tarde','☾ Noche'],
@@ -503,7 +503,7 @@ class Component extends DCLogic {
         focusLabel:'Your practice today', ritualT:'Chain it · keep the chain', ritualS:'Check your habit the moment you do it',
         explore:'Explore', seeAll:'See all', focusModes:'Habits', consistency:'Your consistency',
         currentStreak:'Current streak', streakUnit:'days without breaking the chain', minLabel:'repetitions', blocksLabel:'practices completed',
-        quote:'"We are what we repeatedly do."', comeback:'Come back tomorrow to keep the chain alive.',
+        quote:'"We are what we repeatedly do."', principleLabel:'Principle of the day', comeback:'Come back tomorrow to keep the chain alive.',
         toast:'Practice complete · chain', paused:'Paused', script:["Take a breath… and slow down.","It's not about changing everything today, but repeating the right thing.","Repeat:","What I repeat each day builds me.","I am the sum of my small acts.","One habit at a time, without breaking the chain.","I don't seek perfection; I seek consistency.","Inhale discipline… exhale guilt.","Every time I keep my word to myself, I reinforce who I want to be.","Today I do my part, however small. Tomorrow I'll thank myself.","The chain stays alive."], glowNote:'The glow shifts with the time', aboutTitle:"About this power", aboutBody:"The lab of your habits. Separate the ones that build you from the ones that hold you back, and swap one each day. Small daily reactions, results that explode over time.", aboutClose:"Got it", unlockTag:"Activate your habits", unlockCta:"Enter", cday:"Days 11–15", cdef:"The lab of your habits. Replace one that holds you back each day.", crule:"Never two days in a row without doing it.",
         breath:['Begin…','Keep the rhythm…','One more step…'],
         nav:['Today','Practices','Laws','AI'], days:['M','T','W','T','F','S','S'], modes:['☀ Day','⛅ Afternoon','☾ Night'],
@@ -620,7 +620,7 @@ class Component extends DCLogic {
       intentionLabel: t.intention, focusLabel: t.focusLabel, ritualTitle: t.ritualT, ritualSub: t.ritualS,
       exploreLabel: t.explore, seeAllLabel: t.seeAll, focusModesLabel: t.focusModes,
       consistencyLabel: t.consistency, currentStreakLabel: t.currentStreak, streakUnitLabel: t.streakUnit,
-      minUnitLabel: t.minLabel, blocksUnitLabel: t.blocksLabel, quoteText: t.quote, principleLabel: (L==='es'?'Principio de hoy':'Principle of the day'), comebackText: t.comeback,
+      minUnitLabel: t.minLabel, blocksUnitLabel: t.blocksLabel, quoteText: t.quote, principleLabel: t.principleLabel, comebackText: t.comeback,
       toastLabel: t.toast, glowNote: t.glowNote,
       screenTintStyle: { position:'absolute', inset:'0', zIndex:0, pointerEvents:'none', background:PAL.tint, transition:'background 1.2s ease' },
       glow1Style: blob({ width:'340px', height:'340px', left:'-90px', top:'-60px', background:PAL.g1, animation:'subDrift 18s ease-in-out infinite', transition:'background 1.2s ease' }),
@@ -678,7 +678,7 @@ class Component extends DCLogic {
       breathWord: st.playing ? breathWords[st.breathStep] : t.paused,
       narration,
       orbAnim: { animation: st.playing ? `subBreathe ${orbDur} ease-in-out infinite` : 'none' },
-      showToast: st.showToast, celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#2c8d97','#b8923a','#242029']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
+      celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#2c8d97','#b8923a','#242029']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
       caption: [
         'Tus efectos reales (boom + tap) conectados desde el hub, con botón de silencio.',
         'El aura se adapta sola a la hora del día — aquí puedes previsualizar las tres.',

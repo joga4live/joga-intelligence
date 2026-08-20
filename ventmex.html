@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <script>
 /* Candado Joga (Fase A, 28-jul): esta app revisa SU PROPIA llave (jiUnlocked_ventmex),
@@ -216,10 +216,11 @@
         <div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:#c2564a;margin-bottom:4px">{{ iaKicker }}</div>
         <h2 style="font-family:Newsreader,serif;font-weight:500;font-size:26px;color:#2a201a;margin:0 0 6px">{{ iaTitle }}</h2>
         <p style="font-size:13px;color:#8a7464;margin:0 0 16px;line-height:1.5">{{ iaSub }}</p>
-        <div style="display:flex;gap:11px;align-items:flex-start;margin-bottom:16px">
-          <div style="flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#e7b84a,#e2703a);font-family:Newsreader,serif;font-weight:700;color:#0b0b0c;font-size:16px">J</div>
-          <div style="background:rgba(80,40,26,.07);border:1px solid rgba(80,40,26,.1);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:#2a201a">{{ iaGreeting }}</div>
-        </div>
+        <div style="background:#FBEBC7;border:1px solid #E8C874;border-radius:12px;padding:11px 14px;font:600 12px Inter;line-height:1.5;color:#5A3B00;margin-bottom:16px">{{ iaDisclaimer }}</div>
+                <div style="display:flex;gap:11px;align-items:flex-start;margin-bottom:16px">
+                  <div style="flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#b8923a,#E2703A);font-family:Newsreader,serif;font-weight:700;color:#0b0b0c;font-size:16px">J</div>
+                  <div style="background:rgba(45,38,58,.07);border:1px solid rgba(45,38,58,.1);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:#242029">{{ iaGreeting }}</div>
+                </div>
         <textarea value="{{ iaInput }}" onChange="{{ onIaInput }}" placeholder="{{ iaPlaceholder }}" style="width:100%;min-height:120px;resize:vertical;box-sizing:border-box;background:rgba(80,40,26,.06);border:1px solid rgba(80,40,26,.1);border-radius:14px;padding:14px;color:#2a201a;font:400 13.5px Inter;line-height:1.5;outline:none"></textarea>
         <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#ffffff;background:linear-gradient(135deg,#c2564a,#d4796a)">{{ iaBtnLabel }}</button>
         <sc-if value="{{ iaResult }}" hint-placeholder-val="{{ false }}">
@@ -363,12 +364,12 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:760,&quot;height&quot;:900}}">
 class Component extends DCLogic {
   state = { aboutOpen:false, locked:true, lockOpening:false, celebrate:false, view:'home', playerOpen:false, playing:false, elapsed:0, duration:420, pTitle:'', pTag:'',
-            streak:0, totalSessions:0, baseMin:0, affirmed:false, showToast:false, breathStep:0, doneP:{}, affIdx:0, iaInput:'', iaResult:'', iaLoading:false };
+            streak:0, totalSessions:0, baseMin:0, affirmed:false, breathStep:0, doneP:{}, affIdx:0, iaInput:'', iaResult:'', iaLoading:false };
 
   componentDidMount(){
     try{ if(!window.__jogaAudioGuard){ window.__jogaAudioGuard=1; window.addEventListener('unhandledrejection', e=>{ try{ const m=String((e.reason&&e.reason.message)||e.reason||''); if(/play\(\)/i.test(m)||/NotAllowed/i.test(m)) e.preventDefault(); }catch(_){} }); } }catch(e){}
     try{ this.muted = localStorage.getItem('jiMute')==='1'; }catch(e){ this.muted=false; }
-    let lang='es'; try{ const sv=localStorage.getItem('jiLang'); if(sv==='en'||sv==='es') lang=sv; }catch(e){}
+    let lang='es'; try{ const sv=localStorage.getItem('jiLang'); if(sv==='en'||sv==='es') lang=sv; }catch(e){} document.documentElement.lang=lang;
     let locked=true; try{ if(localStorage.getItem('jiUnlocked_ventmex')==='1') locked=false; }catch(e){} let doneP={}; try{ doneP=JSON.parse(localStorage.getItem('jiPractices_ventmex')||'{}')||{}; }catch(e){} this._key='ventmex'; let _stats={}; try{ _stats=JSON.parse(localStorage.getItem('jiStats_ventmex')||'{}')||{}; }catch(e){} const _today=new Date().toISOString().slice(0,10); let _affD=''; try{ _affD=localStorage.getItem('jiAffirmed_ventmex')||''; }catch(e){} this.setState(Object.assign({ muted: this.muted, lang, locked, doneP, affirmed:_affD===_today }, typeof _stats.streak==='number'?{streak:_stats.streak}:{}, typeof _stats.totalSessions==='number'?{totalSessions:_stats.totalSessions}:{}, typeof _stats.baseMin==='number'?{baseMin:_stats.baseMin}:{}));
     import('./subment-sfx.js').then(m => {
       const mk = src => { try{ const a=new Audio(src); a.preload='auto'; return a; }catch(e){ return null; } };
@@ -395,11 +396,11 @@ class Component extends DCLogic {
 
   play(name){ if(this.muted || !this._sfx || !this._sfx[name]) return; try{ const a=this._sfx[name]; a.currentTime=0; a.volume = name==='unlock'?.9:(name==='boom'?.5:.7); a.play().catch(()=>{}); if(name==='unlock'){ clearTimeout(this._unlockCut); clearInterval(this._unlockFade); this._unlockCut=setTimeout(()=>{ try{ this._unlockFade=setInterval(()=>{ if(a.volume>0.08){ a.volume=Math.max(0,a.volume-0.12); } else { a.pause(); a.currentTime=0; clearInterval(this._unlockFade); } },45); }catch(e){} },1900); } }catch(e){} }
   toggleMute(){ this.muted=!this.muted; try{ localStorage.setItem('jiMute', this.muted?'1':'0'); }catch(e){} try{ if(this._voice) this._voice.volume=this.muted?0:1; if(this._music) this._music.volume=this.muted?0:0.22; }catch(e){} this.setState({ muted:this.muted }); }
-  toggleLang(){ this.play('tap'); this.setState(st => { const lang = st.lang==='en'?'es':'en'; try{ localStorage.setItem('jiLang',lang); }catch(e){} return { lang }; }); }
+  toggleLang(){ this.play('tap'); this.setState(st => { const lang = st.lang==='en'?'es':'en'; try{ localStorage.setItem('jiLang',lang); document.documentElement.lang=lang; }catch(e){} return { lang }; }); }
   togglePractice(i){ this.setState(st => { const d = Object.assign({}, st.doneP); const was = !!d[i]; d[i] = !was; const total = Object.keys(d).filter(k=>d[k]).length; try{ localStorage.setItem('jiPractices_ventmex', JSON.stringify(d)); }catch(e){} if(!was){ this.play('boom'); if(total>=3){ this._toast = setTimeout(()=>this.setState({celebrate:false}),3400); return { doneP:d, celebrate:true }; } } else { this.play('tap'); } return { doneP:d }; }); }
 
   localDiag(q, L){
-    const THEMES = [{"k":["objecion","caro","no quiere","dice que no","rechaz","duda el client"],"es":{"n":"La objeción es interés, no un no","w":"Cuando objetan no te rechazan: piden más información para decidir.","a1":"Ante «está caro», pregunta «¿comparado con qué?» y escucha.","a2":"Responde la duda real, no la palabra; luego vuelve a pedir el cierre."},"en":{"n":"An objection is interest, not a no","w":"When they object they’re not rejecting you: they’re asking for more info to decide.","a1":"To “it’s expensive,” ask “compared to what?” and listen.","a2":"Answer the real doubt, not the word; then ask for the close again."}},{"k":["no cierr","no compr","perd la venta","se enfri","no concret","pierdo"],"es":{"n":"No estás pidiendo el cierre","w":"Muchas ventas se pierden por no atreverse a preguntar directo.","a1":"Tras resolver dudas, pregunta claro: «¿lo hacemos?» y quédate callado.","a2":"Si dijeron «lo pienso», agenda tú el siguiente contacto."},"en":{"n":"You’re not asking for the close","w":"Many sales are lost by not daring to ask directly.","a1":"After resolving doubts, ask clearly: “shall we do it?” and stay quiet.","a2":"If they said “I’ll think about it,” you schedule the next contact."}},{"k":["presion","no me hacen caso","no escuch","hablo mucho","pitch","presento"],"es":{"n":"Hablas más de lo que escuchas","w":"La gente compra cuando se siente entendida, no cuando la presionas.","a1":"En tu próxima charla, haz 3 preguntas antes de mencionar tu producto.","a2":"Vende el beneficio (lo que gana), no la característica."},"en":{"n":"You’re talking more than listening","w":"People buy when they feel understood, not when you push.","a1":"In your next talk, ask 3 questions before mentioning your product.","a2":"Sell the benefit (what they gain), not the feature."}},{"k":[],"es":{"n":"Vender es servir","w":"La confianza vende más que cualquier técnica de presión. Escucha y sé honesto.","a1":"Escucha más de lo que hablas y haz una pregunta más.","a2":"Da seguimiento amable: la mayoría de ventas pasan tras el primer no."},"en":{"n":"Selling is serving","w":"Trust sells more than any pressure tactic. Listen and be honest.","a1":"Listen more than you talk and ask one more question.","a2":"Follow up kindly: most sales happen after the first no."}}];
+    const THEMES = [{"k":["objecion","caro","no quiere","dice que no","rechaz","duda el client","objection","expensive","doesn't want","said no","reject","hesitat"],"es":{"n":"La objeción es interés, no un no","w":"Cuando objetan no te rechazan: piden más información para decidir.","a1":"Ante «está caro», pregunta «¿comparado con qué?» y escucha.","a2":"Responde la duda real, no la palabra; luego vuelve a pedir el cierre."},"en":{"n":"An objection is interest, not a no","w":"When they object they’re not rejecting you: they’re asking for more info to decide.","a1":"To “it’s expensive,” ask “compared to what?” and listen.","a2":"Answer the real doubt, not the word; then ask for the close again."}},{"k":["no cierr","no compr","perd la venta","se enfri","no concret","pierdo","can't close","won't buy","lost the sale","cold","no deal","losing"],"es":{"n":"No estás pidiendo el cierre","w":"Muchas ventas se pierden por no atreverse a preguntar directo.","a1":"Tras resolver dudas, pregunta claro: «¿lo hacemos?» y quédate callado.","a2":"Si dijeron «lo pienso», agenda tú el siguiente contacto."},"en":{"n":"You’re not asking for the close","w":"Many sales are lost by not daring to ask directly.","a1":"After resolving doubts, ask clearly: “shall we do it?” and stay quiet.","a2":"If they said “I’ll think about it,” you schedule the next contact."}},{"k":["presion","no me hacen caso","no escuch","hablo mucho","pitch","presento","pressur","ignore","don't listen","talk too much","pitch","present"],"es":{"n":"Hablas más de lo que escuchas","w":"La gente compra cuando se siente entendida, no cuando la presionas.","a1":"En tu próxima charla, haz 3 preguntas antes de mencionar tu producto.","a2":"Vende el beneficio (lo que gana), no la característica."},"en":{"n":"You’re talking more than listening","w":"People buy when they feel understood, not when you push.","a1":"In your next talk, ask 3 questions before mentioning your product.","a2":"Sell the benefit (what they gain), not the feature."}},{"k":[],"es":{"n":"Vender es servir","w":"La confianza vende más que cualquier técnica de presión. Escucha y sé honesto.","a1":"Escucha más de lo que hablas y haz una pregunta más.","a2":"Da seguimiento amable: la mayoría de ventas pasan tras el primer no."},"en":{"n":"Selling is serving","w":"Trust sells more than any pressure tactic. Listen and be honest.","a1":"Listen more than you talk and ask one more question.","a2":"Follow up kindly: most sales happen after the first no."}}];
     const s = (q||'').toLowerCase();
     let best=THEMES[THEMES.length-1], bestScore=0;
     for(const th of THEMES){ if(!th.k.length) continue; let sc=0; for(const w of th.k){ if(s.indexOf(w)>=0) sc++; } if(sc>bestScore){ bestScore=sc; best=th; } }
@@ -454,10 +455,10 @@ class Component extends DCLogic {
   finishState(st){
     this.stopSession();
     this.play('boom');
-    this._toast = setTimeout(() => this.setState({ celebrate:false, showToast:false }), 3400);
+    this._toast = setTimeout(() => this.setState({ celebrate:false }), 3400);
     const next = { playing:false, playerOpen:false, elapsed:0,
              streak:st.streak+1, totalSessions:st.totalSessions+1,
-             baseMin: st.baseMin + Math.round(st.duration/60), showToast:false, celebrate:true };
+             baseMin: st.baseMin + Math.round(st.duration/60), celebrate:true };
     try{ localStorage.setItem('jiStats_'+(this._key||''), JSON.stringify({ streak:next.streak, totalSessions:next.totalSessions, baseMin:next.baseMin })); }catch(e){}
     return next;
   }
@@ -477,7 +478,7 @@ class Component extends DCLogic {
         focusLabel:'Tu técnica de hoy', ritualT:'Prepara tu pitch · 2 min', ritualS:'Repasa antes de cada llamada',
         explore:'Explora', seeAll:'Ver todo', focusModes:'Técnicas', consistency:'Tu constancia',
         currentStreak:'Racha actual', streakUnit:'días conectando y cerrando', minLabel:'ventas cerradas', blocksLabel:'metas alcanzadas',
-        quote:'"Vender es servir: primero escucha, luego ofrece."', comeback:'Vuelve mañana para cerrar tu siguiente venta.',
+        quote:'"Vender es servir: primero escucha, luego ofrece."', principleLabel:'Principio de hoy', comeback:'Vuelve mañana para cerrar tu siguiente venta.',
         toast:'Cerrada · racha', paused:'En pausa', script:["Respirá y sonreí por dentro.","Vender es servir; conectar es un arte.","Repetí:","Conecto, escucho y cierro con honestidad.","No persigo: atraigo desde el valor que doy.","Cada conversación es una oportunidad de ayudar.","Inhala apertura… exhala la presión.","Confío en mi mensaje porque creo en él.","Escucho más de lo que hablo.","Hoy me acerco con calma y verdad.","El cierre llega solo cuando sirvo primero."], glowNote:'El glow cambia con la hora', aboutTitle:"Sobre este poder", aboutBody:"El cierre donde se unen los seis poderes. Conecta de verdad, escucha más de lo que hablas y cierra con honestidad. Vender no es presionar: es servir con valentía.", aboutClose:"Entendido", unlockTag:"Aprende a vender", unlockCta:"Entrar", cday:"Días 26–30", cdef:"El cierre donde se unen los seis poderes. Vender es servir.", crule:"Nunca dos días seguidos sin hacerlo.",
         breath:['Escucha…','Conecta…','Cierra…'],
         nav:['Hoy','Técnicas','Leyes','IA'], days:['L','M','M','J','V','S','D'], modes:['☀ Día','⛅ Tarde','☾ Noche'],
@@ -497,7 +498,7 @@ class Component extends DCLogic {
         focusLabel:'Your technique today', ritualT:'Prep your pitch · 2 min', ritualS:'Review before every call',
         explore:'Explore', seeAll:'See all', focusModes:'Techniques', consistency:'Your consistency',
         currentStreak:'Current streak', streakUnit:'days connecting and closing', minLabel:'sales closed', blocksLabel:'goals reached',
-        quote:'"Selling is serving: first listen, then offer."', comeback:'Come back tomorrow to close your next sale.',
+        quote:'"Selling is serving: first listen, then offer."', principleLabel:'Principle of the day', comeback:'Come back tomorrow to close your next sale.',
         toast:'Closed · streak', paused:'Paused', script:["Breathe and smile within.","Selling is serving; connecting is an art.","Repeat:","I connect, listen and close with honesty.","I don't chase: I attract through the value I give.","Every conversation is a chance to help.","Inhale openness… exhale pressure.","I trust my message because I believe in it.","I listen more than I talk.","Today I approach with calm and truth.","The close comes on its own when I serve first."], glowNote:'The glow shifts with the time', aboutTitle:"About this power", aboutBody:"The close where all six powers come together. Connect for real, listen more than you talk, and close with honesty. Selling isn’t pushing: it’s serving with courage.", aboutClose:"Got it", unlockTag:"Learn to sell", unlockCta:"Enter", cday:"Days 26–30", cdef:"The close where all six powers meet. Selling is serving.", crule:"Never two days in a row without doing it.",
         breath:['Listen…','Connect…','Close…'],
         nav:['Today','Techniques','Laws','AI'], days:['M','T','W','T','F','S','S'], modes:['☀ Day','⛅ Afternoon','☾ Night'],
@@ -614,7 +615,7 @@ class Component extends DCLogic {
       intentionLabel: t.intention, focusLabel: t.focusLabel, ritualTitle: t.ritualT, ritualSub: t.ritualS,
       exploreLabel: t.explore, seeAllLabel: t.seeAll, focusModesLabel: t.focusModes,
       consistencyLabel: t.consistency, currentStreakLabel: t.currentStreak, streakUnitLabel: t.streakUnit,
-      minUnitLabel: t.minLabel, blocksUnitLabel: t.blocksLabel, quoteText: t.quote, principleLabel: (L==='es'?'Principio de hoy':'Principle of the day'), comebackText: t.comeback,
+      minUnitLabel: t.minLabel, blocksUnitLabel: t.blocksLabel, quoteText: t.quote, principleLabel: t.principleLabel, comebackText: t.comeback,
       toastLabel: t.toast, glowNote: t.glowNote,
       screenTintStyle: { position:'absolute', inset:'0', zIndex:0, pointerEvents:'none', background:PAL.tint, transition:'background 1.2s ease' },
       glow1Style: blob({ width:'340px', height:'340px', left:'-90px', top:'-60px', background:PAL.g1, animation:'subDrift 18s ease-in-out infinite', transition:'background 1.2s ease' }),
@@ -655,7 +656,7 @@ class Component extends DCLogic {
       }),
       ideasKicker: t.ideasKicker, ideasTitle: t.ideasTitle, ideasSub: t.ideasSub, ideas: ideasList,
       iaKicker: t.iaKicker, iaTitle: t.iaTitle, iaSub: t.iaSub, iaPlaceholder: t.iaPlaceholder,
-      iaBtnLabel: st.iaLoading ? t.iaThinking : t.iaBtn, iaGreeting: t.iaGreeting,
+      iaBtnLabel: st.iaLoading ? t.iaThinking : t.iaBtn, iaGreeting: t.iaGreeting, iaDisclaimer: t.iaDisclaimer,
       iaInput: st.iaInput, iaResult: st.iaResult, iaLoading: st.iaLoading,
       onIaInput: (e) => this.setState({ iaInput: e.target.value }),
       runDiagnosis: () => this.diagnose(),
@@ -672,7 +673,7 @@ class Component extends DCLogic {
       breathWord: st.playing ? breathWords[st.breathStep] : t.paused,
       narration,
       orbAnim: { animation: st.playing ? `subBreathe ${orbDur} ease-in-out infinite` : 'none' },
-      showToast: st.showToast, celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#c2564a','#b8923a','#2a201a']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
+      celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#c2564a','#b8923a','#2a201a']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
       caption: [
         'Tus efectos reales (boom + tap) conectados desde el hub, con botón de silencio.',
         'El aura se adapta sola a la hora del día — aquí puedes previsualizar las tres.',

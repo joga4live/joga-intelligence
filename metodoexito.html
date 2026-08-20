@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <script>
 /* Candado Joga (Fase A, 28-jul): esta app revisa SU PROPIA llave (jiUnlocked_pasley —
@@ -304,6 +304,7 @@
         <div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:#3a8fb0;margin-bottom:4px">{{ iaKicker }}</div>
         <h2 style="font-family:Newsreader,serif;font-weight:500;font-size:26px;color:#242029;margin:0 0 6px">{{ iaTitle }}</h2>
         <p style="font-size:13px;color:#7c7488;margin:0 0 16px;line-height:1.5">{{ iaSub }}</p>
+        <div style="background:#FBEBC7;border:1px solid #E8C874;border-radius:12px;padding:11px 14px;font:600 12px Inter;line-height:1.5;color:#5A3B00;margin-bottom:16px">{{ iaDisclaimer }}</div>
         <div style="display:flex;gap:11px;align-items:flex-start;margin-bottom:16px">
           <div style="flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#b8923a,#E2703A);font-family:Newsreader,serif;font-weight:700;color:#0b0b0c;font-size:16px">J</div>
           <div style="background:rgba(45,38,58,.07);border:1px solid rgba(45,38,58,.1);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:#242029">{{ iaGreeting }}</div>
@@ -414,12 +415,12 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:760,&quot;height&quot;:900}}">
 class Component extends DCLogic {
   state = { aboutOpen:false, locked:true, lockOpening:false, celebrate:false, view:'home', playerOpen:false, playing:false, elapsed:0, duration:420, pTitle:'', pTag:'',
-            streak:0, totalSessions:0, baseMin:0, affirmed:false, showToast:false, breathStep:0, doneP:{}, affIdx:0, iaInput:'', iaResult:'', iaLoading:false };
+            streak:0, totalSessions:0, baseMin:0, affirmed:false, breathStep:0, doneP:{}, affIdx:0, iaInput:'', iaResult:'', iaLoading:false };
 
   componentDidMount(){
     try{ if(!window.__jogaAudioGuard){ window.__jogaAudioGuard=1; window.addEventListener('unhandledrejection', e=>{ try{ const m=String((e.reason&&e.reason.message)||e.reason||''); if(/play\(\)/i.test(m)||/NotAllowed/i.test(m)) e.preventDefault(); }catch(_){} }); } }catch(e){}
     try{ this.muted = localStorage.getItem('jiMute')==='1'; }catch(e){ this.muted=false; }
-    let lang='es'; try{ const sv=localStorage.getItem('jiLang'); if(sv==='en'||sv==='es') lang=sv; }catch(e){}
+    let lang='es'; try{ const sv=localStorage.getItem('jiLang'); if(sv==='en'||sv==='es') lang=sv; }catch(e){} document.documentElement.lang=lang;
     let locked=true; try{ if(localStorage.getItem('jiUnlocked_pasley')==='1') locked=false; }catch(e){} let doneP={}; try{ doneP=JSON.parse(localStorage.getItem('jiPractices_pasley')||'{}')||{}; }catch(e){} this._key='pasley'; let _stats={}; try{ _stats=JSON.parse(localStorage.getItem('jiStats_pasley')||'{}')||{}; }catch(e){} const _today=new Date().toISOString().slice(0,10); let _affD=''; try{ _affD=localStorage.getItem('jiAffirmed_pasley')||''; }catch(e){} this.setState(Object.assign({ muted: this.muted, lang, locked, doneP, affirmed:_affD===_today }, typeof _stats.streak==='number'?{streak:_stats.streak}:{}, typeof _stats.totalSessions==='number'?{totalSessions:_stats.totalSessions}:{}, typeof _stats.baseMin==='number'?{baseMin:_stats.baseMin}:{}));
     import('./subment-sfx.js').then(m => {
       const mk = src => { try{ const a=new Audio(src); a.preload='auto'; return a; }catch(e){ return null; } };
@@ -446,11 +447,11 @@ class Component extends DCLogic {
 
   play(name){ if(this.muted || !this._sfx || !this._sfx[name]) return; try{ const a=this._sfx[name]; a.currentTime=0; a.volume = name==='unlock'?.9:(name==='boom'?.5:.7); a.play().catch(()=>{}); if(name==='unlock'){ clearTimeout(this._unlockCut); clearInterval(this._unlockFade); this._unlockCut=setTimeout(()=>{ try{ this._unlockFade=setInterval(()=>{ if(a.volume>0.08){ a.volume=Math.max(0,a.volume-0.12); } else { a.pause(); a.currentTime=0; clearInterval(this._unlockFade); } },45); }catch(e){} },1900); } }catch(e){} }
   toggleMute(){ this.muted=!this.muted; try{ localStorage.setItem('jiMute', this.muted?'1':'0'); }catch(e){} try{ if(this._voice) this._voice.volume=this.muted?0:1; if(this._music) this._music.volume=this.muted?0:0.22; }catch(e){} this.setState({ muted:this.muted }); }
-  toggleLang(){ this.play('tap'); this.setState(st => { const lang = st.lang==='en'?'es':'en'; try{ localStorage.setItem('jiLang',lang); }catch(e){} return { lang }; }); }
+  toggleLang(){ this.play('tap'); this.setState(st => { const lang = st.lang==='en'?'es':'en'; try{ localStorage.setItem('jiLang',lang); document.documentElement.lang=lang; }catch(e){} return { lang }; }); }
   togglePractice(i){ this.setState(st => { const d = Object.assign({}, st.doneP); const was = !!d[i]; d[i] = !was; const total = Object.keys(d).filter(k=>d[k]).length; try{ localStorage.setItem('jiPractices_pasley', JSON.stringify(d)); }catch(e){} if(!was){ this.play('boom'); if(total>=3){ this._toast = setTimeout(()=>this.setState({celebrate:false}),3400); return { doneP:d, celebrate:true }; } } else { this.play('tap'); } return { doneP:d }; }); }
 
   localDiag(q, L){
-    const THEMES = [{"k":["no se","perdid","rumbo","clarid","confund","direccion","meta"],"es":{"n":"Te falta una estrella clara","w":"Sin un destino definido, cada esfuerzo se dispersa. Primero el qué, luego el cómo.","a1":"Escribe en una frase quién quieres ser al final del año.","a2":"Define el siguiente paso visible hacia esa estrella."},"en":{"n":"You’re missing a clear star","w":"Without a defined destination, every effort scatters. First the what, then the how.","a1":"Write in one sentence who you want to be by year’s end.","a2":"Define the next visible step toward that star."}},{"k":["miedo","no puedo","no soy capaz","creo","dud","insegur"],"es":{"n":"Una creencia te frena","w":"Tu mundo exterior refleja tu interior. El límite suele estar en la cabeza.","a1":"Escribe la creencia que te detiene y rebátela con un hecho real.","a2":"Actúa hoy como si tu meta ya fuera posible."},"en":{"n":"A belief is holding you back","w":"Your outer world reflects your inner one. The limit is usually in your head.","a1":"Write the belief that stops you and counter it with a real fact.","a2":"Act today as if your goal were already possible."}},{"k":["suerte","azar","improvis","plan","desorden","caos"],"es":{"n":"Estás dejando tu vida al azar","w":"No planear es planear fallar. Quien no decide su rumbo, queda a merced de la suerte.","a1":"Haz un plan concreto para algo que dejabas «al aire».","a2":"Sustituye un «ya veremos» por una decisión hoy."},"en":{"n":"You’re leaving your life to chance","w":"Failing to plan is planning to fail. Who doesn’t choose their path is at luck’s mercy.","a1":"Make a concrete plan for something you left “up in the air.”","a2":"Replace a “we’ll see” with a decision today."}},{"k":[],"es":{"n":"Avanza con estrategia","w":"Un paso ordenado vale más que mil saltos sin rumbo. La reina no improvisa.","a1":"Elige el peldaño de hoy y súbelo, sin saltarte el orden.","a2":"Al final del día, revisa: ¿me acerqué a mi cima o solo me ocupé?"},"en":{"n":"Advance with strategy","w":"One ordered step beats a thousand aimless leaps. The queen doesn’t improvise.","a1":"Pick today’s step and climb it, without skipping the order.","a2":"At day’s end, review: did I get closer to my summit or just stay busy?"}}];
+    const THEMES = [{"k":["no se","perdid","rumbo","clarid","confund","direccion","meta","don't know","lost","direction","clarity","confus","goal"],"es":{"n":"Te falta una estrella clara","w":"Sin un destino definido, cada esfuerzo se dispersa. Primero el qué, luego el cómo.","a1":"Escribe en una frase quién quieres ser al final del año.","a2":"Define el siguiente paso visible hacia esa estrella."},"en":{"n":"You’re missing a clear star","w":"Without a defined destination, every effort scatters. First the what, then the how.","a1":"Write in one sentence who you want to be by year’s end.","a2":"Define the next visible step toward that star."}},{"k":["miedo","no puedo","no soy capaz","creo","dud","insegur","fear","can't","not capable","believ","doubt","insecur"],"es":{"n":"Una creencia te frena","w":"Tu mundo exterior refleja tu interior. El límite suele estar en la cabeza.","a1":"Escribe la creencia que te detiene y rebátela con un hecho real.","a2":"Actúa hoy como si tu meta ya fuera posible."},"en":{"n":"A belief is holding you back","w":"Your outer world reflects your inner one. The limit is usually in your head.","a1":"Write the belief that stops you and counter it with a real fact.","a2":"Act today as if your goal were already possible."}},{"k":["suerte","azar","improvis","plan","desorden","caos","luck","chance","improvise","plan","disorder","chaos"],"es":{"n":"Estás dejando tu vida al azar","w":"No planear es planear fallar. Quien no decide su rumbo, queda a merced de la suerte.","a1":"Haz un plan concreto para algo que dejabas «al aire».","a2":"Sustituye un «ya veremos» por una decisión hoy."},"en":{"n":"You’re leaving your life to chance","w":"Failing to plan is planning to fail. Who doesn’t choose their path is at luck’s mercy.","a1":"Make a concrete plan for something you left “up in the air.”","a2":"Replace a “we’ll see” with a decision today."}},{"k":[],"es":{"n":"Avanza con estrategia","w":"Un paso ordenado vale más que mil saltos sin rumbo. La reina no improvisa.","a1":"Elige el peldaño de hoy y súbelo, sin saltarte el orden.","a2":"Al final del día, revisa: ¿me acerqué a mi cima o solo me ocupé?"},"en":{"n":"Advance with strategy","w":"One ordered step beats a thousand aimless leaps. The queen doesn’t improvise.","a1":"Pick today’s step and climb it, without skipping the order.","a2":"At day’s end, review: did I get closer to my summit or just stay busy?"}}];
     const s = (q||'').toLowerCase();
     let best=THEMES[THEMES.length-1], bestScore=0;
     for(const th of THEMES){ if(!th.k.length) continue; let sc=0; for(const w of th.k){ if(s.indexOf(w)>=0) sc++; } if(sc>bestScore){ bestScore=sc; best=th; } }
@@ -505,10 +506,10 @@ class Component extends DCLogic {
   finishState(st){
     this.stopSession();
     this.play('boom');
-    this._toast = setTimeout(() => this.setState({ celebrate:false, showToast:false }), 3400);
+    this._toast = setTimeout(() => this.setState({ celebrate:false }), 3400);
     const next = { playing:false, playerOpen:false, elapsed:0,
              streak:st.streak+1, totalSessions:st.totalSessions+1,
-             baseMin: st.baseMin + Math.round(st.duration/60), showToast:false, celebrate:true };
+             baseMin: st.baseMin + Math.round(st.duration/60), celebrate:true };
     try{ localStorage.setItem('jiStats_'+(this._key||''), JSON.stringify({ streak:next.streak, totalSessions:next.totalSessions, baseMin:next.baseMin })); }catch(e){}
     return next;
   }
@@ -528,7 +529,7 @@ class Component extends DCLogic {
         focusLabel:'Tu práctica del método', ritualT:'Revisa tu plan · un paso a la vez', ritualS:'Marca el paso cuando lo completes',
         explore:'Explora', seeAll:'Ver todo', focusModes:'Pasos', consistency:'Tu constancia',
         currentStreak:'Racha actual', streakUnit:'días avanzando sin parar', minLabel:'pasos dados', blocksLabel:'etapas completadas',
-        quote:'"Un paso ordenado vale más que mil saltos sin rumbo."', comeback:'Vuelve mañana para dar tu siguiente paso.',
+        quote:'"Un paso ordenado vale más que mil saltos sin rumbo."', principleLabel:'Principio de hoy', comeback:'Vuelve mañana para dar tu siguiente paso.',
         toast:'Paso completado · racha', paused:'En pausa', script:["Respirá profundo.","No necesitás saltar; necesitás el siguiente paso.","Repetí:","Crezco un peldaño cada día.","Avanzo con estrategia, no con suerte.","Mi mundo exterior refleja mi orden interior.","Sé hacia dónde voy, y eso me da calma.","Inhala claridad… exhala la prisa.","No comparo mi camino con el de nadie.","Cada paso ordenado me acerca. Hoy doy uno, con intención.","El método me sostiene."], glowNote:'El glow cambia con la hora', aboutTitle:"Sobre este poder", aboutBody:"El método del éxito, paso a paso. Alinea cada movimiento con las leyes que de verdad funcionan, no con la suerte. La reina no improvisa: avanza con estrategia.", aboutClose:"Entendido", unlockTag:"Domina el método", unlockCta:"Entrar", cday:"Días 16–20", cdef:"El método del éxito, paso a paso. Avanza con estrategia, no con suerte.", crule:"Nunca dos días seguidos sin hacerlo.",
         breath:['Prepara…','Da el paso…','Afianza…'],
         nav:['Hoy','Pasos','Leyes','IA'], lawsKicker:'Las 7 Leyes', lawsTitle:'Las 7 Leyes', lawsSub:'Los principios que rigen tu éxito — úsalos a tu favor.', lawsCredit:'Inspirado en las Siete Leyes Mentales del Éxito de Brian Tracy.', iaKicker:'Diagnóstico IA', iaTitle:'¿En qué te ayudo?', iaSub:'Cuéntame tu situación y te digo qué ley y qué paso activar.', iaPlaceholder:'Escribe tu situación…', iaBtn:'Analizar mi situación', iaThinking:'Analizando…', iaGreeting:"Hola, soy Joga 👋 Tu coach del método. Cuéntame dónde estás atorado y te digo qué ley y qué paso activar.", days:['L','M','M','J','V','S','D'], modes:['☀ Día','⛅ Tarde','☾ Noche'],
@@ -546,7 +547,7 @@ class Component extends DCLogic {
         focusLabel:'Your method practice', ritualT:'Review your plan · one step at a time', ritualS:'Check the step when you complete it',
         explore:'Explore', seeAll:'See all', focusModes:'Steps', consistency:'Your consistency',
         currentStreak:'Current streak', streakUnit:'days advancing nonstop', minLabel:'steps taken', blocksLabel:'stages completed',
-        quote:'"One ordered step beats a thousand aimless leaps."', comeback:'Come back tomorrow to take your next step.',
+        quote:'"One ordered step beats a thousand aimless leaps."', principleLabel:'Principle of the day', comeback:'Come back tomorrow to take your next step.',
         toast:'Step complete · streak', paused:'Paused', script:["Breathe deep.","You don't need to leap; you need the next step.","Repeat:","I grow one step every day.","I advance with strategy, not luck.","My outer world reflects my inner order.","I know where I'm going, and that gives me calm.","Inhale clarity… exhale the rush.","I don't compare my path to anyone's.","Every ordered step brings me closer. Today I take one, with intention.","The method holds me."], glowNote:'The glow shifts with the time', aboutTitle:"About this power", aboutBody:"The method of success, step by step. Align every move with the laws that truly work, not with luck. The queen doesn’t improvise: she advances with strategy.", aboutClose:"Got it", unlockTag:"Master the method", unlockCta:"Enter", cday:"Days 16–20", cdef:"The method of success, step by step. Advance with strategy, not luck.", crule:"Never two days in a row without doing it.",
         breath:['Prepare…','Take the step…','Lock it in…'],
         nav:['Today','Steps','Laws','AI'], lawsKicker:'The 7 Laws', lawsTitle:'The 7 Laws', lawsSub:'The principles that govern your success — use them in your favor.', lawsCredit:'Inspired by Brian Tracy’s Seven Mental Laws of Success.', iaKicker:'AI Diagnosis', iaTitle:'How can I help?', iaSub:'Tell me your situation and I’ll tell you which law and step to activate.', iaPlaceholder:'Write your situation…', iaBtn:'Analyze my situation', iaThinking:'Analyzing…', iaGreeting:"Hi, I'm Joga 👋 Your method coach. Tell me where you're stuck and I'll tell you which law and step to activate.", days:['M','T','W','T','F','S','S'], modes:['☀ Day','⛅ Afternoon','☾ Night'],
@@ -670,7 +671,7 @@ class Component extends DCLogic {
       intentionLabel: t.intention, focusLabel: t.focusLabel, ritualTitle: t.ritualT, ritualSub: t.ritualS,
       exploreLabel: t.explore, seeAllLabel: t.seeAll, focusModesLabel: t.focusModes,
       consistencyLabel: t.consistency, currentStreakLabel: t.currentStreak, streakUnitLabel: t.streakUnit,
-      minUnitLabel: t.minLabel, blocksUnitLabel: t.blocksLabel, quoteText: t.quote, principleLabel: (L==='es'?'Principio de hoy':'Principle of the day'), comebackText: t.comeback,
+      minUnitLabel: t.minLabel, blocksUnitLabel: t.blocksLabel, quoteText: t.quote, principleLabel: t.principleLabel, comebackText: t.comeback,
       toastLabel: t.toast, glowNote: t.glowNote,
       screenTintStyle: { position:'absolute', inset:'0', zIndex:0, pointerEvents:'none', background:PAL.tint, transition:'background 1.2s ease' },
       glow1Style: blob({ width:'340px', height:'340px', left:'-90px', top:'-60px', background:PAL.g1, animation:'subDrift 18s ease-in-out infinite', transition:'background 1.2s ease' }),
@@ -711,7 +712,7 @@ class Component extends DCLogic {
       }),
       lawsKicker: t.lawsKicker, lawsTitle: t.lawsTitle, lawsSub: t.lawsSub, lawsCredit: t.lawsCredit, leyes: leyesList,
       iaKicker: t.iaKicker, iaTitle: t.iaTitle, iaSub: t.iaSub, iaPlaceholder: t.iaPlaceholder,
-      iaBtnLabel: st.iaLoading ? t.iaThinking : t.iaBtn, iaGreeting: t.iaGreeting,
+      iaBtnLabel: st.iaLoading ? t.iaThinking : t.iaBtn, iaGreeting: t.iaGreeting, iaDisclaimer: t.iaDisclaimer,
       iaInput: st.iaInput, iaResult: st.iaResult, iaLoading: st.iaLoading,
       onIaInput: (e) => this.setState({ iaInput: e.target.value }),
       runDiagnosis: () => this.diagnose(),
@@ -728,7 +729,7 @@ class Component extends DCLogic {
       breathWord: st.playing ? breathWords[st.breathStep] : t.paused,
       narration,
       orbAnim: { animation: st.playing ? `subBreathe ${orbDur} ease-in-out infinite` : 'none' },
-      showToast: st.showToast, celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#2f6ca0','#b8923a','#242029']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
+      celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#2f6ca0','#b8923a','#242029']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
       caption: [
         'Tus efectos reales (boom + tap) conectados desde el hub, con botón de silencio.',
         'El aura se adapta sola a la hora del día — aquí puedes previsualizar las tres.',

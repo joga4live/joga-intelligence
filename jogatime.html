@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <script>
 /* Candado Joga (Fase A, 28-jul): esta app revisa SU PROPIA llave (jiUnlocked_jogatime),
@@ -363,12 +363,12 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:760,&quot;height&quot;:900}}">
 class Component extends DCLogic {
   state = { aboutOpen:false, locked:true, lockOpening:false, celebrate:false, view:'home', playerOpen:false, playing:false, elapsed:0, duration:420, pTitle:'', pTag:'',
-            streak:0, totalSessions:0, baseMin:0, affirmed:false, showToast:false, breathStep:0, doneP:{}, affIdx:0, iaInput:'', iaResult:'', iaLoading:false };
+            streak:0, totalSessions:0, baseMin:0, affirmed:false, breathStep:0, doneP:{}, affIdx:0, iaInput:'', iaResult:'', iaLoading:false };
 
   componentDidMount(){
     try{ if(!window.__jogaAudioGuard){ window.__jogaAudioGuard=1; window.addEventListener('unhandledrejection', e=>{ try{ const m=String((e.reason&&e.reason.message)||e.reason||''); if(/play\(\)/i.test(m)||/NotAllowed/i.test(m)) e.preventDefault(); }catch(_){} }); } }catch(e){}
     try{ this.muted = localStorage.getItem('jiMute')==='1'; }catch(e){ this.muted=false; }
-    let lang='es'; try{ const sv=localStorage.getItem('jiLang'); if(sv==='en'||sv==='es') lang=sv; }catch(e){}
+    let lang='es'; try{ const sv=localStorage.getItem('jiLang'); if(sv==='en'||sv==='es') lang=sv; }catch(e){} document.documentElement.lang=lang;
     let locked=true; try{ if(localStorage.getItem('jiUnlocked_jogatime')==='1') locked=false; }catch(e){} let doneP={}; try{ doneP=JSON.parse(localStorage.getItem('jiPractices_jogatime')||'{}')||{}; }catch(e){} this._key='jogatime'; let _stats={}; try{ _stats=JSON.parse(localStorage.getItem('jiStats_jogatime')||'{}')||{}; }catch(e){} const _today=new Date().toISOString().slice(0,10); let _affD=''; try{ _affD=localStorage.getItem('jiAffirmed_jogatime')||''; }catch(e){} this.setState(Object.assign({ muted: this.muted, lang, locked, doneP, affirmed:_affD===_today }, typeof _stats.streak==='number'?{streak:_stats.streak}:{}, typeof _stats.totalSessions==='number'?{totalSessions:_stats.totalSessions}:{}, typeof _stats.baseMin==='number'?{baseMin:_stats.baseMin}:{}));
     import('./subment-sfx.js').then(m => {
       const mk = src => { try{ const a=new Audio(src); a.preload='auto'; return a; }catch(e){ return null; } };
@@ -395,11 +395,11 @@ class Component extends DCLogic {
 
   play(name){ if(this.muted || !this._sfx || !this._sfx[name]) return; try{ const a=this._sfx[name]; a.currentTime=0; a.volume = name==='unlock'?.9:(name==='boom'?.5:.7); a.play().catch(()=>{}); if(name==='unlock'){ clearTimeout(this._unlockCut); clearInterval(this._unlockFade); this._unlockCut=setTimeout(()=>{ try{ this._unlockFade=setInterval(()=>{ if(a.volume>0.08){ a.volume=Math.max(0,a.volume-0.12); } else { a.pause(); a.currentTime=0; clearInterval(this._unlockFade); } },45); }catch(e){} },1900); } }catch(e){} }
   toggleMute(){ this.muted=!this.muted; try{ localStorage.setItem('jiMute', this.muted?'1':'0'); }catch(e){} try{ if(this._voice) this._voice.volume=this.muted?0:1; if(this._music) this._music.volume=this.muted?0:0.22; }catch(e){} this.setState({ muted:this.muted }); }
-  toggleLang(){ this.play('tap'); this.setState(st => { const lang = st.lang==='en'?'es':'en'; try{ localStorage.setItem('jiLang',lang); }catch(e){} return { lang }; }); }
+  toggleLang(){ this.play('tap'); this.setState(st => { const lang = st.lang==='en'?'es':'en'; try{ localStorage.setItem('jiLang',lang); document.documentElement.lang=lang; }catch(e){} return { lang }; }); }
   togglePractice(i){ this.setState(st => { const d = Object.assign({}, st.doneP); const was = !!d[i]; d[i] = !was; const total = Object.keys(d).filter(k=>d[k]).length; try{ localStorage.setItem('jiPractices_jogatime', JSON.stringify(d)); }catch(e){} if(!was){ this.play('boom'); if(total>=3){ this._toast = setTimeout(()=>this.setState({celebrate:false}),3400); return { doneP:d, celebrate:true }; } } else { this.play('tap'); } return { doneP:d }; }); }
 
   localDiag(q, L){
-    const THEMES = [{"k":["distra","celular","redes","notific","interrump","concentr","foco"],"es":{"n":"Tu foco tiene fugas","w":"No te falta tiempo: te falta foco protegido. Las interrupciones fragmentan tus horas.","a1":"Trabaja 25 min en una sola tarea con el teléfono en otro cuarto.","a2":"Apaga notificaciones durante tu bloque más importante del día."},"en":{"n":"Your focus is leaking","w":"You don’t lack time: you lack protected focus. Interruptions fragment your hours.","a1":"Work 25 min on one task with your phone in another room.","a2":"Turn off notifications during your most important block of the day."}},{"k":["procrastin","dejar","despues","flojera","empezar","posterg"],"es":{"n":"La tarea creció en tu mente","w":"Posponer no es pereza: es una tarea mal definida que parece enorme.","a1":"Divide la tarea hasta que el primer paso tome 2 minutos.","a2":"Hazlo ya, solo ese paso. El resto se vuelve fácil."},"en":{"n":"The task grew in your mind","w":"Procrastinating isn’t laziness: it’s a poorly defined task that looks huge.","a1":"Break the task down until the first step takes 2 minutes.","a2":"Do just that step now. The rest gets easy."}},{"k":["ocupad","satura","mucho","agobi","estres","no me alcanza","prioridad"],"es":{"n":"Confundes ocupado con productivo","w":"Llenar el día no es avanzar. El 20% correcto vale más que el 80% restante.","a1":"Antes de empezar, marca la tarea que haría que el día valiera.","a2":"Bloquéale una hora fija en tu calendario y protégela."},"en":{"n":"You’re confusing busy with productive","w":"Filling your day isn’t progress. The right 20% beats the other 80%.","a1":"Before starting, mark the task that would make the day worth it.","a2":"Block a fixed hour for it on your calendar and protect it."}},{"k":[],"es":{"n":"Dale forma a tu tiempo","w":"Lo que no tiene una hora asignada no sucede. Tu agenda decide tu día.","a1":"Asigna en tu calendario tu tarea #1 de mañana, con hora.","a2":"Cierra el día en 3 líneas: qué logré, qué me robó tiempo, qué sigue."},"en":{"n":"Give your time a shape","w":"What has no assigned hour doesn’t happen. Your calendar decides your day.","a1":"Schedule tomorrow’s #1 task on your calendar, with a time.","a2":"Close the day in 3 lines: what I did, what stole time, what’s next."}}];
+    const THEMES = [{"k":["distra","celular","redes","notific","interrump","concentr","foco","distract","phone","social","notif","interrupt","focus"],"es":{"n":"Tu foco tiene fugas","w":"No te falta tiempo: te falta foco protegido. Las interrupciones fragmentan tus horas.","a1":"Trabaja 25 min en una sola tarea con el teléfono en otro cuarto.","a2":"Apaga notificaciones durante tu bloque más importante del día."},"en":{"n":"Your focus is leaking","w":"You don’t lack time: you lack protected focus. Interruptions fragment your hours.","a1":"Work 25 min on one task with your phone in another room.","a2":"Turn off notifications during your most important block of the day."}},{"k":["procrastin","dejar","despues","flojera","empezar","posterg","later","lazy","start","delay","put off"],"es":{"n":"La tarea creció en tu mente","w":"Posponer no es pereza: es una tarea mal definida que parece enorme.","a1":"Divide la tarea hasta que el primer paso tome 2 minutos.","a2":"Hazlo ya, solo ese paso. El resto se vuelve fácil."},"en":{"n":"The task grew in your mind","w":"Procrastinating isn’t laziness: it’s a poorly defined task that looks huge.","a1":"Break the task down until the first step takes 2 minutes.","a2":"Do just that step now. The rest gets easy."}},{"k":["ocupad","satura","mucho","agobi","estres","no me alcanza","prioridad","busy","overwhelm","stress","priorit","too much","burnout"],"es":{"n":"Confundes ocupado con productivo","w":"Llenar el día no es avanzar. El 20% correcto vale más que el 80% restante.","a1":"Antes de empezar, marca la tarea que haría que el día valiera.","a2":"Bloquéale una hora fija en tu calendario y protégela."},"en":{"n":"You’re confusing busy with productive","w":"Filling your day isn’t progress. The right 20% beats the other 80%.","a1":"Before starting, mark the task that would make the day worth it.","a2":"Block a fixed hour for it on your calendar and protect it."}},{"k":[],"es":{"n":"Dale forma a tu tiempo","w":"Lo que no tiene una hora asignada no sucede. Tu agenda decide tu día.","a1":"Asigna en tu calendario tu tarea #1 de mañana, con hora.","a2":"Cierra el día en 3 líneas: qué logré, qué me robó tiempo, qué sigue."},"en":{"n":"Give your time a shape","w":"What has no assigned hour doesn’t happen. Your calendar decides your day.","a1":"Schedule tomorrow’s #1 task on your calendar, with a time.","a2":"Close the day in 3 lines: what I did, what stole time, what’s next."}}];
     const s = (q||'').toLowerCase();
     let best=THEMES[THEMES.length-1], bestScore=0;
     for(const th of THEMES){ if(!th.k.length) continue; let sc=0; for(const w of th.k){ if(s.indexOf(w)>=0) sc++; } if(sc>bestScore){ bestScore=sc; best=th; } }
@@ -454,10 +454,10 @@ class Component extends DCLogic {
   finishState(st){
     this.stopSession();
     this.play('boom');
-    this._toast = setTimeout(() => this.setState({ celebrate:false, showToast:false }), 3400);
+    this._toast = setTimeout(() => this.setState({ celebrate:false }), 3400);
     const next = { playing:false, playerOpen:false, elapsed:0,
              streak:st.streak+1, totalSessions:st.totalSessions+1,
-             baseMin: st.baseMin + Math.round(st.duration/60), showToast:false, celebrate:true };
+             baseMin: st.baseMin + Math.round(st.duration/60), celebrate:true };
     try{ localStorage.setItem('jiStats_'+(this._key||''), JSON.stringify({ streak:next.streak, totalSessions:next.totalSessions, baseMin:next.baseMin })); }catch(e){}
     return next;
   }
@@ -477,7 +477,7 @@ class Component extends DCLogic {
         focusLabel:'Tu bloque de enfoque', ritualT:'Calienta · 2 min de respiración', ritualS:'Aclara la mente antes de enfocarte',
         explore:'Explora', seeAll:'Ver todo', focusModes:'Enfoques', consistency:'Tu constancia',
         currentStreak:'Racha actual', streakUnit:'días dueño de tu tiempo', minLabel:'minutos enfocado', blocksLabel:'bloques completados',
-        quote:'"El tiempo que diriges es el único que de verdad vives."', comeback:'Vuelve mañana para no romper tu racha.',
+        quote:'"El tiempo que diriges es el único que de verdad vives."', principleLabel:'Principio de hoy', comeback:'Vuelve mañana para no romper tu racha.',
         toast:'Sesión completada · racha', paused:'En pausa', script:["Detené todo por un momento.","El tiempo no se persigue: se dirige.","Respirá, y repetí:","Soy dueño de mis horas y de mi enfoque.","Hoy elijo dónde va mi atención, y mi atención es mi vida.","No hago más; hago lo que importa.","Una hora con intención vale más que un día disperso.","Inhala foco… exhala el ruido.","Cada bloque de tiempo que protejo es un acto de respeto hacia mí.","Cierro los ojos, ordeno mi día por dentro, y avanzo con calma.","El tiempo está de mi lado."], glowNote:'El glow cambia con la hora', aboutTitle:"Sobre este poder", aboutBody:"Tu tiempo es tu reino — gobiérnalo como un rey. Bloquea tus horas, protege tu foco y decide tú dónde va tu energía. El que domina su agenda, domina su vida.", aboutClose:"Entendido", unlockTag:"Reclama tu tiempo", unlockCta:"Entrar", cday:"Días 6–10", cdef:"Tu tiempo es tu reino. Bloquea tus horas y protege tu foco.", crule:"Nunca dos días seguidos sin hacerlo.",
         breath:['Concéntrate…','Sostén el foco…','Respira hondo…'],
         nav:['Hoy','Prácticas','Principios','IA'], days:['L','M','M','J','V','S','D'], modes:['☀ Día','⛅ Tarde','☾ Noche'],
@@ -497,7 +497,7 @@ class Component extends DCLogic {
         focusLabel:'Your focus block', ritualT:'Warm up · 2 min breathing', ritualS:'Clear your mind before you focus',
         explore:'Explore', seeAll:'See all', focusModes:'Focus modes', consistency:'Your consistency',
         currentStreak:'Current streak', streakUnit:'days owning your time', minLabel:'minutes focused', blocksLabel:'blocks completed',
-        quote:'"The time you steer is the only time you truly live."', comeback:'Come back tomorrow to keep your streak alive.',
+        quote:'"The time you steer is the only time you truly live."', principleLabel:'Principle of the day', comeback:'Come back tomorrow to keep your streak alive.',
         toast:'Session complete · streak', paused:'Paused', script:["Stop everything for a moment.","Time isn't chased: it's steered.","Breathe, and repeat:","I own my hours and my focus.","Today I choose where my attention goes, and my attention is my life.","I don't do more; I do what matters.","One hour with intention is worth more than a scattered day.","Inhale focus… exhale the noise.","Every block of time I protect is an act of respect toward myself.","I close my eyes, order my day within, and move forward calmly.","Time is on my side."], glowNote:'The glow shifts with the time', aboutTitle:"About this power", aboutBody:"Your time is your kingdom — rule it like a king. Block your hours, guard your focus, and decide where your energy goes. Master your calendar and you master your life.", aboutClose:"Got it", unlockTag:"Reclaim your time", unlockCta:"Enter", cday:"Days 6–10", cdef:"Your time is your kingdom. Block your hours and guard your focus.", crule:"Never two days in a row without doing it.",
         breath:['Focus…','Hold the focus…','Breathe deep…'],
         nav:['Today','Practices','Principles','AI'], days:['M','T','W','T','F','S','S'], modes:['☀ Day','⛅ Afternoon','☾ Night'],
@@ -614,7 +614,7 @@ class Component extends DCLogic {
       intentionLabel: t.intention, focusLabel: t.focusLabel, ritualTitle: t.ritualT, ritualSub: t.ritualS,
       exploreLabel: t.explore, seeAllLabel: t.seeAll, focusModesLabel: t.focusModes,
       consistencyLabel: t.consistency, currentStreakLabel: t.currentStreak, streakUnitLabel: t.streakUnit,
-      minUnitLabel: t.minLabel, blocksUnitLabel: t.blocksLabel, quoteText: t.quote, principleLabel: (L==='es'?'Principio de hoy':'Principle of the day'), comebackText: t.comeback,
+      minUnitLabel: t.minLabel, blocksUnitLabel: t.blocksLabel, quoteText: t.quote, principleLabel: t.principleLabel, comebackText: t.comeback,
       toastLabel: t.toast, glowNote: t.glowNote,
       screenTintStyle: { position:'absolute', inset:'0', zIndex:0, pointerEvents:'none', background:PAL.tint, transition:'background 1.2s ease' },
       glow1Style: blob({ width:'340px', height:'340px', left:'-90px', top:'-60px', background:PAL.g1, animation:'subDrift 18s ease-in-out infinite', transition:'background 1.2s ease' }),
@@ -672,7 +672,7 @@ class Component extends DCLogic {
       breathWord: st.playing ? breathWords[st.breathStep] : t.paused,
       narration,
       orbAnim: { animation: st.playing ? `subBreathe ${orbDur} ease-in-out infinite` : 'none' },
-      showToast: st.showToast, celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#c07b48','#b8923a','#242029']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
+      celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#c07b48','#b8923a','#242029']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
       caption: [
         'Tus efectos reales (boom + tap) conectados desde el hub, con botón de silencio.',
         'El aura se adapta sola a la hora del día — aquí puedes previsualizar las tres.',

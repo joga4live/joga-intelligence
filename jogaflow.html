@@ -265,7 +265,7 @@
   }
   function playSessionAudio(){
     ensureAudio(); if(!voice) return;
-    var want=voiceSrc(); if((voice.getAttribute("src")||"").indexOf(want)<0){ voice.src=want; try{ voice.load(); }catch(e){} }
+    var want=voiceSrc(); if((voice.src||"").indexOf(want)<0){ voice.src=want; try{ voice.load(); }catch(e){} }
     try{ voice.currentTime=0; }catch(e){}
     voice.volume = muted?0:1;
     if(music){ music.volume = muted?0:0.18; try{ music.currentTime=0; }catch(e){} var pm=music.play(); if(pm&&pm.catch) pm.catch(function(){}); }
