@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./joga-features.js"></script>
 <style>
   *{box-sizing:border-box}
   html,body{margin:0}
@@ -86,6 +87,8 @@
         </div>
 
         <!-- practice of the day -->
+        <div id="jfEmergency"></div>
+        <div id="jfMastery"></div>
         <div id="jfPodLabel" style="font:600 10px Inter;letter-spacing:.28em;text-transform:uppercase;color:var(--soft);margin:0 2px 12px">Práctica sugerida de hoy</div>
         <button id="jfOpenPod" class="tapfx" style="width:100%;text-align:left;cursor:pointer;border:1px solid rgba(47,108,160,.24);border-radius:22px;padding:20px;margin-bottom:22px;background:linear-gradient(160deg,#16344e,#2f6ca0);display:flex;align-items:center;gap:16px">
           <div id="jfPodIconWrap" style="flex:0 0 auto;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#7fc4e6,#3a8fb0);box-shadow:0 12px 26px -10px rgba(47,108,160,.9)">
@@ -104,6 +107,7 @@
           <div id="jfCheckScale" style="display:flex;justify-content:space-between;gap:8px"></div>
           <div id="jfCheckTip" style="margin-top:14px;font-size:13px;line-height:1.5;color:var(--soft);min-height:20px"></div>
         </div>
+        <div id="jfHeatmap"></div>
       </div>
 
       <!-- ============ IA ============ -->
@@ -463,7 +467,8 @@
   var affIdx=dayIndex()%7;
   function greeting(){
     var h=new Date().getHours(), s=t();
-    return h<12?s.greetMorning:h<19?s.greetAfternoon:s.greetEvening;
+    var base=h<12?s.greetMorning:h<19?s.greetAfternoon:s.greetEvening;
+    return window.jogaFeatures ? window.jogaFeatures.greetWithName(base) : base;
   }
   function cycleAff(dir){
     var s=t(); affIdx=(affIdx+(dir||1)+s.affs.length)%s.affs.length;
@@ -487,9 +492,33 @@
     applyVoiceLabel();
     renderPod();
     renderCheck();
+    /* New features: mastery badge, emergency button, heatmap, night mode */
+    var JF = window.jogaFeatures;
+    if (JF) {
+      /* Mastery badge */
+      var mbWrap = $("jfMastery");
+      if (mbWrap) mbWrap.innerHTML = JF.masteryBadgeHtml('jogaflow', lang, 'var(--flow)');
+      /* Emergency button */
+      var emWrap = $("jfEmergency");
+      if (emWrap) {
+        emWrap.innerHTML = JF.emergencyButtonHtml(lang, '#2f6ca0');
+        var emBtn = document.getElementById("jiEmergencyBtn");
+        if (emBtn) emBtn.addEventListener("click", function() { tone("tap"); openBreathe(); });
+      }
+      /* Activity heatmap */
+      var hmWrap = $("jfHeatmap");
+      if (hmWrap) hmWrap.innerHTML = JF.heatmapHtml('jogaflow', lang, 'var(--flow)', 28);
+      /* Night mode tint */
+      var screen = document.querySelector('.jf-screen');
+      if (screen) JF.applyNightTint(screen);
+    }
   }
   function renderPod(){
-    var s=t(), p=s.practices[dayIndex()%s.practices.length];
+    var s=t();
+    var idx = window.jogaFeatures
+      ? window.jogaFeatures.smartPracticeIndex(s.practices, 'jogaflow')
+      : dayIndex()%s.practices.length;
+    var p=s.practices[idx];
     $("jfPodIcon").textContent=p.icon;
     $("jfPodTitle").textContent=p.title;
     $("jfPodSub").textContent=p.desc;
@@ -552,7 +581,9 @@
         var i=parseInt(b.getAttribute("data-toggle"),10);
         var wasDone=!!practiceState().done[i];
         setPracticeDone(i,!wasDone);
-        if(!wasDone){ tone("success"); var up=bumpStreak(); toast(up?t().streakUp:t().doneLabel); }
+        if(!wasDone){ tone("success"); var up=bumpStreak();
+          if(window.jogaFeatures) window.jogaFeatures.incrementPractices('jogaflow');
+          toast(up?t().streakUp:t().doneLabel); }
         else tone("tap");
         renderPracticas();
       });
@@ -793,6 +824,7 @@
     $("jfBreatheCount").textContent="";
     $("jfBreatheCue").textContent=s.breatheDone;
     setPracticeDone(0,true);
+    if(window.jogaFeatures) window.jogaFeatures.incrementPractices('jogaflow');
     var up=bumpStreak();
     setTimeout(function(){
       $("jfBreatheView").style.display="none";
@@ -869,6 +901,7 @@
     playerPause();
     tone("success");
     setPracticeDone(pl.practiceIdx,true);
+    if(window.jogaFeatures) window.jogaFeatures.incrementPractices('jogaflow');
     var up=bumpStreak();
     toast(up?t().streakUp:t().doneLabel);
     $("jfPlayerView").style.display="none";
@@ -889,6 +922,8 @@
   function init(){
     goView("hoy");
     renderStatic();
+    /* Show name modal for first-time users */
+    if(window.jogaFeatures) window.jogaFeatures.showNameModal(lang, function() { renderHome(); });
     $("jfLang").addEventListener("click",function(){
       lang=(lang==="es")?"en":"es"; set(LS.lang,lang); tone("tap");
       stopVoice(); breatheReset(); renderStatic();

@@ -35,6 +35,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>JogaBit · El laboratorio de tus hábitos</title>
+<script src="./joga-features.js"></script>
+<script src="./content/protoneutron-content.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -396,6 +398,7 @@ class Component extends DCLogic {
         this._voice.addEventListener('timeupdate', ()=>{ try{ const v=this._voice, mu=this._music; if(this.muted||!mu) return; const D=this._curDur||(isFinite(v.duration)?v.duration:0); if(!D) return; const rem=D - v.currentTime; mu.volume = rem<6 ? Math.max(0,(rem/6)*0.22) : 0.22; }catch(e){} });
       }catch(e){}
     }).catch(()=>{});
+    if(window.jogaFeatures) window.jogaFeatures.showNameModal(lang, function(){});
   }
   componentWillUnmount(){ clearInterval(this._t); clearInterval(this._b); clearTimeout(this._toast); this.stopSession(); }
 
@@ -465,6 +468,7 @@ class Component extends DCLogic {
              streak:st.streak+1, totalSessions:st.totalSessions+1,
              baseMin: st.baseMin + Math.round(st.duration/60), celebrate:true };
     try{ localStorage.setItem('jiStats_'+(this._key||''), JSON.stringify({ streak:next.streak, totalSessions:next.totalSessions, baseMin:next.baseMin })); }catch(e){}
+    if(window.jogaFeatures) window.jogaFeatures.incrementPractices('protoneutron');
     return next;
   }
   togglePlay(){ this.play('tap'); this.setState(st => { const p=!st.playing; if(p){ this.startTick(); this.startBreath(); this.resumeSession(); } else { this.pauseSession(); } return { playing:p }; }); }
@@ -533,7 +537,7 @@ class Component extends DCLogic {
     const hr = new Date().getHours();
     const autoMode = hr<12 ? 'day' : hr<19 ? 'afternoon' : 'night';
     const mode = st.timeMode || autoMode;
-    const greeting = t.g[mode];
+    const baseGreeting = t.g[mode]; const greeting = window.jogaFeatures ? window.jogaFeatures.greetWithName(baseGreeting) : baseGreeting;
 
     // ambient palette por momento del día — la identidad violeta se mantiene, cambia el aura
     const blob = (extra) => ({ position:'absolute', borderRadius:'50%', filter:'blur(13px)', ...extra });
