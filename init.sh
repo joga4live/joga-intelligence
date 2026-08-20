@@ -116,7 +116,7 @@ done
 # Mini-app HTML files are single-file by design and predate this rule →
 # WARNING, not ERROR. NEW files (e.g. gate.js) must strictly comply (ERROR).
 section "Regla — Máx ${MAX_LINES} líneas por archivo"
-LEGACY_FILES="index.html app.html subment.html jogaflow.html jogatime.html protoneutron.html support.js monexium.html metodoexito.html ventmex.html onboarding.html retos.html"
+LEGACY_FILES="index.html app.html subment.html jogaflow.html jogatime.html protoneutron.html support.js monexium.html metodoexito.html ventmex.html onboarding.html retos.html react.min.js react-dom.min.js"
 BIG=0
 while IFS= read -r file; do
   n=$(wc -l < "$file")

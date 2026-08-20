@@ -1421,6 +1421,10 @@
   }
 
   // src/index.ts
+  /* React local-first con fallback a CDN para offline real /
+     React local-first with CDN fallback for true offline support */
+  var REACT_URL_LOCAL = "./react.min.js";
+  var REACT_DOM_URL_LOCAL = "./react-dom.min.js";
   var REACT_URL = "https://unpkg.com/react@18.3.1/umd/react.production.min.js";
   var REACT_SRI = "sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z";
   var REACT_DOM_URL = "https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js";
@@ -1435,20 +1439,24 @@
       //! nosemgrep: create-script-element
       const s = document.createElement("script");
       s.src = src;
-      s.integrity = integrity;
-      s.crossOrigin = "anonymous";
+      if (integrity) {
+        s.integrity = integrity;
+        s.crossOrigin = "anonymous";
+      }
       s.async = false;
       s.onload = () => resolve2();
       s.onerror = () => reject(new Error(`failed to load ${src}`));
       document.head.appendChild(s);
     });
   }
+  /* Intenta cargar React local, si falla usa CDN con SRI /
+     Try local React first, fall back to CDN with SRI */
   function loadReactUmd() {
     const w = window;
     if (w.React && w.ReactDOM) return Promise.resolve();
     return Promise.all([
-      loadScript(REACT_URL, REACT_SRI),
-      loadScript(REACT_DOM_URL, REACT_DOM_SRI)
+      loadScript(REACT_URL_LOCAL).catch(() => loadScript(REACT_URL, REACT_SRI)),
+      loadScript(REACT_DOM_URL_LOCAL).catch(() => loadScript(REACT_DOM_URL, REACT_DOM_SRI))
     ]).then(() => void 0);
   }
   function init() {
