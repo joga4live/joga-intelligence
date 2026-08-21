@@ -14,7 +14,7 @@
       apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex"]
     },
     {
-      hash: "b48fdc88c0f4a1c96c1f05a924e18e85af5e2a1fa539039d5e9abf7b52af6eca",
+      hash: "cf076b84ca88ed1e2d261d266b08e2351ab62817d260592c9293008cef7260a8",
       apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex", "jogaflow"]
     }
   ];
