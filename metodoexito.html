@@ -479,7 +479,7 @@ class Component extends DCLogic {
             vcBtn.setAttribute('data-speaking', '1');
             var ico2 = document.getElementById('jiVoiceIcon'); if(ico2) ico2.textContent = '\u23f8';
             var st2 = document.getElementById('jiVoiceStatus'); if(st2) st2.textContent = L==='en'?'Speaking...':'Hablando...';
-            window.jogaFeatures.speak(window.jogaFeatures.coachGreeting(L), L, function() {
+            window.jogaFeatures.speakCoachGreeting(L, function() {
               vcBtn.setAttribute('data-speaking', '0');
               var ico3 = document.getElementById('jiVoiceIcon'); if(ico3) ico3.textContent = '\u25b6';
               var st3 = document.getElementById('jiVoiceStatus'); if(st3) st3.textContent = L==='en'?'Tap again':'Toca de nuevo';

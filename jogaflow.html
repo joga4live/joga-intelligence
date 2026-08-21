@@ -539,7 +539,7 @@
             vcBtn.setAttribute('data-speaking', '1');
             var ico2 = document.getElementById("jiVoiceIcon"); if(ico2) ico2.textContent = "\u23f8";
             var st2 = document.getElementById("jiVoiceStatus"); if(st2) st2.textContent = lang==='en'?'Speaking...':'Hablando...';
-            JF.speak(JF.coachGreeting(lang), lang, function() {
+            JF.speakCoachGreeting(lang, function() {
               vcBtn.setAttribute('data-speaking', '0');
               var ico3 = document.getElementById("jiVoiceIcon"); if(ico3) ico3.textContent = "\u25b6";
               var st3 = document.getElementById("jiVoiceStatus"); if(st3) st3.textContent = lang==='en'?'Tap to hear again':'Toca para escuchar de nuevo';

@@ -657,13 +657,52 @@
   };
 
 
-  /* ===== 10. VOZ IA / AI VOICE (Web Speech API) ===== */
+  /* ===== 10. VOZ IA / AI VOICE (ElevenLabs MP3 + Web Speech fallback) ===== */
   JF.canSpeak = function() {
-    return !!(W.speechSynthesis && W.SpeechSynthesisUtterance);
+    return true; /* Always true — we have MP3 files as primary */
   };
 
+  /* Audio player for ElevenLabs MP3s */
+  JF._audioPlayer = null;
+  JF._speaking = false;
+
   JF.speak = function(text, lang, onEnd) {
-    if (!JF.canSpeak() || !text) { if (onEnd) onEnd(); return; }
+    if (!text) { if (onEnd) onEnd(); return; }
+    JF.stopSpeaking();
+    /* For coach greeting, use pre-recorded ElevenLabs MP3 */
+    /* For dynamic text, fall back to Web Speech API */
+    JF._speakWithSynthesis(text, lang, onEnd);
+  };
+
+  /* Play a pre-recorded MP3 from audio/ folder */
+  JF.playAudio = function(filename, onEnd) {
+    JF.stopSpeaking();
+    var a = new Audio('./audio/' + filename);
+    JF._audioPlayer = a;
+    JF._speaking = true;
+    a.onended = function() { JF._speaking = false; JF._audioPlayer = null; if (onEnd) onEnd(); };
+    a.onerror = function() { JF._speaking = false; JF._audioPlayer = null; if (onEnd) onEnd(); };
+    a.play().catch(function() { JF._speaking = false; if (onEnd) onEnd(); });
+  };
+
+  /* Coach greeting with ElevenLabs pre-recorded voice */
+  JF.speakCoachGreeting = function(lang, onEnd) {
+    var h = new Date().getHours();
+    var timeKey = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'night';
+    var prefix = lang === 'en' ? 'coach_en_' : 'coach_es_';
+    JF.playAudio(prefix + timeKey + '.mp3', onEnd);
+  };
+
+  /* Speak a fallback/offline response with ElevenLabs pre-recorded voice */
+  JF.speakFallbackResponse = function(lang, index, onEnd) {
+    var prefix = lang === 'en' ? 'coach_en_r' : 'coach_es_r';
+    var idx = (index % 4) + 1;
+    JF.playAudio(prefix + idx + '.mp3', onEnd);
+  };
+
+  /* Web Speech API fallback for dynamic AI responses */
+  JF._speakWithSynthesis = function(text, lang, onEnd) {
+    if (!(W.speechSynthesis && W.SpeechSynthesisUtterance)) { if (onEnd) onEnd(); return; }
     W.speechSynthesis.cancel();
     var u = new W.SpeechSynthesisUtterance(text);
     u.lang = (lang === 'en') ? 'en-US' : 'es-MX';
@@ -675,17 +714,22 @@
     var target = (lang === 'en') ? 'en' : 'es';
     var preferred = voices.filter(function(v) { return v.lang.indexOf(target) === 0; });
     if (preferred.length) {
-      /* Prefer non-Google voices (more natural) */
       var natural = preferred.filter(function(v) { return v.name.indexOf('Google') < 0; });
       u.voice = (natural.length ? natural[0] : preferred[0]);
     }
-    u.onend = function() { if (onEnd) onEnd(); };
-    u.onerror = function() { if (onEnd) onEnd(); };
+    JF._speaking = true;
+    u.onend = function() { JF._speaking = false; if (onEnd) onEnd(); };
+    u.onerror = function() { JF._speaking = false; if (onEnd) onEnd(); };
     W.speechSynthesis.speak(u);
   };
 
   JF.stopSpeaking = function() {
     if (W.speechSynthesis) W.speechSynthesis.cancel();
+    if (JF._audioPlayer) {
+      try { JF._audioPlayer.pause(); JF._audioPlayer.currentTime = 0; } catch(e) {}
+      JF._audioPlayer = null;
+    }
+    JF._speaking = false;
   };
 
   /* Coach greeting based on time + name + struggle */
