@@ -413,7 +413,8 @@ class Component extends DCLogic {
     if (window.jogaFeatures) {
       var L = this.state.lang || 'es';
       var vw = document.getElementById('jiVoiceWrap_jogatime');
-      if (vw && !vw.hasChildNodes()) {
+      if (vw && vw.getAttribute('data-lang') !== L) {
+        vw.setAttribute('data-lang', L);
         vw.innerHTML = window.jogaFeatures.voiceCoachButtonHtml(L, '#b8923a');
         var vcBtn = document.getElementById('jiVoiceCoach');
         if (vcBtn) vcBtn.addEventListener('click', function() {
@@ -435,7 +436,8 @@ class Component extends DCLogic {
         });
       }
       var vcw = document.getElementById('jiVChatWrap_jogatime');
-      if (vcw && !vcw.hasChildNodes()) {
+      if (vcw && vcw.getAttribute('data-lang') !== L) {
+        vcw.setAttribute('data-lang', L);
         vcw.innerHTML = window.jogaFeatures.voiceChatButtonHtml(L, '#b8923a');
         window.jogaFeatures.initVoiceChat(L, 'jogatime', '#b8923a');
       }
