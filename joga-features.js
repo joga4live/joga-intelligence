@@ -657,24 +657,61 @@
   };
 
 
-  /* ===== 10. VOZ IA / AI VOICE (ElevenLabs MP3 + Web Speech fallback) ===== */
-  JF.canSpeak = function() {
-    return true; /* Always true — we have MP3 files as primary */
-  };
+  /* ===== 10. VOZ IA / AI VOICE (ElevenLabs via Worker + MP3 fallback) ===== */
+  JF.canSpeak = function() { return true; };
 
-  /* Audio player for ElevenLabs MP3s */
+  /* Worker URL — mismo que usa el diagnóstico IA / same URL used by AI diagnosis */
+  JF._WORKER_URL = 'https://joga-ai.omhotien90.workers.dev';
+
+  /* Audio player activo / active audio player */
   JF._audioPlayer = null;
   JF._speaking = false;
 
+  /* speak(text, lang, onEnd)
+     1. Llama al Worker → ElevenLabs (voz humana real)
+     2. Si falla: Web Speech API (robot, siempre disponible)
+     Calls Worker → ElevenLabs (real human voice); on failure falls back to Web Speech. */
   JF.speak = function(text, lang, onEnd) {
     if (!text) { if (onEnd) onEnd(); return; }
     JF.stopSpeaking();
-    /* For coach greeting, use pre-recorded ElevenLabs MP3 */
-    /* For dynamic text, fall back to Web Speech API */
-    JF._speakWithSynthesis(text, lang, onEnd);
+    var clean = text.replace(/[*_#`~>\[\]]/g, '').substring(0, 500);
+    fetch(JF._WORKER_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tts: true, text: clean })
+    })
+    .then(function(r) {
+      if (!r.ok) throw new Error('tts_fail');
+      return r.arrayBuffer();
+    })
+    .then(function(buf) {
+      var blob = new Blob([buf], { type: 'audio/mpeg' });
+      var url  = URL.createObjectURL(blob);
+      var a    = new Audio(url);
+      JF._audioPlayer = a;
+      JF._speaking = true;
+      a.onended = function() {
+        JF._speaking = false; JF._audioPlayer = null;
+        URL.revokeObjectURL(url);
+        if (onEnd) onEnd();
+      };
+      a.onerror = function() {
+        JF._speaking = false; JF._audioPlayer = null;
+        URL.revokeObjectURL(url);
+        JF._speakWithSynthesis(text, lang, onEnd); /* fallback */
+      };
+      a.play().catch(function() {
+        JF._speaking = false;
+        JF._speakWithSynthesis(text, lang, onEnd); /* fallback */
+      });
+    })
+    .catch(function() {
+      JF._speakWithSynthesis(text, lang, onEnd); /* fallback sin red */
+    });
   };
 
-  /* Play a pre-recorded MP3 from audio/ folder */
+  /* Reproduce un MP3 pre-grabado de la carpeta audio/
+     Plays a pre-recorded MP3 from the audio/ folder */
   JF.playAudio = function(filename, onEnd) {
     JF.stopSpeaking();
     var a = new Audio('./audio/' + filename);
@@ -685,7 +722,8 @@
     a.play().catch(function() { JF._speaking = false; if (onEnd) onEnd(); });
   };
 
-  /* Coach greeting with ElevenLabs pre-recorded voice */
+  /* Saludo del coach: MP3 pre-grabado por hora del día
+     Coach greeting: pre-recorded MP3 by time of day */
   JF.speakCoachGreeting = function(lang, onEnd) {
     var h = new Date().getHours();
     var timeKey = h < 12 ? 'morning' : h < 18 ? 'afternoon' : 'night';
@@ -693,23 +731,21 @@
     JF.playAudio(prefix + timeKey + '.mp3', onEnd);
   };
 
-  /* Speak a fallback/offline response with ElevenLabs pre-recorded voice */
+  /* Respuesta de fallback pre-grabada / Pre-recorded fallback response */
   JF.speakFallbackResponse = function(lang, index, onEnd) {
     var prefix = lang === 'en' ? 'coach_en_r' : 'coach_es_r';
     var idx = (index % 4) + 1;
     JF.playAudio(prefix + idx + '.mp3', onEnd);
   };
 
-  /* Web Speech API fallback for dynamic AI responses */
+  /* Web Speech API — fallback cuando Worker no disponible
+     Web Speech API — fallback when Worker unavailable */
   JF._speakWithSynthesis = function(text, lang, onEnd) {
     if (!(W.speechSynthesis && W.SpeechSynthesisUtterance)) { if (onEnd) onEnd(); return; }
     W.speechSynthesis.cancel();
     var u = new W.SpeechSynthesisUtterance(text);
     u.lang = (lang === 'en') ? 'en-US' : 'es-MX';
-    u.rate = 0.92;
-    u.pitch = 1.0;
-    u.volume = 0.9;
-    /* Try to pick a good voice */
+    u.rate = 0.92; u.pitch = 1.0; u.volume = 0.9;
     var voices = W.speechSynthesis.getVoices();
     var target = (lang === 'en') ? 'en' : 'es';
     var preferred = voices.filter(function(v) { return v.lang.indexOf(target) === 0; });
@@ -718,7 +754,7 @@
       u.voice = (natural.length ? natural[0] : preferred[0]);
     }
     JF._speaking = true;
-    u.onend = function() { JF._speaking = false; if (onEnd) onEnd(); };
+    u.onend  = function() { JF._speaking = false; if (onEnd) onEnd(); };
     u.onerror = function() { JF._speaking = false; if (onEnd) onEnd(); };
     W.speechSynthesis.speak(u);
   };
