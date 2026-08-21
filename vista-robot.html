@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Joga — vista previa de la apertura</title>
+<!--
+  VISTA PREVIA, NO ES PARTE DE LA APP.
+  Página suelta para que José vea la apertura del robot en su propio teléfono.
+  Nada del sitio enlaza aquí. Se puede borrar sin consecuencias.
+  La implementación de verdad va en app.html, según .joga/handoff/plan-orbe-21ago.md,
+  y pasa por Tavo y Nico como todo lo demás.
+-->
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#0B0509;overflow:hidden}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .escena{
+    position:fixed;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:flex-start;
+    padding-top:max(6vh,env(safe-area-inset-top));
+  }
+
+  /* El robot va SIEMPRE a ancho completo.
+     El texto del visor ocupa del 23% al 78% del ancho de la imagen:
+     cualquier recorte lateral se come la J. Nunca usar object-fit:cover. */
+  .robot{
+    position:relative;width:100%;max-width:640px;aspect-ratio:1/1;flex:none;
+  }
+  .robot img,.robot video{
+    position:absolute;inset:0;width:100%;height:100%;display:block;
+    object-fit:contain;
+  }
+  .robot video{opacity:0;transition:opacity .9s ease}
+  .robot video.viva{opacity:1}
+  .robot img.oculta{opacity:0;transition:opacity .9s ease}
+
+  /* El visor late, para que nunca haya un robot muerto en pantalla */
+  .visor{
+    position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);
+    width:76%;height:15%;border-radius:50%;pointer-events:none;
+    background:radial-gradient(ellipse at center,
+      rgba(255,40,70,.55) 0%,rgba(255,40,70,.2) 45%,rgba(255,40,70,0) 72%);
+    mix-blend-mode:screen;animation:latido 2.6s ease-in-out infinite;
+  }
+  @keyframes latido{
+    0%,100%{opacity:.3;transform:translate(-50%,-50%) scale(.96)}
+    50%    {opacity:1; transform:translate(-50%,-50%) scale(1.05)}
+  }
+
+  .velo{
+    position:fixed;left:0;right:0;bottom:0;height:46%;pointer-events:none;
+    background:linear-gradient(to bottom,rgba(11,5,9,0),rgba(11,5,9,.9) 55%,#0B0509);
+  }
+
+  .pie{
+    position:fixed;left:0;right:0;
+    bottom:max(7vh,env(safe-area-inset-bottom));
+    text-align:center;padding:0 24px;
+  }
+  .toca{
+    display:inline-flex;align-items:center;gap:10px;
+    background:none;border:1px solid rgba(255,255,255,.22);
+    border-radius:999px;padding:16px 26px;
+    color:#fff;font-size:17px;font-weight:600;letter-spacing:.01em;
+    cursor:pointer;-webkit-tap-highlight-color:transparent;
+    transition:transform .12s ease,background .2s ease,border-color .2s ease;
+  }
+  .toca:active{transform:scale(.96);background:rgba(255,255,255,.09)}
+  .toca:focus-visible{outline:2px solid #FF3B4E;outline-offset:3px}
+  .punto{
+    width:9px;height:9px;border-radius:50%;background:#FF3B4E;flex:none;
+    box-shadow:0 0 12px 3px rgba(255,59,78,.7);
+    animation:latido2 2.1s ease-in-out infinite;
+  }
+  @keyframes latido2{0%,100%{opacity:.4;transform:scale(.8)}50%{opacity:1;transform:scale(1.2)}}
+
+  .frase{
+    margin-top:16px;color:#C9B9BD;font-size:15px;line-height:1.5;
+    min-height:1.5em;opacity:0;transition:opacity .5s ease;
+  }
+  .frase.visible{opacity:1}
+
+  .nota{
+    position:fixed;top:max(2vh,env(safe-area-inset-top));left:0;right:0;
+    text-align:center;color:#5C4750;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;pointer-events:none;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .visor{animation:none;opacity:.7}
+    .punto{animation:none;opacity:.9}
+    .robot video,.robot img{transition:none}
+  }
+</style>
+</head>
+<body>
+
+  <p class="nota">Vista previa</p>
+
+  <div class="escena">
+    <div class="robot">
+      <img id="poster" src="joga-robot-poster.jpg" alt="Joga Intelligence">
+      <video id="clip" src="joga-robot-intro.mp4" muted loop playsinline preload="auto" aria-hidden="true"></video>
+      <div class="visor"></div>
+    </div>
+  </div>
+
+  <div class="velo"></div>
+
+  <div class="pie">
+    <button class="toca" id="toca">
+      <span class="punto"></span>
+      <span id="etiqueta">Toca para hablar con Joga</span>
+    </button>
+    <p class="frase" id="frase"></p>
+  </div>
+
+<script>
+(function(){
+  var clip   = document.getElementById('clip');
+  var poster = document.getElementById('poster');
+  var boton  = document.getElementById('toca');
+  var etiq   = document.getElementById('etiqueta');
+  var frase  = document.getElementById('frase');
+  var hablando = false;
+
+  // El video toma el relevo del poster solo cuando ya se puede reproducir.
+  // Si nunca carga, se queda el poster y no pasa nada.
+  function arrancar(){
+    if (clip.classList.contains('viva')) return;
+    var p = clip.play();
+    if (!p || !p.then) return;
+    p.then(function(){
+      clip.classList.add('viva');
+      poster.classList.add('oculta');
+    }).catch(function(){ /* se queda el poster, es un final aceptable */ });
+  }
+  // OJO: si el video ya estaba listo antes de que llegaramos aqui, el evento
+  // 'canplay' YA paso y nunca vuelve a dispararse. Hay que preguntarle tambien
+  // en este momento. Sin esto el robot se queda quieto para siempre.
+  clip.addEventListener('canplay', arrancar);
+  clip.addEventListener('loadeddata', arrancar);
+  if (clip.readyState >= 3) arrancar();
+
+  boton.addEventListener('click', function(){
+    if (hablando) return;
+    hablando = true;
+
+    // Aqui es donde el navegador POR FIN deja sonar el audio: despues de un toque.
+    clip.muted = false;
+    clip.currentTime = 0;
+    var p = clip.play();
+    if (p && p.catch) p.catch(function(){});
+
+    etiq.textContent = 'Escuchando…';
+    frase.textContent = 'Soy Joga Intelligence.';
+    frase.classList.add('visible');
+
+    clip.addEventListener('timeupdate', function ciclo(){
+      if (clip.currentTime > 4.6) {
+        clip.removeEventListener('timeupdate', ciclo);
+        clip.muted = true;
+        etiq.textContent = 'Toca para hablar con Joga';
+        frase.textContent = 'Aquí empieza la conversación.';
+        hablando = false;
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
