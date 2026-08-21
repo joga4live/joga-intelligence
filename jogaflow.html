@@ -12,13 +12,13 @@
   *{box-sizing:border-box}
   html,body{margin:0}
   :root{
-    --bg:#fbf5ea; --ink:#242029; --muted:#8a8296; --soft:#7c7488;
+    --bg:#0C1A2E; --ink:#F5F5F7; --muted:#8E8E93; --soft:#8E8E93;
     --line:rgba(45,38,58,.12);
-    --flow:#2f6ca0; --flow2:#3a8fb0; --flow-soft:rgba(47,108,160,.12);
-    --deep:#16344e; --deep2:#0e2438; --lite:#9fd3ec; --lite2:#7fc4e6;
-    --gold:#b8923a; --card:#ffffff;
+    --flow:#0A84FF; --flow2:#30D158; --flow-soft:rgba(47,108,160,.12);
+    --deep:#0C1A2E; --deep2:#080F1E; --lite:#64D2FF; --lite2:#64D2FF;
+    --gold:#FFD60A; --card:#ffffff;
   }
-  body{background:#ffffff;font-family:Inter,system-ui,sans-serif;color:var(--ink)}
+  body{background:#0C1A2Efff;font-family:Inter,system-ui,sans-serif;color:var(--ink)}
   button,textarea{font-family:inherit}
   @keyframes jfRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   @keyframes jfTwinkle{0%,100%{opacity:.25}50%{opacity:.9}}
@@ -36,7 +36,7 @@
 </style>
 </head>
 <body>
-<div style="min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#ffffff,#ffffff 70%);display:flex;align-items:center;justify-content:center;padding:40px 20px">
+<div style="min-height:100vh;background:radial-gradient(120% 80% at 50% 0%,#0C1A2E,#101C30 70%);display:flex;align-items:center;justify-content:center;padding:40px 20px">
 
   <!-- PHONE -->
   <div class="jf-phone" style="position:relative;width:392px;height:844px;background:#0B0B0C;border-radius:54px;padding:13px;box-shadow:0 50px 120px -40px rgba(0,0,0,.9),0 0 0 2px #fff,inset 0 0 0 2px #000">
@@ -54,14 +54,14 @@
       </div>
 
       <!-- back / exit -->
-      <button id="jfBack" aria-label="Salir" class="tapfx" style="position:absolute;top:16px;left:16px;z-index:50;cursor:pointer;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.74);backdrop-filter:blur(8px);color:var(--ink);font-size:23px;line-height:1;display:grid;place-items:center;box-shadow:0 5px 16px -7px rgba(0,0,0,.3)">‹</button>
+      <button id="jfBack" aria-label="Salir" class="tapfx" style="position:absolute;top:16px;left:16px;z-index:50;cursor:pointer;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(10,20,40,.84);backdrop-filter:blur(8px);color:var(--ink);font-size:23px;line-height:1;display:grid;place-items:center;box-shadow:0 5px 16px -7px rgba(0,0,0,.3)">‹</button>
 
       <!-- ============ HOY ============ -->
       <div class="jf-scroll" id="jfHome" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 104px">
         <!-- header -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
           <div>
-            <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><svg class="joga-emblem" viewBox="0 0 120 120" fill="none" role="img" aria-label="JOGA" style="width:16px;height:16px;color:#7fc4e6"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg></div>
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px"><svg class="joga-emblem" viewBox="0 0 120 120" fill="none" role="img" aria-label="JOGA" style="width:16px;height:16px;color:#64D2FF"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg></div>
             <div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:var(--flow)">JogaBody</div>
             <div id="jfGreeting" style="font-family:Newsreader,serif;font-weight:500;font-size:23px;color:var(--ink);margin-top:3px">Hola</div>
           </div>
@@ -93,8 +93,8 @@
         <div id="jfMastery"></div>
         <div id="jfBadges"></div>
         <div id="jfPodLabel" style="font:600 10px Inter;letter-spacing:.28em;text-transform:uppercase;color:var(--soft);margin:0 2px 12px">Práctica sugerida de hoy</div>
-        <button id="jfOpenPod" class="tapfx" style="width:100%;text-align:left;cursor:pointer;border:1px solid rgba(47,108,160,.24);border-radius:22px;padding:20px;margin-bottom:22px;background:linear-gradient(160deg,#16344e,#2f6ca0);display:flex;align-items:center;gap:16px">
-          <div id="jfPodIconWrap" style="flex:0 0 auto;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#7fc4e6,#3a8fb0);box-shadow:0 12px 26px -10px rgba(47,108,160,.9)">
+        <button id="jfOpenPod" class="tapfx" style="width:100%;text-align:left;cursor:pointer;border:1px solid rgba(47,108,160,.24);border-radius:22px;padding:20px;margin-bottom:22px;background:linear-gradient(160deg,#0C1A2E,#0A84FF);display:flex;align-items:center;gap:16px">
+          <div id="jfPodIconWrap" style="flex:0 0 auto;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#64D2FF,#30D158);box-shadow:0 12px 26px -10px rgba(47,108,160,.9)">
             <span id="jfPodIcon" style="font-size:26px">🫧</span>
           </div>
           <div style="flex:1;min-width:0;color:#fff">
@@ -141,46 +141,46 @@
       <div id="jfTabbar" style="position:absolute;bottom:0;left:0;right:0;z-index:30;padding:12px 20px 24px;background:linear-gradient(to top,var(--bg) 70%,transparent);display:flex;justify-content:space-between"></div>
 
       <!-- BREATHE OVERLAY (Práctica 1: Respiración guiada) -->
-      <div id="jfBreatheView" style="position:absolute;inset:0;z-index:40;display:none;background:linear-gradient(180deg,#0e2438,#16344e 55%,#1d4566)">
+      <div id="jfBreatheView" style="position:absolute;inset:0;z-index:40;display:none;background:linear-gradient(180deg,#080F1E,#0C1A2E 55%,#101C30)">
         <button id="jfBreatheBack" aria-label="Cerrar" class="tapfx" style="position:absolute;top:18px;left:18px;z-index:5;cursor:pointer;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;font-size:23px;display:grid;place-items:center">‹</button>
         <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center">
-          <div id="jfBreathePhase" style="font:600 11px Inter;letter-spacing:.3em;text-transform:uppercase;color:#9fd3ec;margin-bottom:34px">Prepárate</div>
+          <div id="jfBreathePhase" style="font:600 11px Inter;letter-spacing:.3em;text-transform:uppercase;color:#64D2FF;margin-bottom:34px">Prepárate</div>
           <div style="position:relative;width:240px;height:240px;display:grid;place-items:center;margin-bottom:38px">
             <div id="jfBreatheRing" style="position:absolute;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle at 38% 32%,rgba(159,211,236,.95),rgba(58,143,176,.55));box-shadow:0 0 60px -6px rgba(127,196,230,.8);transition:transform 4s ease-in-out"></div>
             <div id="jfBreatheCount" style="position:relative;font-family:Newsreader,serif;font-size:46px;color:#fff;z-index:2"></div>
           </div>
           <div id="jfBreatheCue" style="font-family:Newsreader,serif;font-size:22px;color:#eaf6fc;margin-bottom:8px">Inhala lento por la nariz</div>
           <div id="jfBreatheRound" style="font:500 12px Inter;color:rgba(255,255,255,.6);margin-bottom:30px">Ronda 1 de 4</div>
-          <button id="jfBreatheToggle" class="tapfx" style="cursor:pointer;border:0;border-radius:999px;padding:14px 30px;font:600 13px Inter;color:#0e2438;background:linear-gradient(135deg,#9fd3ec,#7fc4e6);box-shadow:0 12px 28px -10px rgba(127,196,230,.9)">Comenzar</button>
+          <button id="jfBreatheToggle" class="tapfx" style="cursor:pointer;border:0;border-radius:999px;padding:14px 30px;font:600 13px Inter;color:#080F1E;background:linear-gradient(135deg,#64D2FF,#64D2FF);box-shadow:0 12px 28px -10px rgba(127,196,230,.9)">Comenzar</button>
         </div>
       </div>
 
       <!-- SESSION PLAYER OVERLAY (Prácticas 2 y 3) -->
-      <div id="jfPlayerView" class="jf-scroll" style="position:absolute;inset:0;z-index:40;display:none;overflow-y:auto;background:linear-gradient(180deg,#0e2438,#16344e 60%,#1d4566);padding:74px 24px 40px">
+      <div id="jfPlayerView" class="jf-scroll" style="position:absolute;inset:0;z-index:40;display:none;overflow-y:auto;background:linear-gradient(180deg,#080F1E,#0C1A2E 60%,#101C30);padding:74px 24px 40px">
         <button id="jfPlayerBack" aria-label="Cerrar" class="tapfx" style="position:absolute;top:18px;left:18px;z-index:5;cursor:pointer;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.1);color:#fff;font-size:23px;display:grid;place-items:center">‹</button>
         <div style="display:flex;flex-direction:column;align-items:center;text-align:center;padding-top:10px">
-          <div id="jfPlayerKicker" style="font:600 10px Inter;letter-spacing:.3em;text-transform:uppercase;color:#9fd3ec;margin-bottom:8px">Práctica</div>
+          <div id="jfPlayerKicker" style="font:600 10px Inter;letter-spacing:.3em;text-transform:uppercase;color:#64D2FF;margin-bottom:8px">Práctica</div>
           <div id="jfPlayerTitle" style="font-family:Newsreader,serif;font-weight:500;font-size:24px;color:#fff;margin-bottom:26px">Título</div>
           <div style="position:relative;width:150px;height:150px;display:grid;place-items:center;margin-bottom:22px">
             <div id="jfPlayerOrb" style="width:96px;height:96px;border-radius:50%;background:radial-gradient(circle at 38% 32%,rgba(159,211,236,.95),rgba(58,143,176,.55));box-shadow:0 0 60px -6px rgba(127,196,230,.8);display:grid;place-items:center;font-size:32px">🌅</div>
           </div>
           <div style="width:100%;max-width:300px">
             <div style="height:4px;border-radius:4px;background:rgba(255,255,255,.16);overflow:hidden">
-              <div id="jfPlayerBar" style="width:0%;height:100%;border-radius:4px;background:linear-gradient(90deg,#9fd3ec,#7fc4e6);transition:width 1s linear"></div>
+              <div id="jfPlayerBar" style="width:0%;height:100%;border-radius:4px;background:linear-gradient(90deg,#64D2FF,#64D2FF);transition:width 1s linear"></div>
             </div>
             <div style="display:flex;justify-content:space-between;margin-top:8px;font:500 11px Inter;color:rgba(255,255,255,.65)">
               <span id="jfPlayerElapsed">0:00</span><span id="jfPlayerRemain">-1:00</span>
             </div>
           </div>
-          <button id="jfPlayerToggle" class="tapfx" style="margin-top:22px;cursor:pointer;border:0;border-radius:50%;width:64px;height:64px;font-size:22px;color:#0e2438;background:linear-gradient(135deg,#9fd3ec,#7fc4e6);box-shadow:0 12px 28px -10px rgba(127,196,230,.9)">▶</button>
+          <button id="jfPlayerToggle" class="tapfx" style="margin-top:22px;cursor:pointer;border:0;border-radius:50%;width:64px;height:64px;font-size:22px;color:#080F1E;background:linear-gradient(135deg,#64D2FF,#64D2FF);box-shadow:0 12px 28px -10px rgba(127,196,230,.9)">▶</button>
         </div>
         <div id="jfPlayerSteps" style="display:flex;flex-direction:column;gap:11px;margin-top:30px"></div>
-        <button id="jfPlayerDone" class="tapfx" style="margin-top:22px;width:100%;cursor:pointer;border:0;border-radius:999px;padding:15px;font:600 14px Inter;color:#0e2438;background:linear-gradient(135deg,#9fd3ec,#7fc4e6);box-shadow:0 12px 28px -12px rgba(127,196,230,.9)">Completar sesión</button>
+        <button id="jfPlayerDone" class="tapfx" style="margin-top:22px;width:100%;cursor:pointer;border:0;border-radius:999px;padding:15px;font:600 14px Inter;color:#080F1E;background:linear-gradient(135deg,#64D2FF,#64D2FF);box-shadow:0 12px 28px -12px rgba(127,196,230,.9)">Completar sesión</button>
       </div>
 
       <!-- TOAST -->
       <div id="jfToast" style="position:absolute;left:50%;bottom:100px;transform:translateX(-50%) translateY(16px);z-index:80;display:flex;align-items:center;gap:9px;background:rgba(14,36,56,.94);color:#fff;border:1px solid rgba(159,211,236,.3);border-radius:999px;padding:11px 16px;font:600 12.5px Inter;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s">
-        <span style="color:#9fd3ec">✦</span><span id="jfToastText">Listo</span>
+        <span style="color:#64D2FF">✦</span><span id="jfToastText">Listo</span>
       </div>
 
     </div>
@@ -516,8 +516,8 @@
       /* Voice chat bot */
       var vchatWrap = $("jfVoiceChat");
       if (vchatWrap) {
-        vchatWrap.innerHTML = JF.voiceChatButtonHtml(lang, '#2f6ca0');
-        JF.initVoiceChat(lang, 'jogabody', '#2f6ca0');
+        vchatWrap.innerHTML = JF.voiceChatButtonHtml(lang, '#0A84FF');
+        JF.initVoiceChat(lang, 'jogabody', '#0A84FF');
       }
       /* Badges */
       var bgWrap = $("jfBadges");
@@ -525,7 +525,7 @@
       /* Voice coach button */
       var vcWrap = $("jfVoiceCoach");
       if (vcWrap) {
-        vcWrap.innerHTML = JF.voiceCoachButtonHtml(lang, '#2f6ca0');
+        vcWrap.innerHTML = JF.voiceCoachButtonHtml(lang, '#0A84FF');
         var vcBtn = document.getElementById("jiVoiceCoach");
         if (vcBtn) vcBtn.addEventListener("click", function() {
           tone("tap");
@@ -550,7 +550,7 @@
       /* Emergency button */
       var emWrap = $("jfEmergency");
       if (emWrap) {
-        emWrap.innerHTML = JF.emergencyButtonHtml(lang, '#2f6ca0');
+        emWrap.innerHTML = JF.emergencyButtonHtml(lang, '#0A84FF');
         var emBtn = document.getElementById("jiEmergencyBtn");
         if (emBtn) emBtn.addEventListener("click", function() { tone("tap"); openBreathe(); });
       }
@@ -637,7 +637,7 @@
           if(window.jogaFeatures) {
             window.jogaFeatures.incrementPractices('jogaflow');
             var newBadge = window.jogaFeatures.checkNewBadge('jogaflow');
-            if(newBadge) setTimeout(function(){ window.jogaFeatures.showBadgeModal(newBadge, lang, '#2f6ca0'); }, 600);
+            if(newBadge) setTimeout(function(){ window.jogaFeatures.showBadgeModal(newBadge, lang, '#0A84FF'); }, 600);
           }
           toast(up?t().streakUp:t().doneLabel); }
         else tone("tap");
@@ -672,9 +672,9 @@
       '<div style="font:600 10px Inter;letter-spacing:.32em;text-transform:uppercase;color:var(--flow);margin-bottom:4px">'+s.iaKicker+'</div>'+
       '<h2 style="font-family:Newsreader,serif;font-weight:500;font-size:26px;color:var(--ink);margin:0 0 6px">'+s.iaTitle+'</h2>'+
       '<p style="font-size:13px;color:var(--soft);margin:0 0 16px;line-height:1.5">'+s.iaSub+'</p>'+
-      /* Aviso legal T2: no es consejo medico. Contraste medido ~8.6:1 (#5A3B00 sobre #FBEBC7).
-         Legal notice T2: not medical advice. Measured contrast ~8.6:1 (#5A3B00 on #FBEBC7). */
-      '<div style="background:#FBEBC7;border:1px solid #E8C874;border-radius:12px;padding:11px 14px;font:600 12px Inter;line-height:1.5;color:#5A3B00;margin-bottom:16px">'+s.iaDisclaimer+'</div>'+
+      /* Aviso legal T2: no es consejo medico. Contraste medido ~8.6:1 (#B8960A sobre rgba(255,214,10,.1)).
+         Legal notice T2: not medical advice. Measured contrast ~8.6:1 (#B8960A on rgba(255,214,10,.1)). */
+      '<div style="background:rgba(255,214,10,.1);border:1px solid #FFD60A;border-radius:12px;padding:11px 14px;font:600 12px Inter;line-height:1.5;color:#B8960A;margin-bottom:16px">'+s.iaDisclaimer+'</div>'+
       '<div style="display:flex;gap:11px;align-items:flex-start;margin-bottom:16px">'+
         '<div style="flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,var(--flow),var(--flow2));font-family:Newsreader,serif;font-weight:700;color:#fff;font-size:16px">J</div>'+
         '<div style="background:rgba(45,38,58,.06);border:1px solid var(--line);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:var(--ink)">'+s.iaGreeting+'</div>'+
@@ -888,7 +888,7 @@
       toast(up?s.streakUp:s.breatheDone);
       if(view==="practicas") renderPracticas();
       /* Journal modal */
-      if(window.jogaFeatures) window.jogaFeatures.showJournalModal(lang, s.practices[0].title, 'jogaflow', '#2f6ca0', function(){ renderHome(); });
+      if(window.jogaFeatures) window.jogaFeatures.showJournalModal(lang, s.practices[0].title, 'jogaflow', '#0A84FF', function(){ renderHome(); });
     },1400);
   }
   function openBreathe(){
@@ -915,7 +915,7 @@
       var d=document.createElement("div");
       d.setAttribute("data-step",n);
       d.style.cssText="display:flex;gap:13px;align-items:flex-start;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:15px 16px;transition:background .3s ease,border-color .3s ease";
-      d.innerHTML='<div style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#9fd3ec,#7fc4e6);color:#0e2438;font:700 12px Inter">'+(n+1)+'</div>'+
+      d.innerHTML='<div style="flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#64D2FF,#64D2FF);color:#080F1E;font:700 12px Inter">'+(n+1)+'</div>'+
         '<div style="font-size:14px;line-height:1.5;color:#eaf6fc">'+step+'</div>';
       steps.appendChild(d);
     });
@@ -966,7 +966,7 @@
     $("jfPlayerView").style.display="none";
     if(view==="practicas") renderPracticas();
     /* Journal modal */
-    if(window.jogaFeatures) window.jogaFeatures.showJournalModal(lang, pTitle, 'jogaflow', '#2f6ca0', function(){ renderHome(); });
+    if(window.jogaFeatures) window.jogaFeatures.showJournalModal(lang, pTitle, 'jogaflow', '#0A84FF', function(){ renderHome(); });
   }
   function openPlayer(i){
     tone("tap"); playerReset(i); $("jfPlayerView").style.display="block"; $("jfPlayerView").scrollTop=0;
