@@ -115,6 +115,7 @@
         <div id="jiVChatWrap_jogatime"></div>
         <div id="jiVoiceWrap_jogatime"></div>
         <div id="jiBadgeWrap_jogatime"></div>
+        <div id="jiDashWrap_jogatime"></div>
 
         <!-- challenge strip -->
         <div onClick="{{ openAbout }}" style="cursor:pointer;display:flex;align-items:center;gap:13px;background:rgba(231,196,106,.07);border:1px solid rgba(231,196,106,.22);border-radius:18px;padding:14px 16px;margin-bottom:18px">
@@ -445,6 +446,8 @@ class Component extends DCLogic {
       }
       var bw = document.getElementById('jiBadgeWrap_jogatime');
       if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('jogatime', L, '#FF9F0A');
+      var dw = document.getElementById('jiDashWrap_jogatime');
+      if (dw) dw.innerHTML = window.jogaFeatures.weeklyDashboardHtml('jogatime', L, '#FF9F0A');
     }
   }
   componentWillUnmount(){ clearInterval(this._t); clearInterval(this._b); clearTimeout(this._toast); this.stopSession(); }

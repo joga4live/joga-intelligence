@@ -115,6 +115,7 @@
         <div id="jiVChatWrap_ventmex"></div>
         <div id="jiVoiceWrap_ventmex"></div>
         <div id="jiBadgeWrap_ventmex"></div>
+        <div id="jiDashWrap_ventmex"></div>
 
         <!-- challenge strip -->
         <div onClick="{{ openAbout }}" style="cursor:pointer;display:flex;align-items:center;gap:13px;background:rgba(255,214,10,.07);border:1px solid rgba(255,214,10,.22);border-radius:18px;padding:14px 16px;margin-bottom:18px">
@@ -446,6 +447,8 @@ class Component extends DCLogic {
       }
       var bw = document.getElementById('jiBadgeWrap_ventmex');
       if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('ventmex', L, '#FF453A');
+      var dw = document.getElementById('jiDashWrap_ventmex');
+      if (dw) dw.innerHTML = window.jogaFeatures.weeklyDashboardHtml('ventmex', L, '#FF453A');
     }
   }
   componentWillUnmount(){ clearInterval(this._t); clearInterval(this._b); clearTimeout(this._toast); this.stopSession(); }

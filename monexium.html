@@ -115,6 +115,7 @@
         <div id="jiVChatWrap_monexium"></div>
         <div id="jiVoiceWrap_monexium"></div>
         <div id="jiBadgeWrap_monexium"></div>
+        <div id="jiDashWrap_monexium"></div>
 
         <!-- challenge strip -->
         <div onClick="{{ openAbout }}" style="cursor:pointer;display:flex;align-items:center;gap:13px;background:rgba(231,196,106,.07);border:1px solid rgba(231,196,106,.22);border-radius:18px;padding:14px 16px;margin-bottom:18px">
@@ -448,6 +449,8 @@ class Component extends DCLogic {
       }
       var bw = document.getElementById('jiBadgeWrap_monexium');
       if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('monexium', L, '#30D158');
+      var dw = document.getElementById('jiDashWrap_monexium');
+      if (dw) dw.innerHTML = window.jogaFeatures.weeklyDashboardHtml('monexium', L, '#30D158');
     }
   }
   componentWillUnmount(){ clearInterval(this._t); clearInterval(this._b); clearTimeout(this._toast); this.stopSession(); }
