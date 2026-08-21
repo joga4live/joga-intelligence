@@ -109,6 +109,10 @@
         </div>
 
 
+        <!-- voice coach + badges (injected by JS) -->
+        <div id="jiVoiceWrap_monexium"></div>
+        <div id="jiBadgeWrap_monexium"></div>
+
         <!-- challenge strip -->
         <div onClick="{{ openAbout }}" style="cursor:pointer;display:flex;align-items:center;gap:13px;background:rgba(231,196,106,.07);border:1px solid rgba(231,196,106,.22);border-radius:18px;padding:14px 16px;margin-bottom:18px">
           <div style="flex:0 0 auto;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(231,196,106,.13);font-size:18px">⛓️</div>
@@ -403,6 +407,37 @@ class Component extends DCLogic {
       if(window.jogaFeatures.getName() && !window.jogaFeatures.getStruggle()) {
         window.jogaFeatures.showQuizModal(_lang, function(){});
       }
+      /* Night closure ritual */
+      setTimeout(function(){ window.jogaFeatures.showClosureModal(_lang, 'monexium'); }, 2000);
+    }
+  }
+  componentDidUpdate() {
+    if (window.jogaFeatures) {
+      var L = this.state.lang || 'es';
+      var vw = document.getElementById('jiVoiceWrap_monexium');
+      if (vw && !vw.hasChildNodes()) {
+        vw.innerHTML = window.jogaFeatures.voiceCoachButtonHtml(L, '#2e7d5a');
+        var vcBtn = document.getElementById('jiVoiceCoach');
+        if (vcBtn) vcBtn.addEventListener('click', function() {
+          var speaking = vcBtn.getAttribute('data-speaking') === '1';
+          if (speaking) {
+            window.jogaFeatures.stopSpeaking();
+            vcBtn.setAttribute('data-speaking', '0');
+            var ico = document.getElementById('jiVoiceIcon'); if(ico) ico.textContent = '\u25b6';
+          } else {
+            vcBtn.setAttribute('data-speaking', '1');
+            var ico2 = document.getElementById('jiVoiceIcon'); if(ico2) ico2.textContent = '\u23f8';
+            var st2 = document.getElementById('jiVoiceStatus'); if(st2) st2.textContent = L==='en'?'Speaking...':'Hablando...';
+            window.jogaFeatures.speak(window.jogaFeatures.coachGreeting(L), L, function() {
+              vcBtn.setAttribute('data-speaking', '0');
+              var ico3 = document.getElementById('jiVoiceIcon'); if(ico3) ico3.textContent = '\u25b6';
+              var st3 = document.getElementById('jiVoiceStatus'); if(st3) st3.textContent = L==='en'?'Tap again':'Toca de nuevo';
+            });
+          }
+        });
+      }
+      var bw = document.getElementById('jiBadgeWrap_monexium');
+      if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('monexium', L, '#2e7d5a');
     }
   }
   componentWillUnmount(){ clearInterval(this._t); clearInterval(this._b); clearTimeout(this._toast); this.stopSession(); }
@@ -475,6 +510,8 @@ class Component extends DCLogic {
     try{ localStorage.setItem('jiStats_'+(this._key||''), JSON.stringify({ streak:next.streak, totalSessions:next.totalSessions, baseMin:next.baseMin })); }catch(e){}
     if(window.jogaFeatures) {
         window.jogaFeatures.incrementPractices('monexium');
+            var _newBadge = window.jogaFeatures.checkNewBadge('monexium');
+            if(_newBadge) setTimeout(function(){ window.jogaFeatures.showBadgeModal(_newBadge, st.lang||'es', '#2e7d5a'); }, 600);
         var _pTitle = (st.practices && st.practices[st.currentPractice]) ? st.practices[st.currentPractice].title : '';
         setTimeout(function(){ window.jogaFeatures.showJournalModal(st.lang||'es', _pTitle, 'monexium', '#b8923a', function(){}); }, 800);
       }
