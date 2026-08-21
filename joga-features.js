@@ -371,11 +371,13 @@
     var L = lang === 'en' ? {
       title: "What's your biggest struggle?",
       sub: "This helps us personalize your experience",
-      btn: 'Continue'
+      btn: 'Continue',
+      close: 'Close'
     } : {
       title: '\u00bfCu\u00e1l es tu mayor lucha?',
       sub: 'Esto nos ayuda a personalizar tu experiencia',
-      btn: 'Continuar'
+      btn: 'Continuar',
+      close: 'Cerrar'
     };
     var options = '';
     JF.STRUGGLES.forEach(function(s) {
@@ -386,11 +388,17 @@
         'align-items:center;gap:12px;transition:all .2s ease">' +
         '<span style="font-size:20px">' + s.emoji + '</span>' + label + '</button>';
     });
+    /* T5 21-ago: boton "x" para cerrar (44x44, area tocable minima) \u2014 antes el modal
+       no tenia forma de cerrarse. / T5 Aug 21: "x" close button (44x44, min tap area) \u2014
+       the modal used to have no way to close. */
     return '<div id="jiQuizModal" style="position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.65);' +
       'backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;' +
       'animation:jiFadeIn .4s ease">' +
       '<div style="background:#fff;border-radius:28px;padding:32px 24px;max-width:340px;width:100%;' +
-      'text-align:center;box-shadow:0 40px 80px -20px rgba(0,0,0,.5);animation:jiScaleIn .4s ease">' +
+      'text-align:center;box-shadow:0 40px 80px -20px rgba(0,0,0,.5);animation:jiScaleIn .4s ease;position:relative">' +
+        '<button id="jiQuizClose" aria-label="' + L.close + '" style="position:absolute;top:2px;right:2px;' +
+        'width:44px;height:44px;border:0;background:none;cursor:pointer;font-size:20px;color:#8a8296;' +
+        'display:flex;align-items:center;justify-content:center;line-height:1">\u00d7</button>' +
         '<div style="font-size:38px;margin-bottom:14px">\ud83c\udfaf</div>' +
         '<div style="font-family:Newsreader,serif;font-weight:600;font-size:20px;color:#242029;margin-bottom:4px">' + L.title + '</div>' +
         '<div style="font-size:12px;color:#8a8296;margin-bottom:18px">' + L.sub + '</div>' +
@@ -405,7 +413,22 @@
     wrap.innerHTML = JF.quizModalHtml(lang);
     document.body.appendChild(wrap);
     var btns = wrap.querySelectorAll('[data-struggle]');
-    function close() { try { document.body.removeChild(wrap); } catch(e) {} }
+    var modal = document.getElementById('jiQuizModal');
+    var closeBtn = document.getElementById('jiQuizClose');
+    /* T5 21-ago: cierra por boton "x", tocar fuera de la tarjeta y Escape \u2014 las tres
+       vias que cualquiera intenta, en ese orden. Antes no cerraba por ninguna.
+       T5 Aug 21: closes via the "x" button, tapping outside the card, and Escape \u2014
+       the three ways anyone tries, in that order. It used to close by none. */
+    function onKeydown(e) { if (e.key === 'Escape' || e.key === 'Esc') close(); }
+    function close() {
+      document.removeEventListener('keydown', onKeydown);
+      try { document.body.removeChild(wrap); } catch(e) {}
+    }
+    document.addEventListener('keydown', onKeydown);
+    if (closeBtn) closeBtn.addEventListener('click', function() { close(); if (onDone) onDone(); });
+    if (modal) modal.addEventListener('click', function(e) {
+      if (e.target === modal) { close(); if (onDone) onDone(); }
+    });
     Array.prototype.forEach.call(btns, function(b) {
       b.addEventListener('click', function() {
         var key = b.getAttribute('data-struggle');
@@ -1125,8 +1148,8 @@
       })
     }).then(function(r) { return r.json(); })
     .then(function(d) {
-      if (d && d.texto) {
-        callback(null, String(d.texto).trim());
+      if (d && (d.respuesta || d.texto)) {
+        callback(null, String(d.respuesta || d.texto).trim());
       } else if (d && d.error === 'limite_diario' && d.mensaje) {
         callback(null, String(d.mensaje));
       } else {

@@ -91,6 +91,16 @@
         text-transform: uppercase;
         font-size: 0.88rem;
         color: var(--accent);
+        position: relative;
+      }
+
+      /* T4 21-ago: área táctil invisible de 44px de alto sin agrandar el logo/texto —
+         medía 23px de alto. / T4 Aug 21: invisible 44px-tall tap area without growing
+         the logo/text — it measured 23px tall. */
+      .brand::before {
+        content: "";
+        position: absolute;
+        inset: -11px 0;
       }
 
       .topbar nav {
@@ -105,9 +115,15 @@
         gap: 12px;
       }
 
+      /* D5 21-ago-v2: gap subido de 6px a 12px. Las dos áreas invisibles de .lang-btn::before
+         se ensanchan 5px de cada lado (10px entre las dos) -- con gap:6px eso solapaba 4px y
+         ES perdía área a manos de EN (el que va después en el DOM). Con 12px ya no se tocan.
+         D5 Aug 21 v2: gap raised from 6px to 12px. The two invisible .lang-btn::before areas
+         each grow 5px per side (10px combined) -- with gap:6px that overlapped by 4px and ES
+         lost area to EN (later in DOM order). At 12px they no longer touch. */
       .lang-switch {
         display: inline-flex;
-        gap: 6px;
+        gap: 12px;
       }
 
       .lang-btn {
@@ -119,6 +135,19 @@
         font-weight: 700;
         padding: 5px 9px;
         cursor: pointer;
+        position: relative;
+      }
+
+      /* T4 21-ago: área táctil invisible sin agrandar la píldora visible —
+         medía 35x24 / 36x24. Ver D5 arriba: el gap del contenedor (ahora 12px)
+         es el que evita que esta expansión invada al botón vecino.
+         T4 Aug 21: invisible tap area without growing the visible pill —
+         it measured 35x24 / 36x24. See D5 above: the container's gap (now
+         12px) is what keeps this expansion from invading the neighbor button. */
+      .lang-btn::before {
+        content: "";
+        position: absolute;
+        inset: -10px -5px;
       }
 
       .lang-btn.active {
@@ -730,6 +759,17 @@
         font-weight: 600;
         text-decoration: underline;
         text-underline-offset: 2px;
+        position: relative;
+      }
+
+      /* T4 21-ago: área táctil invisible de 44px de alto — medía 16px de alto en los tres
+         enlaces. Horizontal chico para no solapar Términos/Privacidad/Reembolsos entre sí.
+         T4 Aug 21: invisible 44px-tall tap area — the three links measured 16px tall.
+         Small horizontal expansion so Términos/Privacidad/Reembolsos don't overlap each other. */
+      .footer-legal a::before {
+        content: "";
+        position: absolute;
+        inset: -14px -4px;
       }
 
       .footer-legal a:hover {
@@ -781,6 +821,73 @@
         border-right: 2px solid #fff;
         border-bottom: 2px solid #fff;
         transform: rotate(45deg);
+      }
+
+      /* T7 21-ago: mismo lenguaje visual que .music-toast, pero mas ancho (lleva texto +
+         enlace), sin auto-ocultarse tan rapido, y con boton de cerrar de 44x44.
+         T7 Aug 21: same visual language as .music-toast, but wider (carries text + a
+         link), doesn't auto-hide as fast, and has a 44x44 close button.
+
+         D3 21-ago-v2: left:50% + translateX(-50%) hacía que el ancho "disponible" para el
+         max-width fuera solo la mitad derecha de la ventana (a 320px: 160px, no los 288
+         previstos) -- el aviso salía como columna angosta de 5 renglones. Ahora se centra
+         con left/right/margin:auto, que sí deja usar el max-width completo.
+         D3 Aug 21 v2: left:50% + translateX(-50%) made the "available" width for max-width
+         only the right half of the window (at 320px: 160px, not the expected 288) -- the
+         notice came out as a narrow 5-line column. Now it centers with left/right/margin:
+         auto, which does let the full max-width apply. */
+      .locked-toast {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        margin: 0 auto;
+        bottom: 24px;
+        transform: translateY(16px);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px 14px;
+        max-width: min(420px, calc(100% - 32px));
+        background: rgba(31, 25, 22, 0.94);
+        color: #fff;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 18px;
+        padding: 12px 8px 12px 16px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 180ms ease, transform 180ms ease;
+        z-index: 70;
+      }
+
+      .locked-toast.visible {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .locked-toast-cta {
+        color: var(--accent);
+        text-decoration: underline;
+        text-underline-offset: 2px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .locked-toast-close {
+        margin-left: auto;
+        background: transparent;
+        border: 0;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       @keyframes floatCard {
@@ -1104,6 +1211,16 @@
       <span id="musicToastText">Abriendo Apple Music...</span>
     </div>
 
+    <!-- T7 21-ago: aviso al rebotar de una app bloqueada (candado por-app, sin código) --
+         explica qué pasó y enlaza a Planes, no abre ni debilita el candado.
+         T7 Aug 21: notice when bouncing back from a locked app (per-app gate, no code) --
+         explains what happened and links to Plans, doesn't open or weaken the gate. -->
+    <div class="locked-toast" id="lockedToast" aria-live="polite" role="status">
+      <span id="lockedToastText"></span>
+      <a class="locked-toast-cta" id="lockedToastCta" href="#pricing">Ver planes</a>
+      <button class="locked-toast-close" id="lockedToastClose" type="button" aria-label="Cerrar">×</button>
+    </div>
+
     <!-- ===== Modal: Ingresa tu código (desbloqueo premium) ===== -->
     <div id="unlockOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(31,25,22,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
       <div role="dialog" aria-modal="true" aria-labelledby="unlockTitle" aria-describedby="unlockSub" tabindex="-1" style="background:var(--bg);border:1px solid rgba(184,146,74,.3);border-radius:20px;max-width:420px;width:100%;padding:32px 28px;box-shadow:0 30px 80px rgba(0,0,0,.3);text-align:center;">
@@ -1155,6 +1272,7 @@
       let currentLanguage = 'es';
       let audioContext = null;
       let musicToastTimer = null;
+      let lockedToastTimer = null;
 
       const I18N = {
         es: {
@@ -1275,7 +1393,8 @@
           appsKicker: 'Acceso individual',
           appsTitle: 'Elige tu app',
           appsSub: 'Cada app se vende por separado. Elige la tuya para continuar al pago.',
-          appsClose: 'Cerrar'
+          appsClose: 'Cerrar',
+          lockedToastClose: 'Cerrar'
         },
         en: {
           navEcosystem: 'Ecosystem',
@@ -1395,7 +1514,8 @@
           appsKicker: 'Individual access',
           appsTitle: 'Choose your app',
           appsSub: 'Each app is sold separately. Pick yours to continue to checkout.',
-          appsClose: 'Close'
+          appsClose: 'Close',
+          lockedToastClose: 'Close'
         }
       };
 
@@ -1449,6 +1569,12 @@
               el.placeholder = ui[key];
             } else if (el.tagName === 'VIDEO') {
               // El <video> tampoco pinta texto; el nombre accesible va en aria-label / <video> doesn't render text either; the accessible name goes in aria-label
+              el.setAttribute('aria-label', ui[key]);
+            } else if (key === 'lockedToastClose') {
+              // D4 21-ago-v2: el glifo visible es "×", fijo en los dos idiomas -- solo el
+              // nombre accesible (aria-label) cambia entre "Cerrar" / "Close".
+              // D4 Aug 21 v2: the visible glyph is "×", fixed in both languages -- only the
+              // accessible name (aria-label) changes between "Cerrar" / "Close".
               el.setAttribute('aria-label', ui[key]);
             } else {
               el.textContent = ui[key];
@@ -1541,6 +1667,68 @@
         musicToastTimer = setTimeout(() => {
           toast.classList.remove('visible');
         }, 1500);
+      }
+
+      /* T7 21-ago: nombres legibles para el aviso de "app bloqueada" -- mismos que usan
+         las tarjetas de módulo y el modal "Elige tu app" de esta misma página.
+         T7 Aug 21: readable names for the "locked app" notice -- same ones the module
+         cards and the "Choose your app" modal on this same page already use. */
+      const LOCKED_APP_NAMES = {
+        subment: 'JogaMind', jogatime: 'JogaTime', monexium: 'JogaCapital',
+        ventmex: 'JogaVentix', protoneutron: 'JogaBit', metodoexito: 'JogaPath'
+      };
+
+      function showLockedToast(appKey) {
+        const toast = document.getElementById('lockedToast');
+        const text = document.getElementById('lockedToastText');
+        const cta = document.getElementById('lockedToastCta');
+        if (!toast || !text || !cta) return;
+        const name = LOCKED_APP_NAMES[appKey] || appKey;
+        text.textContent = currentLanguage === 'en'
+          ? name + ' requires a purchase to open.'
+          : name + ' requiere una compra para abrirse.';
+        cta.textContent = currentLanguage === 'en' ? 'See plans' : 'Ver planes';
+        toast.classList.add('visible');
+        if (lockedToastTimer) clearTimeout(lockedToastTimer);
+        lockedToastTimer = setTimeout(() => {
+          toast.classList.remove('visible');
+        }, 8000);
+      }
+
+      /* T7 21-ago: cada app de pago rebota aquí con ?locked=<clave> cuando no está
+         desbloqueada (ver el candado al inicio de subment.html/jogatime.html/etc.).
+         Antes rebotaba en silencio; esto solo lee el parámetro y avisa -- no toca el
+         candado. Se limpia la URL para que refrescar la página no repita el aviso.
+         T7 Aug 21: each paid app bounces back here with ?locked=<key> when it isn't
+         unlocked (see the gate at the top of subment.html/jogatime.html/etc.). It used
+         to bounce back silently; this only reads the parameter and shows a notice --
+         doesn't touch the gate. The URL is cleaned so refreshing won't repeat the notice. */
+      function checkLockedRedirect() {
+        let key = null;
+        try {
+          key = new URLSearchParams(location.search).get('locked');
+        } catch (error) {
+          return;
+        }
+        // D2 21-ago-v2: hasOwnProperty explícito -- LOCKED_APP_NAMES es un objeto literal y
+        // hereda de Object.prototype, así que sin este chequeo "constructor", "toString",
+        // "__proto__", "hasOwnProperty" y "valueOf" pasaban el filtro y pintaban texto de
+        // JavaScript en el aviso ("function Object() { [native code] } requiere..."). No
+        // abría nada (se comprobó), pero se veía mal.
+        // D2 Aug 21 v2: explicit hasOwnProperty -- LOCKED_APP_NAMES is an object literal and
+        // inherits from Object.prototype, so without this check "constructor", "toString",
+        // "__proto__", "hasOwnProperty" and "valueOf" passed the filter and printed raw
+        // JavaScript text in the notice ("function Object() { [native code] } requires...").
+        // It didn't unlock anything (verified), but it looked broken.
+        if (!key || !Object.prototype.hasOwnProperty.call(LOCKED_APP_NAMES, key)) return;
+        showLockedToast(key);
+        try {
+          const url = new URL(location.href);
+          url.searchParams.delete('locked');
+          history.replaceState(null, '', url.pathname + url.search + url.hash);
+        } catch (error) {
+          // Si esto falla el aviso ya se mostró; no es crítico limpiar la URL.
+        }
       }
 
       document.addEventListener('click', (event) => {
@@ -1749,6 +1937,16 @@
       });
 
       reflectPremium();
+
+      const lockedToastClose = document.getElementById('lockedToastClose');
+      if (lockedToastClose) {
+        lockedToastClose.addEventListener('click', () => {
+          if (lockedToastTimer) clearTimeout(lockedToastTimer);
+          const toast = document.getElementById('lockedToast');
+          if (toast) toast.classList.remove('visible');
+        });
+      }
+      checkLockedRedirect();
     </script>
   </body>
 </html>

@@ -24,7 +24,7 @@
   }catch(e){}
   try{
     if (localStorage.getItem("jiUnlocked_subment") !== "1") {
-      window.location.replace("index.html");
+      window.location.replace("index.html?locked=subment");
     }
   }catch(e){
     window.location.replace("index.html");
@@ -64,6 +64,15 @@
     .sub-scroll{scrollbar-width:none}
     @media (max-width:600px){
       .ji-phone{position:fixed!important;inset:0!important;width:100vw!important;width:100dvw!important;height:100dvh!important;border-radius:0!important;padding:0!important;box-shadow:none!important;z-index:5!important}
+      /* T6 21-ago: .ji-phone tapa el "side caption" (vista previa de escritorio) en movil,
+         pero sus botones ☀/⛅/☾ seguian en el recorrido del tabulador aunque nadie los ve.
+         display:none los saca del tabulador y del arbol de accesibilidad. En escritorio
+         (arriba de 600px) siguen visibles y funcionando igual que antes.
+         T6 Aug 21: .ji-phone covers the "side caption" (desktop preview) on mobile, but
+         its sun/afternoon/moon buttons stayed in the tab order even though nobody sees
+         them. display:none removes them from the tab order and the accessibility tree.
+         On desktop (above 600px) they stay visible and working exactly as before. */
+      .ji-side-caption{display:none!important}
       .ji-screen{border-radius:0!important}
       .ji-notch{display:none!important}
     }
@@ -91,7 +100,7 @@
       </div>
 
       <!-- ============ HOME ============ -->
-      <button onClick="{{ exitApp }}" aria-label="Salir" style="position:absolute;top:16px;left:16px;z-index:50;appearance:none;cursor:pointer;width:40px;height:40px;border-radius:50%;border:1px solid rgba(45,38,58,.14);background:rgba(10,20,40,.84);backdrop-filter:blur(8px);color:#F5F5F7;font-size:23px;line-height:1;display:grid;place-items:center;box-shadow:0 5px 16px -7px rgba(0,0,0,.3)">‹</button>
+      <button onClick="{{ exitApp }}" aria-label="Salir" style="position:absolute;top:16px;left:16px;z-index:50;appearance:none;cursor:pointer;width:44px;height:44px;border-radius:50%;border:1px solid rgba(45,38,58,.14);background:rgba(10,20,40,.84);backdrop-filter:blur(8px);color:#F5F5F7;font-size:23px;line-height:1;display:grid;place-items:center;box-shadow:0 5px 16px -7px rgba(0,0,0,.3)" style-active="transform:scale(.97)">‹</button>
       <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
       <div class="sub-scroll" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 110px">
         <!-- header -->
@@ -101,8 +110,8 @@
             <div style="font-family:Newsreader,serif;font-weight:500;font-size:23px;color:#F5F5F7;margin-top:3px">{{ greeting }}</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px">
-            <button onClick="{{ toggleLang }}" style="appearance:none;border:1px solid rgba(45,38,58,.12);background:rgba(45,38,58,.07);cursor:pointer;height:34px;padding:0 12px;border-radius:999px;font:600 11px Inter;letter-spacing:.05em;color:#BF5AF2" aria-label="Idioma">{{ langLabel }}</button>
-            <button onClick="{{ toggleMute }}" style="appearance:none;border:1px solid rgba(45,38,58,.12);background:rgba(45,38,58,.07);cursor:pointer;width:34px;height:34px;border-radius:50%;font-size:13px;display:grid;place-items:center" aria-label="Silenciar">{{ muteIcon }}</button>
+            <button onClick="{{ toggleLang }}" style="appearance:none;border:1px solid rgba(45,38,58,.12);background:rgba(45,38,58,.07);cursor:pointer;height:44px;padding:0 14px;border-radius:999px;font:600 11px Inter;letter-spacing:.05em;color:#BF5AF2" aria-label="Idioma" style-active="transform:scale(.97)">{{ langLabel }}</button>
+            <button onClick="{{ toggleMute }}" style="appearance:none;border:1px solid rgba(45,38,58,.12);background:rgba(45,38,58,.07);cursor:pointer;width:44px;height:44px;border-radius:50%;font-size:13px;display:grid;place-items:center" aria-label="Silenciar" style-active="transform:scale(.97)">{{ muteIcon }}</button>
             <div style="display:flex;align-items:center;gap:7px;background:rgba(231,196,106,.1);border:1px solid rgba(231,196,106,.3);padding:7px 13px;border-radius:999px">
               <span style="font-size:14px">✦</span>
               <span style="font:600 13px Inter;color:#FFD60A">{{ streak }}</span>
@@ -131,12 +140,12 @@
         <div style="position:relative;border-radius:26px;overflow:hidden;padding:30px 24px 26px;margin-bottom:22px;background:linear-gradient(165deg,#1A0E2E,rgba(191,90,242,.12));border:1px solid rgba(138,120,204,.32);box-shadow:0 24px 50px -28px rgba(120,80,230,.7)">
           <div style="font:600 9.5px Inter;letter-spacing:.3em;text-transform:uppercase;color:#BF5AF2;margin-bottom:14px">{{ intentionLabel }}</div>
           <div style="font-family:Newsreader,serif;font-weight:500;font-size:27px;line-height:1.28;color:#F5F5F7;letter-spacing:-.01em">{{ affirmation }}</div>
-          <button onClick="{{ affirm }}" style="margin-top:22px;appearance:none;cursor:pointer;border:0;border-radius:999px;padding:13px 22px;font:600 13px Inter;letter-spacing:.02em;color:#F5F5F7;background:linear-gradient(135deg,#BF5AF2,#8E44AD);box-shadow:0 10px 24px -10px rgba(120,100,190,.9);display:inline-flex;align-items:center;gap:8px" style-hover="transform:translateY(-1px)">{{ affirmLabel }}</button><button onClick="{{ cycleAff }}" aria-label="otra frase" style="margin-top:22px;margin-left:9px;appearance:none;cursor:pointer;border:1px solid rgba(45,38,58,.16);background:rgba(45,38,58,.08);color:#F5F5F7;border-radius:999px;width:44px;height:44px;font-size:17px;vertical-align:top;line-height:1">↻</button>
+          <button onClick="{{ affirm }}" style="margin-top:22px;appearance:none;cursor:pointer;border:0;border-radius:999px;padding:15px 22px;font:600 13px Inter;letter-spacing:.02em;color:#F5F5F7;background:linear-gradient(135deg,#BF5AF2,#8E44AD);box-shadow:0 10px 24px -10px rgba(120,100,190,.9);display:inline-flex;align-items:center;gap:8px" style-hover="transform:translateY(-1px)" style-active="transform:scale(.97)">{{ affirmLabel }}</button><button onClick="{{ cycleAff }}" aria-label="otra frase" style="margin-top:22px;margin-left:9px;appearance:none;cursor:pointer;border:1px solid rgba(45,38,58,.16);background:rgba(45,38,58,.08);color:#F5F5F7;border-radius:999px;width:44px;height:44px;font-size:17px;vertical-align:top;line-height:1" style-active="transform:scale(.97)">↻</button>
         </div>
 
         <!-- session of the day -->
         <div style="font:600 10px Inter;letter-spacing:.28em;text-transform:uppercase;color:#8E8E93;margin:0 2px 12px">{{ focusLabel }}</div>
-        <button onClick="{{ playFeatured }}" style="width:100%;text-align:left;appearance:none;cursor:pointer;border:1px solid rgba(138,120,204,.24);border-radius:22px;padding:20px;margin-bottom:22px;background:linear-gradient(160deg,#1A0E2E,#150C28);display:flex;align-items:center;gap:16px" style-hover="border-color:rgba(138,120,204,.5)">
+        <button onClick="{{ playFeatured }}" style="width:100%;text-align:left;appearance:none;cursor:pointer;border:1px solid rgba(138,120,204,.24);border-radius:22px;padding:20px;margin-bottom:22px;background:linear-gradient(160deg,#1A0E2E,#150C28);display:flex;align-items:center;gap:16px" style-hover="border-color:rgba(138,120,204,.5)" style-active="transform:scale(.97)">
           <div style="flex:0 0 auto;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#D28FF5,#BF5AF2);box-shadow:0 12px 26px -10px rgba(140,100,240,.9)">
             <span style="font-size:22px;color:#fff;margin-left:3px">▶</span>
           </div>
@@ -192,7 +201,7 @@
                   <div style="font-size:12px;line-height:1.55;color:#8E8E93;font-style:italic;margin-top:8px;border-left:2px solid rgba(138,120,204,.4);padding-left:10px">{{ p.extra }}</div>
                 </div>
               </div>
-              <button onClick="{{ p.toggle }}" style="{{ p.btnStyle }}">{{ p.btnLabel }}</button>
+              <button onClick="{{ p.toggle }}" style="{{ p.btnStyle }}" style-active="transform:scale(.97)">{{ p.btnLabel }}</button>
             </div>
           </sc-for>
         </div>
@@ -234,7 +243,7 @@
           <div style="background:rgba(45,38,58,.07);border:1px solid rgba(45,38,58,.1);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:#F5F5F7">{{ iaGreeting }}</div>
         </div>
         <textarea value="{{ iaInput }}" onChange="{{ onIaInput }}" placeholder="{{ iaPlaceholder }}" style="width:100%;min-height:120px;resize:vertical;box-sizing:border-box;background:rgba(45,38,58,.06);border:1px solid rgba(45,38,58,.1);border-radius:14px;padding:14px;color:#F5F5F7;font:400 13.5px Inter;line-height:1.5;outline:none"></textarea>
-        <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#fbf5ea;background:linear-gradient(135deg,#BF5AF2,#D28FF5)">{{ iaBtnLabel }}</button>
+        <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#fbf5ea;background:linear-gradient(135deg,#BF5AF2,#D28FF5)" style-active="transform:scale(.97)">{{ iaBtnLabel }}</button>
         <sc-if value="{{ iaResult }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:18px;border:1px solid rgba(138,120,204,.3);border-radius:16px;padding:16px;background:rgba(70,50,130,.25)">
           <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#F5F5F7;white-space:pre-wrap">{{ iaResult }}</div>
@@ -254,7 +263,7 @@
         </div>
         <div style="font-family:Newsreader,serif;font-weight:500;font-size:30px;line-height:1.18;color:#F5F5F7;margin-bottom:12px;max-width:14ch">{{ unlockTag }}</div>
         <div style="font:600 9px Inter;letter-spacing:.2em;text-transform:uppercase;color:#8E8E93;margin-bottom:34px">{{ challengeDays }}</div>
-        <button onClick="{{ enterApp }}" style="appearance:none;border:0;cursor:pointer;border-radius:999px;padding:16px 52px;font:600 14px Inter;letter-spacing:.03em;color:#F5F5F7;background:#BF5AF2;box-shadow:0 16px 40px -12px rgba(150,108,246,.5)">{{ unlockCta }}</button>
+        <button onClick="{{ enterApp }}" style="appearance:none;border:0;cursor:pointer;border-radius:999px;padding:16px 52px;font:600 14px Inter;letter-spacing:.03em;color:#F5F5F7;background:#BF5AF2;box-shadow:0 16px 40px -12px rgba(150,108,246,.5)" style-active="transform:scale(.97)">{{ unlockCta }}</button>
       </div>
       </sc-if>
 
@@ -275,7 +284,7 @@
             <span style="font-size:15px">⛓</span>
             <span style="font-size:12px;color:#8E8E93;font-style:italic">{{ chainRule }}</span>
           </div>
-          <button onClick="{{ closeAbout }}" style="width:100%;margin-top:20px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#F5F5F7;background:#BF5AF2">{{ aboutClose }}</button>
+          <button onClick="{{ closeAbout }}" style="width:100%;margin-top:20px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#F5F5F7;background:#BF5AF2" style-active="transform:scale(.97)">{{ aboutClose }}</button>
         </div>
       </div>
       </sc-if>
@@ -283,7 +292,7 @@
       <!-- ============ BOTTOM NAV ============ -->
       <div style="position:absolute;bottom:0;left:0;right:0;z-index:30;padding:12px 30px 26px;background:linear-gradient(to top,#1A0E2E 70%,transparent);display:flex;justify-content:space-between">
         <sc-for list="{{ nav }}" as="n" hint-placeholder-count="3">
-          <button onClick="{{ n.go }}" style="appearance:none;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;padding:4px 18px">
+          <button onClick="{{ n.go }}" style="appearance:none;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;padding:4px 18px" style-active="transform:scale(.97)">
             <span style="font-size:19px;{{ n.iconStyle }}">{{ n.icon }}</span>
             <span style="font:600 9.5px Inter;letter-spacing:.04em;{{ n.labelStyle }}">{{ n.label }}</span>
           </button>
@@ -294,7 +303,7 @@
       <sc-if value="{{ playerOpen }}" hint-placeholder-val="{{ false }}">
       <div style="position:absolute;inset:0;z-index:80;background:radial-gradient(120% 70% at 50% 35%,#2A1B3E,#1A0E2E 75%);display:flex;flex-direction:column;align-items:center;padding:60px 28px 40px">
         <!-- close -->
-        <button onClick="{{ closePlayer }}" style="position:absolute;top:58px;left:24px;appearance:none;border:0;background:rgba(45,38,58,.09);color:#F5F5F7;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px">✕</button>
+        <button onClick="{{ closePlayer }}" style="position:absolute;top:58px;left:24px;appearance:none;border:0;background:rgba(45,38,58,.09);color:#F5F5F7;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px" style-active="transform:scale(.97)">✕</button>
         <div style="font:600 10px Inter;letter-spacing:.3em;text-transform:uppercase;color:#BF5AF2;margin-top:6px">{{ player.tag }}</div>
         <div style="font-family:Newsreader,serif;font-weight:500;font-size:25px;color:#F5F5F7;margin-top:8px;text-align:center">{{ player.title }}</div>
 
@@ -319,7 +328,7 @@
         <!-- controls -->
         <div style="display:flex;align-items:center;gap:30px;margin-top:24px">
           <span style="color:#8E8E93;font-size:22px">⟲</span>
-          <button onClick="{{ togglePlay }}" style="appearance:none;border:0;cursor:pointer;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#BF5AF2,#8E44AD);color:#F5F5F7;font-size:26px;display:grid;place-items:center;box-shadow:0 16px 40px -12px rgba(120,100,190,.9)">{{ playIcon }}</button>
+          <button onClick="{{ togglePlay }}" style="appearance:none;border:0;cursor:pointer;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#BF5AF2,#8E44AD);color:#F5F5F7;font-size:26px;display:grid;place-items:center;box-shadow:0 16px 40px -12px rgba(120,100,190,.9)" style-active="transform:scale(.97)">{{ playIcon }}</button>
           <span style="color:#8E8E93;font-size:22px">✦</span>
         </div>
       </div>
@@ -351,14 +360,14 @@
   </div>
 
   <!-- side caption -->
-  <div style="flex:0 0 auto;max-width:300px;color:#8E8E93">
+  <div class="ji-side-caption" style="flex:0 0 auto;max-width:300px;color:#8E8E93">
     <div style="font:600 11px Inter;letter-spacing:.3em;text-transform:uppercase;color:#D28FF5;margin-bottom:14px">App 01 · JogaMind</div>
     <div style="font-family:Newsreader,serif;font-weight:500;font-size:30px;line-height:1.15;color:#F5F5F7;margin-bottom:16px">Entrena tu subconsciente</div>
     <p style="font-size:13.5px;line-height:1.7;color:#8E8E93;margin:0 0 18px">Prototipo funcional. Toca <b style="color:#BF5AF2">▶ una sesión</b> para abrir el reproductor con respiración guiada, prueba la <b style="color:#BF5AF2">afirmación</b>, y navega entre Hoy · Sesiones · Progreso.</p>
     <div style="font:600 9.5px Inter;letter-spacing:.26em;text-transform:uppercase;color:#8E8E93;margin-bottom:9px">{{ glowNote }}</div>
     <div style="display:flex;gap:8px;margin-bottom:24px">
       <sc-for list="{{ modeChips }}" as="c" hint-placeholder-count="3">
-        <button onClick="{{ c.set }}" style="{{ c.style }}">{{ c.label }}</button>
+        <button onClick="{{ c.set }}" style="{{ c.style }}" style-active="transform:scale(.97)">{{ c.label }}</button>
       </sc-for>
     </div>
     <div style="display:flex;flex-direction:column;gap:10px">
@@ -481,7 +490,7 @@ class Component extends DCLogic {
     out=out.split('\n').map(function(line){ return line.replace(/\*([^*]+?)\*/g,'$1'); }).join('\n');
     return out;
   }
-  diagnose(){ const q=(this.state.iaInput||'').trim(); if(!q||this.state.iaLoading) return; this.play('tap'); this.setState({ iaLoading:true, iaResult:'' }); const L=this.state.lang||'es'; const prompt=(L==='es'?'Eres un coach de JOGAMIND, app para entrenar el subconsciente (inspirada en Joseph Murphy, Napoleon Hill, Maxwell Maltz, Wayne Dyer). Analiza esta situación y responde en español, breve y accionable (máx 110 palabras): nombra la CREENCIA subconsciente que puede estar operando, una AFIRMACIóN en presente para reprogramarla, y 2 acciones concretas para hoy.\n\nSituación: ':'You are a JOGAMIND coach, an app to train the subconscious (inspired by Joseph Murphy, Napoleon Hill, Maxwell Maltz, Wayne Dyer). Analyze this situation and answer in English, brief and actionable (max 110 words): name the subconscious BELIEF that may be operating, a present-tense AFFIRMATION to reprogram it, and 2 concrete actions for today.\n\nSituation: ')+q; const JOGA_AI_URL='https://joga-ai.omhotien90.workers.dev'; const JOGA_AI_APP='jogamind'; const _set=(txt)=>this.setState({iaResult:this.cleanIaMd(txt),iaLoading:false}); const _fail=()=>_set(this.localDiag(q,L)); const _worker=()=>{ fetch(JOGA_AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({app:JOGA_AI_APP,situacion:q,idioma:L})}).then(r=>r.json()).then(d=>{ if(d&&d.texto){ _set(String(d.texto).trim()); } else if(d&&(d.error==='limite_diario'||d.error==='limite_mensual')&&d.mensaje){ _set(String(d.mensaje)); } else { _fail(); } }).catch(_fail); }; if(window.claude && window.claude.complete){ window.claude.complete(prompt).then(r=>_set(String(r||'').trim()||this.localDiag(q,L))).catch(_fail); } else { _worker(); } }
+  diagnose(){ const q=(this.state.iaInput||'').trim(); if(!q||this.state.iaLoading) return; this.play('tap'); this.setState({ iaLoading:true, iaResult:'' }); const L=this.state.lang||'es'; const prompt=(L==='es'?'Eres un coach de JOGAMIND, app para entrenar el subconsciente (inspirada en Joseph Murphy, Napoleon Hill, Maxwell Maltz, Wayne Dyer). Analiza esta situación y responde en español, breve y accionable (máx 110 palabras): nombra la CREENCIA subconsciente que puede estar operando, una AFIRMACIóN en presente para reprogramarla, y 2 acciones concretas para hoy.\n\nSituación: ':'You are a JOGAMIND coach, an app to train the subconscious (inspired by Joseph Murphy, Napoleon Hill, Maxwell Maltz, Wayne Dyer). Analyze this situation and answer in English, brief and actionable (max 110 words): name the subconscious BELIEF that may be operating, a present-tense AFFIRMATION to reprogram it, and 2 concrete actions for today.\n\nSituation: ')+q; const JOGA_AI_URL='https://joga-ai.omhotien90.workers.dev'; const JOGA_AI_APP='jogamind'; const _set=(txt)=>this.setState({iaResult:this.cleanIaMd(txt),iaLoading:false}); const _fail=()=>_set(this.localDiag(q,L)); const _worker=()=>{ fetch(JOGA_AI_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({app:JOGA_AI_APP,situacion:q,idioma:L})}).then(r=>r.json()).then(d=>{ if(d&&(d.respuesta||d.texto)){ _set(String(d.respuesta||d.texto).trim()); } else if(d&&(d.error==='limite_diario'||d.error==='limite_mensual')&&d.mensaje){ _set(String(d.mensaje)); } else { _fail(); } }).catch(_fail); }; if(window.claude && window.claude.complete){ window.claude.complete(prompt).then(r=>_set(String(r||'').trim()||this.localDiag(q,L))).catch(_fail); } else { _worker(); } }
   armLaunchBoom(){ const boom = this._sfx && this._sfx.boom; if(!boom) return; const tryPlay = () => { if(this.muted) return Promise.resolve(); try{ boom.currentTime=0; boom.volume=.5; return boom.play(); }catch(e){ return Promise.reject(e); } }; const p = tryPlay(); if(p && p.catch){ p.catch(() => { const once = () => { tryPlay(); window.removeEventListener('pointerdown', once); }; window.addEventListener('pointerdown', once, { once:true }); }); } }
 
   go(v){ return () => { this.play('tap'); this.setState({ view:v }); }; }
@@ -685,7 +694,8 @@ class Component extends DCLogic {
       {color:'#BF5AF2', es:{title:'Despertando al gigante interior', author:'Tony Robbins', idea:'Tus decisiones y el lenguaje que usas contigo moldean tu estado y tu identidad. Cambiar tus preguntas cambia tu enfoque.', ej:'Sustituye «¿por qué a mí?» por «¿qué puedo aprender de esto?» y observa el cambio.'}, en:{title:'Awaken the Giant Within', author:'Tony Robbins', idea:'Your decisions and the language you use with yourself shape your state and identity. Changing your questions changes your focus.', ej:'Replace “why me?” with “what can I learn from this?” and watch the change.'}},
     ];
     const ideasList = (function(){
-      var base = BOOKS.map(b => ({ color:b.color, title:b[L].title, author:b[L].author, idea:b[L].idea, ej:b[L].ej }));
+      try {
+      var base = (typeof BOOKS !== 'undefined' && Array.isArray(BOOKS)) ? BOOKS.map(b => ({ color:b.color, title:b[L].title, author:b[L].author, idea:b[L].idea, ej:b[L].ej })) : [];
       var ext = window.JOGA_CONTENT_SUBMENT;
       if (ext && ext[L] && ext[L].leyes) {
         ext[L].leyes.forEach(function(ley) {
@@ -693,6 +703,11 @@ class Component extends DCLogic {
         });
       }
       return base;
+      } catch (e) {
+        // Defensa: si falta BOOKS o el contenido externo, la sección de libros queda vacía en vez de tumbar la app entera. / Defense: if BOOKS or external content is missing, the books section stays empty instead of crashing the whole app.
+        try{ console.error('ideasList (libros/leyes) falló, sección vacía / ideasList (books/laws) failed, empty section:', e); }catch(_){}
+        return [];
+      }
     })();
 
     return {
@@ -739,7 +754,7 @@ class Component extends DCLogic {
           chipBg: done ? 'rgba(150,108,246,.3)' : 'rgba(150,108,246,.14)',
           cardStyle: { border:'1px solid '+(done?'rgba(138,120,204,.5)':'rgba(45,38,58,.09)'), borderRadius:'18px', padding:'16px', background: done?'linear-gradient(160deg,rgba(70,50,130,.4),rgba(14,11,20,.6))':'linear-gradient(160deg,#251640,#1A0E2E)', transition:'all .3s ease' },
           btnLabel: done ? t.pDone : t.pMark,
-          btnStyle: { width:'100%', marginTop:'14px', appearance:'none', cursor:'pointer', borderRadius:'999px', padding:'11px', font:'600 12.5px Inter', border:'0', color: done?'#fbf5ea':'#BF5AF2', background: done?'#BF5AF2':'rgba(150,108,246,.12)', transition:'all .3s ease' },
+          btnStyle: { width:'100%', marginTop:'14px', appearance:'none', cursor:'pointer', borderRadius:'999px', padding:'15px 11px', font:'600 12.5px Inter', border:'0', color: done?'#fbf5ea':'#BF5AF2', background: done?'#BF5AF2':'rgba(150,108,246,.12)', transition:'all .3s ease' },
           toggle: () => this.togglePractice(i) };
       }),
       ideasKicker: t.ideasKicker, ideasTitle: t.ideasTitle, ideasSub: t.ideasSub, ideas: ideasList,

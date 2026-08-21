@@ -1,0 +1,44 @@
+JOGA — ARREGLOS DEL 21 DE AGOSTO
+=================================
+
+QUE SUBIR
+---------
+Sube los 12 archivos .html/.js de esta carpeta a la carpeta principal
+de tu repositorio, reemplazando los que ya estan.
+
+NO subas este LEEME.txt.
+
+QUE MAS HAY QUE HACER, A MANO
+------------------------------
+En tu repositorio de GitHub, BORRA estos dos archivos:
+
+   acceso.html
+   worker-temp.js
+
+Son los dos agujeros de seguridad. No basta con no subirlos: hay que
+borrarlos de tu repositorio, porque hoy siguen vivos en tu sitio.
+
+Para borrarlos: entra al archivo en GitHub, y arriba a la derecha hay
+un icono de bote de basura.
+
+QUE ARREGLA
+-----------
+- Las 4 apps que no abrian: JogaTime, JogaCapital, JogaVentix, JogaBit.
+- La IA, que no respondia en ninguna de las 7 apps.
+- acceso.html regalaba las 7 apps a cualquiera que viera el codigo.
+- worker-temp.js publicaba tu licencia real de Gumroad.
+- Los 26 libros ahora dicen quien los escribio.
+- JogaBody ya habla ingles.
+- Los botones ya responden cuando los tocas.
+- 21 botones eran muy chicos para un dedo.
+- El cuestionario ya se puede cerrar.
+- Tocar una app que no compraste ya te explica por que.
+
+COMO SABER QUE FUNCIONO
+-----------------------
+Despues de subirlo, abre tu sitio y entra a JogaTime. Antes salia una
+pantalla negra con un error. Ahora tiene que abrir normal.
+
+Y escribele algo a la IA. Tiene que contestarte de verdad.
+
+Version del sistema: joga-v85

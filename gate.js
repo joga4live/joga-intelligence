@@ -8,18 +8,20 @@
   "use strict";
 
   // Hash SHA-256 (hex) del código de José + apps que abre / José's code SHA-256 hash (hex) + apps it unlocks.
+  // Se borraron dos entradas muertas (21-ago-2026): un hash huérfano cuyo texto en claro
+  // nadie conoce (Nico probó 116 487 variantes, sin coincidencia) y SHA-256("joga7jose9")
+  // en minúsculas, que este validate() nunca puede igualar porque normaliza la entrada con
+  // .trim().toUpperCase() antes de hashear — además ese texto quedó publicado en el mensaje
+  // del commit f0bc127. No se inventó código maestro nuevo; eso lo decide José. /
+  // Two dead entries were removed (21-Aug-2026): an orphaned hash whose plaintext nobody
+  // knows (Nico tried 116,487 variants, no match) and SHA-256("joga7jose9") lowercase,
+  // which this validate() can never match because it normalizes input with
+  // .trim().toUpperCase() before hashing — and that text was also leaked in commit
+  // f0bc127's message. No new master code was invented; that's José's call.
   var ENTRIES = [
     {
       hash: "1569b405a3d87c672b34ffe27e9c520a287122da200ab0e65b1d8d93f7174ba1",
       apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex"]
-    },
-    {
-      hash: "cf076b84ca88ed1e2d261d266b08e2351ab62817d260592c9293008cef7260a8",
-      apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex", "jogaflow"]
-    },
-    {
-      hash: "8f578491cb55171dfc238d280c7d9dda875a9853b361e709e07db8f7a75d8a3f",
-      apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex", "jogaflow"]
     }
   ];
 
