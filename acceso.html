@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Joga — Acceso</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{min-height:100vh;background:#1A1400;display:flex;align-items:center;justify-content:center;font-family:Inter,system-ui,sans-serif;padding:20px}
+  .card{background:#2A2200;border:1px solid rgba(255,214,10,.2);border-radius:24px;padding:36px 28px;width:100%;max-width:340px;text-align:center}
+  .logo{font-size:13px;letter-spacing:.3em;text-transform:uppercase;color:#FFD60A;margin-bottom:24px}
+  h1{font-size:22px;color:#F5F5F7;margin-bottom:8px}
+  p{font-size:14px;color:#8E8E93;margin-bottom:24px;line-height:1.5}
+  input{width:100%;padding:14px 16px;border:1px solid rgba(255,214,10,.3);border-radius:12px;background:#1A1400;color:#F5F5F7;font-size:16px;text-align:center;outline:none;letter-spacing:.05em;-webkit-appearance:none}
+  input:focus{border-color:#FFD60A}
+  .err{color:#FF453A;font-size:13px;min-height:18px;margin:10px 0}
+  button{width:100%;padding:15px;border:none;border-radius:12px;background:linear-gradient(135deg,#FFD60A,#FFA700);color:#1A1400;font-weight:700;font-size:16px;cursor:pointer;margin-top:4px}
+  .ok{color:#30D158;font-size:15px;font-weight:600;margin-top:16px;display:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Joga Intelligence</div>
+  <h1>Acceso Premium</h1>
+  <p>Escribe tu clave de acceso</p>
+  <input id="inp" type="text" autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" placeholder="tu clave">
+  <div class="err" id="err"></div>
+  <button onclick="check()">Entrar</button>
+  <div class="ok" id="ok">✓ Acceso concedido — redirigiendo...</div>
+</div>
+<script>
+var VALID = "joga7jose9";
+
+function unlock() {
+  var apps = ["subment","jogatime","protoneutron","pasley","monexium","ventmex","jogaflow"];
+  apps.forEach(function(k){ localStorage.setItem("jiUnlocked_"+k,"1"); });
+  localStorage.setItem("jiPaid","1");
+}
+
+function check() {
+  var v = document.getElementById("inp").value.trim().toLowerCase();
+  if (v === VALID) {
+    unlock();
+    document.getElementById("ok").style.display = "block";
+    document.getElementById("err").textContent = "";
+    setTimeout(function(){ window.location.replace("app.html"); }, 1200);
+  } else {
+    document.getElementById("err").textContent = "Clave incorrecta";
+    document.getElementById("inp").style.borderColor = "#FF453A";
+  }
+}
+
+document.getElementById("inp").addEventListener("keydown", function(e){
+  if (e.key === "Enter") check();
+});
+</script>
+</body>
+</html>
