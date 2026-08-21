@@ -114,6 +114,7 @@
 
 
         <!-- voice coach + badges (injected by JS) -->
+        <div id="jiVChatWrap_metodoexito"></div>
         <div id="jiVoiceWrap_metodoexito"></div>
         <div id="jiBadgeWrap_metodoexito"></div>
 
@@ -484,6 +485,11 @@ class Component extends DCLogic {
             });
           }
         });
+      }
+      var vcw = document.getElementById('jiVChatWrap_metodoexito');
+      if (vcw && !vcw.hasChildNodes()) {
+        vcw.innerHTML = window.jogaFeatures.voiceChatButtonHtml(L, '#8b6914');
+        window.jogaFeatures.initVoiceChat(L, 'jogapath', '#8b6914');
       }
       var bw = document.getElementById('jiBadgeWrap_metodoexito');
       if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('metodoexito', L, '#8b6914');

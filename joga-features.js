@@ -964,4 +964,226 @@
     }
   };
 
+
+  /* ===== 13. VOICE CHAT BOT / BOT DE VOZ CONVERSACIONAL ===== */
+  var SR = W.SpeechRecognition || W.webkitSpeechRecognition;
+
+  JF.canListen = function() { return !!SR; };
+
+  JF._voiceChatState = { listening: false, processing: false, recognition: null };
+
+  JF.startListening = function(lang, onResult, onError) {
+    if (!SR) { if (onError) onError('no_support'); return; }
+    var vcs = JF._voiceChatState;
+    if (vcs.listening) return;
+    try {
+      var r = new SR();
+      r.lang = (lang === 'en') ? 'en-US' : 'es-MX';
+      r.interimResults = false;
+      r.maxAlternatives = 1;
+      r.continuous = false;
+      vcs.recognition = r;
+      vcs.listening = true;
+      r.onresult = function(e) {
+        vcs.listening = false;
+        var transcript = '';
+        for (var i = e.resultIndex; i < e.results.length; i++) {
+          transcript += e.results[i][0].transcript;
+        }
+        if (onResult) onResult(transcript.trim());
+      };
+      r.onerror = function(e) {
+        vcs.listening = false;
+        if (onError) onError(e.error || 'error');
+      };
+      r.onend = function() {
+        vcs.listening = false;
+      };
+      r.start();
+    } catch(e) {
+      vcs.listening = false;
+      if (onError) onError('start_failed');
+    }
+  };
+
+  JF.stopListening = function() {
+    var vcs = JF._voiceChatState;
+    if (vcs.recognition) {
+      try { vcs.recognition.stop(); } catch(e) {}
+    }
+    vcs.listening = false;
+  };
+
+  /* Send user's spoken text to Joga AI Worker and get response */
+  JF.askCoachAI = function(text, lang, appName, callback) {
+    var JOGA_AI_URL = 'https://joga-ai.omhotien90.workers.dev';
+    var name = JF.getName() || '';
+    var struggle = JF.getStruggle() || '';
+    
+    var systemContext = lang === 'en'
+      ? 'You are a warm, wise personal coach inside Joga Intelligence (a personal development app). '
+        + 'The user is talking to you by VOICE so keep your answer natural, conversational, short (max 80 words). '
+        + 'Do NOT use markdown, bullet points, or formatting — speak naturally like a real coach. '
+        + (name ? 'Their name is ' + name + '. ' : '')
+        + (struggle ? 'They struggle with: ' + struggle + '. ' : '')
+        + 'Respond in English.'
+      : 'Eres un coach personal cálido y sabio dentro de Joga Intelligence (app de desarrollo personal). '
+        + 'El usuario te habla por VOZ así que responde natural, conversacional, corto (máx 80 palabras). '
+        + 'NO uses markdown, viñetas, ni formato — habla natural como un coach real. '
+        + (name ? 'Se llama ' + name + '. ' : '')
+        + (struggle ? 'Su mayor lucha es: ' + struggle + '. ' : '')
+        + 'Responde en español.';
+    
+    fetch(JOGA_AI_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        app: appName || 'jogacoach',
+        situacion: text,
+        idioma: lang,
+        sistema: systemContext
+      })
+    }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d && d.texto) {
+        callback(null, String(d.texto).trim());
+      } else if (d && d.error === 'limite_diario' && d.mensaje) {
+        callback(null, String(d.mensaje));
+      } else {
+        /* Fallback: local response */
+        callback(null, JF._localCoachResponse(text, lang));
+      }
+    }).catch(function() {
+      callback(null, JF._localCoachResponse(text, lang));
+    });
+  };
+
+  /* Offline fallback responses */
+  JF._localCoachResponse = function(text, lang) {
+    var name = JF.getName();
+    if (lang === 'en') {
+      var responses = [
+        'I hear you' + (name ? ', ' + name : '') + '. Take a deep breath right now. Inhale for 4, hold for 7, exhale for 8. Sometimes the best thing you can do is pause and reset.',
+        (name ? name + ', w' : 'W') + 'hat you\'re feeling is valid. Remember: progress isn\'t a straight line. One practice at a time. You\'re already ahead by being here.',
+        'Here\'s what I want you to try right now: close your eyes, take 3 deep breaths, and ask yourself — what\'s the ONE thing I can control today? Focus only on that.',
+        'You know what separates people who grow from those who don\'t? They show up even when they don\'t feel like it. You\'re showing up right now. That matters.'
+      ];
+      return responses[Math.floor(Math.random() * responses.length)];
+    } else {
+      var respuestas = [
+        'Te escucho' + (name ? ', ' + name : '') + '. Respira hondo ahora mismo. Inhala 4 segundos, sostén 7, exhala 8. A veces lo mejor que puedes hacer es pausar y reiniciar.',
+        (name ? name + ', l' : 'L') + 'o que sientes es válido. Recuerda: el progreso no es una línea recta. Una práctica a la vez. Ya estás adelante por estar aquí.',
+        'Esto quiero que hagas ahora: cierra los ojos, toma 3 respiraciones profundas, y pregúntate — ¿cuál es la ÚNICA cosa que puedo controlar hoy? Enfócate solo en eso.',
+        '¿Sabes qué separa a la gente que crece de la que no? Se presentan incluso cuando no tienen ganas. Tú te estás presentando ahora mismo. Eso importa.'
+      ];
+      return respuestas[Math.floor(Math.random() * respuestas.length)];
+    }
+  };
+
+  /* Full voice chat flow: listen → AI → speak response */
+  JF.voiceChat = function(lang, appName, onStateChange) {
+    var notify = onStateChange || function() {};
+    
+    notify('listening');
+    JF.startListening(lang, function(transcript) {
+      if (!transcript) { notify('idle'); return; }
+      notify('thinking', transcript);
+      
+      JF.askCoachAI(transcript, lang, appName, function(err, response) {
+        if (!response) { notify('idle'); return; }
+        notify('speaking', response);
+        JF.speak(response, lang, function() {
+          notify('idle');
+        });
+      });
+    }, function(error) {
+      if (error === 'not-allowed') {
+        notify('denied');
+      } else {
+        notify('idle');
+      }
+    });
+  };
+
+  /* Voice chat button HTML — the main conversational mic button */
+  JF.voiceChatButtonHtml = function(lang, accentColor) {
+    if (!JF.canListen() || !JF.canSpeak()) return '';
+    var color = accentColor || '#6d5bb5';
+    var label = lang === 'en' ? 'Talk to your coach' : 'Habla con tu coach';
+    var sub = lang === 'en' ? 'Tap the mic and speak' : 'Toca el mic y habla';
+    return '<div id="jiVoiceChatWrap" style="border:1.5px solid ' + color + '22;' +
+      'background:linear-gradient(135deg,' + color + '08,' + color + '04);border-radius:22px;' +
+      'padding:18px;margin-bottom:18px;text-align:center">' +
+      '<div style="font:600 12px Inter,system-ui,sans-serif;color:#242029;margin-bottom:4px">' + label + '</div>' +
+      '<div id="jiVCStatus" style="font:400 11px Inter,system-ui,sans-serif;color:#8a8296;margin-bottom:14px">' + sub + '</div>' +
+      '<button id="jiVCMicBtn" class="tapfx" style="cursor:pointer;border:0;width:64px;height:64px;border-radius:50%;' +
+        'background:linear-gradient(135deg,' + color + ',' + color + 'cc);' +
+        'color:#fff;font-size:26px;box-shadow:0 12px 30px -8px ' + color + '88;' +
+        'display:inline-grid;place-items:center;transition:transform .2s,box-shadow .2s">' +
+        '\ud83c\udfa4' +
+      '</button>' +
+      '<div id="jiVCTranscript" style="display:none;margin-top:14px;font:italic 400 13px Newsreader,serif;' +
+        'color:#242029;line-height:1.5;padding:12px 16px;background:rgba(45,38,58,.04);border-radius:14px"></div>' +
+      '<div id="jiVCResponse" style="display:none;margin-top:10px;font:400 13px Inter,system-ui,sans-serif;' +
+        'color:#242029;line-height:1.6;padding:14px 16px;background:linear-gradient(135deg,' + color + '08,' + color + '04);' +
+        'border-radius:14px;border:1px solid ' + color + '18;text-align:left"></div>' +
+    '</div>';
+  };
+
+  /* Wire up voice chat button */
+  JF.initVoiceChat = function(lang, appName, accentColor) {
+    var btn = document.getElementById('jiVCMicBtn');
+    if (!btn) return;
+    var color = accentColor || '#6d5bb5';
+
+    btn.addEventListener('click', function() {
+      var vcs = JF._voiceChatState;
+      if (vcs.listening) {
+        JF.stopListening();
+        return;
+      }
+
+      JF.voiceChat(lang, appName, function(state, data) {
+        var status = document.getElementById('jiVCStatus');
+        var transcript = document.getElementById('jiVCTranscript');
+        var response = document.getElementById('jiVCResponse');
+
+        if (state === 'listening') {
+          btn.style.transform = 'scale(1.15)';
+          btn.style.boxShadow = '0 0 0 8px ' + color + '22, 0 12px 30px -8px ' + color + '88';
+          btn.textContent = '\ud83d\udd34';
+          if (status) status.textContent = lang === 'en' ? 'Listening... speak now' : 'Escuchando... habla ahora';
+          if (transcript) transcript.style.display = 'none';
+          if (response) response.style.display = 'none';
+        }
+        else if (state === 'thinking') {
+          btn.style.transform = 'scale(1)';
+          btn.style.boxShadow = '0 12px 30px -8px ' + color + '88';
+          btn.textContent = '\u23f3';
+          if (status) status.textContent = lang === 'en' ? 'Thinking...' : 'Pensando...';
+          if (transcript) { transcript.style.display = 'block'; transcript.textContent = '\u201c' + data + '\u201d'; }
+        }
+        else if (state === 'speaking') {
+          btn.textContent = '\ud83d\udde3\ufe0f';
+          if (status) status.textContent = lang === 'en' ? 'Coach is speaking...' : 'El coach est\u00e1 hablando...';
+          if (response) { response.style.display = 'block'; response.textContent = data; }
+        }
+        else if (state === 'denied') {
+          btn.textContent = '\ud83c\udfa4';
+          btn.style.transform = 'scale(1)';
+          btn.style.boxShadow = '0 12px 30px -8px ' + color + '88';
+          if (status) status.textContent = lang === 'en'
+            ? 'Microphone access denied. Check your browser settings.'
+            : 'Acceso al micr\u00f3fono denegado. Revisa la configuraci\u00f3n de tu navegador.';
+        }
+        else { /* idle */
+          btn.textContent = '\ud83c\udfa4';
+          btn.style.transform = 'scale(1)';
+          btn.style.boxShadow = '0 12px 30px -8px ' + color + '88';
+          if (status) status.textContent = lang === 'en' ? 'Tap the mic and speak' : 'Toca el mic y habla';
+        }
+      });
+    });
+  };
+
 })(window);

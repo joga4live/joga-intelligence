@@ -110,6 +110,7 @@
 
 
         <!-- voice coach + badges (injected by JS) -->
+        <div id="jiVChatWrap_subment"></div>
         <div id="jiVoiceWrap_subment"></div>
         <div id="jiBadgeWrap_subment"></div>
 
@@ -436,6 +437,11 @@ class Component extends DCLogic {
             });
           }
         });
+      }
+      var vcw = document.getElementById('jiVChatWrap_subment');
+      if (vcw && !vcw.hasChildNodes()) {
+        vcw.innerHTML = window.jogaFeatures.voiceChatButtonHtml(L, '#6d5bb5');
+        window.jogaFeatures.initVoiceChat(L, 'jogamind', '#6d5bb5');
       }
       var bw = document.getElementById('jiBadgeWrap_subment');
       if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('subment', L, '#6d5bb5');

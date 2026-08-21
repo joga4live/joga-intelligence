@@ -110,6 +110,7 @@
 
 
         <!-- voice coach + badges (injected by JS) -->
+        <div id="jiVChatWrap_jogatime"></div>
         <div id="jiVoiceWrap_jogatime"></div>
         <div id="jiBadgeWrap_jogatime"></div>
 
@@ -432,6 +433,11 @@ class Component extends DCLogic {
             });
           }
         });
+      }
+      var vcw = document.getElementById('jiVChatWrap_jogatime');
+      if (vcw && !vcw.hasChildNodes()) {
+        vcw.innerHTML = window.jogaFeatures.voiceChatButtonHtml(L, '#b8923a');
+        window.jogaFeatures.initVoiceChat(L, 'jogatime', '#b8923a');
       }
       var bw = document.getElementById('jiBadgeWrap_jogatime');
       if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('jogatime', L, '#b8923a');

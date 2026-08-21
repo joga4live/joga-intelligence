@@ -87,6 +87,7 @@
         </div>
 
         <!-- practice of the day -->
+        <div id="jfVoiceChat"></div>
         <div id="jfEmergency"></div>
         <div id="jfVoiceCoach"></div>
         <div id="jfMastery"></div>
@@ -512,6 +513,12 @@
       /* Mastery badge */
       var mbWrap = $("jfMastery");
       if (mbWrap) mbWrap.innerHTML = JF.masteryBadgeHtml('jogaflow', lang, 'var(--flow)');
+      /* Voice chat bot */
+      var vchatWrap = $("jfVoiceChat");
+      if (vchatWrap) {
+        vchatWrap.innerHTML = JF.voiceChatButtonHtml(lang, '#2f6ca0');
+        JF.initVoiceChat(lang, 'jogabody', '#2f6ca0');
+      }
       /* Badges */
       var bgWrap = $("jfBadges");
       if (bgWrap) bgWrap.innerHTML = JF.badgesHtml('jogaflow', lang, 'var(--flow)');

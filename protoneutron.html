@@ -111,6 +111,7 @@
 
 
         <!-- voice coach + badges (injected by JS) -->
+        <div id="jiVChatWrap_protoneutron"></div>
         <div id="jiVoiceWrap_protoneutron"></div>
         <div id="jiBadgeWrap_protoneutron"></div>
 
@@ -438,6 +439,11 @@ class Component extends DCLogic {
             });
           }
         });
+      }
+      var vcw = document.getElementById('jiVChatWrap_protoneutron');
+      if (vcw && !vcw.hasChildNodes()) {
+        vcw.innerHTML = window.jogaFeatures.voiceChatButtonHtml(L, '#3a8fb0');
+        window.jogaFeatures.initVoiceChat(L, 'jogabit', '#3a8fb0');
       }
       var bw = document.getElementById('jiBadgeWrap_protoneutron');
       if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('protoneutron', L, '#3a8fb0');
