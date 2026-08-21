@@ -231,7 +231,7 @@
           <div style="background:rgba(45,38,58,.07);border:1px solid rgba(45,38,58,.1);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:#F5F5F7">{{ iaGreeting }}</div>
         </div>
         <textarea value="{{ iaInput }}" onChange="{{ onIaInput }}" placeholder="{{ iaPlaceholder }}" style="width:100%;min-height:120px;resize:vertical;box-sizing:border-box;background:rgba(45,38,58,.06);border:1px solid rgba(45,38,58,.1);border-radius:14px;padding:14px;color:#F5F5F7;font:400 13.5px Inter;line-height:1.5;outline:none"></textarea>
-        <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#ffffff;background:linear-gradient(135deg,#30D158,#30D158)">{{ iaBtnLabel }}</button>
+        <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#0A1F12;background:linear-gradient(135deg,#30D158,#30D158)">{{ iaBtnLabel }}</button>
         <sc-if value="{{ iaResult }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:18px;border:1px solid rgba(111,180,135,.3);border-radius:16px;padding:16px;background:rgba(80,70,24,.25)">
           <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#F5F5F7;white-space:pre-wrap">{{ iaResult }}</div>
@@ -258,7 +258,7 @@
       <!-- about-overlay -->
       <sc-if value="{{ aboutOpen }}" hint-placeholder-val="{{ false }}">
       <div onClick="{{ closeAbout }}" style="position:absolute;inset:0;z-index:85;background:rgba(8,6,12,.72);backdrop-filter:blur(6px);display:flex;align-items:flex-end">
-        <div style="width:100%;background:linear-gradient(180deg,#ffffff,#f4f1f8);border-radius:28px 28px 0 0;border-top:1px solid rgba(45,38,58,.1);padding:26px 24px 34px;box-shadow:0 -20px 60px -20px rgba(0,0,0,.9)">
+        <div style="width:100%;background:linear-gradient(180deg,#0C2416,#0A1F12);border-radius:28px 28px 0 0;border-top:1px solid rgba(48,209,88,.2);padding:26px 24px 34px;box-shadow:0 -20px 60px -20px rgba(0,0,0,.9)">
           <div style="width:42px;height:4px;border-radius:4px;background:rgba(45,38,58,.14);margin:0 auto 20px"></div>
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
             <div style="flex:0 0 auto;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-family:Newsreader,serif;font-weight:600;font-size:16px;color:#F5F5F7;background:#30D158">10♠</div>
@@ -278,7 +278,7 @@
       </sc-if>
 
       <!-- ============ BOTTOM NAV ============ -->
-      <div style="position:absolute;bottom:0;left:0;right:0;z-index:30;padding:12px 30px 26px;background:linear-gradient(to top,#fbf5ea 70%,transparent);display:flex;justify-content:space-between">
+      <div style="position:absolute;bottom:0;left:0;right:0;z-index:30;padding:12px 30px 26px;background:linear-gradient(to top,#0A1F12 70%,transparent);display:flex;justify-content:space-between">
         <sc-for list="{{ nav }}" as="n" hint-placeholder-count="3">
           <button onClick="{{ n.go }}" style="appearance:none;border:0;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;padding:4px 18px">
             <span style="font-size:19px;{{ n.iconStyle }}">{{ n.icon }}</span>
@@ -316,7 +316,7 @@
         <!-- controls -->
         <div style="display:flex;align-items:center;gap:30px;margin-top:24px">
           <span style="color:#8E8E93;font-size:22px">⟲</span>
-          <button onClick="{{ togglePlay }}" style="appearance:none;border:0;cursor:pointer;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#30D158,#30D158);color:#ffffff;font-size:26px;display:grid;place-items:center;box-shadow:0 16px 40px -12px rgba(79,158,106,.9)">{{ playIcon }}</button>
+          <button onClick="{{ togglePlay }}" style="appearance:none;border:0;cursor:pointer;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#30D158,#1A8A3A);color:#F5F5F7;font-size:26px;display:grid;place-items:center;box-shadow:0 16px 40px -12px rgba(79,158,106,.9)">{{ playIcon }}</button>
           <span style="color:#8E8E93;font-size:22px">✦</span>
         </div>
       </div>
@@ -341,7 +341,7 @@
 
       <!-- completion toast -->
       <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
-      <div style="position:absolute;bottom:120px;left:50%;transform:translateX(-50%);z-index:90;background:linear-gradient(135deg,#ffffff,#ffffff);border:1px solid rgba(111,180,135,.5);color:#F5F5F7;padding:14px 22px;border-radius:16px;font-family:Newsreader,serif;font-size:14px;box-shadow:0 20px 50px -16px rgba(0,0,0,.8);white-space:nowrap">✦ {{ toastLabel }} <span style="color:#b8923a;font-weight:600">{{ streak }}</span></div>
+      <div style="position:absolute;bottom:120px;left:50%;transform:translateX(-50%);z-index:90;background:linear-gradient(135deg,#0C2416,#0A1F12);border:1px solid rgba(48,209,88,.5);color:#F5F5F7;padding:14px 22px;border-radius:16px;font-family:Newsreader,serif;font-size:14px;box-shadow:0 20px 50px -16px rgba(0,0,0,.8);white-space:nowrap">✦ {{ toastLabel }} <span style="color:#30D158;font-weight:600">{{ streak }}</span></div>
       </sc-if>
 
     </div>

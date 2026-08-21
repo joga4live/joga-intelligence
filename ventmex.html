@@ -229,7 +229,7 @@
                   <div style="background:rgba(255,69,58,.07);border:1px solid rgba(255,69,58,.1);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:#F5F5F7">{{ iaGreeting }}</div>
                 </div>
         <textarea value="{{ iaInput }}" onChange="{{ onIaInput }}" placeholder="{{ iaPlaceholder }}" style="width:100%;min-height:120px;resize:vertical;box-sizing:border-box;background:rgba(255,69,58,.06);border:1px solid rgba(255,69,58,.1);border-radius:14px;padding:14px;color:#F5F5F7;font:400 13.5px Inter;line-height:1.5;outline:none;caret-color:#FF453A"></textarea>
-        <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#ffffff;background:linear-gradient(135deg,#FF453A,#FF453A)">{{ iaBtnLabel }}</button>
+        <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#F5F5F7;background:linear-gradient(135deg,#FF453A,#CC2E24)">{{ iaBtnLabel }}</button>
         <sc-if value="{{ iaResult }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:18px;border:1px solid rgba(255,69,58,.25);border-radius:16px;padding:16px;background:rgba(255,69,58,.1)">
           <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#F5F5F7;white-space:pre-wrap">{{ iaResult }}</div>
