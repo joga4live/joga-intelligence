@@ -12,6 +12,10 @@
     {
       hash: "1569b405a3d87c672b34ffe27e9c520a287122da200ab0e65b1d8d93f7174ba1",
       apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex"]
+    },
+    {
+      hash: "b48fdc88c0f4a1c96c1f05a924e18e85af5e2a1fa539039d5e9abf7b52af6eca",
+      apps: ["subment", "jogatime", "protoneutron", "pasley", "monexium", "ventmex", "jogaflow"]
     }
   ];
 
