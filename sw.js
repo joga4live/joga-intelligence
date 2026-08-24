@@ -4,7 +4,7 @@
    - Estáticos mismo origen y fuentes: stale-while-revalidate (rápido + se actualiza solo).
    Sube CACHE_VERSION cada vez que quieras forzar refresco tras un deploy. */
 
-const CACHE_VERSION = 'joga-v85';
+const CACHE_VERSION = 'joga-v86';
 const CACHE = `joga-cache-${CACHE_VERSION}`;
 
 /* Shell mínimo que se precachea al instalar.
@@ -35,6 +35,8 @@ const CORE = [
   './assets/joga-ad-spot-en.en.vtt',
   './joga-emblem.svg',
   './joga-lockup.svg',
+  './joga-robot-poster.jpg',
+  './joga-robot-intro.mp4',
   './manifest.webmanifest',
   './icon-192.png',
   './icon-512.png',

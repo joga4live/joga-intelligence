@@ -702,8 +702,28 @@
 #jbw-mute{position:absolute;top:18px;left:18px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#cfc6b4;font-size:15px;cursor:pointer;display:grid;place-items:center;z-index:5}
 .jbw-brand{display:flex;align-items:center;gap:10px;margin-bottom:26px;opacity:.9}
 .jbw-brand small{font:600 8px/1 system-ui;letter-spacing:.34em;text-transform:uppercase;color:#8a8276}
-.jbw-orb{position:relative;width:240px;height:240px;margin-bottom:28px;overflow:hidden;border-radius:50%;animation:jbwFloat 6s ease-in-out infinite;cursor:pointer}
-.jbw-orb-video{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(2);transform-origin:center;width:240px;height:240px;border-radius:50%;object-fit:cover;pointer-events:none}
+/* El robot de Joga (joga-robot-poster.jpg + joga-robot-intro.mp4) reemplaza la
+   esfera vieja (joga-welcome-orb.mp4 se queda sin usar en el repo, no se borra).
+   El poster aparece al instante; el video (mudo, solo animación) toma el
+   relevo si carga a tiempo. SIEMPRE object-fit:contain, NUNCA cover: el texto
+   "JOGA INTELLIGENCE" pintado dentro de la imagen ocupa 23%-78% del ancho y
+   cualquier recorte lateral borra la J. Ver plan-orbe-21ago.md, Parte C.
+   The robot replaces the old orb (joga-welcome-orb.mp4 stays in the repo,
+   unused, not deleted). Poster shows instantly; the muted video (visual
+   only) takes over once it can play. ALWAYS object-fit:contain, NEVER cover:
+   the "JOGA INTELLIGENCE" text painted inside the image spans 23%-78% of the
+   width and any side crop erases the J. */
+.jbw-orb{position:relative;width:100%;max-width:320px;aspect-ratio:1/1;margin-bottom:22px;flex:none;animation:jbwFloat 6s ease-in-out infinite;cursor:pointer}
+.jbw-orb-poster,.jbw-orb-video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:contain;border-radius:26px;pointer-events:none}
+.jbw-orb-video{opacity:0;transition:opacity .9s ease}
+.jbw-orb-video.jbw-viva{opacity:1}
+.jbw-orb-poster.jbw-oculto{opacity:0;transition:opacity .9s ease}
+/* El visor late con una capa aparte (mix-blend-mode) porque el texto ya viene
+   pintado dentro de la imagen y no se puede animar solo. José: "tiene que
+   parpadear, live". / The visor pulses via a separate overlay layer because
+   the text is baked into the image and can't be animated on its own. */
+.jbw-orb-visor{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:76%;height:15%;border-radius:50%;pointer-events:none;background:radial-gradient(ellipse at center,rgba(255,40,70,.55) 0%,rgba(255,40,70,.2) 45%,rgba(255,40,70,0) 72%);mix-blend-mode:screen;animation:jbwVisor 2.6s ease-in-out infinite}
+@keyframes jbwVisor{0%,100%{opacity:.3;transform:translate(-50%,-50%) scale(.96)}50%{opacity:1;transform:translate(-50%,-50%) scale(1.05)}}
 .jbw-speech{min-height:120px;max-width:600px;margin-bottom:6px;font-family:var(--serif);font-weight:500;font-size:clamp(20px,3.4vw,27px);line-height:1.42;color:var(--bone,#F2ECDD)}
 .jbw-caret{display:inline-block;margin-left:1px;color:#9a6cf6;animation:jbwCaret 1s steps(1) infinite}
 .jbw-paths{width:100%}
@@ -745,6 +765,9 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
   .jbw-orb{animation:jbwFloat 6s ease-in-out infinite!important}
   .jbw-caret{animation:jbwCaret 1s steps(1) infinite!important}
   .jbw-hint{animation:jbwHint 2.2s ease-in-out infinite!important}
+  /* Visor encendido pero quieto, no parpadeando / lit but still, not pulsing */
+  .jbw-orb-visor{animation:none;opacity:.7}
+  .jbw-orb-poster,.jbw-orb-video{transition:none}
 }
 </style>
 </head>
@@ -784,10 +807,12 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
   <section id="welcome">
     <button id="jbw-mute" aria-label="Silenciar / Mute">🔊</button>
     <div class="jbw-brand"><svg class="joga-emblem" viewBox="0 0 120 120" fill="none" aria-hidden="true" style="width:20px;height:20px;flex-shrink:0;color:var(--gold)"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg><small>JOGA INTELLIGENCE</small></div>
-    <div class="jbw-orb" id="jbw-orb" title="Toca para escuchar a Joga">
-      <video class="jbw-orb-video" src="joga-welcome-orb.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+    <div class="jbw-orb" id="jbw-orb" title="Toca para hablar con Joga">
+      <img class="jbw-orb-poster" id="jbw-orb-poster" src="joga-robot-poster.jpg" alt="Joga Intelligence" width="1080" height="1080">
+      <video class="jbw-orb-video" id="jbw-orb-video" src="joga-robot-intro.mp4" muted loop playsinline preload="auto" aria-hidden="true"></video>
+      <div class="jbw-orb-visor" aria-hidden="true"></div>
     </div>
-    <button class="jbw-hint" id="jbw-hint">▶ Presiona para escuchar a Joga</button>
+    <button class="jbw-hint" id="jbw-hint">▶ Toca para hablar con Joga</button>
     <div class="jbw-speech"><span id="jbw-typed"></span><span class="jbw-caret" id="jbw-caret">▍</span></div>
     <div class="jbw-paths" id="jbw-paths" hidden>
       <div class="jbw-choose" id="jbw-choose">Tres caminos para entrar</div>
@@ -1942,6 +1967,43 @@ Lo que dijo la persona: «${text}»`;
     rez('es','voz-bienvenida.mp3'); rez('en','voz-bienvenida-en.mp3');
     voice.addEventListener('ended', finish);
   }catch(e){}
+  /* El robot (joga-robot-poster.jpg + joga-robot-intro.mp4) reemplaza la
+     esfera. El poster ya se ve al cargar la página (está en el HTML); el
+     video mudo toma el relevo solo si puede reproducirse. Esto se intenta
+     SOLO la primera visita — de ahí en más nos quedamos con el poster fijo +
+     el visor latiendo (CSS), sin volver a esperar ni recargar el clip. Tocar
+     para hablar con Joga (go(), abajo) funciona igual sin importar en qué
+     quedó el video: ver/tocar nunca bloquea al otro.
+     The robot replaces the old orb. The poster is already visible on load
+     (it's in the HTML); the muted video takes over only if it can play.
+     Only attempted on the very first visit — after that we stay on the
+     static poster + pulsing visor (CSS), no wait, no reloading the clip.
+     Tapping to talk to Joga (go(), below) works the same regardless of the
+     video's state: watching never blocks tapping. */
+  var orbPoster=document.getElementById('jbw-orb-poster'), orbVideo=document.getElementById('jbw-orb-video');
+  var robotVisto; try{ robotVisto=localStorage.getItem('jiRobotIntro')==='1'; }catch(e){ robotVisto=false; }
+  if(orbVideo && !robotVisto){
+    var robotArrancado=false;
+    var arrancarRobot=function(){
+      if(robotArrancado) return;
+      var p=orbVideo.play();
+      if(!p||!p.then) return;
+      p.then(function(){
+        robotArrancado=true;
+        orbVideo.classList.add('jbw-viva');
+        if(orbPoster) orbPoster.classList.add('jbw-oculto');
+        try{ localStorage.setItem('jiRobotIntro','1'); }catch(e){}
+      }).catch(function(){ /* se queda el poster, es un final aceptable / staying on the poster is fine */ });
+    };
+    // OJO: si 'canplay' ya pasó antes de llegar aquí, el evento nunca se
+    // vuelve a disparar — hay que preguntarle también en este momento, o el
+    // robot se queda quieto para siempre. / if 'canplay' already fired before
+    // we got here it never fires again — ask again right now too, or the
+    // robot stays frozen forever.
+    orbVideo.addEventListener('canplay', arrancarRobot);
+    orbVideo.addEventListener('loadeddata', arrancarRobot);
+    if (orbVideo.readyState >= 3) arrancarRobot();
+  }
   function setMuteIcon(){ muteBtn.textContent=muted?'\ud83d\udd07':'\ud83d\udd0a'; }
   function finish(){ if(raf)cancelAnimationFrame(raf); var Lg=lang(); typedEl.textContent=SCRIPTS[Lg]; if(!done){ done=true; caret.style.display='none'; paths.hidden=false; } }
   function start(){ if(raf)cancelAnimationFrame(raf); var Lg=lang(), full=SCRIPTS[Lg]; done=false; caret.style.display=''; paths.hidden=true; typedEl.textContent=''; buildCards();
@@ -1953,7 +2015,7 @@ Lo que dijo la persona: «${text}»`;
       if(music && !muted && d>0){ var rem=d-(voice?voice.currentTime:el); music.volume=rem<5?Math.max(0,(rem/5)*BASE):BASE; }
       if(frac>=1){ finish(); return; } raf=requestAnimationFrame(tick); })();
   }
-  function setHint(){ if(!hint) return; var Lg=lang(); hint.textContent='▶ '+(Lg==='en'?'Press to hear Joga':'Presiona para escuchar a Joga'); }
+  function setHint(){ if(!hint) return; var Lg=lang(); hint.textContent='▶ '+(Lg==='en'?'Tap to talk to Joga':'Toca para hablar con Joga'); }
   var backBtn=document.getElementById('jbw-back'), backT=document.getElementById('jbw-back-t');
   function setBackLabel(){ if(backT) backT.textContent=(lang()==='en'?'Main menu':'Menú principal'); }
   function go(){ if(hint) hint.style.display='none'; start(); }
