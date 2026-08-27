@@ -48,18 +48,18 @@
       '<div style="background:#fff;border-radius:28px;padding:36px 28px;max-width:320px;width:100%;' +
       'text-align:center;box-shadow:0 40px 80px -20px rgba(0,0,0,.5);animation:jiScaleIn .4s ease">' +
         '<div style="font-size:42px;margin-bottom:16px">\u2728</div>' +
-        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:22px;color:#FFFCF0;margin-bottom:6px">' + L.title + '</div>' +
-        '<div style="font-size:13px;color:#B7B2C0;margin-bottom:22px">' + L.sub + '</div>' +
+        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:22px;color:#242029;margin-bottom:6px">' + L.title + '</div>' +
+        '<div style="font-size:13px;color:#797086;margin-bottom:22px">' + L.sub + '</div>' +
         '<input id="jiNameInput" type="text" placeholder="' + L.placeholder + '" maxlength="20" autocomplete="off" ' +
-          'style="width:100%;box-sizing:border-box;border:1.5px solid rgba(255,255,255,.15);border-radius:14px;' +
-          'padding:14px 16px;font:500 15px Inter,system-ui,sans-serif;color:#FFFCF0;outline:none;' +
-          'text-align:center;background:rgba(255,255,255,.04)">' +
+          'style="width:100%;box-sizing:border-box;border:1.5px solid rgba(45,38,58,.15);border-radius:14px;' +
+          'padding:14px 16px;font:500 15px Inter,system-ui,sans-serif;color:#242029;outline:none;' +
+          'text-align:center;background:rgba(45,38,58,.04)">' +
         '<button id="jiNameBtn" style="width:100%;margin-top:14px;border:0;cursor:pointer;border-radius:999px;' +
-          'padding:15px;font:600 14px Inter,system-ui,sans-serif;color:#111;' +
-          'background:linear-gradient(135deg,#b8924a,#d8b06a);box-shadow:0 12px 28px -10px rgba(184,146,74,.7)">' +
+          'padding:15px;font:600 14px Inter,system-ui,sans-serif;color:#fff;' +
+          'background:linear-gradient(135deg,#6d5bb5,#8a78cc);box-shadow:0 12px 28px -10px rgba(184,146,74,.7)">' +
           L.btn + '</button>' +
         '<button id="jiNameSkip" style="border:0;background:none;cursor:pointer;margin-top:12px;' +
-          'font:500 12px Inter,system-ui,sans-serif;color:#B7B2C0;padding:6px 12px">' + L.skip + '</button>' +
+          'font:500 12px Inter,system-ui,sans-serif;color:#797086;padding:6px 12px">' + L.skip + '</button>' +
       '</div>' +
     '</div>';
   };
@@ -210,19 +210,19 @@
       : (lang === 'en' ? 'Maximum level reached!' : '\u00a1Nivel m\u00e1ximo alcanzado!');
     var color = accentColor || '#b8924a';
 
-    return '<div style="border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:14px 16px;' +
+    return '<div style="border:1px solid rgba(45,38,58,.12);border-radius:18px;padding:14px 16px;' +
       'background:linear-gradient(160deg,rgba(255,255,255,.9),rgba(245,240,255,.6));margin-bottom:18px">' +
       '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">' +
         '<span style="font-size:22px">' + d.level.emoji + '</span>' +
         '<div>' +
-          '<div style="font:600 14px Inter,system-ui,sans-serif;color:#FFFCF0">' + label + '</div>' +
-          '<div style="font:400 13px Inter,system-ui,sans-serif;color:#B7B2C0">' + d.total + (lang === 'en' ? ' practices' : ' pr\u00e1cticas') + '</div>' +
+          '<div style="font:600 14px Inter,system-ui,sans-serif;color:#242029">' + label + '</div>' +
+          '<div style="font:400 13px Inter,system-ui,sans-serif;color:#797086">' + d.total + (lang === 'en' ? ' practices' : ' pr\u00e1cticas') + '</div>' +
         '</div>' +
       '</div>' +
-      '<div style="height:6px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-bottom:6px">' +
+      '<div style="height:6px;background:rgba(45,38,58,.08);border-radius:3px;overflow:hidden;margin-bottom:6px">' +
         '<div style="height:100%;width:' + pct + '%;background:' + color + ';border-radius:3px;transition:width .5s ease"></div>' +
       '</div>' +
-      '<div style="font:400 13px Inter,system-ui,sans-serif;color:#B7B2C0">' + nextText + '</div>' +
+      '<div style="font:400 13px Inter,system-ui,sans-serif;color:#797086">' + nextText + '</div>' +
     '</div>';
   };
 
@@ -335,10 +335,10 @@
         'background:' + color + ';opacity:' + opacity + '"></div>';
     });
 
-    return '<div style="border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:14px 16px;' +
-      'background:rgba(255,255,255,.06);margin-bottom:18px">' +
-      '<div style="font:600 11px Inter,system-ui,sans-serif;color:#FFFCF0;margin-bottom:4px">' + title + '</div>' +
-      '<div style="font:400 10px Inter,system-ui,sans-serif;color:#B7B2C0;margin-bottom:10px">' + sub + '</div>' +
+    return '<div style="border:1px solid rgba(45,38,58,.1);border-radius:18px;padding:14px 16px;' +
+      'background:rgba(255,255,255,.6);margin-bottom:18px">' +
+      '<div style="font:600 11px Inter,system-ui,sans-serif;color:#242029;margin-bottom:4px">' + title + '</div>' +
+      '<div style="font:400 10px Inter,system-ui,sans-serif;color:#797086;margin-bottom:10px">' + sub + '</div>' +
       '<div style="display:flex;flex-wrap:wrap;gap:3px">' + cells + '</div>' +
     '</div>';
   };
@@ -383,8 +383,8 @@
     JF.STRUGGLES.forEach(function(s) {
       var label = lang === 'en' ? s.en : s.es;
       options += '<button data-struggle="' + s.key + '" style="width:100%;text-align:left;cursor:pointer;' +
-        'border:1.5px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);border-radius:14px;' +
-        'padding:13px 16px;font:500 14px Inter,system-ui,sans-serif;color:#FFFCF0;display:flex;' +
+        'border:1.5px solid rgba(45,38,58,.12);background:rgba(45,38,58,.03);border-radius:14px;' +
+        'padding:13px 16px;font:500 14px Inter,system-ui,sans-serif;color:#242029;display:flex;' +
         'align-items:center;gap:12px;transition:all .2s ease">' +
         '<span style="font-size:20px">' + s.emoji + '</span>' + label + '</button>';
     });
@@ -397,11 +397,11 @@
       '<div style="background:#fff;border-radius:28px;padding:32px 24px;max-width:340px;width:100%;' +
       'text-align:center;box-shadow:0 40px 80px -20px rgba(0,0,0,.5);animation:jiScaleIn .4s ease;position:relative">' +
         '<button id="jiQuizClose" aria-label="' + L.close + '" style="position:absolute;top:2px;right:2px;' +
-        'width:44px;height:44px;border:0;background:none;cursor:pointer;font-size:20px;color:#B7B2C0;' +
+        'width:44px;height:44px;border:0;background:none;cursor:pointer;font-size:20px;color:#797086;' +
         'display:flex;align-items:center;justify-content:center;line-height:1">\u00d7</button>' +
         '<div style="font-size:38px;margin-bottom:14px">\ud83c\udfaf</div>' +
-        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:20px;color:#FFFCF0;margin-bottom:4px">' + L.title + '</div>' +
-        '<div style="font-size:12px;color:#B7B2C0;margin-bottom:18px">' + L.sub + '</div>' +
+        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:20px;color:#242029;margin-bottom:4px">' + L.title + '</div>' +
+        '<div style="font-size:12px;color:#797086;margin-bottom:18px">' + L.sub + '</div>' +
         '<div style="display:flex;flex-direction:column;gap:8px">' + options + '</div>' +
       '</div>' +
     '</div>';
@@ -441,8 +441,8 @@
           if (onDone) onDone(key);
         }, 300);
       });
-      b.addEventListener('mouseenter', function() { b.style.background = 'rgba(255,255,255,.06)'; });
-      b.addEventListener('mouseleave', function() { b.style.background = 'rgba(255,255,255,.03)'; });
+      b.addEventListener('mouseenter', function() { b.style.background = 'rgba(45,38,58,.06)'; });
+      b.addEventListener('mouseleave', function() { b.style.background = 'rgba(45,38,58,.03)'; });
     });
   };
 
@@ -486,10 +486,10 @@
     ];
     var emojiHtml = '';
     emojis.forEach(function(e) {
-      emojiHtml += '<button data-mood="' + e.val + '" style="flex:1;cursor:pointer;border:1.5px solid rgba(255,255,255,.1);' +
+      emojiHtml += '<button data-mood="' + e.val + '" style="flex:1;cursor:pointer;border:1.5px solid rgba(45,38,58,.1);' +
         'background:#fff;border-radius:14px;padding:10px 4px;text-align:center;transition:all .2s ease">' +
         '<div style="font-size:24px">' + e.icon + '</div>' +
-        '<div style="font:500 9px Inter,system-ui,sans-serif;color:#B7B2C0;margin-top:3px">' + e.label + '</div>' +
+        '<div style="font:500 9px Inter,system-ui,sans-serif;color:#797086;margin-top:3px">' + e.label + '</div>' +
       '</button>';
     });
     return '<div id="jiJournalModal" style="position:fixed;inset:0;z-index:9998;background:rgba(0,0,0,.55);' +
@@ -497,15 +497,15 @@
       'animation:jiFadeIn .3s ease">' +
       '<div style="background:#fff;border-radius:24px 24px 0 0;padding:28px 22px 34px;width:100%;max-width:400px;' +
       'box-shadow:0 -20px 60px -10px rgba(0,0,0,.3);animation:jiSlideUp .35s ease">' +
-        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:20px;color:#FFFCF0;margin-bottom:3px">' + L.title + '</div>' +
-        '<div style="font-size:12px;color:#B7B2C0;margin-bottom:16px">' + L.sub + '</div>' +
+        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:20px;color:#242029;margin-bottom:3px">' + L.title + '</div>' +
+        '<div style="font-size:12px;color:#797086;margin-bottom:16px">' + L.sub + '</div>' +
         '<div style="display:flex;gap:6px;margin-bottom:16px">' + emojiHtml + '</div>' +
         '<textarea id="jiJournalNote" placeholder="' + L.note + '" maxlength="200" style="width:100%;box-sizing:border-box;' +
-          'min-height:60px;resize:none;border:1.5px solid rgba(255,255,255,.12);border-radius:14px;padding:12px;' +
-          'font:400 13px Inter,system-ui,sans-serif;color:#FFFCF0;outline:none;background:rgba(255,255,255,.03)"></textarea>' +
+          'min-height:60px;resize:none;border:1.5px solid rgba(45,38,58,.12);border-radius:14px;padding:12px;' +
+          'font:400 13px Inter,system-ui,sans-serif;color:#242029;outline:none;background:rgba(45,38,58,.03)"></textarea>' +
         '<div style="display:flex;gap:10px;margin-top:14px">' +
-          '<button id="jiJournalSkip" style="flex:1;cursor:pointer;border:1.5px solid rgba(255,255,255,.12);' +
-            'background:#fff;border-radius:999px;padding:13px;font:600 13px Inter,system-ui,sans-serif;color:#B7B2C0">' + L.skip + '</button>' +
+          '<button id="jiJournalSkip" style="flex:1;cursor:pointer;border:1.5px solid rgba(45,38,58,.12);' +
+            'background:#fff;border-radius:999px;padding:13px;font:600 13px Inter,system-ui,sans-serif;color:#797086">' + L.skip + '</button>' +
           '<button id="jiJournalSave" style="flex:2;cursor:pointer;border:0;border-radius:999px;padding:13px;' +
             'font:600 13px Inter,system-ui,sans-serif;color:#fff;background:' + color + ';opacity:.4;pointer-events:none">' + L.save + '</button>' +
         '</div>' +
@@ -535,7 +535,7 @@
       b.addEventListener('click', function() {
         selectedMood = parseInt(b.getAttribute('data-mood'), 10);
         Array.prototype.forEach.call(moodBtns, function(ob) {
-          ob.style.border = '1.5px solid rgba(255,255,255,.1)';
+          ob.style.border = '1.5px solid rgba(45,38,58,.1)';
           ob.style.background = '#fff';
           ob.style.transform = 'scale(1)';
         });
@@ -634,11 +634,11 @@
     };
 
     if (total === 0) {
-      return '<div style="border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:20px;' +
-        'background:rgba(255,255,255,.06);margin-bottom:18px;text-align:center">' +
+      return '<div style="border:1px solid rgba(45,38,58,.1);border-radius:18px;padding:20px;' +
+        'background:rgba(255,255,255,.6);margin-bottom:18px;text-align:center">' +
         '<div style="font-size:28px;margin-bottom:8px">\ud83d\udcca</div>' +
-        '<div style="font:600 14px Inter,system-ui,sans-serif;color:#FFFCF0;margin-bottom:4px">' + L.title + '</div>' +
-        '<div style="font:400 12px Inter,system-ui,sans-serif;color:#B7B2C0">' + L.noData + '</div>' +
+        '<div style="font:600 14px Inter,system-ui,sans-serif;color:#242029;margin-bottom:4px">' + L.title + '</div>' +
+        '<div style="font:400 12px Inter,system-ui,sans-serif;color:#797086">' + L.noData + '</div>' +
       '</div>';
     }
 
@@ -646,35 +646,35 @@
     var moodText = journal ? (moodEmojis[Math.round(journal.avg)] + ' ' + journal.avg) : '—';
     var levelLabel = lang === 'en' ? mastery.level.en : mastery.level.es;
 
-    return '<div style="border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:16px;' +
-      'background:rgba(255,255,255,.06);margin-bottom:18px">' +
-      '<div style="font:600 13px Inter,system-ui,sans-serif;color:#FFFCF0;margin-bottom:14px">' + L.title + '</div>' +
+    return '<div style="border:1px solid rgba(45,38,58,.1);border-radius:18px;padding:16px;' +
+      'background:rgba(255,255,255,.6);margin-bottom:18px">' +
+      '<div style="font:600 13px Inter,system-ui,sans-serif;color:#242029;margin-bottom:14px">' + L.title + '</div>' +
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">' +
         /* Streak */
-        '<div style="background:rgba(255,255,255,.04);border-radius:14px;padding:12px;text-align:center">' +
+        '<div style="background:rgba(45,38,58,.04);border-radius:14px;padding:12px;text-align:center">' +
           '<div style="font:700 22px Inter,system-ui,sans-serif;color:' + color + '">' + streak + '</div>' +
-          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#B7B2C0">' + L.streak + '</div>' +
+          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#797086">' + L.streak + '</div>' +
         '</div>' +
         /* Practices this week */
-        '<div style="background:rgba(255,255,255,.04);border-radius:14px;padding:12px;text-align:center">' +
+        '<div style="background:rgba(45,38,58,.04);border-radius:14px;padding:12px;text-align:center">' +
           '<div style="font:700 22px Inter,system-ui,sans-serif;color:' + color + '">' + totalThisWeek + '</div>' +
-          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#B7B2C0">' + L.practices + '</div>' +
+          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#797086">' + L.practices + '</div>' +
         '</div>' +
         /* Active days */
-        '<div style="background:rgba(255,255,255,.04);border-radius:14px;padding:12px;text-align:center">' +
-          '<div style="font:700 22px Inter,system-ui,sans-serif;color:' + color + '">' + activeDays + ' <span style="font:400 14px Inter;color:#B7B2C0">' + L.of7 + '</span></div>' +
-          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#B7B2C0">' + L.activeDays + '</div>' +
+        '<div style="background:rgba(45,38,58,.04);border-radius:14px;padding:12px;text-align:center">' +
+          '<div style="font:700 22px Inter,system-ui,sans-serif;color:' + color + '">' + activeDays + ' <span style="font:400 14px Inter;color:#797086">' + L.of7 + '</span></div>' +
+          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#797086">' + L.activeDays + '</div>' +
         '</div>' +
         /* Feeling / Level */
-        '<div style="background:rgba(255,255,255,.04);border-radius:14px;padding:12px;text-align:center">' +
+        '<div style="background:rgba(45,38,58,.04);border-radius:14px;padding:12px;text-align:center">' +
           '<div style="font:700 22px Inter,system-ui,sans-serif;color:' + color + '">' + mastery.level.emoji + '</div>' +
-          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#B7B2C0">' + L.level + ': ' + levelLabel + '</div>' +
+          '<div style="font:500 10px Inter,system-ui,sans-serif;color:#797086">' + L.level + ': ' + levelLabel + '</div>' +
         '</div>' +
       '</div>' +
-      (journal ? '<div style="margin-top:10px;background:rgba(255,255,255,.04);border-radius:14px;padding:10px 12px;' +
+      (journal ? '<div style="margin-top:10px;background:rgba(45,38,58,.04);border-radius:14px;padding:10px 12px;' +
         'display:flex;align-items:center;justify-content:space-between">' +
-        '<span style="font:500 11px Inter,system-ui,sans-serif;color:#B7B2C0">' + L.feeling + '</span>' +
-        '<span style="font:600 14px Inter,system-ui,sans-serif;color:#FFFCF0">' + moodText + '</span>' +
+        '<span style="font:500 11px Inter,system-ui,sans-serif;color:#797086">' + L.feeling + '</span>' +
+        '<span style="font:600 14px Inter,system-ui,sans-serif;color:#242029">' + moodText + '</span>' +
       '</div>' : '') +
     '</div>';
   };
@@ -845,8 +845,8 @@
         'background:linear-gradient(135deg,' + color + ',' + color + 'cc);' +
         'display:grid;place-items:center;color:#fff;font-size:18px">\ud83c\udf99\ufe0f</div>' +
       '<div style="flex:1">' +
-        '<div style="font:600 13px Inter,system-ui,sans-serif;color:#FFFCF0">' + label + '</div>' +
-        '<div id="jiVoiceStatus" style="font:400 13px Inter,system-ui,sans-serif;color:#B7B2C0;margin-top:1px">' +
+        '<div style="font:600 13px Inter,system-ui,sans-serif;color:#242029">' + label + '</div>' +
+        '<div id="jiVoiceStatus" style="font:400 13px Inter,system-ui,sans-serif;color:#797086;margin-top:1px">' +
           (lang === 'en' ? 'Tap to hear your daily message' : 'Toca para escuchar tu mensaje diario') + '</div>' +
       '</div>' +
       '<span id="jiVoiceIcon" style="font-size:20px;color:' + color + '">\u25b6</span>' +
@@ -909,7 +909,7 @@
       'text-align:center;box-shadow:0 40px 80px -20px rgba(0,0,0,.5);animation:jiScaleIn .5s ease">' +
         '<div style="font-size:60px;margin-bottom:12px;animation:jiBadgePop .6s ease">' + badge.emoji + '</div>' +
         '<div style="font:600 11px Inter,system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:' + color + ';margin-bottom:8px">' + title + '</div>' +
-        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:22px;color:#FFFCF0;margin-bottom:20px">' + label + '</div>' +
+        '<div style="font-family:Newsreader,serif;font-weight:600;font-size:22px;color:#242029;margin-bottom:20px">' + label + '</div>' +
         '<button id="jiBadgeOk" style="width:100%;cursor:pointer;border:0;border-radius:999px;padding:14px;' +
           'font:600 14px Inter,system-ui,sans-serif;color:#fff;background:' + color + '">' + btn + '</button>' +
       '</div>' +
@@ -935,9 +935,9 @@
     var color = accentColor || '#b8924a';
     var title = lang === 'en' ? 'Achievements' : 'Logros';
 
-    var html = '<div style="border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:14px 16px;' +
-      'background:rgba(255,255,255,.06);margin-bottom:18px">' +
-      '<div style="font:600 11px Inter,system-ui,sans-serif;color:#FFFCF0;margin-bottom:10px">' + title + '</div>' +
+    var html = '<div style="border:1px solid rgba(45,38,58,.1);border-radius:18px;padding:14px 16px;' +
+      'background:rgba(255,255,255,.6);margin-bottom:18px">' +
+      '<div style="font:600 11px Inter,system-ui,sans-serif;color:#242029;margin-bottom:10px">' + title + '</div>' +
       '<div style="display:flex;gap:8px;flex-wrap:wrap">';
 
     earned.forEach(function(b) {
@@ -948,14 +948,14 @@
     if (next) {
       var remaining = next.threshold - total;
       html += '<div title="' + remaining + ' more" style="width:40px;height:40px;border-radius:12px;' +
-        'background:rgba(255,255,255,.06);display:grid;place-items:center;font-size:14px;color:#B7B2C0;' +
-        'border:1.5px dashed rgba(255,255,255,.15)">?</div>';
+        'background:rgba(45,38,58,.06);display:grid;place-items:center;font-size:14px;color:#797086;' +
+        'border:1.5px dashed rgba(45,38,58,.15)">?</div>';
     }
 
     html += '</div>';
     if (next) {
       var remaining2 = next.threshold - total;
-      html += '<div style="font:400 10px Inter,system-ui,sans-serif;color:#B7B2C0;margin-top:8px">' +
+      html += '<div style="font:400 10px Inter,system-ui,sans-serif;color:#797086;margin-top:8px">' +
         (lang==='en' ? remaining2 + ' more for ' + next.en : remaining2 + ' m\u00e1s para ' + next.es) + '</div>';
     }
     html += '</div>';
@@ -1015,7 +1015,7 @@
     var moodLine = '';
     if (journal && journal.entries.length) {
       var lastMood = journal.entries[journal.entries.length - 1].mood;
-      moodLine = '<div style="font:400 13px Inter;color:#B7B2C0;margin-bottom:8px">' +
+      moodLine = '<div style="font:400 13px Inter;color:#797086;margin-bottom:8px">' +
         L.mood + ' ' + moodEmojis[lastMood] + '</div>';
     }
 
@@ -1030,14 +1030,14 @@
         '<div style="font-family:Newsreader,serif;font-weight:500;font-size:24px;color:#fff;margin-bottom:6px">' + L.greeting + '</div>' +
         '<div style="font:400 13px Inter;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:24px">' + L.title + '</div>' +
         '<div style="display:flex;justify-content:center;gap:20px;margin-bottom:20px">' +
-          '<div style="text-align:center"><div style="font:700 28px Inter;color:#fff">' + todayCount + '</div><div style="font:400 10px Inter;color:rgba(255,255,255,.06)">' + L.practices + '</div></div>' +
-          '<div style="text-align:center"><div style="font-size:28px">' + mastery.level.emoji + '</div><div style="font:400 10px Inter;color:rgba(255,255,255,.06)">' + L.level + ': ' + levelLabel + '</div></div>' +
+          '<div style="text-align:center"><div style="font:700 28px Inter;color:#fff">' + todayCount + '</div><div style="font:400 10px Inter;color:rgba(255,255,255,.6)">' + L.practices + '</div></div>' +
+          '<div style="text-align:center"><div style="font-size:28px">' + mastery.level.emoji + '</div><div style="font:400 10px Inter;color:rgba(255,255,255,.6)">' + L.level + ': ' + levelLabel + '</div></div>' +
         '</div>' +
         moodLine +
         '<div style="font:italic 400 14px Newsreader,serif;color:rgba(255,255,255,.85);line-height:1.5;margin-bottom:24px;padding:0 10px">' +
           '"' + message + '"</div>' +
         '<button id="jiClosureBtn" style="cursor:pointer;border:0;border-radius:999px;padding:14px 40px;' +
-          'font:600 14px Inter;color:#FFFCF0;background:linear-gradient(135deg,#e8d5a0,#f0e6c4);' +
+          'font:600 14px Inter;color:#242029;background:linear-gradient(135deg,#e8d5a0,#f0e6c4);' +
           'box-shadow:0 12px 30px -10px rgba(232,213,160,.6)">' + L.close + '</button>' +
       '</div>' +
     '</div>';
@@ -1217,8 +1217,8 @@
     return '<div id="jiVoiceChatWrap" style="border:1.5px solid ' + color + '22;' +
       'background:linear-gradient(135deg,' + color + '08,' + color + '04);border-radius:22px;' +
       'padding:18px;margin-bottom:18px;text-align:center">' +
-      '<div style="font:600 12px Inter,system-ui,sans-serif;color:#FFFCF0;margin-bottom:4px">' + label + '</div>' +
-      '<div id="jiVCStatus" style="font:400 13px Inter,system-ui,sans-serif;color:#B7B2C0;margin-bottom:14px">' + sub + '</div>' +
+      '<div style="font:600 12px Inter,system-ui,sans-serif;color:#242029;margin-bottom:4px">' + label + '</div>' +
+      '<div id="jiVCStatus" style="font:400 13px Inter,system-ui,sans-serif;color:#797086;margin-bottom:14px">' + sub + '</div>' +
       '<button id="jiVCMicBtn" class="tapfx" style="cursor:pointer;border:0;width:64px;height:64px;border-radius:50%;' +
         'background:linear-gradient(135deg,' + color + ',' + color + 'cc);' +
         'color:#fff;font-size:26px;box-shadow:0 12px 30px -8px ' + color + '88;' +
@@ -1226,9 +1226,9 @@
         '\ud83c\udfa4' +
       '</button>' +
       '<div id="jiVCTranscript" style="display:none;margin-top:14px;font:italic 400 13px Newsreader,serif;' +
-        'color:#FFFCF0;line-height:1.5;padding:12px 16px;background:rgba(255,255,255,.04);border-radius:14px"></div>' +
+        'color:#242029;line-height:1.5;padding:12px 16px;background:rgba(45,38,58,.04);border-radius:14px"></div>' +
       '<div id="jiVCResponse" style="display:none;margin-top:10px;font:400 13px Inter,system-ui,sans-serif;' +
-        'color:#FFFCF0;line-height:1.6;padding:14px 16px;background:linear-gradient(135deg,' + color + '08,' + color + '04);' +
+        'color:#242029;line-height:1.6;padding:14px 16px;background:linear-gradient(135deg,' + color + '08,' + color + '04);' +
         'border-radius:14px;border:1px solid ' + color + '18;text-align:left"></div>' +
     '</div>';
   };

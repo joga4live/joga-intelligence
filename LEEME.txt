@@ -1,5 +1,5 @@
-JOGA — JOGAMIND CON EL NUEVO SISTEMA DE COLOR
-================================================
+JOGA — JOGAMIND DE VUELTA A CLARO
+===================================
 
 QUE SUBIR
 ---------
@@ -8,33 +8,16 @@ Dos archivos:
    subment.html
    joga-features.js
 
-Sube los DOS. joga-features.js es compartido por tus 7 apps, asi que
-al subirlo, TODAS se van a ver un poco distinto (los textos que se
-compartian ya no se veran negros sobre oscuro). Solo JogaMind (subment.html)
-tiene ya el color completo terminado.
+Sube los DOS juntos.
 
 QUE VAS A VER
 -------------
-JogaMind: fondo oscuro casi negro, con purpura como su color y el
-dorado como hilo que conecta con tu marca. El microfono, la voz del
-coach y "Tu semana" ya se leen bien.
+JogaMind ya no es oscura. Blanco, negro y dorado, la version que te
+gusto antes de la sugerencia de fondo oscuro. El microfono, "Habla con
+tu coach" y "Tu semana" se leen bien. La tarjeta de cita que antes era
+azul marino con letra negra (invisible) ahora es dorada clara.
 
-Las otras 6 apps: seguiran viendose como estaban en fondo, pero los
-textos que comparten con JogaMind (el mensaje de bienvenida, "Tu semana",
-etc.) ya no se veran negros. Es normal que se vean "a medio camino"
-hasta que le pongamos su color completo a cada una.
+joga-features.js es compartido: al subirlo, las otras 6 apps tambien
+mejoran un poco (un gris que no se leia bien, corregido en las 7).
 
-QUE SE MIDIO
-------------
-- 0 textos sin leerse (antes eran 8, incluyendo "Habla con tu coach"
-  y "Voz del coach", que estaban practicamente invisibles).
-- 0 textos con letra muy chica (antes eran 11).
-- Se encontro y corrigio un error de programacion viejo: el pie de
-  pagina (Hoy / IA / Practicas / Ideas) tenia un color mal escrito
-  que el navegador ignoraba, cayendo a negro. Ya se ve bien.
-
-SIGUIENTE PASO
---------------
-Si te gusta como quedo JogaMind, replicamos el mismo sistema a las
-otras 6 apps, cada una con su color: JogaBody turquesa, JogaTime azul,
-JogaBit cian, JogaCapital dorado, JogaVentix naranja, JogaPath indigo.
+Version del sistema: sin cambio, sigue en joga-v86.
