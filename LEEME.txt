@@ -1,44 +1,40 @@
-JOGA — ARREGLOS DEL 21 DE AGOSTO
-=================================
+JOGA — JOGAMIND CON EL NUEVO SISTEMA DE COLOR
+================================================
 
 QUE SUBIR
 ---------
-Sube los 12 archivos .html/.js de esta carpeta a la carpeta principal
-de tu repositorio, reemplazando los que ya estan.
+Dos archivos:
 
-NO subas este LEEME.txt.
+   subment.html
+   joga-features.js
 
-QUE MAS HAY QUE HACER, A MANO
-------------------------------
-En tu repositorio de GitHub, BORRA estos dos archivos:
+Sube los DOS. joga-features.js es compartido por tus 7 apps, asi que
+al subirlo, TODAS se van a ver un poco distinto (los textos que se
+compartian ya no se veran negros sobre oscuro). Solo JogaMind (subment.html)
+tiene ya el color completo terminado.
 
-   acceso.html
-   worker-temp.js
+QUE VAS A VER
+-------------
+JogaMind: fondo oscuro casi negro, con purpura como su color y el
+dorado como hilo que conecta con tu marca. El microfono, la voz del
+coach y "Tu semana" ya se leen bien.
 
-Son los dos agujeros de seguridad. No basta con no subirlos: hay que
-borrarlos de tu repositorio, porque hoy siguen vivos en tu sitio.
+Las otras 6 apps: seguiran viendose como estaban en fondo, pero los
+textos que comparten con JogaMind (el mensaje de bienvenida, "Tu semana",
+etc.) ya no se veran negros. Es normal que se vean "a medio camino"
+hasta que le pongamos su color completo a cada una.
 
-Para borrarlos: entra al archivo en GitHub, y arriba a la derecha hay
-un icono de bote de basura.
+QUE SE MIDIO
+------------
+- 0 textos sin leerse (antes eran 8, incluyendo "Habla con tu coach"
+  y "Voz del coach", que estaban practicamente invisibles).
+- 0 textos con letra muy chica (antes eran 11).
+- Se encontro y corrigio un error de programacion viejo: el pie de
+  pagina (Hoy / IA / Practicas / Ideas) tenia un color mal escrito
+  que el navegador ignoraba, cayendo a negro. Ya se ve bien.
 
-QUE ARREGLA
------------
-- Las 4 apps que no abrian: JogaTime, JogaCapital, JogaVentix, JogaBit.
-- La IA, que no respondia en ninguna de las 7 apps.
-- acceso.html regalaba las 7 apps a cualquiera que viera el codigo.
-- worker-temp.js publicaba tu licencia real de Gumroad.
-- Los 26 libros ahora dicen quien los escribio.
-- JogaBody ya habla ingles.
-- Los botones ya responden cuando los tocas.
-- 21 botones eran muy chicos para un dedo.
-- El cuestionario ya se puede cerrar.
-- Tocar una app que no compraste ya te explica por que.
-
-COMO SABER QUE FUNCIONO
------------------------
-Despues de subirlo, abre tu sitio y entra a JogaTime. Antes salia una
-pantalla negra con un error. Ahora tiene que abrir normal.
-
-Y escribele algo a la IA. Tiene que contestarte de verdad.
-
-Version del sistema: joga-v85
+SIGUIENTE PASO
+--------------
+Si te gusta como quedo JogaMind, replicamos el mismo sistema a las
+otras 6 apps, cada una con su color: JogaBody turquesa, JogaTime azul,
+JogaBit cian, JogaCapital dorado, JogaVentix naranja, JogaPath indigo.
