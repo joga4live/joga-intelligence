@@ -95,7 +95,7 @@
         <div style="{{ glow3Style }}"></div>
         <div style="position:absolute;top:120px;left:50px;width:3px;height:3px;border-radius:50%;background:#B8924A;animation:subTwinkle 4s ease-in-out infinite"></div>
         <div style="position:absolute;top:200px;right:60px;width:2px;height:2px;border-radius:50%;background:#fff;animation:subTwinkle 5.5s ease-in-out infinite"></div>
-        <div style="position:absolute;top:300px;left:120px;width:2px;height:2px;border-radius:50%;background:#8D6F37;animation:subTwinkle 6s ease-in-out infinite"></div>
+        <div style="position:absolute;top:300px;left:120px;width:2px;height:2px;border-radius:50%;background:#856834;animation:subTwinkle 6s ease-in-out infinite"></div>
         <div style="position:absolute;top:90px;right:120px;width:2px;height:2px;border-radius:50%;background:#B8924A;animation:subTwinkle 4.8s ease-in-out infinite"></div>
       </div>
 
@@ -106,15 +106,15 @@
         <!-- header -->
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:26px">
           <div>
-            <div style="font:600 12px Inter;letter-spacing:.32em;text-transform:uppercase;color:#8D6F37">JogaMind</div>
+            <div style="font:600 12px Inter;letter-spacing:.32em;text-transform:uppercase;color:#856834">JogaMind</div>
             <div style="font-family:Newsreader,serif;font-weight:500;font-size:23px;color:#000000;margin-top:3px">{{ greeting }}</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px">
-            <button onClick="{{ toggleLang }}" style="appearance:none;border:1px solid rgba(45,38,58,.12);background:rgba(45,38,58,.07);cursor:pointer;height:44px;padding:0 14px;border-radius:999px;font:600 11px Inter;letter-spacing:.05em;color:#8D6F37" aria-label="Idioma" style-active="transform:scale(.97)">{{ langLabel }}</button>
+            <button onClick="{{ toggleLang }}" style="appearance:none;border:1px solid rgba(45,38,58,.12);background:rgba(45,38,58,.07);cursor:pointer;height:44px;padding:0 14px;border-radius:999px;font:600 11px Inter;letter-spacing:.05em;color:#856834" aria-label="Idioma" style-active="transform:scale(.97)">{{ langLabel }}</button>
             <button onClick="{{ toggleMute }}" style="appearance:none;border:1px solid rgba(45,38,58,.12);background:rgba(45,38,58,.07);cursor:pointer;width:44px;height:44px;border-radius:50%;font-size:13px;display:grid;place-items:center" aria-label="Silenciar" style-active="transform:scale(.97)">{{ muteIcon }}</button>
             <div style="display:flex;align-items:center;gap:7px;background:rgba(231,196,106,.1);border:1px solid rgba(231,196,106,.3);padding:7px 13px;border-radius:999px">
               <span style="font-size:14px">✦</span>
-              <span style="font:600 13px Inter;color:#8D6F37">{{ streak }}</span>
+              <span style="font:600 13px Inter;color:#856834">{{ streak }}</span>
             </div>
           </div>
         </div>
@@ -130,7 +130,7 @@
         <div onClick="{{ openAbout }}" style="cursor:pointer;display:flex;align-items:center;gap:13px;background:rgba(231,196,106,.07);border:1px solid rgba(231,196,106,.22);border-radius:18px;padding:14px 16px;margin-bottom:18px">
           <div style="flex:0 0 auto;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(231,196,106,.13);font-size:18px">⛓️</div>
           <div style="flex:1;min-width:0">
-            <div style="font:600 12px Inter;letter-spacing:.18em;text-transform:uppercase;color:#8D6F37;margin-bottom:3px">{{ challengeDays }}</div>
+            <div style="font:600 12px Inter;letter-spacing:.18em;text-transform:uppercase;color:#856834;margin-bottom:3px">{{ challengeDays }}</div>
             <div style="font-size:13px;line-height:1.45;color:#6F655D">{{ challengeDef }}</div>
             <div style="font-size:13px;color:#6F655D;margin-top:5px;font-style:italic">⛓ {{ chainRule }}</div>
           </div>
@@ -138,15 +138,15 @@
 
         <!-- affirmation hero -->
         <div style="position:relative;border-radius:26px;overflow:hidden;padding:30px 24px 26px;margin-bottom:22px;background:linear-gradient(165deg,#FFFFFF,rgba(184,146,74,.12));border:1px solid rgba(184,146,74,.32);box-shadow:0 24px 50px -28px rgba(184,146,74,.7)">
-          <div style="font:600 12px Inter;letter-spacing:.3em;text-transform:uppercase;color:#8D6F37;margin-bottom:14px">{{ intentionLabel }}</div>
+          <div style="font:600 12px Inter;letter-spacing:.3em;text-transform:uppercase;color:#856834;margin-bottom:14px">{{ intentionLabel }}</div>
           <div style="font-family:Newsreader,serif;font-weight:500;font-size:27px;line-height:1.28;color:#000000;letter-spacing:-.01em">{{ affirmation }}</div>
-          <button onClick="{{ affirm }}" style="margin-top:22px;appearance:none;cursor:pointer;border:0;border-radius:999px;padding:15px 22px;font:600 13px Inter;letter-spacing:.02em;color:#000000;background:linear-gradient(135deg,#B8924A,#8D6F37);box-shadow:0 10px 24px -10px rgba(184,146,74,.9);display:inline-flex;align-items:center;gap:8px" style-hover="transform:translateY(-1px)" style-active="transform:scale(.97)">{{ affirmLabel }}</button><button onClick="{{ cycleAff }}" aria-label="otra frase" style="margin-top:22px;margin-left:9px;appearance:none;cursor:pointer;border:1px solid rgba(45,38,58,.16);background:rgba(45,38,58,.08);color:#000000;border-radius:999px;width:44px;height:44px;font-size:17px;vertical-align:top;line-height:1" style-active="transform:scale(.97)">↻</button>
+          <button onClick="{{ affirm }}" style="margin-top:22px;appearance:none;cursor:pointer;border:0;border-radius:999px;padding:15px 22px;font:600 13px Inter;letter-spacing:.02em;color:#000000;background:linear-gradient(135deg,#B8924A,#856834);box-shadow:0 10px 24px -10px rgba(184,146,74,.9);display:inline-flex;align-items:center;gap:8px" style-hover="transform:translateY(-1px)" style-active="transform:scale(.97)">{{ affirmLabel }}</button><button onClick="{{ cycleAff }}" aria-label="otra frase" style="margin-top:22px;margin-left:9px;appearance:none;cursor:pointer;border:1px solid rgba(45,38,58,.16);background:rgba(45,38,58,.08);color:#000000;border-radius:999px;width:44px;height:44px;font-size:17px;vertical-align:top;line-height:1" style-active="transform:scale(.97)">↻</button>
         </div>
 
         <!-- session of the day -->
         <div style="font:600 12px Inter;letter-spacing:.28em;text-transform:uppercase;color:#6F655D;margin:0 2px 12px">{{ focusLabel }}</div>
         <button onClick="{{ playFeatured }}" style="width:100%;text-align:left;appearance:none;cursor:pointer;border:1px solid rgba(184,146,74,.24);border-radius:22px;padding:20px;margin-bottom:22px;background:linear-gradient(160deg,#FFFFFF,#F4F1EA);display:flex;align-items:center;gap:16px" style-hover="border-color:rgba(184,146,74,.5)" style-active="transform:scale(.97)">
-          <div style="flex:0 0 auto;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#8D6F37,#B8924A);box-shadow:0 12px 26px -10px rgba(184,146,74,.9)">
+          <div style="flex:0 0 auto;width:60px;height:60px;border-radius:18px;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#856834,#B8924A);box-shadow:0 12px 26px -10px rgba(184,146,74,.9)">
             <span style="font-size:22px;color:#fff;margin-left:3px">▶</span>
           </div>
           <div style="flex:1;min-width:0">
@@ -162,7 +162,7 @@
             <div style="font-weight:600;font-size:13.5px;color:#000000">{{ ritualTitle }}</div>
             <div style="font-size:13px;color:#6F655D;margin-top:1px">{{ ritualSub }}</div>
           </div>
-          <span style="color:#8D6F37;font-size:18px">›</span>
+          <span style="color:#856834;font-size:18px">›</span>
         </div>
 
         <!-- principle of the day -->
@@ -177,12 +177,12 @@
       <!-- ============ PRÁCTICAS ============ -->
       <sc-if value="{{ isLibrary }}" hint-placeholder-val="{{ false }}">
       <div class="sub-scroll" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 110px">
-        <div style="font:600 12px Inter;letter-spacing:.32em;text-transform:uppercase;color:#8D6F37;margin-bottom:4px">{{ practicesKicker }}</div>
+        <div style="font:600 12px Inter;letter-spacing:.32em;text-transform:uppercase;color:#856834;margin-bottom:4px">{{ practicesKicker }}</div>
         <h2 style="font-family:Newsreader,serif;font-weight:500;font-size:28px;color:#000000;margin:0 0 6px">{{ practicesTitle }}</h2>
         <p style="font-size:13px;color:#6F655D;margin:0 0 18px;line-height:1.5">{{ practicesSub }}</p>
         <div style="margin-bottom:22px">
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px">
-            <span style="font:600 12px Inter;letter-spacing:.18em;text-transform:uppercase;color:#8D6F37">{{ progressLabel }}</span>
+            <span style="font:600 12px Inter;letter-spacing:.18em;text-transform:uppercase;color:#856834">{{ progressLabel }}</span>
             <span style="font-family:Newsreader,serif;font-weight:600;font-size:15px;color:#000000">{{ practiceCount }}</span>
           </div>
           <div style="height:7px;border-radius:7px;background:rgba(45,38,58,.09);overflow:hidden">
@@ -211,7 +211,7 @@
       <!-- ============ IDEAS ============ -->
       <sc-if value="{{ isIdeas }}" hint-placeholder-val="{{ false }}">
       <div class="sub-scroll" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 110px">
-        <div style="font:600 12px Inter;letter-spacing:.32em;text-transform:uppercase;color:#8D6F37;margin-bottom:4px">{{ ideasKicker }}</div>
+        <div style="font:600 12px Inter;letter-spacing:.32em;text-transform:uppercase;color:#856834;margin-bottom:4px">{{ ideasKicker }}</div>
         <h2 style="font-family:Newsreader,serif;font-weight:500;font-size:28px;color:#000000;margin:0 0 6px">{{ ideasTitle }}</h2>
         <p style="font-size:13px;color:#6F655D;margin:0 0 18px;line-height:1.5">{{ ideasSub }}</p>
         <div style="display:flex;flex-direction:column;gap:12px">
@@ -225,7 +225,7 @@
                 </div>
               </div>
               <div style="font-size:13px;line-height:1.55;color:#6F655D">{{ b.idea }}</div>
-              <div style="font-size:12px;line-height:1.5;color:#1C7E34;margin-top:10px;background:rgba(184,146,74,.08);border-radius:10px;padding:10px 12px"><b style="color:#8D6F37">→ </b>{{ b.ej }}</div>
+              <div style="font-size:12px;line-height:1.5;color:#1C7E34;margin-top:10px;background:rgba(184,146,74,.08);border-radius:10px;padding:10px 12px"><b style="color:#856834">→ </b>{{ b.ej }}</div>
             </div>
           </sc-for>
         </div>
@@ -235,15 +235,15 @@
       <!-- ============ DIAGNÓSTICO IA ============ -->
       <sc-if value="{{ isIA }}" hint-placeholder-val="{{ false }}">
       <div class="sub-scroll" style="position:absolute;inset:0;z-index:10;overflow-y:auto;padding:84px 22px 110px">
-        <div style="font:600 12px Inter;letter-spacing:.32em;text-transform:uppercase;color:#8D6F37;margin-bottom:4px">{{ iaKicker }}</div>
+        <div style="font:600 12px Inter;letter-spacing:.32em;text-transform:uppercase;color:#856834;margin-bottom:4px">{{ iaKicker }}</div>
         <h2 style="font-family:Newsreader,serif;font-weight:500;font-size:26px;color:#000000;margin:0 0 6px">{{ iaTitle }}</h2>
         <p style="font-size:13px;color:#6F655D;margin:0 0 16px;line-height:1.5">{{ iaSub }}</p>
         <div style="display:flex;gap:11px;align-items:flex-start;margin-bottom:16px">
-          <div style="flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#8D6F37,#9C5F00);font-family:Newsreader,serif;font-weight:700;color:#000000;font-size:16px">J</div>
+          <div style="flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#856834,#9C5F00);font-family:Newsreader,serif;font-weight:700;color:#000000;font-size:16px">J</div>
           <div style="background:rgba(45,38,58,.07);border:1px solid rgba(45,38,58,.1);border-radius:4px 16px 16px 16px;padding:12px 15px;font-size:13px;line-height:1.55;color:#000000">{{ iaGreeting }}</div>
         </div>
         <textarea value="{{ iaInput }}" onChange="{{ onIaInput }}" placeholder="{{ iaPlaceholder }}" style="width:100%;min-height:120px;resize:vertical;box-sizing:border-box;background:rgba(45,38,58,.06);border:1px solid rgba(45,38,58,.1);border-radius:14px;padding:14px;color:#000000;font:400 13.5px Inter;line-height:1.5;outline:none"></textarea>
-        <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#000000;background:linear-gradient(135deg,#B8924A,#8D6F37)" style-active="transform:scale(.97)">{{ iaBtnLabel }}</button>
+        <button onClick="{{ runDiagnosis }}" style="width:100%;margin-top:12px;appearance:none;border:0;cursor:pointer;border-radius:999px;padding:14px;font:600 13px Inter;color:#000000;background:linear-gradient(135deg,#B8924A,#856834)" style-active="transform:scale(.97)">{{ iaBtnLabel }}</button>
         <sc-if value="{{ iaResult }}" hint-placeholder-val="{{ false }}">
         <div style="margin-top:18px;border:1px solid rgba(184,146,74,.3);border-radius:16px;padding:16px;background:rgba(184,146,74,.25)">
           <div style="font-family:Newsreader,serif;font-weight:400;font-size:14.5px;line-height:1.6;color:#000000;white-space:pre-wrap">{{ iaResult }}</div>
@@ -255,7 +255,7 @@
       <!-- unlock-overlay -->
       <sc-if value="{{ locked }}" hint-placeholder-val="{{ false }}">
       <div style="position:absolute;inset:0;z-index:100;background:radial-gradient(120% 75% at 50% 38%,rgba(184,146,74,.06),rgba(184,146,74,.06) 78%);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 34px;text-align:center">
-        <svg class="joga-emblem" viewBox="0 0 120 120" fill="none" aria-hidden="true" style="width:48px;height:48px;color:#8D6F37;margin-bottom:14px"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg>
+        <svg class="joga-emblem" viewBox="0 0 120 120" fill="none" aria-hidden="true" style="width:48px;height:48px;color:#856834;margin-bottom:14px"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg>
         <div style="font:600 12px Inter;letter-spacing:.2em;text-transform:uppercase;color:#6F655D;margin-bottom:18px">JOGA INTELLIGENCE</div>
         <div style="position:relative;margin-bottom:30px;display:grid;place-items:center">
           <div style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(184,146,74,.28),transparent 66%);filter:blur(16px)"></div>
@@ -275,7 +275,7 @@
           <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
             <div style="flex:0 0 auto;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-family:Newsreader,serif;font-weight:600;font-size:16px;color:#000000;background:#B8924A">A♠</div>
             <div>
-              <div style="font:600 12px Inter;letter-spacing:.28em;text-transform:uppercase;color:#8D6F37">{{ aboutTitle }}</div>
+              <div style="font:600 12px Inter;letter-spacing:.28em;text-transform:uppercase;color:#856834">{{ aboutTitle }}</div>
               <div style="font-family:Newsreader,serif;font-weight:500;font-size:20px;color:#000000">{{ challengeDays }}</div>
             </div>
           </div>
@@ -304,12 +304,12 @@
       <div style="position:absolute;inset:0;z-index:80;background:radial-gradient(120% 70% at 50% 35%,#FFFFFF,#FFFFFF 75%);display:flex;flex-direction:column;align-items:center;padding:60px 28px 40px">
         <!-- close -->
         <button onClick="{{ closePlayer }}" style="position:absolute;top:58px;left:24px;appearance:none;border:0;background:rgba(45,38,58,.09);color:#000000;width:38px;height:38px;border-radius:50%;cursor:pointer;font-size:16px" style-active="transform:scale(.97)">✕</button>
-        <div style="font:600 12px Inter;letter-spacing:.3em;text-transform:uppercase;color:#8D6F37;margin-top:6px">{{ player.tag }}</div>
+        <div style="font:600 12px Inter;letter-spacing:.3em;text-transform:uppercase;color:#856834;margin-top:6px">{{ player.tag }}</div>
         <div style="font-family:Newsreader,serif;font-weight:500;font-size:25px;color:#000000;margin-top:8px;text-align:center">{{ player.title }}</div>
 
         <!-- breathing orb -->
         <div style="flex:1;display:flex;align-items:center;justify-content:center;width:100%;position:relative;cursor:pointer" onClick="{{ togglePlay }}">
-          <dc-import name="Joga Orb" c1="#B8924A" c2="#8D6F37" c3="#8D6F37" glow="150,108,246" word="{{ breathWord }}" hint-size="230px,230px"></dc-import>
+          <dc-import name="Joga Orb" c1="#B8924A" c2="#856834" c3="#856834" glow="150,108,246" word="{{ breathWord }}" hint-size="230px,230px"></dc-import>
         </div>
 
         <!-- no subtitle: voice carries the words -->
@@ -328,7 +328,7 @@
         <!-- controls -->
         <div style="display:flex;align-items:center;gap:30px;margin-top:24px">
           <span style="color:#6F655D;font-size:22px">⟲</span>
-          <button onClick="{{ togglePlay }}" style="appearance:none;border:0;cursor:pointer;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#B8924A,#8D6F37);color:#000000;font-size:26px;display:grid;place-items:center;box-shadow:0 16px 40px -12px rgba(184,146,74,.9)" style-active="transform:scale(.97)">{{ playIcon }}</button>
+          <button onClick="{{ togglePlay }}" style="appearance:none;border:0;cursor:pointer;width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,#B8924A,#856834);color:#000000;font-size:26px;display:grid;place-items:center;box-shadow:0 16px 40px -12px rgba(184,146,74,.9)" style-active="transform:scale(.97)">{{ playIcon }}</button>
           <span style="color:#6F655D;font-size:22px">✦</span>
         </div>
       </div>
@@ -340,7 +340,7 @@
         <div style="position:absolute;inset:0;pointer-events:none">
           <sc-for list="{{ confetti }}" as="c" hint-placeholder-count="16"><div style="{{ c.pieceStyle }}"></div></sc-for>
         </div>
-        <svg class="joga-emblem" viewBox="0 0 120 120" fill="none" role="img" aria-label="JOGA" style="width:24px;height:24px;color:#8D6F37;opacity:.9;margin-bottom:26px;position:relative;z-index:2"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg>
+        <svg class="joga-emblem" viewBox="0 0 120 120" fill="none" role="img" aria-label="JOGA" style="width:24px;height:24px;color:#856834;opacity:.9;margin-bottom:26px;position:relative;z-index:2"><circle cx="60" cy="60" r="44" stroke="currentColor" stroke-width="8" stroke-dasharray="124 14" stroke-dashoffset="-7"/><g stroke="currentColor" stroke-width="7.5"><path d="M42 52 L60 34 L78 52"/><path d="M42 70 L60 52 L78 70"/><path d="M42 88 L60 70 L78 88"/></g></svg>
         <div style="position:relative;width:140px;height:140px;display:grid;place-items:center;margin-bottom:26px">
           <div style="position:absolute;width:110px;height:110px;border-radius:50%;border:2px solid #B8924A;animation:jiCelebRing 1.1s ease-out forwards"></div>
           <div style="position:absolute;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,#B8924A55,transparent 68%);filter:blur(6px)"></div>
@@ -353,7 +353,7 @@
 
       <!-- completion toast -->
       <sc-if value="{{ showToast }}" hint-placeholder-val="{{ false }}">
-      <div style="position:absolute;bottom:120px;left:50%;transform:translateX(-50%);z-index:90;background:linear-gradient(135deg,#FFFFFF,#FFFFFF);border:1px solid rgba(184,146,74,.5);color:#000000;padding:14px 22px;border-radius:16px;font-family:Newsreader,serif;font-size:14px;box-shadow:0 20px 50px -16px rgba(0,0,0,.8);white-space:nowrap">✦ {{ toastLabel }} <span style="color:#8D6F37;font-weight:600">{{ streak }}</span></div>
+      <div style="position:absolute;bottom:120px;left:50%;transform:translateX(-50%);z-index:90;background:linear-gradient(135deg,#FFFFFF,#FFFFFF);border:1px solid rgba(184,146,74,.5);color:#000000;padding:14px 22px;border-radius:16px;font-family:Newsreader,serif;font-size:14px;box-shadow:0 20px 50px -16px rgba(0,0,0,.8);white-space:nowrap">✦ {{ toastLabel }} <span style="color:#856834;font-weight:600">{{ streak }}</span></div>
       </sc-if>
 
     </div>
@@ -361,9 +361,9 @@
 
   <!-- side caption -->
   <div class="ji-side-caption" style="flex:0 0 auto;max-width:300px;color:#6F655D">
-    <div style="font:600 11px Inter;letter-spacing:.3em;text-transform:uppercase;color:#8D6F37;margin-bottom:14px">App 01 · JogaMind</div>
+    <div style="font:600 11px Inter;letter-spacing:.3em;text-transform:uppercase;color:#856834;margin-bottom:14px">App 01 · JogaMind</div>
     <div style="font-family:Newsreader,serif;font-weight:500;font-size:30px;line-height:1.15;color:#000000;margin-bottom:16px">Entrena tu subconsciente</div>
-    <p style="font-size:13.5px;line-height:1.7;color:#6F655D;margin:0 0 18px">Prototipo funcional. Toca <b style="color:#8D6F37">▶ una sesión</b> para abrir el reproductor con respiración guiada, prueba la <b style="color:#8D6F37">afirmación</b>, y navega entre Hoy · Sesiones · Progreso.</p>
+    <p style="font-size:13.5px;line-height:1.7;color:#6F655D;margin:0 0 18px">Prototipo funcional. Toca <b style="color:#856834">▶ una sesión</b> para abrir el reproductor con respiración guiada, prueba la <b style="color:#856834">afirmación</b>, y navega entre Hoy · Sesiones · Progreso.</p>
     <div style="font:600 12px Inter;letter-spacing:.26em;text-transform:uppercase;color:#6F655D;margin-bottom:9px">{{ glowNote }}</div>
     <div style="display:flex;gap:8px;margin-bottom:24px">
       <sc-for list="{{ modeChips }}" as="c" hint-placeholder-count="3">
@@ -653,7 +653,7 @@ class Component extends DCLogic {
           margin:'0 auto', fontSize:'13px',
           background: done ? 'linear-gradient(135deg,#B8924A,#B8924A)' : 'rgba(45,38,58,.08)',
           color: done ? '#000000' : '#6F655D',
-          border: isToday ? '1.5px solid #8D6F37' : '1px solid rgba(45,38,58,.09)',
+          border: isToday ? '1.5px solid #856834' : '1px solid rgba(45,38,58,.09)',
           boxShadow: done ? '0 6px 16px -6px rgba(184,146,74,.8)' : 'none'
         }};
     });
@@ -686,11 +686,11 @@ class Component extends DCLogic {
     const orbDur = ['6s','7s','8s'][st.breathStep];
 
     const BOOKS = [
-      {color:'#8D6F37', es:{title:'El poder de tu mente subconsciente', author:'Joseph Murphy', idea:'Tu subconsciente trabaja siempre y acepta como verdad lo que tu mente consciente le repite con fe y emoción.', ej:'Antes de dormir, repite en presente y con calma: «Cada día me siento más tranquilo y capaz.»'}, en:{title:'The Power of Your Subconscious Mind', author:'Joseph Murphy', idea:'Your subconscious works at all times and accepts as true whatever your conscious mind repeats with faith and emotion.', ej:'Before sleeping, calmly repeat in the present: “Each day I feel calmer and more capable.”'}},
+      {color:'#856834', es:{title:'El poder de tu mente subconsciente', author:'Joseph Murphy', idea:'Tu subconsciente trabaja siempre y acepta como verdad lo que tu mente consciente le repite con fe y emoción.', ej:'Antes de dormir, repite en presente y con calma: «Cada día me siento más tranquilo y capaz.»'}, en:{title:'The Power of Your Subconscious Mind', author:'Joseph Murphy', idea:'Your subconscious works at all times and accepts as true whatever your conscious mind repeats with faith and emotion.', ej:'Before sleeping, calmly repeat in the present: “Each day I feel calmer and more capable.”'}},
       {color:'#B8924A', es:{title:'Piense y hágase rico', author:'Napoleon Hill', idea:'Un deseo definido, sostenido con fe y repetido a diario, programa tu mente para encontrar los caminos hacia tu meta.', ej:'Escribe tu meta concreta y léela en voz alta al despertar y antes de dormir.'}, en:{title:'Think and Grow Rich', author:'Napoleon Hill', idea:'A definite desire, held with faith and repeated daily, programs your mind to find the paths toward your goal.', ej:'Write your specific goal and read it aloud when you wake and before you sleep.'}},
       {color:'#B8924A', es:{title:'Psico-cibernética', author:'Maxwell Maltz', idea:'Tu autoimagen gobierna tu conducta. Si cambias cómo te ves por dentro, cambias cómo actúas por fuera.', ej:'Visualízate 5 minutos al día actuando ya como la persona que quieres llegar a ser.'}, en:{title:'Psycho-Cybernetics', author:'Maxwell Maltz', idea:'Your self-image governs your behavior. Change how you see yourself within, and you change how you act without.', ej:'Visualize yourself for 5 minutes a day already acting as the person you want to become.'}},
-      {color:'#8D6F37', es:{title:'Tus zonas erróneas', author:'Wayne Dyer', idea:'Muchos sentimientos que te frenan son hábitos mentales aprendidos. Puedes elegir soltarlos y vivir en el presente.', ej:'Cuando llegue la culpa por el pasado, nómbrala y vuelve a una acción útil del ahora.'}, en:{title:'Your Erroneous Zones', author:'Wayne Dyer', idea:'Many feelings that hold you back are learned mental habits. You can choose to let them go and live in the present.', ej:'When guilt about the past arrives, name it and return to a useful action in the now.'}},
-      {color:'#8D6F37', es:{title:'El poder de los hábitos', author:'Charles Duhigg', idea:'Los hábitos son bucles de señal, rutina y recompensa que tu subconsciente ejecuta solo. Si identificas la señal, puedes cambiar la rutina.', ej:'Detecta qué dispara un hábito que no quieres y reemplaza la rutina manteniendo la recompensa.'}, en:{title:'The Power of Habit', author:'Charles Duhigg', idea:'Habits are loops of cue, routine and reward that your subconscious runs on its own. If you spot the cue, you can change the routine.', ej:'Spot what triggers a habit you do not want and replace the routine while keeping the reward.'}},
+      {color:'#856834', es:{title:'Tus zonas erróneas', author:'Wayne Dyer', idea:'Muchos sentimientos que te frenan son hábitos mentales aprendidos. Puedes elegir soltarlos y vivir en el presente.', ej:'Cuando llegue la culpa por el pasado, nómbrala y vuelve a una acción útil del ahora.'}, en:{title:'Your Erroneous Zones', author:'Wayne Dyer', idea:'Many feelings that hold you back are learned mental habits. You can choose to let them go and live in the present.', ej:'When guilt about the past arrives, name it and return to a useful action in the now.'}},
+      {color:'#856834', es:{title:'El poder de los hábitos', author:'Charles Duhigg', idea:'Los hábitos son bucles de señal, rutina y recompensa que tu subconsciente ejecuta solo. Si identificas la señal, puedes cambiar la rutina.', ej:'Detecta qué dispara un hábito que no quieres y reemplaza la rutina manteniendo la recompensa.'}, en:{title:'The Power of Habit', author:'Charles Duhigg', idea:'Habits are loops of cue, routine and reward that your subconscious runs on its own. If you spot the cue, you can change the routine.', ej:'Spot what triggers a habit you do not want and replace the routine while keeping the reward.'}},
       {color:'#B8924A', es:{title:'Despertando al gigante interior', author:'Tony Robbins', idea:'Tus decisiones y el lenguaje que usas contigo moldean tu estado y tu identidad. Cambiar tus preguntas cambia tu enfoque.', ej:'Sustituye «¿por qué a mí?» por «¿qué puedo aprender de esto?» y observa el cambio.'}, en:{title:'Awaken the Giant Within', author:'Tony Robbins', idea:'Your decisions and the language you use with yourself shape your state and identity. Changing your questions changes your focus.', ej:'Replace “why me?” with “what can I learn from this?” and watch the change.'}},
     ];
     const ideasList = (function(){
@@ -732,7 +732,7 @@ class Component extends DCLogic {
         { key:'night', label:t.modes[2] },
       ].map(c => ({ label:c.label, set:() => { this.play('tap'); this.setState({ timeMode:c.key }); },
         style:{ appearance:'none', cursor:'pointer', borderRadius:'999px', padding:'7px 14px', font:'600 12px Inter',
-          border: mode===c.key ? '1px solid #8D6F37' : '1px solid rgba(45,38,58,.12)',
+          border: mode===c.key ? '1px solid #856834' : '1px solid rgba(45,38,58,.12)',
           background: mode===c.key ? 'rgba(184,146,74,.22)' : 'transparent',
           color: mode===c.key ? '#B8924A' : '#6F655D' } })),
       isHome: st.view==='home', isLibrary: st.view==='library', isIdeas: st.view==='ideas', isIA: st.view==='ia',
@@ -747,7 +747,7 @@ class Component extends DCLogic {
       library: sessions.map(withPlay),
       practicesKicker: t.pKicker, practicesTitle: t.pTitle, practicesSub: t.pSub, progressLabel: t.pProgress,
       practiceCount: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length) + ' / ' + t.practices.length,
-      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/t.practices.length*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#8D6F37,#B8924A)', transition:'width .5s ease' },
+      practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/t.practices.length*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#856834,#B8924A)', transition:'width .5s ease' },
       practices: t.practices.map((p,i) => {
         const done = !!st.doneP[i];
         return { icon:p.icon, num:p.num, title:p.title, desc:p.desc, extra:p.extra,
@@ -776,7 +776,7 @@ class Component extends DCLogic {
       breathWord: st.playing ? breathWords[st.breathStep] : t.paused,
       narration,
       orbAnim: { animation: st.playing ? `subBreathe ${orbDur} ease-in-out infinite` : 'none' },
-      celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#B8924A','#8D6F37','#000000']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
+      celebrate: st.celebrate, confetti: Array.from({length:16}).map((_,i)=>{ const cols=['#B8924A','#856834','#000000']; const seed=(i*73)%100; return { pieceStyle:{ position:'absolute', top:'-12px', left:(4+seed*0.92)+'%', width:(i%3===0?'9px':'6px'), height:(i%3===0?'9px':'6px'), borderRadius:i%2?'50%':'1px', background:cols[i%3], animation:`jiConfetti ${1.6+(seed%5)*0.18}s ease-in ${ (seed%7)*0.12 }s forwards` } }; }),
       caption: [
         'Tus efectos reales (boom + tap) conectados desde el hub, con botón de silencio.',
         'El aura se adapta sola a la hora del día — aquí puedes previsualizar las tres.',

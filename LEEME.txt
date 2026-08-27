@@ -1,23 +1,33 @@
-JOGA — JOGAMIND DE VUELTA A CLARO
-===================================
+JOGA — LAS 7 APPS CON SU PROPIO COLOR
+========================================
 
 QUE SUBIR
 ---------
-Dos archivos:
+Ocho archivos. Sube TODOS juntos:
 
-   subment.html
-   joga-features.js
-
-Sube los DOS juntos.
+   subment.html        JogaMind      (dorado)
+   jogatime.html        JogaTime      (azul)
+   monexium.html        JogaCapital   (dorado vivo)
+   ventmex.html          JogaVentix    (naranja)
+   metodoexito.html      JogaPath      (indigo)
+   protoneutron.html    JogaBit       (cian)
+   jogaflow.html         JogaBody      (turquesa)
+   joga-features.js     (compartido por las 7 — sube este tambien)
 
 QUE VAS A VER
 -------------
-JogaMind ya no es oscura. Blanco, negro y dorado, la version que te
-gusto antes de la sugerencia de fondo oscuro. El microfono, "Habla con
-tu coach" y "Tu semana" se leen bien. La tarjeta de cita que antes era
-azul marino con letra negra (invisible) ahora es dorada clara.
+Las 7 apps ya se distinguen a simple vista, cada una con su color,
+sobre la misma base blanca, negra y dorada que ya te gusto en JogaMind.
 
-joga-features.js es compartido: al subirlo, las otras 6 apps tambien
-mejoran un poco (un gris que no se leia bien, corregido en las 7).
+QUE SE MIDIO
+------------
+Las 7, una por una y las 7 juntas al final: 0 textos sin leerse bien,
+0 letra menor a 12 pixeles.
+
+Se encontro y corrigio un error de programacion que se repetia en 4
+de las apps (el pie de pagina caia a negro por un bug viejo, no por
+el color), y un detalle fino: el color de cada app se leia bien sobre
+fondo blanco pero no del todo sobre las tarjetas, asi que se oscurecio
+un poco mas en las 7 para que pase en cualquier parte de la pantalla.
 
 Version del sistema: sin cambio, sigue en joga-v86.
