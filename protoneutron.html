@@ -457,8 +457,9 @@ class Component extends DCLogic {
       var vcw = document.getElementById('jiVChatWrap_protoneutron');
       if (vcw && vcw.getAttribute('data-lang') !== L) {
         vcw.setAttribute('data-lang', L);
-        vcw.innerHTML = window.jogaFeatures.voiceChatButtonHtml(L, '#06B6D4');
-        window.jogaFeatures.initVoiceChat(L, 'jogabit', '#06B6D4');
+        /* 'Habla con tu coach' (microfono) retirado a pedido de Jose: el Worker
+           ignora la personalidad y no hay memoria de conversacion. La 'Voz del
+           coach' (mensaje diario grabado) no se toca, sigue funcionando. */
       }
       var bw = document.getElementById('jiBadgeWrap_protoneutron');
       if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('protoneutron', L, '#06B6D4');

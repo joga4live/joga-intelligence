@@ -502,8 +502,9 @@ class Component extends DCLogic {
       var vcw = document.getElementById('jiVChatWrap_metodoexito');
       if (vcw && vcw.getAttribute('data-lang') !== L) {
         vcw.setAttribute('data-lang', L);
-        vcw.innerHTML = window.jogaFeatures.voiceChatButtonHtml(L, '#6366F1');
-        window.jogaFeatures.initVoiceChat(L, 'jogapath', '#6366F1');
+        /* 'Habla con tu coach' (microfono) retirado a pedido de Jose: el Worker
+           ignora la personalidad y no hay memoria de conversacion. La 'Voz del
+           coach' (mensaje diario grabado) no se toca, sigue funcionando. */
       }
       var bw = document.getElementById('jiBadgeWrap_metodoexito');
       if (bw) bw.innerHTML = window.jogaFeatures.badgesHtml('metodoexito', L, '#6366F1');

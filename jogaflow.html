@@ -519,12 +519,9 @@
       /* Mastery badge */
       var mbWrap = $("jfMastery");
       if (mbWrap) mbWrap.innerHTML = JF.masteryBadgeHtml('jogaflow', lang, 'var(--flow-text)');
-      /* Voice chat bot */
-      var vchatWrap = $("jfVoiceChat");
-      if (vchatWrap) {
-        vchatWrap.innerHTML = JF.voiceChatButtonHtml(lang, '#00D4AA');
-        JF.initVoiceChat(lang, 'jogabody', '#00D4AA');
-      }
+      /* "Habla con tu coach" (microfono) retirado a pedido de Jose: el Worker
+         ignora la personalidad y no hay memoria de conversacion. La "Voz del
+         coach" (mensaje diario grabado) no se toca, sigue funcionando. */
       /* Badges */
       var bgWrap = $("jfBadges");
       if (bgWrap) bgWrap.innerHTML = JF.badgesHtml('jogaflow', lang, 'var(--flow-text)');
