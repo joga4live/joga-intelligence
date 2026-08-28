@@ -1,137 +1,149 @@
-# AGENTS.md — Joga Intelligence PWA
+# AGENTS.md — Joga Books
 
-Guía para cualquier agente de IA (Claude, etc.) que trabaje en este repo.
+Guia para cualquier agente IA (Claude Code, etc.) que trabaje en este repo.
 Guide for any AI agent working on this repo.
 
 ---
 
-## 1. Qué es el proyecto / What this is
+## 1. Que es el proyecto / What this is
 
-Joga Intelligence es una **PWA (Progressive Web App)** compuesta por varias mini-apps,
-hospedada en **GitHub Pages**. Se distribuye por código de licencia y se vende vía
-Gumroad / Stripe.
+Joga Books es una PWA (Progressive Web App) que ayuda a cualquier persona
+a crear un libro de no ficcion completo usando IA.
 
-**Stack:** HTML + CSS + JavaScript puro. Sin frameworks, sin build step, sin bundler.
-Lo que hay en el repo es lo que se sirve. Mantenerlo así.
+Stack: HTML + CSS + JS puro. Sin frameworks, sin build step, sin bundler.
+Lo que hay en el repo es lo que se sirve. Mantenerlo asi.
 
-**Mini-apps:** SUBMENT · JOGA TIME · PROTONEUTRÓN · PASLEY · MONEXIUM · VENTEMEX
-**Tracker:** Retos JOGA (reto 30 días, 6 etapas × 5 días, persistencia en localStorage).
+Hosting: GitHub Pages (push = deploy automatico)
+IA: Cloudflare Worker con Claude API
+Datos: localStorage del usuario
+Licencias: gate.js con hashes SHA-256
+
+Archivos principales:
+- index.html     landing + acceso con codigo de licencia
+- app.html       dashboard — lista de libros del usuario
+- wizard.html    flujo 5 pasos para crear un libro nuevo
+- editor.html    escritura y humanizacion capitulo x capitulo
+- export.html    ver libro completo + copiar + exportar
+- gate.js        validacion de licencias SHA-256
+- sw.js          service worker offline
+- worker.js      Cloudflare Worker (prompts de IA)
 
 ---
 
 ## 2. Reglas de oro / Golden rules
 
-El agente **NUNCA** debe romper ninguno de estos cuatro sistemas. Si un cambio los toca,
-verificar que sigan funcionando antes de dar por cerrado el trabajo.
+NUNCA romper estos cuatro sistemas:
 
-1. **Licencias (`gate.js`)** — validación SHA-256 con los 50 códigos privados.
-   Puede editarse libremente, pero **jamás** debe quedar el gate abierto (bypass) ni
-   filtrarse la lista de códigos en texto plano en un archivo público.
-2. **Service Worker / PWA offline** — la app debe seguir cargando sin conexión.
+1. Licencias (gate.js) — validacion SHA-256. Jamas dejar el gate abierto
+   ni exponer codigos en texto plano en archivos publicos.
+
+2. Service Worker / PWA offline — la app debe seguir cargando sin conexion.
    No romper el registro del SW ni la lista de archivos cacheados.
-3. **i18n (traducciones)** — el toggle de idioma (`toggleLang` + `jiLang` en
-   localStorage) y los diccionarios `es:{...}` / `en:{...}` deben seguir
-   funcionando. **Nota:** auditoría completa (23-jul-2026) confirmó que
-   `Monexium`, `VentMex` y `Retos` YA están completos y correctos → ver sección 5.
-4. **Diseño / branding JOGA** — logo, colores y estilo visual no se alteran sin permiso.
+
+3. i18n (traducciones) — el toggle ES/EN y los diccionarios es:{}/en:{}
+   deben funcionar siempre. Key en localStorage: jogaBooks_lang
+
+4. Diseno / branding — colores y estilo no se alteran sin permiso del dueno.
 
 ---
 
-## 3. Service Worker — regla de versión / SW version rule
+## 3. Service Worker — regla de version
 
-**Cada bugfix o cambio de archivos servidos → subir la versión del cache del SW.**
-
-- `joga-v2` → `joga-v3` → `joga-v4` ...
-- Actualizar el nombre del cache Y la lista de archivos si se agregó/renombró algo.
-- Esto evita que los usuarios queden atorados con archivos viejos en caché.
-
-Si no se sube la versión, el fix no llega al usuario. No lo olvides.
+Cada cambio de archivos servidos → subir version del cache.
+joga-books-v1 → joga-books-v2 → joga-books-v3 ...
+Si no se sube la version, el fix no llega al usuario.
 
 ---
 
-## 4. Archivos sensibles / Sensitive files
+## 4. Sistema de color
 
-| Archivo | Regla |
-|---|---|
-| `gate.js` | Editable libre. No abrir el gate. No exponer códigos en claro. |
-| Códigos de licencia | Editable libre. Mantener SHA-256, nunca en texto plano público. |
-| Service worker | Editable, pero **siempre** subir versión (ver sección 3). |
-| Logo / branding | No tocar sin pedir permiso. |
+Filosofia: Oscuro + un acento fuerte = premium y profesional.
+Referencia: Linear, GitHub, Notion.
 
----
+Base (todas las pantallas):
+  --color-bg-deep:    #0D1117
+  --color-bg-card:    #161B22
+  --color-border:     #21262D
+  --color-text:       #E6EDF3
+  --color-muted:      #7D8590
+  --color-success:    #22C55E
+  --color-error:      #EF4444
 
-## 5. Estado conocido / Known issues
+Hero Joga Books — Tech Inteligente:
+  --color-primary:      #4F8EF7
+  --color-primary-dark: #2563EB
+  --color-light:        #93C5FD
+  --color-glow:         #4F8EF740
+  --color-bg-tint:      #0D1B2E
+  --color-gold:         #F0C040
 
-- **Licencias (`gate.js`)** — los 71 códigos (1 maestro + 50 originales + 20 nuevos)
-  viven como hashes SHA-256 en `gate.js` (`window.jogaGate.validate`, async).
-  `index.html` y `app.html` ya no tienen códigos en texto plano; ambos llaman a
-  `await window.jogaGate.validate(v)`. Verificado: `grep -rn "JOGA-4ET2L\|JOGA7K2M9"
-  *.html *.js` → cero resultados.
-- **Service worker** en `joga-v25`, con `./gate.js` agregado a la lista CORE.
-- **i18n — auditoría completa (23-jul-2026):** se revisaron `monexium.html`,
-  `ventmex.html` y `retos.html` en detalle, comparando contra el patrón de
-  referencia (`subment.html`: diccionarios `es:{...}`/`en:{...}`, `toggleLang`,
-  `jiLang` en localStorage). **Las tres apps ya están 100% bien** — todo el texto
-  visible dentro de la pantalla del teléfono (home, prácticas/técnicas,
-  leyes/ideas, diagnóstico IA, modales "about"/unlock, nav inferior, reproductor,
-  toasts, diagnóstico local de IA y los prompts de IA) sale de los diccionarios
-  `es`/`en` y cambia con el toggle. No se encontró texto hardcodeado roto; no se
-  hizo ningún cambio de código en estas tres apps.
-  - El check de `init.sh` que marca estos archivos con `!` ("sin data-i18n") es
-    una **falsa alarma conocida**: ninguna app del proyecto (ni siquiera
-    `subment.html`, la referencia que sí funciona) usa atributos `data-i18n`;
-    todas usan el patrón de diccionario + `toggleLang`. El warning se deja tal
-    cual (no bloquea, exit 0) pero no indica un problema real.
-  - Único texto que queda fijo en español sin traducir (por diseño, igual que en
-    `subment.html`): el nombre de marca de cada app (ej. "JogaCapital",
-    "JogaVentix") y el `aria-label` de los botones de icono superiores
-    ("Salir", "Idioma", "Silenciar", "otra frase") — accesibilidad, no texto
-    visible del flujo principal. También el caption lateral fuera del "teléfono"
-    (visible solo en la vista de escritorio/preview, no en el uso real en
-    móvil porque `.ji-phone` pasa a `position:fixed;inset:0` y lo cubre) queda
-    en español, igual que en la referencia — no se tocó.
-- Retos usa `localStorage` para persistencia — no borrar ni renombrar las llaves
-  existentes o los usuarios pierden su progreso.
+Humanizador:
+  --color-profesional:    #60A5FA
+  --color-conversacional: #34D399
+  --color-motivacional:   #F97316
 
 ---
 
-## 6. Convenciones / Conventions
+## 5. Cloudflare Worker
 
-- **Comentarios y commits: bilingües** (español + inglés). Ej:
-  `fix: gate.js valida código vacío / validate empty code`
-- **Máximo 200 líneas por archivo.** Si un archivo se pasa, dividirlo en módulos
-  más chicos. No entregar archivos de más de 200 líneas / no file over 200 lines.
-- HTML/CSS/JS puro: nada de dependencias nuevas sin pedir permiso.
-- Mantener metadata PWA para iOS (íconos, `apple-mobile-web-app-*`, viewport).
-- Audio embebido en base64 (ej. botón "Empezar el reto") — no romper esos data URIs.
-- Cambios pequeños y verificables. No refactors masivos sin avisar.
+URL del worker: (configurar en cada HTML como WORKER_URL constante)
+Nunca llamar directo a la API de Anthropic desde el frontend.
+Siempre via el Worker para no exponer la API key.
 
----
-
-## 7. Deploy
-
-- Deploy = push a GitHub → GitHub Pages publica automático.
-- **Antes de dar por listo un cambio:**
-  1. ¿Subiste la versión del service worker? (si aplica)
-  2. ¿Sigue cargando offline?
-  3. ¿El gate sigue cerrado y validando?
-  4. ¿El toggle de idioma no se rompió?
+Endpoints disponibles:
+  POST /titulos     — genera 5 opciones de titulo
+  POST /outline     — genera 12 capitulos con nombres
+  POST /capitulo    — escribe un capitulo completo
+  POST /humanizar   — humaniza texto con tono elegido
 
 ---
 
-## 8. Flujo de trabajo / Workflow
+## 6. localStorage schema
 
-> **OBLIGATORIO / MANDATORY:** Corre `./init.sh` ANTES de hacer cualquier cambio.
-> Run `./init.sh` BEFORE making any change.
-> **Si falla (exit ≠ 0): DETENTE. No continúes. Pide ayuda al humano.**
-> **If it fails: STOP. Do not continue. Ask the human for help.**
+Clave principal: jogaBooks_library (array de libros)
+Clave de idioma: jogaBooks_lang = "es" | "en"
+Clave de licencia: jogaBooks_licensed = true
 
-1. Corre `./init.sh`. Si sale rojo/error → **para y avisa**. No toques nada.
-   Run `./init.sh`. If it errors → **stop and report**. Change nothing.
-2. Lee esta guía antes de tocar código.
-3. Haz el cambio mínimo necesario.
-4. Verifica las 4 reglas de oro (sección 2).
-5. Sube versión del SW si tocaste archivos servidos.
-6. Corre `./init.sh` otra vez para confirmar que sigue verde.
-   Run `./init.sh` again to confirm it's still green.
-7. Commit bilingüe, claro y corto.
+Estructura de cada libro:
+{
+  id, titulo, subtitulo, nicho, audiencia, idioma,
+  progreso, total, fechaCreacion, fechaEdicion,
+  outline: [{num, nombre, descripcion}],
+  capitulos: { "1": {original:"", humanizado:"", tono:""} }
+}
+
+---
+
+## 7. Convenciones
+
+- Comentarios y commits bilingues (ES + EN)
+- Maximo 200 lineas por archivo HTML/JS
+- Mobile first — todo pensado para pantalla de telefono
+- Sin librerias externas en MVP (jsPDF en V2 solamente)
+- Todos los errores del Worker: mostrar toast al usuario, no console.log
+
+---
+
+## 8. Orden de construccion MVP
+
+1. gate.js
+2. index.html
+3. app.html
+4. wizard.html pasos 1-2 (nicho + audiencia)
+5. wizard.html paso 3 (titulos con IA)
+6. wizard.html pasos 4-5 (outline + confirmacion)
+7. editor.html (generar capitulos)
+8. editor.html (humanizador 3 tonos)
+9. export.html
+10. sw.js + manifest.json
+11. AGENTS.md (este archivo — ya existe)
+
+---
+
+## 9. Lo que NO va en MVP (V2)
+
+- Exportar a PDF (usar jsPDF desde CDN en V2)
+- Portada con imagen generada
+- Compartir libro con link publico
+- Editor de portada
+- Guia para publicar en Amazon KDP

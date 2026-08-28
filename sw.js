@@ -1,173 +1,85 @@
-/* Joga Intelligence — Service Worker
-   Estrategia:
-   - Navegaciones (páginas): network-first → si no hay red, sirve desde caché (offline).
-   - Estáticos mismo origen y fuentes: stale-while-revalidate (rápido + se actualiza solo).
-   Sube CACHE_VERSION cada vez que quieras forzar refresco tras un deploy. */
+/* sw.js — Joga Books Service Worker
+   Cache First para assets propios (misma origin). Network First para
+   llamadas al Worker (otra origin: WORKER_URL). Cada cambio de archivos
+   servidos sube la version del cache abajo.
+   Cache First for our own assets (same origin). Network First for Worker
+   calls (different origin: WORKER_URL). Every change to served files bumps
+   the cache version below.
 
-const CACHE_VERSION = 'joga-v86';
-const CACHE = `joga-cache-${CACHE_VERSION}`;
+   Regla de version / version rule: joga-books-v1 -> v2 -> v3 ... (AGENTS.md #3)
+*/
+"use strict";
+var CACHE_NAME = "joga-books-v16"; // v16: jbCallWorker distingue limite_diario/limite_mensual del Worker (common.js, wizard.html, editor.html) — worker.js no se sirve, no cuenta aqui / v16: jbCallWorker now tells limite_diario/limite_mensual apart from the Worker (common.js, wizard.html, editor.html) — worker.js is never served, doesn't belong here
 
-/* Shell mínimo que se precachea al instalar.
-   Se mantiene corto a propósito: si un archivo faltara, addAll NO falla en bloque
-   porque lo envolvemos en intentos individuales. El resto (las 6 apps) se cachea
-   solo al visitarlas la primera vez con red. */
-const CORE = [
-  './',
-  './index.html',
-  './app.html',
-  './onboarding.html',
-  './react.min.js',
-  './react-dom.min.js',
-  './retos.html',
-  './legal.html',
-  './legal.css',
-  './legal.js',
-  './gate.js',
-  './joga-features.js',
-  './content/jogaflow-content.js',
-  './content/subment-content.js',
-  './content/jogatime-content.js',
-  './content/protoneutron-content.js',
-  './content/monexium-content.js',
-  './content/ventmex-content.js',
-  './content/metodoexito-content.js',
-  './assets/joga-ad-spot.es.vtt',
-  './assets/joga-ad-spot-en.en.vtt',
-  './joga-emblem.svg',
-  './joga-lockup.svg',
-  './joga-robot-poster.jpg',
-  './joga-robot-intro.mp4',
-  './manifest.webmanifest',
-  './icon-192.png',
-  './icon-512.png',
-  './icon-512-maskable.png',
-  './apple-touch-icon.png'
+// Archivos core: si alguno falta, el install debe fallar (bug real).
+// Core files: if any is missing, install should fail (a real bug).
+var CORE_FILES = [
+  "./", "./index.html", "./app.html", "./wizard.html", "./editor.html", "./export.html",
+  "./gate.js", "./assets/styles.css", "./assets/i18n.js", "./assets/common.js", "./assets/manifest.json",
+  "./assets/wizard.css", "./assets/wizard-data.js",
+  "./assets/logo-hero.jpg",
+  "./assets/icon-outline.mp4", "./assets/icon-outline-poster.jpg",
+  "./assets/icon-chapters.mp4", "./assets/icon-chapters-poster.jpg",
+  "./assets/icon-humanizer.mp4", "./assets/icon-humanizer-poster.jpg",
+  "./assets/fonts/playfair.woff2", "./assets/fonts/inter.woff2"
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil((async () => {
-    const cache = await caches.open(CACHE);
-    // cachea uno por uno para que un 404 no rompa toda la instalación
-    await Promise.all(CORE.map(async (url) => {
-      try { await cache.add(new Request(url, { cache: 'reload' })); }
-      catch (e) { /* ignora el que falle */ }
+// icon-192.png/icon-512.png TODAVIA NO EXISTEN en assets/ (gap conocido, ver
+// implementacion-mvp-25ago.md). Se cachean aparte y por separado, con su
+// propio try/catch, para que su ausencia NUNCA tumbe el install completo.
+// icon-192.png/icon-512.png DO NOT EXIST YET in assets/ (known gap, see the
+// implementation handoff). Cached separately, each with its own try/catch,
+// so their absence never breaks the whole install.
+var OPTIONAL_FILES = ["./assets/icon-192.png", "./assets/icon-512.png"];
+
+self.addEventListener("install", function (event) {
+  event.waitUntil((async function () {
+    var cache = await caches.open(CACHE_NAME);
+    await cache.addAll(CORE_FILES);
+    await Promise.all(OPTIONAL_FILES.map(async function (url) {
+      try {
+        var res = await fetch(url);
+        if (res && res.ok) await cache.put(url, res);
+      } catch (e) { /* icono ausente: se ignora, no tumba el install / missing icon: ignored, doesn't break install */ }
     }));
     self.skipWaiting();
   })());
 });
 
-self.addEventListener('activate', (event) => {
-  event.waitUntil((async () => {
-    const keys = await caches.keys();
-    await Promise.all(keys.map((k) => k.startsWith('joga-cache-') && k !== CACHE ? caches.delete(k) : null));
+self.addEventListener("activate", function (event) {
+  event.waitUntil((async function () {
+    var keys = await caches.keys();
+    await Promise.all(keys.filter(function (k) { return k !== CACHE_NAME; }).map(function (k) { return caches.delete(k); }));
     await self.clients.claim();
   })());
 });
 
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-  if (req.method !== 'GET') return;
+self.addEventListener("fetch", function (event) {
+  var req = event.request;
+  if (req.method !== "GET") return; // POST al Worker: no interceptar / POST to the Worker: don't intercept
+  var url = new URL(req.url);
+  var sameOrigin = url.origin === self.location.origin;
+  event.respondWith(sameOrigin ? cacheFirst(req) : networkFirst(req));
+});
 
-  const url = new URL(req.url);
-  const sameOrigin = url.origin === self.location.origin;
-
-  // Páginas (navegación): network-first con fallback a caché
-  if (req.mode === 'navigate') {
-    event.respondWith((async () => {
-      try {
-        const fresh = await fetch(req);
-        const cache = await caches.open(CACHE);
-        cache.put(req, fresh.clone());
-        return fresh;
-      } catch (e) {
-        const cached = await caches.match(req);
-        return cached || await caches.match('./index.html');
-      }
-    })());
-    return;
+async function cacheFirst(req) {
+  var cached = await caches.match(req);
+  if (cached) return cached;
+  try {
+    var res = await fetch(req);
+    if (res && res.ok) { var cache = await caches.open(CACHE_NAME); cache.put(req, res.clone()); }
+    return res;
+  } catch (e) {
+    return cached || new Response("Offline", { status: 503, statusText: "Offline" });
   }
+}
 
-  // Estáticos mismo origen + Google Fonts: stale-while-revalidate
-  const isFont = url.hostname.includes('fonts.googleapis.com') || url.hostname.includes('fonts.gstatic.com');
-  if (sameOrigin || isFont) {
-    event.respondWith((async () => {
-      const cache = await caches.open(CACHE);
-      const cached = await cache.match(req);
-      const network = fetch(req).then((res) => {
-        if (res && res.status === 200) cache.put(req, res.clone());
-        return res;
-      }).catch(() => null);
-      return cached || (await network) || new Response('', { status: 504 });
-    })());
+async function networkFirst(req) {
+  try {
+    return await fetch(req);
+  } catch (e) {
+    var cached = await caches.match(req);
+    if (cached) return cached;
+    return new Response(JSON.stringify({ error: "offline" }), { status: 503, headers: { "Content-Type": "application/json" } });
   }
-});
-
-
-/* ===== Recordatorio diario / Daily reminder =====
-   La pagina guarda la config en IndexedDB (on, hour, lang, lastShown).
-   El SW la lee al recibir un ping de la pagina o un periodicsync (PWA instalada). */
-function rdbOpen() {
-  return new Promise((res) => {
-    try {
-      const rq = indexedDB.open('joga-reminder', 1);
-      rq.onupgradeneeded = () => { rq.result.createObjectStore('kv'); };
-      rq.onsuccess = () => res(rq.result);
-      rq.onerror = () => res(null);
-    } catch (e) { res(null); }
-  });
 }
-function rdbGet(key) {
-  return rdbOpen().then((db) => new Promise((res) => {
-    if (!db) return res(null);
-    try {
-      const g = db.transaction('kv', 'readonly').objectStore('kv').get(key);
-      g.onsuccess = () => res(g.result || null);
-      g.onerror = () => res(null);
-    } catch (e) { res(null); }
-  }));
-}
-function rdbSet(key, val) {
-  return rdbOpen().then((db) => new Promise((res) => {
-    if (!db) return res(false);
-    try {
-      const tx = db.transaction('kv', 'readwrite');
-      tx.objectStore('kv').put(val, key);
-      tx.oncomplete = () => res(true);
-      tx.onerror = () => res(false);
-    } catch (e) { res(false); }
-  }));
-}
-function localDay(d) {
-  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-}
-async function maybeRemind() {
-  const cfg = await rdbGet('cfg');
-  if (!cfg || !cfg.on) return;
-  const now = new Date(), today = localDay(now);
-  const last = await rdbGet('lastShown');
-  if (last === today) return;
-  if (now.getHours() < (typeof cfg.hour === 'number' ? cfg.hour : 8)) return;
-  const es = cfg.lang !== 'en';
-  await self.registration.showNotification('Joga Intelligence', {
-    body: es ? '\u{1F525} No rompas la cadena: tu pr\u00e1ctica de hoy te espera.'
-             : '\u{1F525} Don\u2019t break the chain: today\u2019s practice is waiting for you.',
-    icon: './icon-192.png',
-    badge: './icon-192.png',
-    tag: 'joga-daily',
-    renotify: false
-  });
-  await rdbSet('lastShown', today);
-}
-self.addEventListener('periodicsync', (event) => {
-  if (event.tag === 'joga-daily') event.waitUntil(maybeRemind());
-});
-self.addEventListener('message', (event) => {
-  if (event.data && event.data.type === 'joga-remind-check') {
-    const p = maybeRemind();
-    if (event.waitUntil) event.waitUntil(p);
-  }
-});
-self.addEventListener('notificationclick', (event) => {
-  event.notification.close();
-  event.waitUntil(self.clients.openWindow('./app.html'));
-});
