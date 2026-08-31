@@ -109,6 +109,33 @@ for f in monexium ventmex retos; do
   fi
 done
 
+# ---- 5-b. Regla: constantes de contenido usadas pero nunca definidas ----
+# Caza el defecto real de books-21ago: 4 apps usaban `BOOKS.map(...)` pero
+# nunca declaraban `const BOOKS = [...]` (se copió la línea que usa, no la
+# que define) -> la app truena al arrancar (renderVals() lanza, pantalla
+# casi en blanco con letrero rojo de error). Este check falla el arnés
+# (ERROR, no warning) antes de que le llegue a un cliente que ya pagó.
+# Catches the real books-21ago defect: 4 apps used `BOOKS.map(...)` but
+# never declared `const BOOKS = [...]` (the line that USES a constant got
+# copied, not the line that DEFINES it) -> app crashes on load (renderVals()
+# throws, near-blank screen with a red error banner). This check fails the
+# harness (ERROR, not warning) before it reaches a paying customer.
+section "Regla — Constantes usadas sin definir / undefined-but-used constants"
+CONTENT_CONSTS="BOOKS"
+UNDEF_FOUND=0
+for f in *.html; do
+  [ -f "$f" ] || continue
+  for c in $CONTENT_CONSTS; do
+    if grep -qE "\\b${c}\\.(map|forEach|filter|reduce|length)\\b|\\b${c}\\[" "$f" 2>/dev/null; then
+      if ! grep -qE "(const|var|let)[[:space:]]+${c}[[:space:]]*=" "$f" 2>/dev/null; then
+        bad "$f usa ${c} pero nunca la define / uses ${c} but never defines it"
+        UNDEF_FOUND=1
+      fi
+    fi
+  done
+done
+[ "$UNDEF_FOUND" -eq 0 ] && ok "Todas las constantes de contenido usadas están definidas / all used content constants are defined"
+
 # ---- 6. Regla: máx 200 líneas / max 200 lines ----
 # Los HTML de las mini-apps son single-file por diseño y ya existían antes de
 # esta regla → quedan como WARNING, no ERROR. Archivos NUEVOS (ej. gate.js)
