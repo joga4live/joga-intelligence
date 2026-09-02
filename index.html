@@ -406,6 +406,34 @@
         margin-top: 20px;
       }
 
+      .awaken-card {
+        text-align: center;
+      }
+
+      .awaken-card .eyebrow {
+        margin-bottom: 14px;
+      }
+
+      .awaken-frame {
+        margin-top: 22px;
+        border-radius: 24px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        background: #000;
+        max-width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+        aspect-ratio: 1 / 1;
+      }
+
+      .awaken-video {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
       .benefits-grid {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -984,6 +1012,21 @@
       </div>
     </section>
 
+    <section class="section" id="awakenSpot">
+      <div class="container">
+        <div class="section-card awaken-card">
+          <span class="eyebrow" id="awakenLabel">Ecosistema de crecimiento premium</span>
+          <h3 id="awakenTitle">Despierta lo que ya está en ti</h3>
+          <p id="awakenDesc">Un momento de calma antes de empezar: mente, cuerpo y propósito reunidos en una sola energía.</p>
+          <div class="awaken-frame">
+            <video class="awaken-video" id="awakenVideoAria" autoplay muted loop playsinline poster="assets/awaken/hero-awaken.png">
+              <source src="assets/awaken/hero-awaken.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section" id="videoSpot">
       <div class="container">
         <div class="section-card">
@@ -1299,6 +1342,10 @@
           pillOne: 'Claridad',
           pillTwo: 'Acompañamiento',
           pillThree: 'Progreso',
+          awakenLabel: 'Ecosistema de crecimiento premium',
+          awakenTitle: 'Despierta lo que ya está en ti',
+          awakenDesc: 'Un momento de calma antes de empezar: mente, cuerpo y propósito reunidos en una sola energía.',
+          awakenVideoAria: 'Animación de una silueta dorada despertando, símbolo de Joga Intelligence.',
           videoSpotTitle: 'Mira cómo funciona',
           videoSpotDesc: 'Un vistazo rápido a Joga Intelligence: el método, las apps y cómo empezar hoy.',
           videoSpotBtn: 'Ver precios y empezar',
@@ -1420,6 +1467,10 @@
           pillOne: 'Clarity',
           pillTwo: 'Guidance',
           pillThree: 'Progress',
+          awakenLabel: 'Premium growth ecosystem',
+          awakenTitle: 'Awaken what is already within you',
+          awakenDesc: 'A moment of calm before you begin: mind, body, and purpose gathered into one energy.',
+          awakenVideoAria: 'Animation of a golden silhouette awakening, symbol of Joga Intelligence.',
           videoSpotTitle: 'See how it works',
           videoSpotDesc: 'A quick look at Joga Intelligence: the method, the apps, and how to start today.',
           videoSpotBtn: 'See pricing and start',
