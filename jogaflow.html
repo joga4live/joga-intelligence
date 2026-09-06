@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="only light">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>JogaBody · Energía en equilibrio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,7 +19,7 @@
     --deep:#F4F1EA; --deep2:#FFFFFF; --lite:#00D4AA; --lite2:#00D4AA;
     --gold:#FFD60A; --card:#ffffff;
   }
-  body{background:#F4F1EAfff;font-family:Inter,system-ui,sans-serif;color:var(--ink)}
+  body{background:#F4F1EA;font-family:Inter,system-ui,sans-serif;color:var(--ink)}
   button,textarea{font-family:inherit}
   @keyframes jfRise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   @keyframes jfTwinkle{0%,100%{opacity:.25}50%{opacity:.9}}
@@ -342,6 +343,7 @@
       iaGreeting:"Hola, soy Joga 👋 Tu guía de energía corporal. Cuéntame cómo estás y te doy una sugerencia para hoy.",
       iaPlaceholder:"Escribe cómo te sientes hoy…",
       iaBtn:"Analizar mi energía",iaThinking:"Analizando…",
+      iaEmptyWarn:"Escribe primero cómo te sientes.",
       leyesKicker:"Leyes del cuerpo",leyesTitle:"6 leyes de tu energía",
       leyesSub:"Principios originales de JogaBody para sostener tu energía todos los días.",
       leyes:[
@@ -406,6 +408,7 @@
       iaGreeting:"Hi, I'm Joga 👋 Your body-energy guide. Tell me how you're doing and I'll give you a suggestion for today.",
       iaPlaceholder:"Write how you feel today…",
       iaBtn:"Analyze my energy",iaThinking:"Analyzing…",
+      iaEmptyWarn:"Write how you feel first.",
       leyesKicker:"Body laws",leyesTitle:"6 laws of your energy",
       leyesSub:"Original JogaBody principles to sustain your energy every day.",
       leyes:[
@@ -715,7 +718,8 @@
   }
   function runDiagnosis(){
     var q=($("jfIaInput").value||"").trim();
-    if(!q||iaLoading) return;
+    if(iaLoading) return;
+    if(!q){ iaResult=t().iaEmptyWarn; renderIA(); return; }
     tone("tap"); iaLoading=true; iaResult=""; renderIA();
     var L=lang;
     var prompt=(L==="es"

@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
+<meta name="color-scheme" content="only light">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0B0B0C">
 <title>Joga Intelligence — Despierta los poderes que ya viven en ti</title>
@@ -1355,7 +1356,7 @@ body.jbw-v-concierge #concierge-section{padding-top:30px}
             <span class="progress-bar"><span class="progress-fill" style="width:${pct}%"></span></span>
             <span class="progress-text">${progressText}</span>
           </span>
-          ${isAwakened?"":`<button class="test-btn" data-power="${n.app.name}">${LANG==="es"?"✓ Marcar práctica como completada (prueba)":"✓ Mark practice as done (test)"}</button>`}
+          ${isAwakened?"":`<button class="test-btn" data-power="${n.app.name}">${LANG==="es"?"✓ Marcar práctica como completada":"✓ Mark practice as done"}</button>`}
         </span>`;
       // click en la caja abre el poder, pero NO si es el botón de prueba
       b.addEventListener("click",(e)=>{
