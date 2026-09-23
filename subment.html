@@ -480,7 +480,7 @@ class Component extends DCLogic {
     const host=document.getElementById('jogaMindCompact');
     if(!host || !window.JogaMindCompactUI) return;
     const L=this.state.lang||'es';
-    if(this._compact){ this._compact.setLanguage(L); return; }
+    if(this._compact && this._compact.el===host){ this._compact.setLanguage(L); return; }
     this._compact=window.JogaMindCompactUI.mount(host,{
       lang:L,
       getAffirmation:()=>{ const n=document.getElementById('jogaMindAffirmation'); return n?n.textContent:''; },
