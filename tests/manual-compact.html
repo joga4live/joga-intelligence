@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Joga Mind Compact Flow Test</title>
+  <script src="../jogamind-compact-core.js"></script>
+  <script src="../jogamind-compact-ui.js"></script>
+</head>
+<body style="max-width:392px;margin:20px auto;font-family:Inter,sans-serif">
+  <div id="jogaMindCompact"></div>
+  <output id="events"></output>
+  <script>
+    window.JogaMindCompactUI.mount(document.getElementById('jogaMindCompact'),{
+      lang:location.search.indexOf('lang=en')>=0?'en':'es',
+      onPractice:function(i){ document.getElementById('events').value='practice:'+i; },
+      onAffirm:function(){ document.getElementById('events').value='affirm'; },
+      onAudio:function(){ document.getElementById('events').value='audio'; },
+      onComplete:function(){ document.getElementById('events').value='complete'; }
+    });
+  </script>
+</body>
+</html>
