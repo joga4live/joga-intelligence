@@ -39,6 +39,8 @@
 <script src="./react-dom.min.js"></script>
 <script src="./joga-features.js"></script>
 <script src="./content/subment-content.js"></script>
+<script src="./jogamind-compact-core.js"></script>
+<script src="./jogamind-compact-ui.js"></script>
 <script src="./support.js"></script>
 </head>
 <body>
@@ -127,6 +129,9 @@
         <div id="jiBadgeWrap_subment"></div>
         <div id="jiDashWrap_subment"></div>
 
+        <!-- Compact daily cycle / Ciclo diario Compact -->
+        <div id="jogaMindCompact"></div>
+
         <!-- challenge strip -->
         <div onClick="{{ openAbout }}" style="cursor:pointer;display:flex;align-items:center;gap:13px;background:rgba(231,196,106,.07);border:1px solid rgba(231,196,106,.22);border-radius:18px;padding:14px 16px;margin-bottom:18px">
           <div style="flex:0 0 auto;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:rgba(231,196,106,.13);font-size:18px">⛓️</div>
@@ -140,7 +145,7 @@
         <!-- affirmation hero -->
         <div style="position:relative;border-radius:26px;overflow:hidden;padding:30px 24px 26px;margin-bottom:22px;background:linear-gradient(165deg,#FFFFFF,rgba(184,146,74,.12));border:1px solid rgba(184,146,74,.32);box-shadow:0 24px 50px -28px rgba(184,146,74,.7)">
           <div style="font:600 12px Inter;letter-spacing:.3em;text-transform:uppercase;color:#856834;margin-bottom:14px">{{ intentionLabel }}</div>
-          <div style="font-family:Newsreader,serif;font-weight:500;font-size:27px;line-height:1.28;color:#000000;letter-spacing:-.01em">{{ affirmation }}</div>
+          <div id="jogaMindAffirmation" style="font-family:Newsreader,serif;font-weight:500;font-size:27px;line-height:1.28;color:#000000;letter-spacing:-.01em">{{ affirmation }}</div>
           <button onClick="{{ affirm }}" style="margin-top:22px;appearance:none;cursor:pointer;border:0;border-radius:999px;padding:15px 22px;font:600 13px Inter;letter-spacing:.02em;color:#000000;background:linear-gradient(135deg,#B8924A,#856834);box-shadow:0 10px 24px -10px rgba(184,146,74,.9);display:inline-flex;align-items:center;gap:8px" style-hover="transform:translateY(-1px)" style-active="transform:scale(.97)">{{ affirmLabel }}</button><button onClick="{{ cycleAff }}" aria-label="otra frase" style="margin-top:22px;margin-left:9px;appearance:none;cursor:pointer;border:1px solid rgba(45,38,58,.16);background:rgba(45,38,58,.08);color:#000000;border-radius:999px;width:44px;height:44px;font-size:17px;vertical-align:top;line-height:1" style-active="transform:scale(.97)">↻</button>
         </div>
 
@@ -192,7 +197,8 @@
         </div>
         <div style="display:flex;flex-direction:column;gap:13px">
           <sc-for list="{{ practices }}" as="p" hint-placeholder-count="3">
-            <div style="{{ p.cardStyle }}">
+            <div id="{{ p.anchorId }}" tabindex="-1" aria-label="{{ p.accessibleLabel }}" style="{{ p.cardStyle }}">
+              <div style="{{ p.recommendStyle }}">{{ p.recommendLabel }}</div>
               <div style="display:flex;align-items:flex-start;gap:13px">
                 <div style="flex:0 0 auto;width:44px;height:44px;border-radius:13px;display:grid;place-items:center;background:{{ p.chipBg }};font-size:20px">{{ p.icon }}</div>
                 <div style="flex:1;min-width:0">
@@ -425,8 +431,11 @@ class Component extends DCLogic {
       /* Night closure ritual */
       setTimeout(function(){ window.jogaFeatures.showClosureModal(_lang, 'subment'); }, 2000);
     }
+    setTimeout(() => this.mountCompact(), 0);
   }
   componentDidUpdate() {
+    this.mountCompact();
+    if(window.JogaMindCompact) window.JogaMindCompact.Host.flushPractice(this,document);
     if (window.jogaFeatures) {
       var L = this.state.lang || 'es';
       var vw = document.getElementById('jiVoiceWrap_subment');
@@ -466,6 +475,21 @@ class Component extends DCLogic {
     }
   }
   componentWillUnmount(){ clearInterval(this._t); clearInterval(this._b); clearTimeout(this._toast); this.stopSession(); }
+
+  mountCompact(){
+    const host=document.getElementById('jogaMindCompact');
+    if(!host || !window.JogaMindCompactUI) return;
+    const L=this.state.lang||'es';
+    if(this._compact){ this._compact.setLanguage(L); return; }
+    this._compact=window.JogaMindCompactUI.mount(host,{
+      lang:L,
+      getAffirmation:()=>{ const n=document.getElementById('jogaMindAffirmation'); return n?n.textContent:''; },
+      onPractice:(i)=>window.JogaMindCompact.Host.openPractice(this,i),
+      onAffirm:()=>window.JogaMindCompact.Host.affirm(this),
+      onAudio:()=>window.JogaMindCompact.Host.audio(this),
+      onComplete:(cycle)=>window.JogaMindCompact.Host.complete(this,cycle,window.jogaFeatures)
+    });
+  }
 
   play(name){ if(this.muted || !this._sfx || !this._sfx[name]) return; try{ const a=this._sfx[name]; a.currentTime=0; a.volume = name==='unlock'?.9:(name==='boom'?.5:.7); a.play().catch(()=>{}); if(name==='unlock'){ clearTimeout(this._unlockCut); clearInterval(this._unlockFade); this._unlockCut=setTimeout(()=>{ try{ this._unlockFade=setInterval(()=>{ if(a.volume>0.08){ a.volume=Math.max(0,a.volume-0.12); } else { a.pause(); a.currentTime=0; clearInterval(this._unlockFade); } },45); }catch(e){} },1900); } }catch(e){} }
   toggleMute(){ this.muted=!this.muted; try{ localStorage.setItem('jiMute', this.muted?'1':'0'); }catch(e){} try{ if(this._voice) this._voice.volume=this.muted?0:1; if(this._music) this._music.volume=this.muted?0:0.22; }catch(e){} this.setState({ muted:this.muted }); }
@@ -752,9 +776,14 @@ class Component extends DCLogic {
       practiceBarStyle: { width: (Object.keys(st.doneP).filter(k=>st.doneP[k]).length/t.practices.length*100)+'%', height:'100%', borderRadius:'7px', background:'linear-gradient(90deg,#856834,#B8924A)', transition:'width .5s ease' },
       practices: t.practices.map((p,i) => {
         const done = !!st.doneP[i];
+        const recommended = st.view==='library' && st.currentPractice===i;
         return { icon:p.icon, num:p.num, title:p.title, desc:p.desc, extra:p.extra,
+          anchorId:'jmc-practice-'+i,
+          accessibleLabel:(recommended?(L==='en'?'Lucy recommendation. ':'Recomendación de Lucy. '):'')+p.title,
+          recommendLabel:recommended?(L==='en'?'Lucy’s recommendation':'Recomendación de Lucy'):'',
+          recommendStyle:{ display:recommended?'inline-block':'none', marginBottom:'10px', borderRadius:'999px', padding:'5px 9px', background:'rgba(184,146,74,.2)', color:'#856834', font:'600 10px Inter', letterSpacing:'.12em', textTransform:'uppercase' },
           chipBg: done ? 'rgba(184,146,74,.3)' : 'rgba(184,146,74,.14)',
-          cardStyle: { border:'1px solid '+(done?'rgba(184,146,74,.5)':'rgba(45,38,58,.09)'), borderRadius:'18px', padding:'16px', background: done?'linear-gradient(160deg,rgba(184,146,74,.4),rgba(14,11,20,.6))':'linear-gradient(160deg,#FFFFFF,#FFFFFF)', transition:'all .3s ease' },
+          cardStyle: { border:(recommended?'2px':'1px')+' solid '+(recommended?'#B8924A':done?'rgba(184,146,74,.5)':'rgba(45,38,58,.09)'), borderRadius:'18px', padding:'16px', background: recommended?'linear-gradient(160deg,#fff,rgba(184,146,74,.16))':done?'linear-gradient(160deg,rgba(184,146,74,.4),rgba(14,11,20,.6))':'linear-gradient(160deg,#FFFFFF,#FFFFFF)', boxShadow:recommended?'0 12px 28px -18px #856834':'none', transition:'all .3s ease' },
           btnLabel: done ? t.pDone : t.pMark,
           btnStyle: { width:'100%', marginTop:'14px', appearance:'none', cursor:'pointer', borderRadius:'999px', padding:'15px 11px', font:'600 12.5px Inter', border:'0', color: done?'#000000':'#B8924A', background: done?'#B8924A':'rgba(184,146,74,.12)', transition:'all .3s ease' },
           toggle: () => this.togglePractice(i) };
